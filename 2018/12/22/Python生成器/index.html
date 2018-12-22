@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="生成器概念生成器是一次生成一个值的特殊类型函数。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。 包含yield关键字的函数可以理解是一个用函数名表示的另类list对象，通过迭代的方式（例如：for）依次获取结果。 生成器的特点 记录执行函数内的所有变量状态（数据）和代码执行位置。 立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/Python生成器/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="生成器概念生成器是一次生成一个值的特殊类型函数。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。 包含yield关键字的函数可以理解是一个用函数名表示的另类list对象，通过迭代的方式（例如：for）依次获取结果。 生成器的特点 记录执行函数内的所有变量状态（数据）和代码执行位置。 立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-10T09:12:35.487Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="生成器概念生成器是一次生成一个值的特殊类型函数。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。 包含yield关键字的函数可以理解是一个用函数名表示的另类list对象，通过迭代的方式（例如：for）依次获取结果。 生成器的特点 记录执行函数内的所有变量状态（数据）和代码执行位置。 立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/Python生成器/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Python生成器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="生成器概念"><a href="#生成器概念" class="headerlink" title="生成器概念"></a>生成器概念</h2><p>生成器是一次生成一个值的<code>特殊类型函数</code>。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。<br> 包含yield关键字的函数可以理解是一个用函数名表示的另类<code>list对象</code>，通过迭代的方式（例如：for）依次获取结果。</p>
+<h2 id="生成器的特点"><a href="#生成器的特点" class="headerlink" title="生成器的特点"></a>生成器的特点</h2><ol>
+<li>记录执行函数内的所有变量状态（数据）和代码执行位置。</li>
+<li>立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。</li>
+</ol>
+<h2 id="认识生成器"><a href="#认识生成器" class="headerlink" title="认识生成器"></a>认识生成器</h2><p>下来让我们一起来看看如何使用yield，先通过一个简单的例子认识生成器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addlist</span><span class="params">(alist)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> alist:</span><br><span class="line">        <span class="comment"># yield与return功能类似，返回本次迭代结果   </span></span><br><span class="line">        <span class="keyword">yield</span> i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">alist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> addlist(alist):</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>根据addlist()函数实现可以推断出addlist(alist)相当于一个值为[2, 3, 4, 5]的list，不过迭代调用时以函数表达式的形式出现在for语句中。<br> 使用”list变量”（实际为函数变量，此处可以理解为list）替代addlist(alist)作为for的参数，执行结果相同，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_one_list = addlist(alist)</span><br><span class="line">for x in add_one_list:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<h2 id="生成器执行过程"><a href="#生成器执行过程" class="headerlink" title="生成器执行过程"></a>生成器执行过程</h2><p>到底yield是如何执行的呢？生成器（函数）的执行逻辑到底是什么样子？<br> 让我们一起来写个demo进行分析。</p>
+<blockquote>
+<p>next()函数<br>   用于移动迭代器指向下一个数据，直到抛出StopIteration，代表迭代终止。</p>
+</blockquote>
+<p>定义函数yield_run_logic()，对一个已经初始化变量a，多次调用，同在yield前后输出日志，用于分析执行逻辑。然后再一个while(1)的死循环中使用next()方法遍历生成器，直到抛出停止迭代异常跳出循环（StopIteration）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def yield_run_logic():</span><br><span class="line">    a = 1</span><br><span class="line">    for i in range(3):</span><br><span class="line">        print(&apos;begin yield&apos;)</span><br><span class="line">        yield a</span><br><span class="line">        print(&apos;end yield&apos;)</span><br><span class="line">        a += i</span><br><span class="line"></span><br><span class="line"># 获取生成器对象</span><br><span class="line">yield_obj = yield_run_logic()</span><br><span class="line"># 此时只是获取对象，尚未执行yield_run_logic()的内容，直到第一调用next()\</span><br><span class="line">while 1:</span><br><span class="line">    try:</span><br><span class="line">        ret = next(yield_obj)</span><br><span class="line">        # 第一次调用next()方法，开始执行yield_run_logic()，直到遇到yield关键字，返回当前结果，</span><br><span class="line">        # yield_run_logic()保留当前执行状态和代码执行位置，当下次执行next()时，</span><br><span class="line">        # yield_run_logic()从上次保留的继续执行，直到遇到yield关键字。</span><br><span class="line">        # yield_run_logic()无迭代数据时，抛出StopIteration异常，表示迭代结束。</span><br><span class="line">        print(ret)</span><br><span class="line">    except StopIteration:</span><br><span class="line">        print(&apos;end test&apos;)</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 第1次执行输出 a = 1, i = 0</span><br><span class="line">begin yield</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 第2次执行输出 a = 1, i = 1</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"># 第3次执行输出 a = 2, i = 2</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">4</span><br><span class="line"></span><br><span class="line"># 第4次执行</span><br><span class="line">end yield # yield_run_logic()中 i 超过range(3)的范围，结束迭代，</span><br><span class="line">          # 由于使用next()而并非使用for来迭代生成器，所以迭代结束异常需要自己处理。</span><br><span class="line">end test</span><br></pre></td></tr></table></figure>
+<p>根据输出结果可以看出，在第一次执行next()时，生成器yield_run_logic()开始执行，打印’begin yield’，并在<code>yield a</code>处返回结果，之后再执行next()都是从<code>yield a</code>之后开始执行（打印’end yield’），直到循环中再次遇到<code>yield a</code>时返回。</p>
+<p><strong>总结</strong> yield的执行逻辑。</p>
+<blockquote>
+<p><strong>第一次获取迭代结果，函数的第一行代码执行到yield关键字返回，第[2,n]次迭代结果，函数执行从yield关键字下一行代码到再次碰到yield关键字返回。</strong></p>
+</blockquote>
+<h2 id="yield的应用场景"><a href="#yield的应用场景" class="headerlink" title="yield的应用场景"></a>yield的应用场景</h2><p>凡是本次处理使用上次处理结果作为基础数据的逻辑实现，都可以考虑使用生成器。</p>
+<p><strong>练习1：打印杨辉三角</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">          1</span><br><span class="line">        1   1</span><br><span class="line">      1   2   1</span><br><span class="line">    1   3   3   1</span><br><span class="line">  1   4   6   4   1</span><br><span class="line">1   5   10  10  5   1</span><br></pre></td></tr></table></figure>
+<p><strong>特征分析</strong>：从第三行开始每一行的非边界数字等于上一行相邻两数字之和，边界数字全部为1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pascals_triangle</span><span class="params">(line_count)</span>:</span></span><br><span class="line">    up_line = []</span><br><span class="line">    line = []</span><br><span class="line">    <span class="comment"># i取值范围[0, line_count-1]</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(line_count):</span><br><span class="line">        <span class="comment"># 扩展当前行列表长度，初始化数据为1，并且保证边界数据为1</span></span><br><span class="line">        line.append(<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 1,2行全部是1，3行开始体现特征，需要进行特征处理</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 当前行[1, n-1]的值等于上一行[0, n-2]与[1, n-1]的和</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(up_line)):</span><br><span class="line">                line[j] = up_line[j<span class="number">-1</span>] + up_line[j]</span><br><span class="line">        <span class="comment"># 返回当前行</span></span><br><span class="line">        <span class="keyword">yield</span> line</span><br><span class="line">        <span class="comment"># 更新上一行记录结果，保存当前行</span></span><br><span class="line">        up_line = line[:]</span><br><span class="line"></span><br><span class="line">lines = <span class="number">6</span></span><br><span class="line">fn = pascals_triangle(lines)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fn:</span><br><span class="line">    print(line)</span><br></pre></td></tr></table></figure>
+<p>函数执行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1]</span><br><span class="line">[1, 1]</span><br><span class="line">[1, 2, 1]</span><br><span class="line">[1, 3, 3, 1]</span><br><span class="line">[1, 4, 6, 4, 1]</span><br><span class="line">[1, 5, 10, 10, 5, 1]</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/22/Python(4)oop/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/post的参数的一般获取/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器概念"><span class="nav-number">1.</span> <span class="nav-text">生成器概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器的特点"><span class="nav-number">2.</span> <span class="nav-text">生成器的特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#认识生成器"><span class="nav-number">3.</span> <span class="nav-text">认识生成器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器执行过程"><span class="nav-number">4.</span> <span class="nav-text">生成器执行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yield的应用场景"><span class="nav-number">5.</span> <span class="nav-text">yield的应用场景</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

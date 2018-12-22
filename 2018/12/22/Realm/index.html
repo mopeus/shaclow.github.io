@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Realm 配置快速入门本文档介绍了如何借助一个“数据库”来配置 Tomcat ，从而实现容器管理安全性。所要连接的这种数据库含有用户名、密码以及用户角色。你只需知道的是，如果使用的 Web 应用含有一个或多个 &amp;lt;security-constraint&amp;gt; 元素，&amp;lt;login-config&amp;gt; 元素定义了用户验证的必需细节信息。如果你不打算使用这些功能，则可以忽略这篇文档。 关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/Realm/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="Realm 配置快速入门本文档介绍了如何借助一个“数据库”来配置 Tomcat ，从而实现容器管理安全性。所要连接的这种数据库含有用户名、密码以及用户角色。你只需知道的是，如果使用的 Web 应用含有一个或多个 &amp;lt;security-constraint&amp;gt; 元素，&amp;lt;login-config&amp;gt; 元素定义了用户验证的必需细节信息。如果你不打算使用这些功能，则可以忽略这篇文档。 关">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-12T00:46:38.665Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="Realm 配置快速入门本文档介绍了如何借助一个“数据库”来配置 Tomcat ，从而实现容器管理安全性。所要连接的这种数据库含有用户名、密码以及用户角色。你只需知道的是，如果使用的 Web 应用含有一个或多个 &amp;lt;security-constraint&amp;gt; 元素，&amp;lt;login-config&amp;gt; 元素定义了用户验证的必需细节信息。如果你不打算使用这些功能，则可以忽略这篇文档。 关">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/Realm/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Realm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Realm-配置"><a href="#Realm-配置" class="headerlink" title="Realm 配置"></a>Realm 配置</h1><h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><p>本文档介绍了如何借助一个“数据库”来配置 Tomcat ，从而实现<strong>容器管理安全性</strong>。所要连接的这种数据库含有用户名、密码以及用户角色。你只需知道的是，如果使用的 Web 应用含有一个或多个 <code>&lt;security-constraint&gt;</code> 元素，<code>&lt;login-config&gt;</code> 元素定义了用户验证的必需细节信息。如果你不打算使用这些功能，则可以忽略这篇文档。</p>
+<p>关于容器管理安全性的基础知识，可参考 <a href="http://wiki.apache.org/tomcat/Specifications" target="_blank" rel="noopener">Servlet Specification (Version 2.4)</a> 中的第 12 节内容。</p>
+<p>关于如何使用 Tomcat 中的<strong>单点登录</strong>（用户只需验证一次，就能够登录一个虚拟主机的所有 Web 应用）功能，请参看<a href="http://tomcat.apache.org/tomcat-8.0-doc/config/host.html#Single_Sign_On" target="_blank" rel="noopener">该文档</a>。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="什么是-Realm"><a href="#什么是-Realm" class="headerlink" title="什么是 Realm"></a>什么是 Realm</h3><p><strong>Realm</strong>（安全域）其实就是一个存储用户名和密码的“数据库”再加上一个枚举列表。“数据库”中的用户名和密码是用来验证 Web 应用（或 Web 应用集合）用户合法性的，而每一合法用户所对应的<strong>角色</strong>存储在枚举列表中。可以把这些角色看成是类似 UNIX 系统中的 group（分组），因为只有能够拥有特定角色的用户才能访问特定的 Web 应用资源（而不是通过对用户名列表进行枚举适配）。特定用户的用户名下可以配置多个角色。</p>
+<p>虽然 Servlet 规范描述了一个可移植机制，使应用可以在 <code>web.xml</code> 部署描述符中声明它们的安全需求，但却没有提供一种可移植 API 来定义出 Servlet 容器与相应用户及角色信息的接口。然而，在很多情况下，非常适于将 Servlet 容器与一些已有的验证数据库或者生产环境中已存在的机制“连接”起来。因此，Tomcat 定义了一个 Java 接口（<code>org.apache.catalina.Realm</code>），通过“插入”组件来建立连接。提供了 6 种标准插件，支持与各种验证信息源的连接：</p>
+<ul>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JDBCRealm" target="_blank" rel="noopener">JDBCRealm</a>——通过 JDBC 驱动器来访问保存在关系型数据库中的验证信息。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#DataSourceRealm" target="_blank" rel="noopener">DataSourceRealm</a>——访问保存在关系型数据库中的验证信息。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JNDIRealm" target="_blank" rel="noopener">JNDIRealm</a>——访问保存在 LDAP 目录服务器中的验证信息。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#UserDatabaseRealm" target="_blank" rel="noopener">UserDatabaseRealm</a>——访问存储在一个 UserDatabase JNDI 数据源中的认证信息，通常依赖一个 XML 文档（<code>conf/tomcat-users.xml</code>）。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#MemoryRealm" target="_blank" rel="noopener">MemoryRealm</a>——访问存储在一个内存中对象集合中的认证信息，通过 XML 文档初始化（<code>conf/tomcat-users.xml</code>）。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JAASRealm" target="_blank" rel="noopener">JAASRealm</a>——通过 Java 认证与授权服务（JAAS）架构来获取认证信息。</li>
+</ul>
+<p>另外，还可以编写自定义 <code>Realm</code> 实现，将其整合到 Tomcat 中，只需这样做：</p>
+<ul>
+<li>实现 <code>org.apache.catalina.Realm</code> 接口。</li>
+<li>将编译好的 realm 放到 $CATALINA_HOME/lib 中。</li>
+<li>声明自定义 realm，具体方法详见<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">“配置 Realm”一节</a>。</li>
+<li>在 MBeans 描述符文件中声明自定义realm。</li>
+</ul>
+<h3 id="配置-Realm"><a href="#配置-Realm" class="headerlink" title="配置 Realm"></a>配置 Realm</h3><p>在详细介绍标准 Realm 实现之前，简要了解 Realm 的配置方式是很关键的一步。大体来说，就是需要在<code>conf/server.xml</code> 配置文件中添加一个 XML 元素，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;... class name for this implementation&quot;</span><br><span class="line">       ... other attributes for this implementation .../&gt;</span><br></pre></td></tr></table></figure>
+<p><code>&lt;Realm&gt;</code> 可以嵌入以下任何一种 <code>Container</code> 元素中。Realm 元素的位置至关重要，它会对 Realm 的“范围”（比如说哪个 Web 应用能够共享同一验证信息）有直接的影响。</p>
+<ul>
+<li><strong><engine> 元素</engine></strong> 内嵌入该元素中的这种 Realm 元素可以被<strong>所有</strong>虚拟主机上的<strong>所有</strong> Web 应用所共享，除非该 Realm 元素被内嵌入下属 <code>&lt;Host&gt;</code> 或 <code>&lt;Context&gt;</code> 元素的 Realm 元素所覆盖。</li>
+<li><strong><host> 元素</host></strong> 内嵌入该元素中的这种 Realm 元素可以被<strong>这一</strong>虚拟主机上的<strong>所有</strong> Web 应用所共享。除非该 Realm 元素被内嵌入下属 <code>&lt;Context&gt;</code> 元素的 Realm 元素所覆盖。</li>
+<li><strong><context> 元素</context></strong> 内嵌入该元素中的这种 Realm 元素<strong>只能</strong>被这一 Web 应用所使用。</li>
+</ul>
+<h2 id="常用特性"><a href="#常用特性" class="headerlink" title="常用特性"></a>常用特性</h2><h3 id="摘要式密码"><a href="#摘要式密码" class="headerlink" title="摘要式密码"></a>摘要式密码</h3><p>对于每种标准 <code>Realm</code> 实现来说，用户的密码默认都是以明文方式保存的。在很多情况下，这种方式都非常糟糕，即使是一般的用户也能收集到足够的验证信息，从而以其他用户的信息成功登录。为了避免这种情况的发生，标准 <code>Realm</code> 实现支持一种对用户密码进行<strong>摘要式处理</strong>的机制，它能以无法轻易破解的形式对存储的密码进行加密处理，同时保证<code>Realm</code> 实现仍能使用这种加密后的密码进行验证。</p>
+<p>在标准的 Realm 验证时，会将存储的密码与用户所提供的密码进行比对，这时，我们可以通过指定 <code>&lt;Realm&gt;</code> 元素中的 <code>digest</code> 属性来选择摘要式密码。该属性值必须是一种<code>java.security.MessageDigest</code> 类所支持的摘要式算法（SHA、MD2、或 MD5）。当你选择该属性值时，存储在 Realm 中的密码内容必须是明文格式，随后它将被你所指定的算法进行摘要式加密。</p>
+<p>在调用 Realm 的 <code>authenticate()</code> 方法后，用户所提供的明文密码同样也会利用上述你所指定的加密算法进行加密，加密结果与 Realm 的返回值相比较。如果两者相等，则表明原始密码的明文形式更用户所提供的密码完全等同，因此该用户身份验证成功。</p>
+<p>可以采用以下两种比较便利的方法来计算明文密码的摘要值：</p>
+<ul>
+<li>如果应用需要动态计算摘要式密码，调用 <code>org.apache.catalina.realm.RealmBase</code> 类的静态 <code>Digest()</code> 方法，传入明文密码和摘要式算法名称及字符编码方案。该方法返回摘要式密码。</li>
+<li>如果想执行命令行工具来计算摘要式密码，只需执行：<br><code>CATALINA_HOME/bin/digest.[bat|sh] -a {algorithm} {cleartext-password}</code><br>标准输出将返回明文密码的摘要式形式。</li>
+</ul>
+<p>如果使用 DIGEST 验证的摘要式密码，用来生成摘要密码的明文密码则将有所不同，而且必须使用一次不加盐的 MD5 算法。对应到上面的范例，那就是必须把 <code>{cleartext-password}</code> 替换成 <code>{username}:{realm}:{cleartext-password}</code>。再比如说，在一个开发环境中，可能采用这种形式：<code>testUser:Authentication required:testPassword</code>。<code>{realm}</code> 的值取自 Web 应用 <code>&lt;login-config&gt;</code> 的 <code>&lt;realm-name&gt;</code> 元素。如果没有在 web.xml 中指定，则使用默认的<code>Authentication required</code>。</p>
+<p>若要使用非平台默认编码的用户名和（或）密码，则命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CATALINA_HOME/bin/digest.[bat|sh] -a &#123;algorithm&#125; -e &#123;encoding&#125; &#123;input&#125;</span><br></pre></td></tr></table></figure>
+<p>但需要注意的是，一定要确保输入正确地传入摘要。摘要返回 <code>{input}:{digest}</code>。如果输入在返回时出现损坏，摘要则将无效。</p>
+<p>摘要的输出格式为 <code>{salt}${iterations}${digest}</code>。如果盐的长度为 0，迭代次数为 1，则输出将简化为 <code>{digest}</code>。</p>
+<p><code>CATALINA_HOME/bin/digest.[bat|sh]</code> 的完整格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CATALINA_HOME/bin/digest.[bat|sh] [-a &lt;algorithm&gt;] [-e &lt;encoding&gt;]</span><br><span class="line">        [-i &lt;iterations&gt;] [-s &lt;salt-length&gt;] [-k &lt;key-length&gt;]</span><br><span class="line">        [-h &lt;handler-class-name&gt;] &lt;credentials&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-a</code> 用来生成存储凭证的算法。如未指定，将使用凭证处理器（CredentialHandler）的默认值，如果认证处理器和算法均未指定，则使用默认值 <code>SHA-512</code>。</li>
+<li><code>-e</code> 指定用于任何必要的字节与字符间转换的字符编码方案。如未指定，使用系统默认的字符编码方案 <code>Charset#defaultCharset()</code>。</li>
+<li><code>-i</code> 生成存储的凭证时所使用的迭代次数。如未指定，使用 CredentialHandler 的默认值。</li>
+<li><code>-s</code> 生成并存储到认证中的盐的长度（字节）。如未指定，使用 CredentialHandler 的默认值。</li>
+<li><code>-k</code> （生成凭证时，如果随带创建了）键的长度（位）。如未指定，则使用 CredentialHandler 的默认值</li>
+<li><code>-h</code> CredentialHandler 使用的完整类名。如未指定，则轮流使用内建的凭证处理器（<code>MessageDigestCredentialHandler</code>，然后是 <code>SecretKeyCredentialHandler</code>），将使用第一个接受指定算法的凭证处理器。</li>
+</ul>
+<h3 id="范例应用"><a href="#范例应用" class="headerlink" title="范例应用"></a>范例应用</h3><p>Tomcat 自带的范例应用中包含一个受到安全限制保护的区域，使用表单式登录方式。为了访问它，在你的浏览器地址栏中输入 <code>http://localhost:8080/examples/jsp/security/protected/</code>，并使用 <a href="http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#UserDatabaseRealm" target="_blank" rel="noopener">UserDatabaseRealm</a> 默认的用户名和密码进行登录。</p>
+<h3 id="Manager-应用"><a href="#Manager-应用" class="headerlink" title="Manager 应用"></a>Manager 应用</h3><p>如果你希望使用 Manager 应用在一个运行的 Tomcat 安装上来部署或取消部署 Web 应用，那么<strong>必须</strong>在一个选定的 Realm 实现上，将 <strong>manager-gui</strong> 角色添加到至少一个用户名上。这是因为 Manager 自身使用一个安全限制，要想在该应用的 HTML 界面中访问请求 URI，就必须要有 manager-gui 角色。</p>
+<p>出于安全性考虑，默认情况下，Realm 中的用户名（比如使用 <code>conf/tomcat-users.xml</code>）没有被分配 manager-gui 角色。因此，用户起初无法使用这个功能，除非 Tomcat 管理员特意将这一角色分配给他们。</p>
+<h3 id="Realm-日志"><a href="#Realm-日志" class="headerlink" title="Realm 日志"></a>Realm 日志</h3><p>Realm 的容器（Context、Host 及 Engine）所对应的日志配置文件将记录 <code>Realm</code> 所记录下的调试和异常信息。</p>
+<h2 id="标准-Realm-实现"><a href="#标准-Realm-实现" class="headerlink" title="标准 Realm 实现"></a>标准 Realm 实现</h2><h3 id="JDBCRealm"><a href="#JDBCRealm" class="headerlink" title="JDBCRealm"></a>JDBCRealm</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p><strong>JDBCRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，它通过 JDBC 驱动程序在关系型数据库中查找用户。只要数据库结构符合下列要求，你可以通过大量的配置来灵活地修改现有的表与列名。</p>
+<ul>
+<li><p>必须有一张<strong>用户表</strong>（<em>users table</em>）。它包含着一个由 <code>Realm</code> 所能识别的所有合法用户所构成的行。</p>
+</li>
+<li><p>用户表</p>
+<p>必须至少包含两列（当然，如果现有应用确实需要，则同样也可以包含更多的列）：</p>
+<ul>
+<li>用户名。当用户登录时，能被 Tomcat 识别的用户名。</li>
+<li>密码。当用户登录时，能被 Tomcat 所识别的密码。该列中的值可能是明文，也可能是摘要式密码，稍后详述。</li>
+</ul>
+</li>
+<li><p>必须有一张<strong>用户角色表</strong>（<em>user roles table</em>）。该表包含一个角色行，包含着可能指定给特定用户的每个合法角色。一个用户可以没有角色，也可以有一个或多个角色，这都是合法的。</p>
+</li>
+<li><p>用户角色表</p>
+</li>
+</ul>
+<p>  至少应包含两列（如果现有应用确实需要，则也可以包含更多的列）：</p>
+<ul>
+<li>用户名。Tomcat 所能识别的用户名（与用户表中指定的值相同）。</li>
+<li>用户所对应的合法角色名。</li>
+</ul>
+<h4 id="快速入门-1"><a href="#快速入门-1" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了设置 Tomcat 从而使用 JDBCRealm，需要执行以下步骤：</p>
+<ol>
+<li>在数据库中创建符合上述规范的表与列。</li>
+<li>配置一个 Tomcat 使用的数据库用户名与密码，并且至少有只读权限（Tomcat 永远都不会去修改那些表中的数据）。</li>
+<li>将用到的 JDBC 驱动程序复制到 <code>$CATALINA_HOME/lib</code> 目录中。注意<strong>只能</strong>识别 JAR 文件！</li>
+<li>在 <code>$CATALINA_BASE/conf/server.xml</code> 目录中设置一个 <code>&lt;Realm&gt;</code> 元素。这一点下文将会详细叙述。</li>
+<li>如果 Tomcat 处于运行状态，则重启它。</li>
+</ol>
+<h4 id="Realm-元素属性"><a href="#Realm-元素属性" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>如上所述，为了配置 JDBCRealm，需要创建一个 <code>Realm</code> 元素，并把它放在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中。JDBCRealm 的属性都定义在 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm</a> 配置文档中。</p>
+<h4 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h4><p>下面这个 SQL 脚本范例创建了我们所需的表（根据你所用的数据库，可以相应修改其中的语法）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table users (</span><br><span class="line">  user_name         varchar(15) not null primary key,</span><br><span class="line">  user_pass         varchar(15) not null</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table user_roles (</span><br><span class="line">  user_name         varchar(15) not null,</span><br><span class="line">  role_name         varchar(15) not null,</span><br><span class="line">  primary key (user_name, role_name)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p><code>Realm</code> 元素包含在默认的 <code>$CATALINA_BASE/conf/server.xml</code> 文件中（被注释掉了）。在下面的范例中，有一个名为 authority 的数据库，它包含上述创建的表，通过用户名“dbuser”和密码“dbpass”进行访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.JDBCRealm&quot;</span><br><span class="line">      driverName=&quot;org.gjt.mm.mysql.Driver&quot;</span><br><span class="line">   connectionURL=&quot;jdbc:mysql://localhost/authority?user=dbuser&amp;amp;password=dbpass&quot;</span><br><span class="line">       userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">   userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="特别注意事项"><a href="#特别注意事项" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>JDBCRealm 必须遵循以下规则：</p>
+<ul>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
+</ul>
+<h3 id="DataSourceRealm"><a href="#DataSourceRealm" class="headerlink" title="DataSourceRealm"></a>DataSourceRealm</h3><h4 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h4><p><strong>DataSourceRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，它通过一个 JNDI 命名的 JDBC 数据源在关系型数据库中查找用户。只要数据库结构符合下列要求，你可以通过大量的配置来灵活地修改现有的表与列名。</p>
+<ul>
+<li><p>必须有一张<strong>用户表</strong>（<em>users table</em>）。它包含着一个由 <code>Realm</code> 所能识别的所有合法用户所构成的行。</p>
+</li>
+<li><p>用户表</p>
+<p>必须至少包含两列（当然，如果现有应用确实需要，则同样也可以包含更多的列）：</p>
+<ul>
+<li>用户名。当用户登录时，能被 Tomcat 识别的用户名。</li>
+<li>密码。当用户登录时，能被 Tomcat 所识别的密码。该列中的值可能是明文，也可能是摘要式密码，稍后详述。</li>
+</ul>
+</li>
+<li><p>必须有一张<strong>用户角色表</strong>（<em>user roles table</em>）。该表包含一个角色行，包含着可能指定给特定用户的每个合法角色。一个用户可以没有角色，也可以有一个或多个角色，这都是合法的。</p>
+</li>
+<li><p>用户角色表</p>
+</li>
+</ul>
+<p>  至少应包含两列（如果现有应用确实需要，则也可以包含更多的列）：</p>
+<ul>
+<li>用户名。Tomcat 所能识别的用户名（与用户表中指定的值相同）。</li>
+<li>用户所对应的合法角色名。</li>
+</ul>
+<h4 id="快速入门-2"><a href="#快速入门-2" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了设置 Tomcat 从而使用 DataSourceRealm，需要执行以下步骤：</p>
+<ol>
+<li>在数据库中创建符合上述规范的表与列。</li>
+<li>配置一个 Tomcat 使用的数据库用户名与密码，并且至少有只读权限（Tomcat 永远都不会去修改那些表中的数据）。</li>
+<li>为数据库配置一个 JNDI 命名的 JDBC DataSource。详情可参考<a href="http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html" target="_blank" rel="noopener">JNDI DataSource Example HOW-TO》应该链接至相应中文页面》</a>。</li>
+<li>在 <code>$CATALINA_BASE/conf/server.xml</code> 目录中设置一个 <code>&lt;Realm&gt;</code> 元素。这一点下文将会详细叙述。</li>
+<li>如果 Tomcat 处于运行状态，则重启它。</li>
+</ol>
+<h4 id="范例-1"><a href="#范例-1" class="headerlink" title="范例"></a>范例</h4><p>下面这个 SQL 脚本范例创建了我们所需的表（根据你所用的数据库，可以相应修改其中的语法）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table users (</span><br><span class="line">  user_name         varchar(15) not null primary key,</span><br><span class="line">  user_pass         varchar(15) not null</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table user_roles (</span><br><span class="line">  user_name         varchar(15) not null,</span><br><span class="line">  role_name         varchar(15) not null,</span><br><span class="line">  primary key (user_name, role_name)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>在下面的范例中，有一个名为 authority 的 MySQL 数据库，它包含上述创建的表，通过名为 “<code>java:/comp/env/jdbc/authority</code>” 的 JNDI 命名的 JDBC 数据源来访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.DataSourceRealm&quot;</span><br><span class="line">   dataSourceName=&quot;jdbc/authority&quot;</span><br><span class="line">   userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">   userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="特别注意事项-1"><a href="#特别注意事项-1" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 DataSourceRealm 时必须遵守下列规则：</p>
+<ul>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
+</ul>
+<h3 id="JNDIRealm"><a href="#JNDIRealm" class="headerlink" title="JNDIRealm"></a>JNDIRealm</h3><h4 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h4><p><strong>JNDIRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，通过一个 JNDI 提供者1在 LDAP 目录服务器中查找用户。realm 支持大量的方法来使用认证目录。</p>
+<p>通常是可以使用 JNDI API 类的标准 LDAP 提供者。</p>
+<h5 id="a-连接目录"><a href="#a-连接目录" class="headerlink" title="a. 连接目录"></a>a. 连接目录</h5><p>realm 与目录服务器的连接是通过 <strong>connectionURL</strong> 配置属性来定义的。这个 URL 的格式是通过 JNDI 提供者来定义的。它通常是个 LDAP URL，指定了所要连接的目录服务器的域名，另外还（可选择）指定了所需的根命名上下文的端口和唯一名称（DN）。</p>
+<p>如果有多个提供者，则可以配置 <strong>alternateURL</strong>。如果一个套接字连接无法传递给提供者 <strong>connectionURL</strong>，则会换用 <strong>alternateURL</strong>。</p>
+<p>当通过创建连接来搜索目录，获取用户及角色信息时，realm 会利用 <strong>connectionName</strong> 和 <strong>connectionPassword</strong>这两个属性所指定的用户名和密码在目录上进行自我认证。如果未指定这两个属性，则创立的连接是匿名连接，这种连接适用于大多数情况。</p>
+<h5 id="b-选择用户目录项"><a href="#b-选择用户目录项" class="headerlink" title="b. 选择用户目录项"></a>b. 选择用户目录项</h5><p>在目录中，每个可被认证的用户都必须表示为独立的项，这种独立项对应着由属性 <strong>connectionURL</strong> 定义的初始 <code>DirContext</code> 中的元素。这种用户项必须有一个包含认证所需用户名的属性。</p>
+<p>每个用户项的唯一性名称（DN）通常含有用于认证的用户名。在这种情况下，<strong>userPattern</strong> 属性可以用来指定 DN，其中的 <code>{0}</code> 代表用户名应该被替换的位置。</p>
+<p>realm 必须搜索目录来寻找一个包含用户名的唯一项，可用下列属性来配置搜索：</p>
+<ul>
+<li><strong>userBase</strong> 用户子树的基准项。如果未指定，则搜索基准为顶级元素。</li>
+<li><strong>userSubtree</strong> 用户子树，也就是搜索范围。如果希望搜索以<strong>userBase</strong> 项为基准的整个子树，则使用 <code>true</code>；默认值为 <code>false</code>，只对顶级元素进行搜索。</li>
+<li><strong>userSearch</strong> 指定替代用户名之后所使用的 LDAP 搜索过滤器的模式。</li>
+</ul>
+<h5 id="c-用户认证"><a href="#c-用户认证" class="headerlink" title="c. 用户认证"></a>c. 用户认证</h5><ul>
+<li><p><strong>绑定模式</strong></p>
+<p>默认情况下，realm 会利用用户项的 DN 与用户所提供的密码，将用户绑定到目录上。如果成功执行了这种简单的绑定，那么就可以认为用户认证成功。</p>
+<p>出于安全考虑，目录可能保存的是用户的摘要式密码，而非明文密码（参看<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#digestedPass" target="_blank" rel="noopener">摘要式密码</a>以获知详情）。在这种情况下，在绑定过程中，目录会自动将用户所提供的明文密码加密为正确的摘要式密码，以便后续和存储的摘要式密码进行比对。然而在绑定过程中，realm 并不参与处理摘要式密码。不会用到 <strong>digest</strong> 属性，如果设置了该属性，也会被自动忽略。</p>
+</li>
+<li><p><strong>对比模式</strong></p>
+<p>另外一种方法是，realm 从目录中获取存储的密码，然后将其与用户所提供的值进行比对。配置方法是，在包含密码的用户项中，将 <strong>userPassword</strong> 属性设为目录属性名。</p>
+<p>对比模式的缺点在于：首先，<code>connectionName</code> 和 <code>connectionPassword</code> 属性必须配置成允许 realm 读取目录中的用户密码。出于安全考虑，这是一种不可取的做法。事实上，很多目录实现甚至都不允许目录管理器读取密码。其次，realm 必须自己处理摘要式密码，包括要设置所使用的具体算法、在目录中表示密码散列值的方式。但是，realm 可能有时又要访问存储的密码，比如为了支持 HTTP 摘要式访问认证（HTTP Digest Access Authentication，RFC 2069）。（注意，HTTP 摘要式访问认证不同于之前讨论过的在库中存储密码摘要的方式。）</p>
+</li>
+</ul>
+<h5 id="d-赋予用户角色"><a href="#d-赋予用户角色" class="headerlink" title="d. 赋予用户角色"></a>d. 赋予用户角色</h5><p>Realm 支持两种方法来表示目录中的角色：</p>
+<ul>
+<li><p><strong>将角色显式表示为目录项</strong></p>
+<p>通过明确的目录项来表示角色。角色项通常是一个 LDAP 分组项，该分组项的一个属性包含角色名称，另一属性值则是拥有该角色的用户的 DN 名或用户名。下列属性配置了一个目录搜索来寻找与认证用户相关的角色名。</p>
+<ul>
+<li><strong>roleBase</strong> 角色搜索的基准项。如未指定，则基准项为顶级目录上下文。</li>
+<li><strong>roleSubtree</strong> 搜索范围。如果希望搜索以 <code>roleBase</code> 为基准项的整个子树，则设为 <code>true</code>。默认值为 <code>false</code>，请求一个只包含顶级元素的单一搜索。</li>
+<li><strong>roleSearch</strong> 用于选择角色项的 LDAP 搜索过滤器。它还可以（可选择）包含用于唯一名称的模式替换 <code>{0}</code>、用户名的模式替换 <code>{1}</code>，以及用户目录项属性的模式替换 <code>{2}</code>。使用 <strong>userRoleAttribute</strong> 来指定提供 <code>{2}</code> 值的属性名。</li>
+<li><strong>roleName</strong> 包含角色名称的角色项属性。</li>
+<li><strong>roleNested</strong> 启用内嵌角色。如果希望在角色中内嵌角色，则设为 <code>true</code>。如果配置了该属性，每一个新近找到的 roleName 和 DN 都将用于递归式的新角色搜索。默认值为 <code>false</code>。</li>
+</ul>
+</li>
+<li><p><strong>将角色表示为用户项属性</strong></p>
+<p>将角色名称保存为用户目录项中的一个属性值。使用 <strong>userRoleName</strong> 来指定该属性名称。</p>
+</li>
+</ul>
+<p>当然，也可以综合使用这两种方法来表示角色。</p>
+<h4 id="快速入门-3"><a href="#快速入门-3" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了配置 Tomcat 使用 JNDIRealm，需要下列步骤：</p>
+<ol>
+<li>确保目录服务器配置中的模式符合上文所列出的要求。</li>
+<li>必要时可以为 Tomcat 配置一个用户名和密码，对上文所提到的信息用于只读访问权限（Tomcat 永远不会修改该信息。）</li>
+<li>按照下文的方法，在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中设置一个 <code>&lt;Realm&gt;</code> 元素。</li>
+<li>如果 Tomcat 已经运行，则重启它。</li>
+</ol>
+<h4 id="Realm-元素属性-1"><a href="#Realm-元素属性-1" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>如上所述，为了配置 JDBCRealm，需要创建一个 <code>Realm</code> 元素，并把它放在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中。JDBCRealm 的属性都定义在 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm</a> 配置文档中。</p>
+<h4 id="范例-2"><a href="#范例-2" class="headerlink" title="范例"></a>范例</h4><p>在目录服务器上创建适合的模式超出了本文档的讲解范围，因为这是跟每个目录服务器的实现密切相关的。在下面的实例中，我们将假定使用的是 OpenLDAP 目录服务器的一个分发版（2.0.11 版或更新版本，可从<a href="http://www.openldap.org/" target="_blank" rel="noopener">http://www.openldap.org</a>处下载）。假设 <code>slapd.conf</code> 文件包含下列设置（除了其他设置之外）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">database ldbm</span><br><span class="line">suffix dc=&quot;mycompany&quot;,dc=&quot;com&quot;</span><br><span class="line">rootdn &quot;cn=Manager,dc=mycompany,dc=com&quot;</span><br><span class="line">rootpw secret</span><br></pre></td></tr></table></figure>
+<p>我们还假定 <code>connectionURL</code>，使目录服务器与 Tomcat 运行在同一台机器上。要想了解如何配置及使用 JNDI LDAP 提供者的详细信息，请参看 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/jndi/index.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/7/docs/technotes/guides/jndi/index.html</a>。</p>
+<p>接下来，假定利用如下所示的元素（以 LDIF 格式）来填充目录服务器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># Define top-level entry</span><br><span class="line">dn: dc=mycompany,dc=com</span><br><span class="line">objectClass: dcObject</span><br><span class="line">dc:mycompany</span><br><span class="line"></span><br><span class="line"># Define an entry to contain people</span><br><span class="line"># searches for users are based on this entry</span><br><span class="line">dn: ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: people</span><br><span class="line"></span><br><span class="line"># Define a user entry for Janet Jones</span><br><span class="line">dn: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: jjones</span><br><span class="line">sn: jones</span><br><span class="line">cn: janet jones</span><br><span class="line">mail: j.jones@mycompany.com</span><br><span class="line">userPassword: janet</span><br><span class="line"></span><br><span class="line"># Define a user entry for Fred Bloggs</span><br><span class="line">dn: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: fbloggs</span><br><span class="line">sn: bloggs</span><br><span class="line">cn: fred bloggs</span><br><span class="line">mail: f.bloggs@mycompany.com</span><br><span class="line">userPassword: fred</span><br><span class="line"></span><br><span class="line"># Define an entry to contain LDAP groups</span><br><span class="line"># searches for roles are based on this entry</span><br><span class="line">dn: ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: groups</span><br><span class="line"></span><br><span class="line"># Define an entry for the &quot;tomcat&quot; role</span><br><span class="line">dn: cn=tomcat,ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: groupOfUniqueNames</span><br><span class="line">cn: tomcat</span><br><span class="line">uniqueMember: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">uniqueMember: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br><span class="line"></span><br><span class="line"># Define an entry for the &quot;role1&quot; role</span><br><span class="line">dn: cn=role1,ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: groupOfUniqueNames</span><br><span class="line">cn: role1</span><br><span class="line">uniqueMember: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br></pre></td></tr></table></figure>
+<p>OpenLDAP 服务器。假定用户使用他们的 uid（比如说 jjones）登录应用，匿名连接已经足够可以搜索目录并获取角色信息了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">       userPattern=&quot;uid=&#123;0&#125;,ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+<p>利用这种配置，通过在 <code>userPattern</code> 替换用户名，realm 能够确定用户的 DN，然后利用这个 DN 和取自用户的密码将用户绑定到目录中，从而验证用户身份，然后搜索整个目录服务器来找寻用户角色。</p>
+<p>现在假定希望用户输入电子邮件地址（而不是用户 id）。在这种情况下，realm 必须搜索目录找到用户项。当用户项被保存在多个子树中，而这些子树可能分别对应不同的组织单位或企业位置时，可能必须执行一个搜索。</p>
+<p>另外，假设除了分组项之外，你还想用用户项的属性来保存角色，那么在这种情况下，Janet Jones 对应的项可能如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dn: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: jjones</span><br><span class="line">sn: jones</span><br><span class="line">cn: janet jones</span><br><span class="line">mail: j.jones@mycompany.com</span><br><span class="line">memberOf: role2</span><br><span class="line">memberOf: role3</span><br><span class="line">userPassword: janet</span><br></pre></td></tr></table></figure>
+<p>这个 realm 配置必须满足以下新要求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">          userBase=&quot;ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">        userSearch=&quot;(mail=&#123;0&#125;)&quot;</span><br><span class="line">      userRoleName=&quot;memberOf&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+<p>当 Janet Jones 用她的电子邮件 <a href="mailto:`j.jones@mycompany.com" target="_blank" rel="noopener">`j.jones@mycompany.com</a><code>登录时，realm 会搜索目录，寻找带有该电邮值的唯一项，并尝试利用给定密码来绑定到目录：</code>uid=jjones,ou=people,dc=mycompany,dc=com<code>。如果验证成功，该用户将被赋予以下三个角色：&quot;role2&quot; 与 &quot;role3&quot;，她的目录项中的</code>memberOf<code>属性值；&quot;tomcat&quot;，她作为成员存在的唯一分组项中的</code>cn` 属性值。</p>
+<p>最后，为了验证用户，我们必须从目录中获取密码并在 realm 中执行本地比对，将 realm 按照如下方式来配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">    connectionName=&quot;cn=Manager,dc=mycompany,dc=com&quot;</span><br><span class="line">connectionPassword=&quot;secret&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">      userPassword=&quot;userPassword&quot;</span><br><span class="line">       userPattern=&quot;uid=&#123;0&#125;,ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+<p>但是，正如之前所讨论的那样，往往应该优先考虑默认的绑定模式。</p>
+<h4 id="特别注意事项-2"><a href="#特别注意事项-2" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 JNDIRealm 需要遵循以下规则：</p>
+<ul>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
+</ul>
+<h3 id="UserDatabaseRealm"><a href="#UserDatabaseRealm" class="headerlink" title="UserDatabaseRealm"></a>UserDatabaseRealm</h3><p><strong>UserDatabaseRealm</strong> 是 Tomcat <strong>Realm</strong> 接口的一种实现，使用 JNDI 资源来存储用户信息。默认，JNDI 资源是通过一个 XML 文件来提供支持的。它并不是针对大规模生产环境用途而设计的。在启动时，UserDatabaseRealm 会从一个 XML 文档中加载所有用户以及他们角色的信息（该 XML 文档默认位于 <code>$CATALINA_BASE/conf/tomcat-users.xml</code>。）用户、密码以及相应角色通常可利用 JMX 进行动态编辑，更改结果会加以保存并立刻反映在 XML 文档中。</p>
+<h4 id="Realm-元素属性-2"><a href="#Realm-元素属性-2" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>跟<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">之前讨论</a>的一样，为了配置 UserDatabaseRealm，需要在 <code>$CATALINA_BASE/conf/server.xml</code> 中创建 <code>&lt;Realm&gt;</code> 元素。关于 UserDatabaseRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="用户文件格式"><a href="#用户文件格式" class="headerlink" title="用户文件格式"></a>用户文件格式</h4><p>用户文件使用的格式与 <a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#userfileformatofMemoryRealm" target="_blank" rel="noopener">MemoryRealm</a>所使用的相同。</p>
+<h4 id="范例-3"><a href="#范例-3" class="headerlink" title="范例"></a>范例</h4><p>默认的 Tomcat 安装已经配置了内嵌在 <code>&lt;Engine&gt;</code> 元素中的 UserDatabaseRealm，因而可以将其应用于所有的虚拟主机和 Web 应用中。默认的 <code>conf/tomcat-users.xml</code> 文件内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;tomcat-users&gt;</span><br><span class="line">  &lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;tomcat&quot; /&gt;</span><br><span class="line">  &lt;user username=&quot;role1&quot;  password=&quot;tomcat&quot; roles=&quot;role1&quot;  /&gt;</span><br><span class="line">  &lt;user username=&quot;both&quot;   password=&quot;tomcat&quot; roles=&quot;tomcat,role1&quot; /&gt;</span><br><span class="line">&lt;/tomcat-users&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="特别注意事项-3"><a href="#特别注意事项-3" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 UserDatabaseRealm 需要遵循以下规则：</p>
+<ul>
+<li>当 Tomcat 首次启动时，它会从用户文件中加载所有已定义的用户及其相关信息。假如对该用户文件中的数据进行修改，则只有重启 Tomcat 后才能生效。这些修改并不是通过 UserDatabase 数据源来完成的，是由 Tomcat 所提供的通过 JMX 访问的 MBean 来实现的。</li>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+</ul>
+<h3 id="MemoryRealm"><a href="#MemoryRealm" class="headerlink" title="MemoryRealm"></a>MemoryRealm</h3><h4 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h4><p><strong>MemoryRealm</strong> 是一种对 Tomcat 的 Realm 接口的简单演示实现，并不是针对生产环境而设计的。在启动时，MemoryRealm 会从 XML 文档中加载所有的用户信息及其相关的角色信息（默认该文档位于 <code>$CATALINA_BASE/conf/tomcat-users.xml</code>）。只有重启 Tomcat 才能使对该文件作出的修改生效。</p>
+<h4 id="Realm-元素属性-3"><a href="#Realm-元素属性-3" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>跟<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">之前讨论</a>的一样，为了配置 MemoryRealm，需要在 <code>$CATALINA_BASE/conf/server.xml</code> 中创建 <code>&lt;Realm&gt;</code> 元素。关于 MemoryRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="用户文件格式-1"><a href="#用户文件格式-1" class="headerlink" title="用户文件格式"></a>用户文件格式</h4><p>用户文件包含下列属性。默认情况下，<code>conf/tomcat-users.xml</code> 必须是一个 XML 文件，并且带有一个根元素：<code>&lt;tomcat-users&gt;</code>。每一个有效用户都有一个内嵌在根元素中的 <code>&lt;user&gt;</code> 元素。</p>
+<ul>
+<li><strong>name</strong> 用户登录所用的用户名。</li>
+<li><strong>password</strong> 用户登录所用的密码。如果 <code>&lt;Realm&gt;</code> 元素中没有设置 <code>digest</code> 属性，则采用明文密码，否则就设置为摘要式密码，如<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#digestedPass" target="_blank" rel="noopener">之前讨论</a>的那样。</li>
+<li><strong>roles</strong> 以逗号分隔的用户角色名列表。</li>
+</ul>
+<h4 id="特别注意事项-4"><a href="#特别注意事项-4" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 MemoryRealm 需要注意以下规则：</p>
+<ul>
+<li>当 Tomcat 首次启动时，它会从用户文件中加载所有已定义的用户及其相关信息。假如对该用户文件中的数据进行修改，则只有重启 Tomcat 后才能生效。</li>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
+</ul>
+<h3 id="JAASRealm"><a href="#JAASRealm" class="headerlink" title="JAASRealm"></a>JAASRealm</h3><h4 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h4><p><strong>JAASRealm</strong> 是 Tomcat 的 <code>Realm</code> 接口的一种实现，通过 Java Authentication &amp; Authorization Service（JAAS，Java身份验证与授权服务）架构来实现对用户身份的验证。JAAS 架构现已加入到标准的 Java SE API 中。</p>
+<p>通过 JAASRealm，开发者实际上可以将任何安全的 Realm 与 Tomcat 的 CMA 一起组合使用。</p>
+<p>JAASRealm 是 Tomcat 针对基于 JAAS 的 J2EE 1.4 的 J2EE 认证框架的原型实现，基于 <a href="https://www.jcp.org/en/jsr/detail?id=196" target="_blank" rel="noopener">JCP Specification Request 196</a>，从而能够增强容器管理安全性，并且能促进“可插拔的”认证机制，该认证机制能够实现与容器的无关性。</p>
+<p>根据 JAAS 登录模块和准则（参见 <code>javax.security.auth.spi.LoginModule</code> 与 <code>javax.security.Principal</code> 的相关说明），你可以自定义安全机制，或者将第三方的安全机制与 Tomcat 所实现的 CMA 相集成。</p>
+<h4 id="快速入门-4"><a href="#快速入门-4" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了利用自定义的 JAAS 登录模块使用 JAASRealm，需要执行如下步骤：</p>
+<ol>
+<li><p>编写自己的 JAAS 登录模块。在开发自定义登录模块时，将通过 JAAS 登录上下文对基于 JAAS 2的 User 和 Role 类管理。注意，JAASRealm 内建的 <code>CallbackHandler</code> 目前只能识别 <code>NameCallback</code> 和 <code>PasswordCallback</code>。</p>
+<p>\2. 详情请参看 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/tutorials/GeneralAcnOnly.html" target="_blank" rel="noopener">JAAS 认证教程</a> 与 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/JAASLMDevGuide.html" target="_blank" rel="noopener">JAAS 登录模块开发教程</a>。</p>
+</li>
+<li><p>尽管 JAAS 并未明确指定，但你也应该为用户和角色创建不同的类来加以区分，它们都应该扩展自 <code>javax.security.Principal</code>，从而使 Tomcat 明白从登录模块中返回的规则究竟是用户还是角色（参看 <code>org.apache.catalina.realm.JAASRealm</code> 相关描述）。不管怎样，第一个返回的规则<strong>总</strong>被认为是用户规则。</p>
+</li>
+<li><p>将编译好的类指定在 Tomcat 的类路径中。</p>
+</li>
+<li><p>为 Java 建立一个 login.config 文件（参见 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/tutorials/LoginConfigFile.html" target="_blank" rel="noopener">JAAS LoginConfig 文件</a>）。将其位置指定给 JVM，从而便于 Tomcat 明确它的位置。例如，设置如下环境变量：<br><code>JAVA_OPTS=$JAVA_OPTS -Djava.security.auth.login.config==$CATALINA_BASE/conf/jaas.config</code></p>
+</li>
+<li><p>为了保护一些资源，在 web.xml 中配置安全限制。</p>
+</li>
+<li><p>在 server.xml 中配置 JAASRealm 模块。</p>
+</li>
+<li><p>重启 Tomcat（如果它正在运行）。</p>
+</li>
+</ol>
+<h4 id="Realm-元素属性-4"><a href="#Realm-元素属性-4" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>在上述步骤中，为了配置步骤 6 以上的 JAASRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。关于 JAASRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="范例-4"><a href="#范例-4" class="headerlink" title="范例"></a>范例</h4><p>下例是 server.xml 中的一截代码段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.JAASRealm&quot;</span><br><span class="line">                appName=&quot;MyFooRealm&quot;</span><br><span class="line">    userClassNames=&quot;org.foobar.realm.FooUser&quot;</span><br><span class="line">     roleClassNames=&quot;org.foobar.realm.FooRole&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>完全由登录模块负责创建并保存用于表示用户规则的 User 与 Role 对象（<code>javax.security.auth.Subject</code>）。如果登录模块不仅无法创建用户对象，而且也无法抛出登录异常，Tomcat CMA 就会失去作用，所在页面就会变成 <code>http://localhost:8080/myapp/j_security_check</code> 或其他未指明的页面。</p>
+<p>JAAS 方法具有双重的灵活性：</p>
+<ul>
+<li>你可以在自定义的登录模块后台执行任何所需的进程。</li>
+<li>通过改变配置以及重启服务器，你可以插入一个完全不同的登录模块，不需要对应用做出任何改动。</li>
+</ul>
+<h4 id="特别注意事项-5"><a href="#特别注意事项-5" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><ul>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>和其他 Realm 实现一样，如果 <code>server.xml</code> 中的 <code>&lt;Realm&gt;</code> 元素包含一个 <code>digest</code> 属性，则支持摘要式密码。JAASRealm 的 <code>CallbackHandler</code> 将先于将密码传回 <code>LoginModule</code> 之前，对密码进行摘要式处理。</li>
+</ul>
+<h3 id="CombinedRealm"><a href="#CombinedRealm" class="headerlink" title="CombinedRealm"></a>CombinedRealm</h3><h4 id="简介-5"><a href="#简介-5" class="headerlink" title="简介"></a>简介</h4><p><strong>CombinedRealm</strong> 是一种 Tomcat 的 Realm 实现，通过一个或多个子 Realm 进行用户验证。</p>
+<p>通过 CombinedRealm，开发者能够将多个 Realm（同一或不同类型） 组合起来使用，从而用于验证多种数据源，而且万一当其中一个 Realm 失败，或其他一些操作需要多个 Realm 时，它还能提供回滚处理。</p>
+<p>子 Realm 是通过在定义 CombineRealm 的 <code>Realm</code> 元素中内嵌 <code>Realm</code> 元素来实现的。验证操作会按照 Realm 元素的叠加顺序来逐个进行。对逐个 Realm 进行验证，从而就能充分证明用户的身份。</p>
+<h4 id="Realm-元素属性-5"><a href="#Realm-元素属性-5" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>为了配置 CombinedRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 或 <code>&lt;Host&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。同样，你也可以将其内嵌到 <code>context.xml</code> 文件下的 <code>&lt;Context&gt;</code> 节点。</p>
+<h4 id="范例-5"><a href="#范例-5" class="headerlink" title="范例"></a>范例</h4><p>下面是 server.xml 中的一段代码，综合使用了 UserDatabaseRealm 和 DataSourceRealm：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.CombinedRealm&quot; &gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span><br><span class="line">             resourceName=&quot;UserDatabase&quot;/&gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.DataSourceRealm&quot;</span><br><span class="line">             dataSourceName=&quot;jdbc/authority&quot;</span><br><span class="line">             userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">             userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br><span class="line">&lt;/Realm&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="LockOutRealm"><a href="#LockOutRealm" class="headerlink" title="LockOutRealm"></a>LockOutRealm</h3><h4 id="简介-6"><a href="#简介-6" class="headerlink" title="简介"></a>简介</h4><p><strong>LockOutRealm</strong> 是一个 Tomcat 的 Realm 实现，它扩展了 CombinedRealm，假如在某一段时间内出现很多验证失败，则它能够提供锁定用户的功能。</p>
+<p>为了确保操作的正确性，该 Realm 允许出现较合理的同步。</p>
+<p>该 Realm 并不需要对底层的 Realm 或与其相关的用户存储机制进行任何改动。它会记录失败的登录，包括那些因为用户不存在的登录。为了防止无效用户通过精心设计的请求而实施的 DOS 攻击（从而造成缓存增加），没有通过验证的用户所在列表的容量受到了严格的限制。</p>
+<p>子 Realm 是通过在定义 LockOutRealm 的 <code>Realm</code> 元素中内嵌 <code>Realm</code> 元素来实现的。验证操作会按照 Realm 元素的叠加顺序来逐个进行。对逐个 Realm 进行验证，从而就能充分证明用户的身份。</p>
+<h4 id="Realm-元素属性-6"><a href="#Realm-元素属性-6" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>为了配置 CombinedRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 或 <code>&lt;Host&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。同样，你也可以将其内嵌到 <code>context.xml</code> 文件下的 <code>&lt;Context&gt;</code> 节点。关于 LockOutRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="范例-6"><a href="#范例-6" class="headerlink" title="范例"></a>范例</h4><p>下面是 server.xml 中的一段代码，为 UserDatabaseRealm 添加了锁定功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.LockOutRealm&quot; &gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span><br><span class="line">             resourceName=&quot;UserDatabase&quot;/&gt;</span><br><span class="line">&lt;/Realm&gt;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/22/WSDL/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/big-endian和little-endian/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Realm-配置"><span class="nav-number">1.</span> <span class="nav-text">Realm 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#快速入门"><span class="nav-number">1.1.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">1.2.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-Realm"><span class="nav-number">1.2.1.</span> <span class="nav-text">什么是 Realm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-Realm"><span class="nav-number">1.2.2.</span> <span class="nav-text">配置 Realm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用特性"><span class="nav-number">1.3.</span> <span class="nav-text">常用特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要式密码"><span class="nav-number">1.3.1.</span> <span class="nav-text">摘要式密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#范例应用"><span class="nav-number">1.3.2.</span> <span class="nav-text">范例应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Manager-应用"><span class="nav-number">1.3.3.</span> <span class="nav-text">Manager 应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Realm-日志"><span class="nav-number">1.3.4.</span> <span class="nav-text">Realm 日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准-Realm-实现"><span class="nav-number">1.4.</span> <span class="nav-text">标准 Realm 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBCRealm"><span class="nav-number">1.4.1.</span> <span class="nav-text">JDBCRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速入门-1"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Realm-元素属性"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">Realm 元素属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范例"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">范例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特别注意事项"><span class="nav-number">1.4.1.5.</span> <span class="nav-text">特别注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DataSourceRealm"><span class="nav-number">1.4.2.</span> <span class="nav-text">DataSourceRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-1"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速入门-2"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范例-1"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">范例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特别注意事项-1"><span class="nav-number">1.4.2.4.</span> <span class="nav-text">特别注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JNDIRealm"><span class="nav-number">1.4.3.</span> <span class="nav-text">JNDIRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-2"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#a-连接目录"><span class="nav-number">1.4.3.1.1.</span> <span class="nav-text">a. 连接目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#b-选择用户目录项"><span class="nav-number">1.4.3.1.2.</span> <span class="nav-text">b. 选择用户目录项</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c-用户认证"><span class="nav-number">1.4.3.1.3.</span> <span class="nav-text">c. 用户认证</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#d-赋予用户角色"><span class="nav-number">1.4.3.1.4.</span> <span class="nav-text">d. 赋予用户角色</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速入门-3"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Realm-元素属性-1"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">Realm 元素属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范例-2"><span class="nav-number">1.4.3.4.</span> <span class="nav-text">范例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特别注意事项-2"><span class="nav-number">1.4.3.5.</span> <span class="nav-text">特别注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UserDatabaseRealm"><span class="nav-number">1.4.4.</span> <span class="nav-text">UserDatabaseRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Realm-元素属性-2"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">Realm 元素属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户文件格式"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">用户文件格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范例-3"><span class="nav-number">1.4.4.3.</span> <span class="nav-text">范例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特别注意事项-3"><span class="nav-number">1.4.4.4.</span> <span class="nav-text">特别注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MemoryRealm"><span class="nav-number">1.4.5.</span> <span class="nav-text">MemoryRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-3"><span class="nav-number">1.4.5.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Realm-元素属性-3"><span class="nav-number">1.4.5.2.</span> <span class="nav-text">Realm 元素属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户文件格式-1"><span class="nav-number">1.4.5.3.</span> <span class="nav-text">用户文件格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特别注意事项-4"><span class="nav-number">1.4.5.4.</span> <span class="nav-text">特别注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JAASRealm"><span class="nav-number">1.4.6.</span> <span class="nav-text">JAASRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-4"><span class="nav-number">1.4.6.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快速入门-4"><span class="nav-number">1.4.6.2.</span> <span class="nav-text">快速入门</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Realm-元素属性-4"><span class="nav-number">1.4.6.3.</span> <span class="nav-text">Realm 元素属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范例-4"><span class="nav-number">1.4.6.4.</span> <span class="nav-text">范例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#特别注意事项-5"><span class="nav-number">1.4.6.5.</span> <span class="nav-text">特别注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CombinedRealm"><span class="nav-number">1.4.7.</span> <span class="nav-text">CombinedRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-5"><span class="nav-number">1.4.7.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Realm-元素属性-5"><span class="nav-number">1.4.7.2.</span> <span class="nav-text">Realm 元素属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范例-5"><span class="nav-number">1.4.7.3.</span> <span class="nav-text">范例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LockOutRealm"><span class="nav-number">1.4.8.</span> <span class="nav-text">LockOutRealm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-6"><span class="nav-number">1.4.8.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Realm-元素属性-6"><span class="nav-number">1.4.8.2.</span> <span class="nav-text">Realm 元素属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#范例-6"><span class="nav-number">1.4.8.3.</span> <span class="nav-text">范例</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

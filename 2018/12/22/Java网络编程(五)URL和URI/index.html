@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="URL是URI的一种表示方式 URI的语法 模式:模式特定部分 （模式特定部分的语法取决于所用的模式） data    连接重直接包含的base64编码数据file    本地磁盘文件ftphttpmailto  电子邮件地址magnet 对等网络可以下载的资源telnet 与基于telnet的服务的连接 urn 统一资源名  还有其他非标准的 rmi jar jndi doc URI没有特定的语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/Java网络编程(五)URL和URI/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="URL是URI的一种表示方式 URI的语法 模式:模式特定部分 （模式特定部分的语法取决于所用的模式） data    连接重直接包含的base64编码数据file    本地磁盘文件ftphttpmailto  电子邮件地址magnet 对等网络可以下载的资源telnet 与基于telnet的服务的连接 urn 统一资源名  还有其他非标准的 rmi jar jndi doc URI没有特定的语">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-05T05:11:37.818Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="URL是URI的一种表示方式 URI的语法 模式:模式特定部分 （模式特定部分的语法取决于所用的模式） data    连接重直接包含的base64编码数据file    本地磁盘文件ftphttpmailto  电子邮件地址magnet 对等网络可以下载的资源telnet 与基于telnet的服务的连接 urn 统一资源名  还有其他非标准的 rmi jar jndi doc URI没有特定的语">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/Java网络编程(五)URL和URI/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(五)URL和URI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>URL是URI的一种表示方式</p>
+<p>URI的语法</p>
+<p>模式:模式特定部分 （模式特定部分的语法取决于所用的模式）</p>
+<p>data    连接重直接包含的base64编码数据<br>file    本地磁盘文件<br>ftp<br>http<br>mailto  电子邮件地址<br>magnet 对等网络可以下载的资源<br>telnet 与基于telnet的服务的连接</p>
+<p>urn 统一资源名  还有其他非标准的 rmi jar jndi doc</p>
+<p>URI没有特定的语法，不过大都采用一种层次结构的形式</p>
+<p>//authority/path?query</p>
+<p>authority 代表解析该URI的其余部分的授权机构 </p>
+<p>比如  <a href="http://www.baidu.com/ca/abc?key=233" target="_blank" rel="noopener">http://www.baidu.com/ca/abc?key=233</a></p>
+<p>授权机构 <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a><br>路径 /ca/abc              不过这个部分不全是路径  有可能是一个数据库的提取信息的参数 也可以代表一个会话钥匙<br>请求 key=233</p>
+<p>但有些uri表示不分层，也有些是通过.而不是/来进行分层</p>
+<p>非ascll得字母和数字 要用%号进行转移 后面加上它得UTF-8的16进制的编码</p>
+<p>如果没有将非ascll字符按上述编码而是将其直接放在URI中，这个是IRI　但很多协议和软件只接受和支持URI</p>
+<p>如果不是用于特定的部分　／　和　＠都要进行编码</p>
+<h3 id="URL类"><a href="#URL类" class="headerlink" title="URL类"></a>URL类</h3><p>这是一个final类 不能对其派生</p>
+<p>URL 对象是不可改变的，他是线程安全的</p>
+<h4 id="构造URL"><a href="#构造URL" class="headerlink" title="构造URL"></a>构造URL</h4><p>构造函数</p>
+<p>URL(String url)<br>URL(String protocol,String hostname,String file)   file前记得要加/<br>URL(String protocol,String hostname,int port,String file)  port设为-1说明用协议默认端口<br>URL(URL base,String relative)  base是一个完整的指向file的路径了 relative不用/</p>
+<p>除了验证能否识别URL的模式之外，不支持则会抛出MalformedURLException，java不会对url做其他检查</p>
+<p>其他URL对象来源</p>
+<p>java类库中其他的方法也返回URL对象</p>
+<p>applet中调用 getDocumentBase() 返回这个applet的页面的URL getCodeBase() 该applet的class文件的URL</p>
+<p>java.io.File 有一个toURL() 他会返回指定文件匹配的file URL  这个方法会返回URL格式和平台相关</p>
+<p>类加载器能加载资源 它的静态方法  ClassLoader.getSystemResource(String name) 返回URL 通过它可以读取一个资源</p>
+<p>ClassLoader.getSystemResources(String name) 返回一个Enumeration 包含一个URL列表</p>
+<p>getResource(String name) 会在引用类加载器使用的路径中搜索指定资源的URL</p>
+<p>java.swing.JEditorPane的getPage() 和java.net.URLConnection getURL()</p>
+<h4 id="从URL获取数据"><a href="#从URL获取数据" class="headerlink" title="从URL获取数据"></a>从URL获取数据</h4><p>我们接下来介绍如何往URL类压榨数据</p>
+<p>InputStream openStream()<br>URLConnection openConnection()<br>URLConnection openConnection(Proxy proxy)<br>Object getContent()<br>Object getContent(Class[]classes)</p>
+<p>InputStream openStream()  这个对象获得的资源是原始内容未经解释 它不包含任何http首部或者协议相关信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">import java.io.BufferedInputStream;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.InputStream;</span><br><span class="line">import java.io.InputStreamReader;</span><br><span class="line">import java.io.Reader;</span><br><span class="line">import java.net.URL;</span><br><span class="line">import java.nio.charset.MalformedInputException;</span><br><span class="line"></span><br><span class="line">public class sourceViewer &#123;</span><br><span class="line">	public static void main(String[]args) &#123;</span><br><span class="line">		if(args.length&gt;0) &#123;</span><br><span class="line">			InputStream inputStream=null;</span><br><span class="line">			try &#123;</span><br><span class="line">				URL url=new URL(args[0]);</span><br><span class="line">				inputStream=url.openStream();</span><br><span class="line">				inputStream=new BufferedInputStream(inputStream);</span><br><span class="line">				Reader reader=new InputStreamReader(inputStream);</span><br><span class="line">				int c;</span><br><span class="line">				while((c=reader.read())!=-1) &#123;</span><br><span class="line">					System.out.print((char)c);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			catch(MalformedInputException ex) &#123;</span><br><span class="line">				System.err.println(args[0]+&quot;is not a parseable URL&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			catch(IOException ex) &#123;</span><br><span class="line">				System.err.println(ex);</span><br><span class="line">			&#125;</span><br><span class="line">			finally &#123;</span><br><span class="line">				if(inputStream!=null) &#123;</span><br><span class="line">					try &#123;</span><br><span class="line">						inputStream.close();</span><br><span class="line">					&#125;</span><br><span class="line">					catch (IOException e) &#123;</span><br><span class="line">						// TODO: handle exception</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个不可靠的地方就是 远程主机和本地客户端可能采用不同的默认字符集。如果页面使用了与Ascll完全不同字符集而无法识别Meta标记或http头部什么的。导致编码错误</p>
+<p>URLConnection openConnection()</p>
+<p>openConnection() 打开socket，并返回一个URLConnection()对象  它表示一个网络资源打开的连接 调用失败出IOException</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">try&#123;</span><br><span class="line">    URL u=new URL(&quot;http://xxxx&quot;);</span><br><span class="line">    try&#123;</span><br><span class="line">        URLConnection uc=u.openConnection();</span><br><span class="line">        &lt;!--通过URLConnection去获取输入流--&gt;</span><br><span class="line">        InputStream in=uc.getInputStream();</span><br><span class="line">    &#125;</span><br><span class="line">    catch(MalformedURLException ex)&#123;</span><br><span class="line">        System.err.println(ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>URLConnection允许你访问http首部以及原始的html 除了URL读取，还允许你向url写入数据</p>
+<p>URLConnection openConnection(Proxy proxy)  这个版本就指定通过哪个代理服务器传递连接</p>
+<p>Object getContent()  会根据数据内容尝试建立一个某种类型的对象 如果是文本内容则返回InputStream 如果是图像则返回一个ImageProducer<br>不过返回的是Object 要强制类型转换你要的类型   </p>
+<p>它会从服务器的数据首部查找的Content-type 字段，如果服务器没有MiMe首部或者给了不熟悉的类型就会返回输入流 如果出错则返回IOException</p>
+<p>Object getContent(Class[]classes)   指定你想要返回的类型  你可以传个数组代表你希望返回的类型的优先列表</p>
+<h3 id="分解URL"><a href="#分解URL" class="headerlink" title="分解URL"></a>分解URL</h3><p>URL 对象可以通过一些成员方法得到一些部分的url</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">String getProtocol()  得到模式</span><br><span class="line"></span><br><span class="line">String getHost() 返回主机</span><br><span class="line"></span><br><span class="line">int getPort() 返回端口 没明确指明则返回-1</span><br><span class="line"></span><br><span class="line">int getDefaultPort() URL没有指定端口，该方法返回这个url协议所使用的默认端口</span><br><span class="line"></span><br><span class="line">String getFile() 返回路径 （第一个斜线后的内容到#前）</span><br><span class="line"></span><br><span class="line">String getPath() 返回路径但不包含查询的部分</span><br><span class="line"></span><br><span class="line">String getRef() 返回片段标识符的部分 #后的部分</span><br><span class="line"></span><br><span class="line">String getQuery() 返回查询字符串 如果没有返回null</span><br><span class="line"></span><br><span class="line">String getUserInfo() 返回用户信息 /后 @ 前面的内容  但是对于mailto模式的@ 不代表用户 整个代表路径 其实是指接收方的用户</span><br><span class="line"></span><br><span class="line">String getAuthority() 返回权威机构 // 。。。。/中的内容可能包含 用户信息 和端口内容</span><br></pre></td></tr></table></figure>
+<p>相等性和比较</p>
+<p>URL的比较 是要在同一主机 路径 资源 这才是相同 然后equals() 返回true  equals()通过DNS去解析主机来判断两个主机相同但不会比较两个URL标识的资源 比如加个端口省略默认资源什么的就不认识了</p>
+<p>实际上equals是一个阻塞IO的操作 所以不要将URL存储在依赖equals的数据结构当中比如HashMap 更好选择是URI</p>
+<p>sameFile() 这个比较和equals基本相同 但它不考虑片段的标识符</p>
+<h4 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h4><p>toString()  生成String对象 而且URL时绝对URL  往往是用于做隐式调用的<br>toExternalForm() 将URL对象转为字符串  实际上toString()所做的事情就是返回toExternalForm()<br>toURI() 将URL对象转换为URI对象      </p>
+<p>URI类 提供了比URL类更准确，更符合规范的行为。对于绝对化和编码等操作，应当首选URI类，因为它的equals方法不会阻塞，而URL类应当从事服务器下载的任务</p>
+<p>URI是对URL的抽象，不仅包括统一资源定位符，还包括统一资源名（URN） 实际使用上URI大多是URL 但大多数标准是用URI定义的</p>
+<ul>
+<li>URI类完全有关于资源的标识和URI的解析，它没有提供方法去获取</li>
+<li>URI的规范更加一直</li>
+<li>URI可以代表相对的地址，但URL在存储URI之前会将其绝对化地址</li>
+</ul>
+<p>如果你是想下载一个URL内容，就用URL 如果是完成标识而不是获取，则使用URI类 二者都需要时 其实可以通过toURL 和 toURI 相互转换</p>
+<h3 id="构造URI"><a href="#构造URI" class="headerlink" title="构造URI"></a>构造URI</h3><ul>
+<li>URI(String uri)</li>
+<li>URI(String scheme,String schemeSpecificPart,String fragment)</li>
+<li>URI(String scheme,String host,String path,String fragment)</li>
+<li>URI(String scheme,String authority,String path,String query)</li>
+<li>URI(String scheme,String userInfo,String host,int port,String path,String query,String fragment)</li>
+</ul>
+<p>与URL类不同，URI类不依赖底层协议处理器，所以只要URI语法正确，Java就不需要为了创建URI对象而理解其协议。</p>
+<p><strong>URI(String uri)</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URI voice=<span class="keyword">new</span> URI(<span class="string">"tel:+1-800-9988-9938"</span>);</span><br><span class="line">URI web=<span class="keyword">new</span> URI(<span class="string">"http://www.xml.com/pub/a/..."</span>);</span><br><span class="line">URI book=<span class="keyword">new</span> URI(<span class="string">"urn:isbn:1-565-92870-9"</span>);</span><br></pre></td></tr></table></figure>
+<p>如果语法不正常的话，比如冒号开头，这个构造函数将抛出一个URISyntaxException 异常 这是一个受查异常，所以要捕获这个异常。 或者调用构造函数的方法中声明可能抛出该异常 URI中可以包括其他的Unicode字符</p>
+<p>剩下我就不一个个构造函数讲了，就讲一下参数的意义</p>
+<p>scheme 模式 是URI的协议如http urn tel    必须字母数字 和（+-.） 组成  如果传入null 则省略，创建相对uri</p>
+<p>schemeSpecificPart  模式特定部分，取决于URI模式的语法　　和scheme相关  不和规矩的字符会用百分号来转义</p>
+<p>fragment 片段标识符    #号后面的内容 可以传null</p>
+<p>host/authority path 用于层次的URI 比如http ftp  指定主机和路径  host <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a>  path /xxxb/cc</p>
+<p>query 用于表示？ 之后的东西  代表参数</p>
+<p>userinfo 代表用户信息</p>
+<p>port 代表端口</p>
+<p>如果你确信你的URI是有效的，不违反规则，可以使用静态工厂方法URI.create() 与构造函数不同，不抛出URISyntaxException异常 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URI styles=URI.create(<span class="string">"xxxxx"</span>);</span><br></pre></td></tr></table></figure>
+<p>如果是不正确的，方法则会抛出一个IlleagalArgumentException的运行异常</p>
+<p>URI各部分的获取</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URISplitter</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;args.length();i++)&#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                URI u=<span class="keyword">new</span> URI(args[i]);</span><br><span class="line">                System.out.println(<span class="string">"The url is "</span>+u);</span><br><span class="line">                <span class="keyword">if</span>(u.isOpaque())&#123;   <span class="comment">//判断是否为层次URI</span></span><br><span class="line">            	  	System.out.println(<span class="string">"这是一个层次URI"</span>);</span><br><span class="line">                	System.out.println(<span class="string">"the scheme is"</span>+u.getScheme());</span><br><span class="line">                  	System.out.println(<span class="string">"the scheme specific part is "</span>+u.getSchemeSpecificPart());</span><br><span class="line">                    System.out.println(<span class="string">"the fragment id is "</span>+u.getFragment());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    System.out.println(<span class="string">"this is a hierarchical url."</span>);</span><br><span class="line">                    System.out.println(<span class="string">"the scheme is"</span>+u.getScheme());</span><br><span class="line">                    <span class="keyword">try</span>&#123;</span><br><span class="line">                        u=u.parseServerAuthority();   <span class="comment">//将authority进行划分？</span></span><br><span class="line">                        System.out.println(<span class="string">"the host is"</span>+u.getHost());</span><br><span class="line">                        System.out.println(<span class="string">"the user info is"</span>+u.getUserInfo());</span><br><span class="line">                        System.out.println(<span class="string">"the port is"</span>+u.getPort());</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">catch</span>(URISyntaxException ex)&#123;</span><br><span class="line">                        System.out.println(<span class="string">"the authority is"</span>+u.getAuthority());</span><br><span class="line">                    &#125;</span><br><span class="line">                    System.out.println(<span class="string">"the path is"</span>+u.getPath());</span><br><span class="line">                    System.out.println(<span class="string">"the query string is"</span>+u.getQuery());</span><br><span class="line">                    System.out.println(<span class="string">"fragment id is"</span>+u.getFragment());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">catch</span>(URISyntaxException ex)&#123;</span><br><span class="line">                System.err.println(args[i]+<span class="string">"does not seem to be a URI."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解析拼接URI</p>
+<p>主要是两个 resolve(URI/String) relativize(URI)  都返回URI</p>
+<p>resolve用于拼接 而relativize 用于分解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">URI a=<span class="keyword">new</span> URI(<span class="string">"www.bb.com/"</span>);</span><br><span class="line">URI b=<span class="keyword">new</span> URI(<span class="string">"login.jpg"</span>);</span><br><span class="line">URI c=b.resolve(a);         <span class="comment">//c www.bb.com/login.jpg</span></span><br><span class="line"></span><br><span class="line">URI a=<span class="keyword">new</span> URI(<span class="string">"www.bb.com/login.jpg"</span>);    </span><br><span class="line">URI b=<span class="keyword">new</span> URI(<span class="string">"www.bb.com/"</span>);</span><br><span class="line">URI c=b.relativize(a);           <span class="comment">//c login.jpg</span></span><br></pre></td></tr></table></figure>
+<p>相等性和比较</p>
+<p>可以测试URI的相等性，这不是直接的字符串比较，</p>
+<ul>
+<li>相等的URI必须都是层次的或是不透明的。</li>
+<li>比较时模式和授权机构（不透明）主机（透明）不考虑大小写。  其他则区分</li>
+<li>转义字符比较前不解码</li>
+</ul>
+<p>hashCode()方法和相等性是一样的，相等的URI则有相同的散列码</p>
+<p>比较是从左往右 不过模式比是否层次的优先级更高一点</p>
+<p><strong>URI的字符串表示</strong></p>
+<p>toString()              URI未编码的字符串形式  （所以可能是无法识别的URI）</p>
+<p>toASCLLString()    URI的编码的字符串的形式</p>
+<p>x-www-form-urlencoded</p>
+<p>我们使用Ascll的子集 来作为URL的组成字符</p>
+<p>其他不识别的字符全部转换为字节，每个字节都要写为百分号后面加两个十六进制数字</p>
+<p>空格可以编码为%20 或者+    +号本身可以编码为%2B</p>
+<p>/ # = &amp; ？ 字符用在名字中应当编码，但作为URL各部分的分隔符时不用编码</p>
+<p>用getPath() toExternalForm() 等方法输出时，这样的字符和转义字符不会自动编码或解码</p>
+<p>java提供 URLEncoder 和 URLDecoder</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String encoded=URLEncoder.encode(<span class="string">"hhttp://asd/.."</span>,<span class="string">"UTF-8"</span>);</span><br></pre></td></tr></table></figure>
+<p>他会返回对URL进行编码，甚至将能识别的波浪线感叹号等符号转为百分号转义字符，但URL规范不禁止这种转换，所以Web浏览器会合理地处理这些过度编码URL</p>
+<p>编码最好选择UTF-8更兼容</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加url的参数 但好像构造函数没写好。。。url本身没有，，可以在后期参数加在url中 </span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QueryString</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> StringBuilder query=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String name,String value)</span></span>&#123;</span><br><span class="line">        query.append(<span class="string">'&amp;'</span>);</span><br><span class="line">        encode(name,value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">encode</span><span class="params">(String name,String value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            query.append(URLEncoder.encode(name,<span class="string">"UTF-8"</span>));</span><br><span class="line">            query.append(<span class="string">'='</span>);</span><br><span class="line">            query.append(URLEncoder.encode(value,<span class="string">"UTF-8"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span>(UnsupportedEcodingException ex)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"VM does not support utf-8"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> String <span class="title">getQuery</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> query.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getQuery();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>URLDecoder</p>
+<p>URLDecoder 有一个静态方法decode() 会对用x-www-form-url-encoded 格式编码字符串进行解码 就是编码的逆操作</p>
+<p>static String decode(String s,String encoding) throws UnsupportedEncodingException 编码方式一般为UTF-8</p>
+<p>如果字符串的%号后没有两个十六进制数字，或字符串解码为无效序列，则返回IllegalArgumentException异常</p>
+<p>代理</p>
+<p>如果时用纯粹的http的代理 将http.proxyHost 设置为代理服务器的域名或IP地址，http.proxyPort 设置代理服务器的端口</p>
+<p>还有一些其他方法，包括java代码调用System.setProperty()                   p154-155 不懂克</p>
+<p>Proxy类</p>
+<p>Proxy类允许从java程序中对代理服务器更细粒度的控制  代理本身用java.net.Proxy 实例表示 </p>
+<p>三种代理模式 HTTP SOCKS 和直接链接</p>
+<ul>
+<li>Proxy.Type.DIRECT</li>
+<li>Proxy.Type.HTTP</li>
+<li>Proxy.Type.SOCKS</li>
+</ul>
+<p>关于代理的地址和端口</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SocketAddress addr=<span class="keyword">new</span> InetSocketAddress(<span class="string">"xxx.com"</span>,<span class="number">80</span>);</span><br><span class="line">Proxy proxy=<span class="keyword">new</span> Proxy(Proxy.Type.HTTP,addr);</span><br></pre></td></tr></table></figure>
+<p>ProxySelector 类</p>
+<p>每个运行的虚拟机都有一个proxyselector 对象 用来确定不同链接的代理服务器  默认只会检查各种系统属性和URL协议  我们可以安装自己的ProxySelector子类代替默认的选择器 用它的协议主机路径日期和其他标准选择不同代理</p>
+<p>实现这个类的关键是实现select的方法</p>
+<ol>
+<li><p>abstract List<proxy> select (URI uri)  根据URI对象选择合适的代理放入队列中</proxy></p>
+</li>
+<li><p>void connectFailed(URI uri,SocketAddress addr,IOException ex)  回调方法，用来警告程序这个代理服务器并没有建立链接</p>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">localproxyselector</span> <span class="keyword">extends</span> <span class="title">ProxySelector</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;URI&gt; failed=<span class="keyword">new</span> ArrayList&lt;URI&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Proxy&gt; <span class="title">select</span><span class="params">(URI uri)</span></span>&#123;</span><br><span class="line">        List&lt;Proxy&gt; result=<span class="keyword">new</span> ArrayList&lt;Proxy&gt;();</span><br><span class="line">        <span class="comment">//是失败的uri或者非http协议的uri</span></span><br><span class="line">        <span class="keyword">if</span>(failed.contains(uri)|| !<span class="string">"http"</span>.equalsIgnoreCase(uri.getScheme()))&#123;</span><br><span class="line">            result.add(Proxy.NO_PROXY);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//先建立socketAddress 再建立Proxy</span></span><br><span class="line">            SocketAddress proxyAddress=<span class="keyword">new</span> InetSocketAddress(<span class="string">"proxy.example.com"</span>,<span class="number">8000</span>);</span><br><span class="line">            Proxy proxy=<span class="keyword">new</span> Proxy(Proxy.Type.HTTP,proxyAddress);</span><br><span class="line">            result.add(proxy);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//失败的回调方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connectFailed</span><span class="params">(URI uri,SocketAddress addr,IOException ex)</span></span>&#123;</span><br><span class="line">        failed.add(uri);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但前面所述，每个虚拟机只有一个ProxySelector 而且已经有默认的了 需要改变默认的selector</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProxySelector selector=<span class="keyword">new</span> LocalProxySelector();</span><br><span class="line">ProxySelector.setDefault(selector);</span><br></pre></td></tr></table></figure>
+<p>一般不要在某个servlet中改变proxyselector 因为这会改变整个</p>
+<p>通过GET与服务器端程序通信</p>
+<p>说到底就是从表单获取元素，构造新URL</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">aa</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String target=<span class="string">""</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;args.length;i++)&#123;</span><br><span class="line">            target+=args[i]+<span class="string">" "</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        target=target.trim();</span><br><span class="line">        <span class="comment">//将其包装成QueryString</span></span><br><span class="line">        QueryString query=<span class="keyword">new</span> QueryString();</span><br><span class="line">        query.add(<span class="string">"q"</span>,target);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            URL u=<span class="keyword">new</span> URL(<span class="string">"http://www.xxx.org/search/q?"</span>+query);</span><br><span class="line">            <span class="comment">//通过uri获取输入流 然后将页面写出来</span></span><br><span class="line">            <span class="keyword">try</span>(InputStream in =<span class="keyword">new</span> BufferedInputStream(u.openStream()))&#123;</span><br><span class="line">                InputStreamReader thehtml=<span class="keyword">new</span> InputStreamReader(in);</span><br><span class="line">                <span class="keyword">int</span> c;</span><br><span class="line">                <span class="keyword">while</span>((c=thehtml.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">                    System.out.print((<span class="keyword">char</span>)c);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(MalformedURLException ex)&#123;</span><br><span class="line">            System.err.println(ex);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">            System.err.println(ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问口令的保护网站</p>
+<p>Authenticator类 可以用它使用http认证自我保护的网站提供用户名和口令</p>
+<p>但这是个抽象类，必须派生子类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置默认的认证程序</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDefault</span><span class="params">(Authenticator a)</span></span></span><br></pre></td></tr></table></figure>
+<p>当URL类需要用户名和口令时，会使用Authenticator.requestPasswordAuthentication() 去访问这个Authentication子类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> PasswordAuthentication <span class="title">requestPasswordAuthentication</span><span class="params">(InetAddress addr,<span class="keyword">int</span> port,String protocol,String prompt,String scheme)</span><span class="keyword">throws</span> SecurityException</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>addr 需要认证的主机 </li>
+<li>port是该主机上的端口 </li>
+<li>protocol 访问网站的应用层协议  </li>
+<li>http服务器提供prompt一般是需要认证的域和域名   比如一个大的Web服务器会有多个域 每个域有不同的用户名和口令  </li>
+<li>scheme是所使用的认证模式（不是协议 比如说http的认证模式为basic）</li>
+</ul>
+<p>不可信的applet不允许向用户询问用户名和口令，可信任的才可以访问，但只有在拥有requestPasswordAuthentication NetPermission 权限才允许   否则Authenticator.requestPasswordAuthentication 会抛出一个SecurityException</p>
+<p>Authenticator子类必须覆盖getPasswordAuthentication()方法 在这个方法中，要从用户或其他来源收集用户名和口令，把它作为java.net,PasswordAuthentication 类的一个实例返回</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> PasswordAuthentication <span class="title">getPasswordAuthentication</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p>如果不希望对这个请求完成认证，就返回null，Java会告诉服务器它不知道如何认证这个链接。如果你提交了不正确的认证，会再次调用 getPasswordAuthentication()  给你再次输入，连续5次把，如果还是错 则抛出ProtocolException</p>
+<p>用户名和口令将缓存在同一个虚拟机会话中，一旦设置好口令就不应再次询问，除非将包含这个口令的char数组清零</p>
+<p>Authenticator的超类有很多方法 去获得相关请求认证url的各种信息</p>
+<h2 id="PasswordAuthentication"><a href="#PasswordAuthentication" class="headerlink" title="PasswordAuthentication"></a>PasswordAuthentication</h2><p>这是个final类 支持两个只读属性 用户名（String) 口令（char数组） </p>
+<p><code>PasswordAuthentication(String userName,char[] password)</code></p>
+<p><code>public String getUserName()</code></p>
+<p><code>public char[] getPassword()</code></p>
+<h2 id="JPasswordField"><a href="#JPasswordField" class="headerlink" title="JPasswordField"></a>JPasswordField</h2><p>该类用来当作文本域,不过口令部分是变成星号  这是来自swing的组件</p>
+<p><code>public class JPasswordField extends JTextField</code></p>
+<p>它的口令存储为char[]</p>
+<p><code>public char[] getPassword()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java....</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DialogAuthenticator</span> <span class="keyword">extends</span> <span class="title">Authenticator</span></span>&#123;   <span class="comment">//继承Authenticator</span></span><br><span class="line">        <span class="keyword">private</span> JDialog passwordDialog;</span><br><span class="line">        <span class="keyword">private</span> JTextField usernameField=<span class="keyword">new</span> JTextField(<span class="number">20</span>);</span><br><span class="line">        <span class="keyword">private</span> JPasswordField passwordField=<span class="keyword">new</span> JPasswordField(<span class="number">20</span>);</span><br><span class="line">        <span class="keyword">private</span> JButton okButton=<span class="keyword">new</span> JButton(<span class="string">"OK"</span>);</span><br><span class="line">        <span class="keyword">private</span> JButton cancelButton=<span class="keyword">new</span> JButton(<span class="string">"Cancel"</span>);</span><br><span class="line">        <span class="keyword">private</span> JLabel mainLabel=<span class="keyword">new</span> JLabel(<span class="string">"Please enter username and password: "</span>);</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">DialogAuthenticator</span><span class="params">(String username,JFrame parent)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.passwordDialog=<span class="keyword">new</span> JDialog(parent,<span class="keyword">true</span>);</span><br><span class="line">            Container pane=passwordDialog.getContentPane();</span><br><span class="line">            pane.setLayout(<span class="keyword">new</span> GridLayout(<span class="number">4</span>,<span class="number">1</span>));</span><br><span class="line">            JLabel userLabel=<span class="keyword">new</span> JLabel(<span class="string">"Username: "</span>);</span><br><span class="line">            JLabel passwordLabel=<span class="keyword">new</span> JLabel(<span class="string">"Password: "</span>);</span><br><span class="line">            pane.add(mainLabel);</span><br><span class="line">            JPanel p2=<span class="keyword">new</span> JPanel();</span><br><span class="line">            p2.add(userLabel);</span><br><span class="line">            p2.add(usernameField);</span><br><span class="line">            usernameField.setText(username);</span><br><span class="line">            pane.add(p2);</span><br><span class="line">            JPanel p3=<span class="keyword">new</span> JPanel();</span><br><span class="line">            p3.add(passwordLabel);</span><br><span class="line">            p3.add(passwordField);</span><br><span class="line">            pane.add(p3);</span><br><span class="line">            JPanel p4=<span class="keyword">new</span> JPanel();</span><br><span class="line">            p4,add(okButton);</span><br><span class="line">            p4.add(cancelButton);</span><br><span class="line">            pane.add(p4);</span><br><span class="line">            passwordDialog.pack();</span><br><span class="line">            </span><br><span class="line">            ActionListener al=<span class="keyword">new</span> OKResponse();</span><br><span class="line">            okButton.addActionListener(al);</span><br><span class="line">            usernameField.addActionListener(al);</span><br><span class="line">            passwordField.addActionListener(al);</span><br><span class="line">            cancelButton.addActionListener(<span class="keyword">new</span> CancelResponse());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">            String prompt=<span class="keyword">this</span>.getRequestingPrompt();</span><br><span class="line">            <span class="keyword">if</span>(prompt==<span class="keyword">null</span>)&#123;</span><br><span class="line">                String site=<span class="keyword">this</span>.getRequestingSite().getHostName();</span><br><span class="line">                String protocol=<span class="keyword">this</span>.getRequestingProtocol();</span><br><span class="line">                <span class="keyword">int</span> port=<span class="keyword">this</span>.getRequestingPort();</span><br><span class="line">                <span class="keyword">if</span>(site!=<span class="keyword">null</span>&amp;protocol!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    prompt=protocol+<span class="string">"://"</span>+site;</span><br><span class="line">                    <span class="keyword">if</span>(port&gt;<span class="number">0</span>)prompt+=<span class="string">":"</span>+port;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    prompt=<span class="string">""</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            mainLabel.setText(<span class="string">"Please enter username and password for"</span>+prompt+<span class="string">": "</span>);</span><br><span class="line">            passwordDialog.pack();</span><br><span class="line">            passwordDialog.setVisible(<span class="keyword">true</span>);</span><br><span class="line">        &#125; </span><br><span class="line">        PasswordAuthentication response=<span class="keyword">null</span>;</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">OKResponse</span> <span class="keyword">implements</span> <span class="title">ActionListener</span></span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actionPerformed</span><span class="params">(ActionEvent e)</span></span>&#123;</span><br><span class="line">                passwordDialog.setVisible(<span class="keyword">false</span>);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">char</span>[]password=passwordField.getPassword();</span><br><span class="line">                String username=usernameField.getText();</span><br><span class="line">                passwordField.setText(<span class="string">""</span>);</span><br><span class="line">                response=<span class="keyword">new</span> PasswordAuthentication(username,password);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">CancelResponse</span> <span class="keyword">implements</span> <span class="title">ActionListener</span></span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actionPerformed</span><span class="params">(ActionEvent e)</span></span>&#123;</span><br><span class="line">                passwordDialog.setVisible(<span class="keyword">false</span>);</span><br><span class="line">                passwordField.setText(<span class="string">""</span>);</span><br><span class="line">                response=<span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> PasswordAuthentication <span class="title">getPasswordAuthentication</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.show();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.response;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>我们要重写的是Authenticator的子类</li>
+<li>里面有个重要的类PasswordAuthenication  不用重写但需要好好使用<ul>
+<li>通过构造函数 将username 和password构造成PasswordAuthentication对象</li>
+<li>要定义好getPasswordAuthentication() 返回构造完成的PasswordAuthentication对象</li>
+</ul>
+</li>
+<li>需要利用好Swing的组件 利用组件和事件监听及时将username和password进行传递</li>
+</ul>
+<p>但问题是如何设置你得口令什么的是否正确？？？？？？？？？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecureSourceViewer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">        <span class="comment">//设置验证口令</span></span><br><span class="line">        Authenticator.setDefault(<span class="keyword">new</span> DialogAuthenticator());</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;args.length;i++)&#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                URL u=<span class="keyword">new</span> URL(args[i]);</span><br><span class="line">                <span class="keyword">try</span>(InputStream in =<span class="keyword">new</span> BufferedInputStream(u.openStream()))&#123;</span><br><span class="line">                    Reader r=<span class="keyword">new</span> InputStreamReader(in);</span><br><span class="line">                    <span class="keyword">int</span> c;</span><br><span class="line">                    <span class="keyword">while</span>((c=r.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">                        System.out.print((<span class="keyword">char</span>)c);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">catch</span>(MalformedURLException ex)&#123;</span><br><span class="line">                System.err.println(args[<span class="number">0</span>]+<span class="string">"is not a parseable URL"</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">                System.err.println(ex);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;</span><br><span class="line">        System.exit(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/22/Java网络编程(十二)UDP/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/Java网络编程(十一)非阻塞IO/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#URL类"><span class="nav-number">1.</span> <span class="nav-text">URL类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#构造URL"><span class="nav-number">1.1.</span> <span class="nav-text">构造URL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从URL获取数据"><span class="nav-number">1.2.</span> <span class="nav-text">从URL获取数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分解URL"><span class="nav-number">2.</span> <span class="nav-text">分解URL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较"><span class="nav-number">2.1.</span> <span class="nav-text">比较</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造URI"><span class="nav-number">3.</span> <span class="nav-text">构造URI</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PasswordAuthentication"><span class="nav-number"></span> <span class="nav-text">PasswordAuthentication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JPasswordField"><span class="nav-number"></span> <span class="nav-text">JPasswordField</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

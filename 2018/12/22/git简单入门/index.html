@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="安装好git后，git 是作为命令中使用，但是在它给的客户端  中用给的信息更友好 建立本地仓库，其实还是先从一个简单的文件夹开始 我们知道之后的git操作都需要在git目录下操作，也就是本地仓库，所以建立一个本地仓库还是必不可少的  git status  判断这个文件夹的情况，判断是否是仓库，仓库的一些基本信息等等 git init 将这个文件夹变成本地仓库  其实就是在里面加一个 .git文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/git简单入门/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="安装好git后，git 是作为命令中使用，但是在它给的客户端  中用给的信息更友好 建立本地仓库，其实还是先从一个简单的文件夹开始 我们知道之后的git操作都需要在git目录下操作，也就是本地仓库，所以建立一个本地仓库还是必不可少的  git status  判断这个文件夹的情况，判断是否是仓库，仓库的一些基本信息等等 git init 将这个文件夹变成本地仓库  其实就是在里面加一个 .git文">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-22T09:00:13.008Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="安装好git后，git 是作为命令中使用，但是在它给的客户端  中用给的信息更友好 建立本地仓库，其实还是先从一个简单的文件夹开始 我们知道之后的git操作都需要在git目录下操作，也就是本地仓库，所以建立一个本地仓库还是必不可少的  git status  判断这个文件夹的情况，判断是否是仓库，仓库的一些基本信息等等 git init 将这个文件夹变成本地仓库  其实就是在里面加一个 .git文">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/git简单入门/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/git简单入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>安装好git后，git 是作为命令中使用，但是在它给的客户端  中用给的信息更友好</p>
+<p>建立本地仓库，其实还是先从一个简单的文件夹开始</p>
+<p>我们知道之后的git操作都需要在git目录下操作，也就是本地仓库，所以建立一个本地仓库还是必不可少的</p>
+<ul>
+<li>git status  判断这个文件夹的情况，判断是否是仓库，仓库的一些基本信息等等</li>
+<li>git init 将这个文件夹变成本地仓库  其实就是在里面加一个 .git文件夹  默认作为master分支</li>
+</ul>
+<p>如果在本地仓库文件夹中多了一些文件，其实这些文件不算是真正在仓库当中，因为他们相当于没有做清点记录的工作（Untracked files），不算真正入库。</p>
+<p>需要两部操作进行真正入库</p>
+<ul>
+<li><p>git add 将你这些文件 tracked  这些文件的状态从untracked -&gt;  new file(将文件放入缓存区))等待最后的确认的提交</p>
+<ul>
+<li>git rm –cached + <code>&lt;file&gt;</code>   删除刚刚缓存的文件，  new file-&gt; untracked状态</li>
+<li>git commit -m &lt;”信息xx”&gt;  git commit 代表确认提交       -m  + 信息 代表提交信息，当作一个提交的额外日志备注把</li>
+</ul>
+</li>
+<li><p>git log  可以看到所有产生的commit记录        刚刚的  -m  的信息就会出现在提交记录中</p>
+</li>
+</ul>
+<p>git init 完自动生成主分支 master </p>
+<ul>
+<li>git branch  查看现在分支列表</li>
+<li>git branch + name   建立新分支</li>
+<li>git checkout + name 切换分支</li>
+</ul>
+<p>git checkout -b name  新键加切换一步到胃</p>
+<p>分支合并</p>
+<pre><code>1. checkout master 分支
+2. git merge branchname 
+</code></pre><p>很有趣，在一个本地仓库中创建文件，在一个分支中将其commit上去，git log 显示是head-&gt;branch1   但是在master分支就见不到对这个新文件  待提交</p>
+<p>git merge 后这个 git log 就会显示  这个commit      (Head -&gt; branch1  master )</p>
+<p>git branch -d    branchname     删除分支   在合并完分支后经常会考虑这个操作</p>
+<p>如果 git merge 有冲突 这样会导致 git branch -d 失败，这时候要强势关掉分支  要用  git branch -D</p>
+<p>如果git branch  的分支是代码的横向变化的化</p>
+<p>那么git tag 标签是代码的纵向变化，它允许在一个分支中建立多个标签 当你代码出问题 你就可以回到过去拉哈哈</p>
+<p>git tag tagname 就会在你当前代码建立一个标签</p>
+<p>git checkout tagname 就可以切换标签</p>
+<p>了解了本地仓库的操作后，就能和远程仓库有互动啦，，我们的远程仓库选择github   配置好ssh的东西就ok了</p>
+<ul>
+<li><p>git push 将本地代码推到远程仓库 </p>
+<p>git push origin master    将本地代码推到远程的master分支</p>
+</li>
+<li><p>git pull  将远程仓库的代码拉到本地仓库</p>
+<p>git pull origin master     </p>
+</li>
+</ul>
+<p>git pull &lt;远程主机名&gt; &lt;远程分支名&gt;:&lt;本地分支名&gt;</p>
+<p>git push &lt;远程主机名&gt; &lt;本地分支名&gt;[:&lt;远程分支名&gt;]    </p>
+<p>e.g., git push oschina master， 省略远程分支名，代表推送到有追踪关系的远程分支（一般为同名）</p>
+<p>如果你是这个项目的楞头青你可以将其  git clone +地址  （具体看github上的地址）将整个项目复制下来，而这个新的文件夹本身就变成一个库，且和remote连接好了  默认这个remote仓库的名字叫 origin </p>
+<p>Git 从 <code>2.9.0</code> 版本开始，预设行为不允许合并没有共同祖先的分支，需要加上 <code>--allow-unrelated-histories</code> 进行 pull 操作才不会出现此类错误信息。<br>例：<code>git pull --allow-unrelated-histories</code></p>
+<p>git branch -r 能看到远程分支</p>
+<p><strong>FETCH_HEAD：</strong> 是一个版本链接，记录在本地的一个文件中，指向着目前已经从远程仓库取下来的分支的末端版本。</p>
+<p>git pull : 首先，基于本地的FETCH_HEAD记录，比对本地的FETCH_HEAD记录与远程仓库的版本号，然后git fetch 获得当前指向的远程分支的后续版本的数据，然后再利用git merge将其与本地的当前分支合并。</p>
+<p>有时候删除remote branch 在本地 branch -r 没有显示更新</p>
+<p> git remote update origin –prune，更新。这里要注意下，如果你的remote branch不是在origin下，按你得把origin换成你的名字。</p>
+<p>一些经验或疑惑</p>
+<p>注意  git push 的时候 冒号前面千万别加空格 否则就是删除相应的远程repo</p>
+<p>如果pull的时候不行，可以尝试  git pull -f强制覆盖  还想也是因为项目文件比较少，你的文件比较多的原因</p>
+<p>一般来说 如果是push 到remote repo 的代码 你是无权删除它的  所以你push一个缺少文件的项目是不被允许的 不过你可以 push -f强制覆盖就很变态</p>
+<p>git diff 可以看到差异   比较两次commit   缓存区和版本的文件  两个分支  的差异</p>
+<p>git checkout 除了切换分支 切换标签 甚至可以切换到某次commit </p>
+<p>git checkout + commit_id  (在 git log 中可以看到)</p>
+<p>git  checkout 还能撤销m没有add到缓存区中的文件的修改</p>
+<p>git stash 当你手头上有些代码没写完 ，此时你有紧急任务必须要立刻修复bug并立刻发布，这时候你不希望你没写完的代码随着bug修复的时候commit上去</p>
+<p>这时候 你采用 git stash 命令，将当前分支所有没有commit的代码全部收容起来，</p>
+<p>然后你可以在 git stash list 中可以看到收容的记录   </p>
+<p>然后你可以做你修复的事情，然后回来做之前的功能 这时候就要 git stash apply 代码就回来了 但记录没删除</p>
+<p>然后将缓存区的stash记录删除  git stash drop </p>
+<p>git stash pop 这个是还原加记录删除</p>
+<p>但是这个删除只是删除记录中的最近一条，实际上drop 中可以加  stash_id </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/22/big-endian和little-endian/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/hibernate学习(三)持久化类的注释/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

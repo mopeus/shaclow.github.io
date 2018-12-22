@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Mysql 的外键 感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的 数据库中其实外键有两种说法啦， 一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联） 真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。 首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/Mysql 的外键/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="Mysql 的外键 感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的 数据库中其实外键有两种说法啦， 一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联） 真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。 首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-07T15:00:20.199Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="Mysql 的外键 感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的 数据库中其实外键有两种说法啦， 一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联） 真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。 首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/Mysql 的外键/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Mysql 的外键/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Mysql 的外键</p>
+<p>感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的</p>
+<p>数据库中其实外键有两种说法啦，</p>
+<p>一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联）</p>
+<p>真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。</p>
+<p>首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的列（可以名字不同，但一般名字相同方便思考）这时候，一个表A把这个列定义为唯一索引（可以为unique也可以primary key），一定要（这个表就是主表）。</p>
+<p>另一个表B则要将这个键定义成外键 连接到上一个表的的唯一索引（称为从表）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">create table orders(</span><br><span class="line">O_id int not null,</span><br><span class="line">P_id int ,PRIMARY KEY (O_id),FOREIGN KEY (P_id) references Person(P_id)</span><br><span class="line">)</span><br><span class="line">-- 在Person中P_id是主键   foreign key 等的括号不能省略</span><br><span class="line"></span><br><span class="line">-- alter修改</span><br><span class="line">alter table orders add constraint fk_foreignkey foreign key (P_id) references Person(P_id);</span><br><span class="line"></span><br><span class="line">-- 撤销外键</span><br><span class="line">alter table orders drop foreign key fk_foreignkey  (外键名字)</span><br><span class="line"></span><br><span class="line">-- 删除外键关系时会有点小尴尬，因为一定要外键名字，而你大概率是没有设置或者不记得的，你可以用show create table xxx查看</span><br><span class="line"></span><br><span class="line">-- 禁用约束（子表的外键约束）  好像是用在 oracle的 mysql好像不行  启用是enable</span><br><span class="line">ALTER TABLE 表名 disable constraint 约束名;</span><br></pre></td></tr></table></figure>
+<p><strong>谁是谁的外键？</strong></p>
+<p>说了这么多到底谁是外键呢？你以为是B的那个索引是外键？太天真了 naive 是A的那个主键是B的外键。竟然是主表的键是从表的外键太奇怪了。。</p>
+<p>外键约束</p>
+<p>外键约束咧应该是本来是不能违反的 但是你可以设置违反响应事件？</p>
+<p>   <strong>外键约束事件触发</strong>。既然有外键约束，当违反约束时会发生什么？我们把它的反应看作事件，一共有四种： </p>
+<p>定义方式在最后面加  比如  <code>FOREIGN KEY (main_id) REFERENCES test_main ON DELETE SET NULL;</code></p>
+<p>​        1、级联：当主表更改时，从表跟从更改。  on delete/update cascade</p>
+<p>​        2、不执行任何操作。           默认的外键触发</p>
+<p>​        3、设置null。                        // on delete set null </p>
+<p>​        4、设置默认值。    难道是set 加参数值？   </p>
+<p>   <code>alter table 表名 add constraint DF_字段名 default &#39;默认值&#39; for 字段名--其中的&#39;默认值&#39;为你想要默认的值，注意&#39;for&#39;</code></p>
+<p>外键作用可以说是：保持数据一致性，完整性，关联性，主要目的是控制存储在外键表中的数据。就是当你对一个表的数据进行操作，和他有关联的一个或更多表的数据能够同时发生改变，<strong>避免无效或是无用的改变和孤立的数据</strong>。</p>
+<p>​        <strong>建键原则</strong>：</p>
+<p>​       1、 外键字段为主键<br>　　2、 所有的键都必须唯一<br>　　3、避免使用复合键<br>　　4、外键总是关联唯一的键字段</p>
+<p>总之</p>
+<ul>
+<li><p>删除  要先删除子表所关联的数据再删除父表数据   级联删除 可以删父表的同时删除子表数据</p>
+</li>
+<li><p>更新 更新父表（应该是主键值）会违反约束 但可以修改子表（外键列）（不过该外键不能改成父表没有的 ）  和父表的非主键值   级联更新  可以修改父表的同时修改子表</p>
+<p>其实是可以修改主键的，但是呢和删除数据一样   前提是从表没有连接到它的行</p>
+</li>
+<li><p>插入时 父表可以插入 子表插入如果插入的外键列是父表没有的值的时候会违反约束，子表的数据一定要有父表做依据  </p>
+<p>给出的错误提示<code>Cannot add or update a child row: a foreign key constraint fails</code>  </p>
+</li>
+</ul>
+<p>总的来说 先有父表再有子表    父表数据先看子表，甚至不能改</p>
+<p>级联都是针对改变主表主键/删除主表数据   从表的外键也修改/从表数据删除 的情况 </p>
+<p>已经经过实操过所有例子大概率没有任何问题</p>
+<p>然而并没有级联插入</p>
+<p>或者我们可以用触发器实现级联删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TRIGGER [dbo].[trigCascadeDelete]    --触发器名</span><br><span class="line">   ON  [dbo].[main]      ---作用于哪张表</span><br><span class="line">   instead of  delete    ---什么动作触发</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	declare @id int   --声明@id变量</span><br><span class="line">	select @id=id from deleted --取出要删除的id</span><br><span class="line">	delete from branch where mainId =@id  --先删除从表中的数据行</span><br><span class="line">	delete from main where id =@id   ---再删除主表中的数据行</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>外键并不能帮助我们对查询有什么帮助，我们只能老老实实用联合查询 什么子查询那种东西去做多表查询</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/22/JDBC(四)ResultSet/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/mysql索引/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

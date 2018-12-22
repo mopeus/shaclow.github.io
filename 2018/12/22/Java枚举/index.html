@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Enum代表枚举类型 1234public class Dayclass&amp;#123;    public static final int Monday=233;    ....&amp;#125; 这种也可以做出枚举，但是很蠢很不专业，所以用enum 123public enum Day&amp;#123;    MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/Java枚举/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="Enum代表枚举类型 1234public class Dayclass&amp;#123;    public static final int Monday=233;    ....&amp;#125; 这种也可以做出枚举，但是很蠢很不专业，所以用enum 123public enum Day&amp;#123;    MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-01T16:58:15.523Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="Enum代表枚举类型 1234public class Dayclass&amp;#123;    public static final int Monday=233;    ....&amp;#125; 这种也可以做出枚举，但是很蠢很不专业，所以用enum 123public enum Day&amp;#123;    MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/Java枚举/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java枚举/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Enum代表枚举类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dayclass</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Monday=<span class="number">233</span>;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种也可以做出枚举，但是很蠢很不专业，所以用enum</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Day&#123;</span><br><span class="line">    MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>枚举值一般用大写字母，然后用逗号分隔</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Day day=Day.MONDAY  <span class="comment">//使用方式异常简单</span></span><br></pre></td></tr></table></figure>
+<p>实际上enum会被编译成一个类class 而且编译器会自动帮忙生成一些方法  它不能被继承</p>
+<p>这个class的简单组成如下 它继承自Enum类  以上面的Day枚举类为例</p>
+<ul>
+<li><p>实现了values 函数 返回的是Day的数组 包含这个类的所有的列举值  父类没有</p>
+</li>
+<li><p>实现了 valueOf(String)  调用父类的valueof方法 通过String 返回对应的Day对象</p>
+</li>
+<li><p>私有的Day构造函数（String, int）</p>
+</li>
+<li><p>没错，每个枚举值都变成一个Day对象（public）  并且实例化  </p>
+<p>你注意到参数二的那个数字 其实就是序号，在内部实现叫ordinal  这个和你在enum的枚举值的书写顺序有关从0开始 </p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//反编译Day.class</span></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Day</span> <span class="keyword">extends</span> <span class="title">Enum</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">//编译器为我们添加的静态的values()方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Day[] values()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> (Day[])$VALUES.clone();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//编译器为我们添加的静态的valueOf()方法，注意间接调用了Enum也类的valueOf方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Day <span class="title">valueOf</span><span class="params">(String s)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (Day)Enum.valueOf(com/zejian/enumdemo/Day, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//私有构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Day</span><span class="params">(String s, <span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(s, i);</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">//前面定义的7种枚举实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day MONDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day TUESDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day WEDNESDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day THURSDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day FRIDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day SATURDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day SUNDAY;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Day $VALUES[];</span><br><span class="line"><span class="keyword">static</span> </span><br><span class="line">&#123;    </span><br><span class="line">    <span class="comment">//实例化枚举实例</span></span><br><span class="line">    MONDAY = <span class="keyword">new</span> Day(<span class="string">"MONDAY"</span>, <span class="number">0</span>);</span><br><span class="line">    TUESDAY = <span class="keyword">new</span> Day(<span class="string">"TUESDAY"</span>, <span class="number">1</span>);</span><br><span class="line">    WEDNESDAY = <span class="keyword">new</span> Day(<span class="string">"WEDNESDAY"</span>, <span class="number">2</span>);</span><br><span class="line">    THURSDAY = <span class="keyword">new</span> Day(<span class="string">"THURSDAY"</span>, <span class="number">3</span>);</span><br><span class="line">    FRIDAY = <span class="keyword">new</span> Day(<span class="string">"FRIDAY"</span>, <span class="number">4</span>);</span><br><span class="line">    SATURDAY = <span class="keyword">new</span> Day(<span class="string">"SATURDAY"</span>, <span class="number">5</span>);</span><br><span class="line">    SUNDAY = <span class="keyword">new</span> Day(<span class="string">"SUNDAY"</span>, <span class="number">6</span>);</span><br><span class="line">    $VALUES = (<span class="keyword">new</span> Day[] &#123;</span><br><span class="line">        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumDemo2</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		Day[]days=Day.values();</span><br><span class="line">		System.out.println(<span class="string">"days "</span>+Arrays.toString(days));</span><br><span class="line">		Day day1=Day.valueOf(<span class="string">"FRIDAY"</span>);</span><br><span class="line">		System.out.println(<span class="string">"day"</span>+day1);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽象Enum类</p>
+<p>实现的方法</p>
+<ul>
+<li>compareTo  比较的其实是 ordinal</li>
+<li>equals  </li>
+<li>getDeclaringClass  返回枚举常量的枚举类型对应的class对象</li>
+<li>name  返回枚举常量的名称</li>
+<li>ordinal 返回枚举常量的序号</li>
+<li>toString  和name差不多</li>
+<li>valueOf(Class<t>,String)   返回带指定名称的指定枚举类型的枚举常量。  这个相比子类的valueOf 多个class的参数</t></li>
+</ul>
+<p>它的getDeclaringClass比较特别给出代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Class&lt;E&gt; <span class="title">getDeclaringClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="comment">//获取class对象引用，getClass()是Object的方法</span></span><br><span class="line">     Class&lt;?&gt; clazz = getClass();</span><br><span class="line">     <span class="comment">//获取父类Class对象引用</span></span><br><span class="line">     Class&lt;?&gt; zuper = clazz.getSuperclass();</span><br><span class="line">     <span class="keyword">return</span> (zuper == Enum.class) ? (Class&lt;E&gt;)clazz : (Class&lt;E&gt;)zuper;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这个是首先获取对象的类对象，然后再通过<code>getSuperClass</code>方法去获得父类方法，通过判断是否是Enum.class来进行不同处理</p>
+<ul>
+<li>如果不是Enum的派生类就只是返回该对象的父类</li>
+<li>如果是Enum的派生类则返回对象本身的类对象</li>
+</ul>
+<p>虽然values方法是子类独有，父类是没有，所以不能通过向上转型来使用values 但通过Enum的class对象的getEnumConstants方法，我们仍能一次性获取所有的枚举实例常量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正常使用</span></span><br><span class="line">Day[] ds=Day.values();</span><br><span class="line"><span class="comment">//向上转型Enum</span></span><br><span class="line">Enum e = Day.MONDAY;</span><br><span class="line"><span class="comment">//无法调用,没有此方法</span></span><br><span class="line"><span class="comment">//e.values();</span></span><br><span class="line"><span class="comment">//获取class对象引用</span></span><br><span class="line">Class&lt;?&gt; clasz = e.getDeclaringClass();</span><br><span class="line"><span class="keyword">if</span>(clasz.isEnum()) &#123;</span><br><span class="line">    Day[] dsz = (Day[]) clasz.getEnumConstants();</span><br><span class="line">    System.out.println(<span class="string">"dsz:"</span>+Arrays.toString(dsz));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   输出结果:</span></span><br><span class="line"><span class="comment">   dsz:[MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>实际上枚举类，它其实可以实现class的功能 我们可以向enum类中添加方法,覆盖方法和变量，甚至是main方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//覆盖方法toString 和实现了自己的getDesc方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Day2 &#123;</span><br><span class="line">	MONDAY(<span class="string">"星期一"</span>),</span><br><span class="line">	TUESDAY(<span class="string">"星期二"</span>),</span><br><span class="line">	WEDNESDAY(<span class="string">"星期三"</span>),</span><br><span class="line">	THURSDAY(<span class="string">"星期四"</span>),</span><br><span class="line">	FRIDAY(<span class="string">"星期五"</span>),</span><br><span class="line">	SATURDAY(<span class="string">"星期六"</span>),</span><br><span class="line">	SUNDAY(<span class="string">"星期日"</span>);</span><br><span class="line">	<span class="keyword">private</span> String desc;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Day2</span><span class="params">(String desc)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.desc=desc;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> desc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//覆盖方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> desc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(Day2 day:Day2.values()) &#123;</span><br><span class="line">			System.out.println(<span class="string">"name: "</span>+day.name()+<span class="string">" ,desc:"</span>+day.getDesc()+<span class="string">"  toString"</span>+day.toString());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>enum与抽象方法</p>
+<p>与常规抽象类一样，enum类允许我们为其定义抽象方法，然后使每个枚举实例都实现该方法，以便产生不同的行为方式，注意abstract关键字对于枚举类不一定需要?(要把？)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> EnumDemo3 &#123;</span><br><span class="line">	FIRST&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"First time"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//每个实例内实现抽象方法</span></span><br><span class="line">	SECOND&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"Second time"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//定义抽象方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getInfo</span><span class="params">()</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"First: "</span>+EnumDemo3.FIRST.getInfo());</span><br><span class="line">		System.out.println(<span class="string">"Second: "</span>+EnumDemo3.SECOND.getInfo());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有时候我们可以用接口来 将多个实现该接口的枚举类放在一起</p>
+<p>还可以有枚举嵌套</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Meal&#123;</span><br><span class="line">  APPETIZER(Food.Appetizer.class),</span><br><span class="line">  MAINCOURSE(Food.MainCourse.class),</span><br><span class="line">  DESSERT(Food.Dessert.class),</span><br><span class="line">  COFFEE(Food.Coffee.class);</span><br><span class="line">  <span class="keyword">private</span> Food[] values;</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">Meal</span><span class="params">(Class&lt;? extends Food&gt; kind)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//通过class对象获取枚举实例</span></span><br><span class="line">    values = kind.getEnumConstants();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Food</span> </span>&#123;</span><br><span class="line">    <span class="keyword">enum</span> Appetizer implements Food &#123;</span><br><span class="line">      SALAD, SOUP, SPRING_ROLLS;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> MainCourse implements Food &#123;</span><br><span class="line">      LASAGNE, BURRITO, PAD_THAI,</span><br><span class="line">      LENTILS, HUMMOUS, VINDALOO;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> Dessert implements Food &#123;</span><br><span class="line">      TIRAMISU, GELATO, BLACK_FOREST_CAKE,</span><br><span class="line">      FRUIT, CREME_CARAMEL;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> Coffee implements Food &#123;</span><br><span class="line">      BLACK_COFFEE, DECAF_COFFEE, ESPRESSO,</span><br><span class="line">      LATTE, CAPPUCCINO, TEA, HERB_TEA;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>枚举值可以作为switch的判断</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;GREEN,RED,BLUE&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumDemo4</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printName</span><span class="params">(Color color)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (color)&#123;</span><br><span class="line">            <span class="keyword">case</span> BLUE: <span class="comment">//无需使用Color进行引用</span></span><br><span class="line">                System.out.println(<span class="string">"蓝色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RED:</span><br><span class="line">                System.out.println(<span class="string">"红色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> GREEN:</span><br><span class="line">                System.out.println(<span class="string">"绿色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        printName(Color.BLUE);</span><br><span class="line">        printName(Color.RED);</span><br><span class="line">        printName(Color.GREEN);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//蓝色</span></span><br><span class="line">        <span class="comment">//红色</span></span><br><span class="line">        <span class="comment">//绿色</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>未完待续 。。。。主要是枚举的一些的set 和 map</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/22/javascript补习/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/Java网络编程(十)安全Socket/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

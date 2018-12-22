@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/test-my-site/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/利用CookieManager管理Cookie/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -251,7 +251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/20/test-my-site/" itemprop="url">test_my_site</a></h1>
+                <a class="post-title-link" href="/2018/12/22/利用CookieManager管理Cookie/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -263,8 +263,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T17:19:48+08:00">
-                2018-07-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
+                2018-12-22
               </time>
             
 
@@ -351,7 +351,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/自定义标签/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -370,7 +370,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/20/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/2018/12/22/自定义标签/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -382,8 +382,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T17:14:00+08:00">
-                2018-07-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
+                2018-12-22
               </time>
             
 
@@ -422,15 +422,1528 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+            <p>自定义标签</p>
+<p>一个tld文件 一个特殊的实现类 一个标签的使用</p>
+<p>类</p>
+<ul>
+<li><p>SimpleTagSupport接口的实现  （doTag()）</p>
+</li>
+<li><p>带属性的标签需要 get/set方法</p>
+</li>
+<li><p>getJspContext().getAttribute(xx,PageContext.xxxx_SCOPE) 可以获取jsp页面各种作用域的属性</p>
+<ul>
+<li>或者是 getJspContext().setAttribute(String,object)设置属性不过好像就是pageScope属性的</li>
+</ul>
+</li>
+<li><p>getJspContext().getOut()获取Writer 输出页面</p>
+</li>
+<li><p>getJspBody().invoke(null) 输出标签体内的内容</p>
+<ul>
+<li>这有个很骚的操作 标签体为 ${pageScope.xxx} 然后在一个循环中一边 getJspContext().setAttribute(String,object)设置更改属性，一遍getJspBody().invoke(null)去输出，这样就能实现遍历</li>
+<li>好像就算是<code>&lt;jsp:attribute name=&quot;xxx&quot;&gt;</code>标签包裹的的标签体作为属性，她在类里面也只是个JspFragment也只是能invoke而已</li>
+</ul>
+<p>还有动态属性这比较麻烦，二七</p>
+</li>
+</ul>
+<p>tld文件</p>
+<ul>
+<li>放在WEB-INF文件夹下</li>
+<li>taglib标签为根标签<ul>
+<li>uri标签</li>
+<li>tag标签<ul>
+<li>name</li>
+<li>tag-class</li>
+<li>body-content</li>
+<li>attribute<ul>
+<li>name required fragment</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>使用标签</p>
+<ul>
+<li><code>&lt;%@taglib uri=&quot;&quot; prefix%&gt;</code>声明</li>
+<li><code>&lt;前缀：tagname attributename=&quot;value&quot;&gt;</code></li>
+<li>标签体做属性 用 jsp:attribute标签包裹</li>
+</ul>
+<p>传递集合的时候，只能通过session 属性进行获取传递</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/数据库常识2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/数据库常识2/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-DDL-Data-Definition-Language"><a href="#1-DDL-Data-Definition-Language" class="headerlink" title="1. DDL - Data Definition Language"></a>1. DDL - Data Definition Language</h3><p>数据库定义语言：定义数据库的结构。</p>
+<p>其主要命令有CREATE，ALTER，DROP等，该语言不需要commit，因此慎重。</p>
+<p>还有其他的：</p>
+<p>TRUNCATE - 截断表内容（开发期，还是挺常用的）</p>
+<p>COMMENT - 为数据字典添加备注</p>
+<h3 id="2-DML-Data-Manipulation-Language"><a href="#2-DML-Data-Manipulation-Language" class="headerlink" title="2. DML - Data Manipulation Language"></a>2. DML - Data Manipulation Language</h3><p>数据库操作语言：SQL中处理数据库中的数据</p>
+<p>其主要命令有INSERT,UPDATE,DELETE等，这些例子大家常用就不一一介绍了。该语言需要commit。还</p>
+<p>有常用的 LOCK TABLE ,记得写过锁的博客 - <a href="http://www.bysocket.com/?p=191" target="_blank" rel="noopener">传送门</a></p>
+<p>还有其他不熟悉的：</p>
+<p>CALL - 调用一个PL/SQL或Java子程序<br>EXPLAIN PLAN - 解析分析数据访问路径</p>
+<h3 id="3-DCL-Data-Control-Language"><a href="#3-DCL-Data-Control-Language" class="headerlink" title="3. DCL - Data Control Language"></a>3. DCL - Data Control Language</h3><p>数据库控制语言：授权，角色控制等</p>
+<p>GRANT - 为用户赋予访问权限</p>
+<p>REVOKE - 撤回授权权限</p>
+<h3 id="4-TCL-Transaction-Control-Language"><a href="#4-TCL-Transaction-Control-Language" class="headerlink" title="4. TCL - Transaction Control Language"></a>4. TCL - Transaction Control Language</h3><p>事务控制语言</p>
+<p>COMMIT - 保存已完成的工作</p>
+<p>SAVEPOINT - 在事务中设置保存点，可以回滚到此处</p>
+<p>ROLLBACK - 回滚</p>
+<p>SET TRANSACTION - 改变事务选项</p>
+<p>有一种说法是将 select  where 这种说是DQL  但也有一种说法是归于DML中</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/正则表达式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/正则表达式/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>  正则表达式是由普通字符（例如字符 a 到 z）以及特殊字符（称为”元字符”）组成的文字模式。模式描述在搜索文本时要匹配的一个或多个字符串。正则表达式作为一个模板，将某个字符模式与所搜索的字符串进行匹配。</p>
+<p>？ 代表0或1个字符</p>
+<p>*代表0或多个字符</p>
+<p>^ 匹配输入字符串的开始位置</p>
+<p>[0-9] 匹配单个数字 + 匹配一个或多个</p>
+<p>abc$ 匹配字母abc并以abc结尾 $撇皮字符串的结束位置</p>
+<p>^[a-z0-9_-]{3,15}$ </p>
+<p>^匹配开始   [] 匹配 字母数字 下划线和连接字符   {3，15}$ 指定字符串的长度为3-15个  </p>
+<p>+号 代表前面的字符 至少出现一次 </p>
+<p>runoo+b  =&gt;  runooooooooob runoob</p>
+<p>runoo*b 可以出现0次或更多</p>
+<p>runoo?b  出现一次或0次</p>
+<p>转义字符</p>
+<table>
+<thead>
+<tr>
+<th>\cx</th>
+<th>匹配由x指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。x 的值必须为 A-Z 或 a-z 之一。否则，将 c 视为一个原义的 ‘c’ 字符。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\f</td>
+<td>匹配一个换页符。等价于 \x0c 和 \cL。</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符。等价于 \x0a 和 \cJ。</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>匹配一个回车符。等价于 \x0d 和 \cM。</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。注意 Unicode 正则表达式会匹配全角空格符。</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</td>
+</tr>
+</tbody>
+</table>
+<p>元字符就是特殊字符</p>
+<p>如果要真正当作正常字符匹配他们 前面加 \</p>
+<table>
+<thead>
+<tr>
+<th>$</th>
+<th>匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 ‘\n’ 或 ‘\r’。要匹配 $ 字符本身，请使用 \ $。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>( )</td>
+<td>标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式零次或多次。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式一次或多次。</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配除换行符 \n 之外的任何单字符。</td>
+</tr>
+<tr>
+<td>[</td>
+<td>标记一个中括号表达式的开始。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。</td>
+</tr>
+<tr>
+<td>\</td>
+<td>将下一个字符标记为或特殊字符、或原义字符、或向后引用、或八进制转义符。例如， ‘n’ 匹配字符 ‘n’。’\n’ 匹配换行符。</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配输入字符串的开始位置，除非在方括号表达式中使用，此时它表示不接受该字符集合。</td>
+</tr>
+<tr>
+<td>{</td>
+<td>标记限定符表达式的开始。</td>
+</tr>
+<tr>
+<td>\</td>
+<td></td>
+<td>指明两项之间的一个选择。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="限定符"><a href="#限定符" class="headerlink" title="限定符"></a>限定符</h2><p>限定符用来指定正则表达式的一个给定组件必须要出现多少次才能满足匹配。有 * 或 + 或 ? 或 {n} 或 {n,} 或 {n,m} 共6种。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式零次或多次。例如，zo<em> 能匹配 “z” 以及 “zoo”。</em> 等价于{0,}。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式一次或多次。例如，’zo+’ 能匹配 “zo” 以及 “zoo”，但不能匹配 “z”。+ 等价于 {1,}。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面的子表达式零次或一次。例如，”do(es)?” 可以匹配 “do” 、 “does” 中的 “does” 、 “doxy” 中的 “do” 。? 等价于 {0,1}。</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>n 是一个非负整数。匹配确定的 n 次。例如，’o{2}’ 不能匹配 “Bob” 中的 ‘o’，但是能匹配 “food” 中的两个 o。</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>n 是一个非负整数。至少匹配n 次。例如，’o{2,}’ 不能匹配 “Bob” 中的 ‘o’，但能匹配 “foooood” 中的所有 o。’o{1,}’ 等价于 ‘o+’。’o{0,}’ 则等价于 ‘o*’。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m 次。例如，”o{1,3}” 将匹配 “fooooood” 中的前三个 o。’o{0,1}’ 等价于 ‘o?’。请注意在逗号和两个数之间不能有空格。</td>
+</tr>
+</tbody>
+</table>
+<p>贪婪与最小匹配</p>
+<p><strong>*、+限定符都是贪婪的，因为它们会尽可能多的匹配文字，只有在它们的后面加上一个?就可以实现非贪婪或最小匹配</strong></p>
+<p>通过在 *、+  限定符之后放置 ?，该表达式从”贪心”表达式转换为”非贪心”表达式或者最小匹配。</p>
+<h2 id="定位符"><a href="#定位符" class="headerlink" title="定位符"></a>定位符</h2><p>定位符使您能够将正则表达式固定到行首或行尾。</p>
+<table>
+<thead>
+<tr>
+<th>^</th>
+<th>匹配输入字符串开始的位置。如果设置了 RegExp 对象的 Multiline 属性，^ 还会与 \n 或 \r 之后的位置匹配。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$</td>
+<td>匹配输入字符串结尾的位置。如果设置了 RegExp 对象的 Multiline 属性，$ 还会与 \n 或 \r 之前的位置匹配。</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配一个单词边界，即字与空格间的位置。</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>非单词边界匹配。</td>
+</tr>
+</tbody>
+</table>
+<p>感觉\b \B 表现很奇怪   \b可以表示一个单词后面的空格前面为止的匹配，\B就很奇怪  不奇怪</p>
+<p>下面的表达式匹配 Chapter 中的字符串 apt，但不匹配 aptitude 中的字符串 apt：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/\Bapt/</span><br></pre></td></tr></table></figure>
+<p>而且好像他们不能和$组合一起</p>
+<p>而且所谓的^ 和$ 其实是代表行首和行尾懂8</p>
+<p>捕获缓存</p>
+<p>对一个正则表达式模式或部分模式两边添加圆括号将导致相关匹配存储到一个临时缓冲区中，所捕获的每个子匹配都按照在正则表达式模式中从左到右出现的顺序存储。缓冲区编号从 1 开始，最多可存储 99 个捕获的子表达式。每个缓冲区都可以使用 \n 访问，其中 n 为一个标识特定缓冲区的一位或两位十进制数。</p>
+<p>可以使用非捕获元字符 ?:、?= 或 ?! 来重写捕获，忽略对相关匹配的保存。</p>
+<p>反向引用的最简单的、最有用的应用之一，是提供查找文本中两个相同的相邻单词的匹配项的能力。</p>
+<p>var str = “Is is the cost of of gasoline going up up”; var patt1 = /\b([a-z]+) \1\b/ig; document.write(str.match(patt1));</p>
+<p>Is is,of of,up up</p>
+<p>捕获的表达式，正如 [a-z]+ 指定的，包括一个或多个字母。正则表达式的第二部分是对以前捕获的子匹配项的引用，即，单词的第二个匹配项正好由括号表达式匹配。\1 指定第一个子匹配项。</p>
+<p>单词边界元字符确保只检测整个单词。否则，诸如 “is issued” 或 “this is” 之类的词组将不能正确地被此表达式识别。</p>
+<p>正则表达式后面的全局标记 g 指定将该表达式应用到输入字符串中能够查找到的尽可能多的匹配。</p>
+<p>表达式的结尾处的不区分大小写 i 标记指定不区分大小写。</p>
+<p>多行标记指定换行符的两边可能出现潜在的匹配。</p>
+<p>反向引用还可以将通用资源指示符 (URI) 分解为其组件。假定您想将下面的 URI 分解为协议（ftp、http 等等）、域地址和页/路径：</p>
+<p>. 特殊字符在中括号表达式时 如 [.] 只会匹配 .字符，等价于 .，而非匹配除换行符 <strong>\n</strong> 外的所有字符。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Mysql再补习(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/Mysql再补习(一)/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>模糊匹配 like</p>
+<p>我们在用where 然后可以用 等号替换成 like 然后进行模糊匹配</p>
+<p>比如select * from test01 where nam like ‘a%’;          找到name是a开头的东东</p>
+<p>%代表零到无限多的任意字符 _ (下划线代表一个占位符)</p>
+<p>‘_a’ 代表两个字符，第二个字符是a </p>
+<p>union 联合操作</p>
+<p>这其实就是创建一个视图，将两个select的结果合并成一个表</p>
+<p>最低要求，两个select的列数一样。都是2列3列这种。它会将前一个select和后一个select的结果按照列的顺序将两个列的结果合并成一列（即使列的名字和数据属性不一样），列名按照第一个select中的列名。 如果发现有对应行重复的，则进行合并；</p>
+<p>但此时如果我们指定的是 union all的话就不会进行合并重复操作，老老实实将其表现</p>
+<p>一般搭配where</p>
+<p>Order by field asc/desc 默认为asc升序排列</p>
+<p>order by 拼音排序 如果是gbk编码则直接order by 即可</p>
+<p>如果是utf8 则先转码再排序</p>
+<p>order by convert(title using gbk);</p>
+<p>分组group by  我个人感觉也是和 union差不多，都是为了合并数据。</p>
+<p>不过union是两个表的合并，而group by 是在一个表中对列进行分组合并。</p>
+<p>一般来说是用来统计某一个列中各分组的条目数。。比如一个登记每个人在哪里有房产的表</p>
+<p>小明可能 北京 有房产          小红可能北京上海广州深圳都有房产。   想要统计个人的房产的数目</p>
+<p>select name,count(name) from table group by name; </p>
+<p>select name,sum(price) from … group by name;           //统计他们买房的钱</p>
+<p>或者统计地区的房产数     select address,count(address) from table group by address;</p>
+<p>可以注意到group by一般是搭配 sum count avg这种函数 这样才有使用意义</p>
+<p>传说在最后面接一个 <strong>with rollup</strong> 可以实现在分组统计数据基础上再进行相同的统计（SUM,AVG,COUNT…） <del> 但好像不写也能实现啊<del> 错错错</del></del></p>
+<p>它的意思是在分组统计计算完成后在最后一行添加一行数据，是计算数据列的和 数数 或者平均值      操作取决于你分组计算的函数。</p>
+<p>但是那一行其他列会出现null的情况</p>
+<p>这时候采用 coalesce 来设置一个可以取代 NUll 的名称</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select coalesce(a,b,c);</span><br></pre></td></tr></table></figure>
+<p>参数说明：如果a==null,则选择b；如果b==null,则选择c；如果a!=null,则选择a；如果a b c 都为null ，则返回为null（没意义）。</p>
+<p>select coalesce(name,”总数”),sum(price) from … group by name with rollup;  </p>
+<p>子查询就是在查询中嵌套一个括号表示一个查询</p>
+<p><code>select dname from dept where deptno in (select deptno from emp where sal&gt;3000);</code></p>
+<p>mysql 连接使用</p>
+<p>你可以在 SELECT, UPDATE 和 DELETE 语句中使用 Mysql 的 JOIN 来联合多表查询。</p>
+<ul>
+<li><strong>INNER JOIN（内连接,或等值连接）</strong>：获取两个表中字段匹配关系的记录。</li>
+<li><strong>LEFT JOIN（左连接）：</strong>获取左表所有记录，即使右表没有对应匹配的记录。</li>
+<li><strong>RIGHT JOIN（右连接）：</strong> 与 LEFT JOIN 相反，用于获取右表所有记录，即使左表没有对应匹配的记录</li>
+</ul>
+<p>其实连接其实就是你查询一个表，但是你又想从其他表中找到结果加进来进行奇妙变化，和union有点像，</p>
+<p>不过咧它好像更加有那种联系的感觉</p>
+<p>Inner join</p>
+<p>其实我们可以将inner join 的两个表 分成两个部分</p>
+<p> select a.address,a.name,b.id from table1 a inner join table2 b on a.name=b.name;</p>
+<p>我们分析一下这个句子。我们可以看到首先我们是正常的用select语句从 table1中获取结果。然后这时候采用inner join引入了另一个表table2 并打算引入table2的列 id        这时候table1的两个列和table2的id列必须形成一定的关系才能将其组合成一行行数据        于是引入条件    on  <strong>虽然比较的是name  其实是为了组装 name 所代表的 table1 的address name 和table2 的id</strong> 只有满足这个条件连个数据库的两行才能成功组装的结果行才能显示出来</p>
+<p>其实这个inner join 可以等价于     select ….from table1 table2 where table1.name=table2.name;</p>
+<p>left join 这个用法和上边差不多</p>
+<p>不过区别在于左边的表 第一个表    不会因为你的 on 条件不符合就 不显示它的值。这好比inner join 是两个表相互协商退让的结果，而left join 是左表按原则办事，而右表从旁协助退让的感觉。</p>
+<p>如果左表有右表对应不了的行，则右表的相应数据处就设置为null</p>
+<p>right join 用法和上边差不多，就是上边的相反 听右表的</p>
+<p>数据库之处理null</p>
+<p>null是一个很特殊的值</p>
+<p>比如 <code>select * from table1 where name=null</code> 并不能帮你查找到name为null的行 你应该要用 is null 或 &lt;=&gt;</p>
+<p><code>select * from table1 where name is null</code>  <code>select *from table1 where name &lt;=&gt; null</code></p>
+<p>还有 is not null</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--其实colomnname1+columnname2 其实就是打算将两列每行做加法显式出来而已</span></span><br><span class="line"><span class="keyword">select</span> * , columnName1+<span class="keyword">ifnull</span>(columnName2,<span class="number">0</span>) <span class="keyword">from</span> tableName;</span><br></pre></td></tr></table></figure>
+<p>columnName1，columnName2 为 int 型，当 columnName2 中，有值为 null 时，columnName1+columnName2=null， ifnull(columnName2,0) 把 columnName2 中 null 值转为 0。</p>
+<p>前面有like做简单的模糊匹配，如今有真正的正则表达式带你装逼带你飞</p>
+<p>直接就 where name regexp ‘表达式’</p>
+<p><code>select * from test01 where name regexp &#39;ab$&#39;</code></p>
+<p>事务就是 </p>
+<p>begin;</p>
+<p>操作 1 2 3 x</p>
+<p>commit /rollback</p>
+<p>直接用 SET 来改变 MySQL 的自动提交模式:</p>
+<ul>
+<li><strong>SET AUTOCOMMIT=0</strong> 禁止自动提交</li>
+<li><strong>SET AUTOCOMMIT=1</strong> 开启自动提交</li>
+</ul>
+<p>修改表</p>
+<p>alter table table_name drop columnname   /  add columnname type  [first |  after  columnname2 ]  删除/添加列(可指定列的位置)</p>
+<p>修改列的类型</p>
+<p>alter table table_name modify column newtype;</p>
+<p>alter table table_name change column columnnewname newtype;</p>
+<p>添加非空和默认值</p>
+<p>alter  table table_name modify column newtype not null default value;</p>
+<p>alter table table_name alter column drop default; 删除默认值</p>
+<p>添加删除主键</p>
+<p>alter table table_name drop primary key;</p>
+<p>alter table table_name add primary key(column);</p>
+<p>修改表的存储引擎</p>
+<p>alter table table_name engine = innodb/myisam;</p>
+<p>show table status like ‘table_name’ \G;   可查找表的情况</p>
+<p>修改表的名字</p>
+<p>alter table table_name rename to  newtable_name;</p>
+<p>check约束</p>
+<p>CHECK 约束用于限制列中的值的范围。</p>
+<p>如果对单个列定义 CHECK 约束，那么该列只允许特定的值。</p>
+<p>如果对一个表定义 CHECK 约束，那么此约束会在特定的列中对值进行限制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">create table xx(</span><br><span class="line">id int not null,</span><br><span class="line">name varchar(233),</span><br><span class="line">check(id&gt;9)</span><br><span class="line">)</span><br><span class="line">#这样就规定id的值一定是大于9</span><br><span class="line"></span><br><span class="line">#额外添加约束  规定多个约束用and连接</span><br><span class="line">alter table xx add constraint xx_con check(id&gt;5 and name =&quot;lunlun&quot;)</span><br><span class="line"></span><br><span class="line">#删除约束</span><br><span class="line">alter table xx drop check xx_con</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/mysql表不能删除修改/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/mysql表不能删除修改/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>MySQL如果频繁的修改一个表的数据，那么这么表会被锁死。造成假死现象。</p>
+<p>比如用Navicat等连接工具操作，Navicat会直接未响应，只能强制关闭软件，但是重启后依然无效。</p>
+<p>解决办法：</p>
+<p>首先执行：</p>
+<p>show full processlist;  //列出当前的操作process，一般会看到很多waiting的process，说明已经有卡住的proces了，我们要杀死这些process！！</p>
+<p>再执行：</p>
+<p>kill processid;  //processid表示process的id，比如kill 3301，就会将id为3301的process杀死。</p>
+<p>使用 kill 将所有的 id 杀死。然后重启MySQL，一般就会解决了。如果还不行，那应该是不可能的吧。。。</p>
+<p>重启MySQL：</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/mysql临时表复制表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/mysql临时表复制表/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>临时表 </p>
+<p>就是临时保存的表，关闭客户端后将其删除，你用show tables 并不能看到他， 你也可以在使用完后主动drop 他</p>
+<p><code>create temporary table xxx(xxx xxx,xxx,xxx);</code></p>
+<p>mysql的表复制</p>
+<p><code>show create table tablename \G</code> 这样就会出现你想要的表的创建信息，你复制就行，不过你第一行要改一下表名字</p>
+<p>然后insert into clonetable (col1,col2,col3…) select col1,col2,col3,…. from tablename;进行数据的复制</p>
+<p>完整复制表的其他方法，感觉这个完爆好吧</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE targetTable LIKE sourceTable;</span><br><span class="line">INSERT INTO targetTable SELECT * FROM sourceTable;</span><br></pre></td></tr></table></figure>
+<p>这种好像无法模仿索引神魔的 默认值？</p>
+<p>可以拷贝一个表中其中的一些字段:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT username, password FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以将新建的表的字段改名:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(  </span><br><span class="line">    SELECT id, username AS uname, password AS pass FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以拷贝一部分数据:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin WHERE LEFT(username,1) = &apos;s&apos;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以在创建表的同时定义表中的字段信息:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin</span><br><span class="line">(</span><br><span class="line">    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY</span><br><span class="line">)</span><br><span class="line">AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><strong>第一、只复制表结构到新表</strong></p>
+<p>create table 新表 select * from 旧表 where 1=2</p>
+<p>或者</p>
+<p>create table 新表 like 旧表 </p>
+<p><strong>第二、复制表结构及数据到新表</strong></p>
+<p>create table新表 select * from 旧表 </p>
+<p>服务器元数据</p>
+<table>
+<thead>
+<tr>
+<th>SELECT VERSION( )</th>
+<th>服务器版本信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT DATABASE( )</td>
+<td>当前数据库名 (或者返回空)</td>
+</tr>
+<tr>
+<td>SELECT USER( )</td>
+<td>当前用户名</td>
+</tr>
+<tr>
+<td>SHOW STATUS</td>
+<td>服务器状态</td>
+</tr>
+<tr>
+<td>SHOW VARIABLES</td>
+<td>服务器配置变量</td>
+</tr>
+</tbody>
+</table>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/mysql索引/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/mysql索引/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>创建索引</p>
+<p>创建索引其实就是 给你一个表中一个特殊的列进行索引绑定  这样你就会在查找这个列的时候 （where）更加快</p>
+<p>但是会降低更新表的速度 比如 insert update delete这种，索引其实就是做了一个表 保存主键和索引字段</p>
+<p>索引有很多</p>
+<p>主键索引  就是primary key  索引唯一不可为null </p>
+<p>唯一索引  要求索引列对应的值必须唯一，但允许空值  如果是组合索引，则他们的组合不能重复</p>
+<p>普通索引</p>
+<p>全文索引  也是一种索引方式      　建立全文检索的字段类型必须是char,varchar,text</p>
+<p>删除索引</p>
+<p><code>drop index indexname on tablename</code></p>
+<p>添加索引</p>
+<p><code>alter table tablename add unique indexname/primary key/index indexname/fulltext indexname (columnname(length))</code></p>
+<p><code>create unique index indexname on tablename(columnname(length))</code>  length应该是索引的长度把如果是CHAR，VARCHAR类型，length可以小于字段实际长度；如果是BLOB和TEXT类型，必须指定 length。</p>
+<p>创建表时指定</p>
+<p><code>create table tablename(id int not null,username varchar(255) not null,unique [indexname] (username(length)))</code></p>
+<p>查看表的索引 <code>show index from tablename\G;</code></p>
+<p>全文搜索  innodb也支持</p>
+<p><code>select * from tablename where match(columnname) against (&#39;value&#39;)</code>  用来全文检索的方式查找值为value的行</p>
+<p>注意全文检索中，如果这个被检索的值小于4个，mysql不会将其创建全文索引 你用上文方法将无法查询到</p>
+<p>这个设置在 <code>show variables like &#39;ft%&#39;</code> 可以看到</p>
+<p>​             ft_boolean_syntax    <strong>+ -&gt;&lt;()~*:””&amp;|</strong>         #改变IN BOOLEAN MODE的查询字符，不用重新启动MySQL也不用重建索引<br>​             ft_min_word_len    4                                   #最短的索引字符串，默认值为4，(通常改为1)修改后必须重建索引文件</p>
+<p>​                                                                               重新建立索引命令：<strong>repair table tablename quick</strong> </p>
+<p>​             ft_max_word_len    84                                #最长的索引字符串，默认值为84，修改后必须重建索引文件</p>
+<p>​             ft_query_expansion_limit   20                      #查询括展时取最相关的几个值用作二次查询</p>
+<p>​             ft_stopword_file    <strong>(built-in)</strong>                      #全文索引的过滤词文件      </p>
+<p>in boolean mode </p>
+<p>l  即使找到的单词会出现在一半以上的行里，仍然会把它们搜搜出来</p>
+<p>l  查询结果不再按相关程序排序</p>
+<p>l  搜索可以要求短语里的所有单词都必须是按某种特定的顺序出现</p>
+<p>l  可以对未包括在FULLTEX索引里的那些列，进行布尔模式全文搜索</p>
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><h2 id="4-4-gt-提高该字的相关性，查询的结果会排在比较靠前的位置。"><a href="#4-4-gt-提高该字的相关性，查询的结果会排在比较靠前的位置。" class="headerlink" title="4.4. &gt; :提高该字的相关性，查询的结果会排在比较靠前的位置。"></a>4.4. &gt; :提高该字的相关性，查询的结果会排在比较靠前的位置。</h2><h2 id="4-5-lt-降低相关性，查询的结果会排在比较靠后的位置"><a href="#4-5-lt-降低相关性，查询的结果会排在比较靠后的位置" class="headerlink" title="4.5.&lt; :降低相关性，查询的结果会排在比较靠后的位置"></a>4.5.&lt; :降低相关性，查询的结果会排在比较靠后的位置</h2><p><code>+name</code> 代表一定要有这个匹配 并且出现在<strong>词语</strong>开始位置 </p>
+<p><code>-name</code> 代表不要有这个词语，但不要只用这个词，因为你会查不到东西，要配合其他语法                            </p>
+<p> eg: MATCH (girl_name) AGAINST (‘-林志玲 +张筱雨’)</p>
+<p><code>空格 name</code>表示选择，出现这个词语的行优先级较高</p>
+<p><code>apple banana</code>找至少包含上面词中的一个的记录行</p>
+<p><code>+apple +juice</code>               两个词均在被包含</p>
+<p><code>+apple macintosh</code> 包含词 “apple”，但是如果同时包含 “macintosh”，它的排列将更高一些</p>
+<p><code>+apple -macintosh</code> 包含 “apple” 但不包含 “macintosh”</p>
+<p><code>&lt;  &gt;</code> 这个两个都是提高字的相关性 影响查询结果的排序</p>
+<p>​                        <strong>1. 只要使用 &gt;&lt;的总比没用的 靠前；</strong></p>
+<p>​                                  <strong>2. 使用  &gt;的一定比 &lt;的排的靠前 (这就符合相关性提高和降低)；</strong></p>
+<p>​                                       <strong>3. 使用同一类的，使用的越早，排的越前。</strong></p>
+<p>括号代表选择把  </p>
+<p>​                       eg: +aaa +(&gt;bbb &lt;ccc) // 找到有aaa和bbb和ccc，aaa和bbb，或者aaa和ccc(因为bbb，ccc前面没有+，所以表示可有可无)，</p>
+<p>​                                         然后 aaa&amp;bbb <strong>&gt;</strong> aaa&amp;bbb&amp;ccc <strong>&gt;</strong> aaa&amp;ccc</p>
+<p>~ 代表拥有该词会降低相关性</p>
+<p><code>*</code> 通配符只能接在字符串后面</p>
+<p><code>&quot;&quot;</code> 双引号    代表完全匹配，一定准确无误   平时都是用单引号的</p>
+<p>自增长值</p>
+<p>auto_increment </p>
+<p><code>create table test04 (id int  not null auto_increment,name varchar(20) not null );</code></p>
+<p>可以</p>
+<p><code>create table test04(id int not null auto_increment,name varchar(20) not null)auto_increment=200</code></p>
+<p><code>alter table t auto_increment =100</code>  设定auto_increment的初始值</p>
+<p>重置增长序列值，由于你删除很多列，然后增长序列列就会千疮百孔这时候  (但是如果有外键就无法这么操作哭唧唧)</p>
+<p><code>alter table xx drop column</code>   删除序号列</p>
+<p><code>alter table xx add column int unsigned not null auto_increment first</code>   重新组件序号列</p>
+<p>防止出现重复数据</p>
+<p>设置主键或唯一索引 主键是不能null的  可以 <code>primary key(lastname,firstname)</code></p>
+<p>INSERT IGNORE INTO与INSERT INTO的区别就是INSERT IGNORE会忽略数据库中已经存在的数据，如果数据库没有数据，就插入新的数据，如果有数据的话就跳过这条数据。 不会向数据表中插入重复数据</p>
+<p>如果你需要读取不重复的数据可以在 SELECT 语句中使用 DISTINCT 关键字来过滤重复数据。</p>
+<p><code>select distinct last_name ,first_name from table1;</code></p>
+<p>你也可以使用 GROUP BY 来读取数据表中不重复的数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT last_name, first_name</span><br><span class="line">    -&gt; FROM person_tbl</span><br><span class="line">    -&gt; GROUP BY (last_name, first_name);</span><br></pre></td></tr></table></figure>
+<p>删除重复数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE tmp SELECT last_name, first_name, sex FROM person_tbl  GROUP BY (last_name, first_name, sex);</span><br></pre></td></tr></table></figure>
+<p>当然你也可以在数据表中添加 INDEX（索引） 和 PRIMAY KEY（主键）这种简单的方法来删除表中的重复记录。方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER IGNORE TABLE person_tbl</span><br><span class="line">    -&gt; ADD PRIMARY KEY (last_name, first_name);</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Mysql 的外键/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/Mysql 的外键/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Mysql 的外键</p>
+<p>感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的</p>
+<p>数据库中其实外键有两种说法啦，</p>
+<p>一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联）</p>
+<p>真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。</p>
+<p>首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的列（可以名字不同，但一般名字相同方便思考）这时候，一个表A把这个列定义为唯一索引（可以为unique也可以primary key），一定要（这个表就是主表）。</p>
+<p>另一个表B则要将这个键定义成外键 连接到上一个表的的唯一索引（称为从表）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">create table orders(</span><br><span class="line">O_id int not null,</span><br><span class="line">P_id int ,PRIMARY KEY (O_id),FOREIGN KEY (P_id) references Person(P_id)</span><br><span class="line">)</span><br><span class="line">-- 在Person中P_id是主键   foreign key 等的括号不能省略</span><br><span class="line"></span><br><span class="line">-- alter修改</span><br><span class="line">alter table orders add constraint fk_foreignkey foreign key (P_id) references Person(P_id);</span><br><span class="line"></span><br><span class="line">-- 撤销外键</span><br><span class="line">alter table orders drop foreign key fk_foreignkey  (外键名字)</span><br><span class="line"></span><br><span class="line">-- 删除外键关系时会有点小尴尬，因为一定要外键名字，而你大概率是没有设置或者不记得的，你可以用show create table xxx查看</span><br><span class="line"></span><br><span class="line">-- 禁用约束（子表的外键约束）  好像是用在 oracle的 mysql好像不行  启用是enable</span><br><span class="line">ALTER TABLE 表名 disable constraint 约束名;</span><br></pre></td></tr></table></figure>
+<p><strong>谁是谁的外键？</strong></p>
+<p>说了这么多到底谁是外键呢？你以为是B的那个索引是外键？太天真了 naive 是A的那个主键是B的外键。竟然是主表的键是从表的外键太奇怪了。。</p>
+<p>外键约束</p>
+<p>外键约束咧应该是本来是不能违反的 但是你可以设置违反响应事件？</p>
+<p>   <strong>外键约束事件触发</strong>。既然有外键约束，当违反约束时会发生什么？我们把它的反应看作事件，一共有四种： </p>
+<p>定义方式在最后面加  比如  <code>FOREIGN KEY (main_id) REFERENCES test_main ON DELETE SET NULL;</code></p>
+<p>​        1、级联：当主表更改时，从表跟从更改。  on delete/update cascade</p>
+<p>​        2、不执行任何操作。           默认的外键触发</p>
+<p>​        3、设置null。                        // on delete set null </p>
+<p>​        4、设置默认值。    难道是set 加参数值？   </p>
+<p>   <code>alter table 表名 add constraint DF_字段名 default &#39;默认值&#39; for 字段名--其中的&#39;默认值&#39;为你想要默认的值，注意&#39;for&#39;</code></p>
+<p>外键作用可以说是：保持数据一致性，完整性，关联性，主要目的是控制存储在外键表中的数据。就是当你对一个表的数据进行操作，和他有关联的一个或更多表的数据能够同时发生改变，<strong>避免无效或是无用的改变和孤立的数据</strong>。</p>
+<p>​        <strong>建键原则</strong>：</p>
+<p>​       1、 外键字段为主键<br>　　2、 所有的键都必须唯一<br>　　3、避免使用复合键<br>　　4、外键总是关联唯一的键字段</p>
+<p>总之</p>
+<ul>
+<li><p>删除  要先删除子表所关联的数据再删除父表数据   级联删除 可以删父表的同时删除子表数据</p>
+</li>
+<li><p>更新 更新父表（应该是主键值）会违反约束 但可以修改子表（外键列）（不过该外键不能改成父表没有的 ）  和父表的非主键值   级联更新  可以修改父表的同时修改子表</p>
+<p>其实是可以修改主键的，但是呢和删除数据一样   前提是从表没有连接到它的行</p>
+</li>
+<li><p>插入时 父表可以插入 子表插入如果插入的外键列是父表没有的值的时候会违反约束，子表的数据一定要有父表做依据  </p>
+<p>给出的错误提示<code>Cannot add or update a child row: a foreign key constraint fails</code>  </p>
+</li>
+</ul>
+<p>总的来说 先有父表再有子表    父表数据先看子表，甚至不能改</p>
+<p>级联都是针对改变主表主键/删除主表数据   从表的外键也修改/从表数据删除 的情况 </p>
+<p>已经经过实操过所有例子大概率没有任何问题</p>
+<p>然而并没有级联插入</p>
+<p>或者我们可以用触发器实现级联删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TRIGGER [dbo].[trigCascadeDelete]    --触发器名</span><br><span class="line">   ON  [dbo].[main]      ---作用于哪张表</span><br><span class="line">   instead of  delete    ---什么动作触发</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	declare @id int   --声明@id变量</span><br><span class="line">	select @id=id from deleted --取出要删除的id</span><br><span class="line">	delete from branch where mainId =@id  --先删除从表中的数据行</span><br><span class="line">	delete from main where id =@id   ---再删除主表中的数据行</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>外键并不能帮助我们对查询有什么帮助，我们只能老老实实用联合查询 什么子查询那种东西去做多表查询</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JDBC(四)ResultSet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/JDBC(四)ResultSet/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>ResultSet 就是个结果集，但其实他是有很多性质可以订制的。</p>
+<p>ResultSet的方法有三类</p>
+<ul>
+<li>浏览方法  就是移动结果集的光标</li>
+<li>获取方法 查看光标指向的数据</li>
+<li>更新方法 更新行的数据，然后在数据库中更新</li>
+</ul>
+<p>ResultSet定制是从创建它的Statement中就要进行设置了，我们知道Statement有三种类型</p>
+<p>对应三种创建的Statement构造函数</p>
+<ul>
+<li>createStatement(int RSType,int RSConcurrency)</li>
+<li>prepareStatement(String sql,int RSType,int RSConcurrency)</li>
+<li>prepareCall(String sql,int RSType,int RSConcurrency)</li>
+</ul>
+<p>发现我们好像有没有使用的参数 RSType 和 RSConcurrency 这就是用来定制ResultSet的性质的两个参数</p>
+<p>RSType 定制光标的移动</p>
+<ul>
+<li>ResultSet.TYPE_FORWARD_ONLY 光标只能在结果集中往前移动</li>
+<li>ResultSet.TYPE_SCROLL_INSENSITIVE 光标可前后移动 但对创建结果集后数据库的变化不敏感</li>
+<li>ResultSet.TYPE_SCROLL_SENSITIVE 光标可前后移动，结果集对数据库之后的变化敏感</li>
+</ul>
+<p>RSConcurrency 定制并发性</p>
+<ul>
+<li>ResultSet.CONCUR_READ_ONLY 只读结果集 默认</li>
+<li>ResultSet.CONCUR_UPDATABLE 可更新结果集</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE)</span><br></pre></td></tr></table></figure>
+<p>ResultSet相关方法</p>
+<ul>
+<li>beforeFirst()     </li>
+<li>afterLast()</li>
+</ul>
+<p>移到第一行之前或之后 感觉不是用来插入数据的，应该是搭配next previous 做遍历的</p>
+<ul>
+<li>first() 第一行</li>
+<li>last() </li>
+</ul>
+<ul>
+<li>absolute(int row) boolean</li>
+<li>boolean relative(int row)</li>
+</ul>
+<p>将光标移动到指定行，分为绝对位移和相对位移</p>
+<ul>
+<li>boolean previous()</li>
+<li>boolean next()</li>
+</ul>
+<ul>
+<li>int getRow() 返回当前行序号</li>
+</ul>
+<ul>
+<li>moveToInsertRow()</li>
+<li>moveToCurrentRow()</li>
+</ul>
+<p>插入行和当前行切换，随时随地插入还能回来，如果已经是插入行或当前行还不报错，美滋滋</p>
+<p>获取数据方法 getXXX</p>
+<p>XXX 可以很多 比如Int String URL Object Date 等等</p>
+<p>获取方法有两种，重载了</p>
+<p>int getInt(String colname) 根据列名获取数据</p>
+<p>int getInt(int colindex) 根据列序号获取数据</p>
+<p>我们获得数据集后还是能进行更新的</p>
+<p>updateXXX(int colinext,String s)  根据序号进行更新</p>
+<p>updateXXX(String colname,String s) 根据索引更新</p>
+<p>如果要将数据集的更改同步的数据库中，要继续调用以下方法</p>
+<ul>
+<li>updateRow() 更新</li>
+<li>deleteRow() 删除该行</li>
+</ul>
+<ul>
+<li>refreshRow() 刷新结果集中的数据以反映数据库中最近的任何更改   (ROW??)</li>
+<li>cancelRowUpdates() 取消对该行更新</li>
+<li>insertRow() 在数据库中插入一行。 只有当光标指向插入行时，才能调用此方法。</li>
+</ul>
 
           
         
@@ -469,6 +1982,10 @@
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -512,7 +2029,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

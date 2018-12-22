@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1234567891011121314151617181920212223242526def __init__(self, name, score):        self.name = name        self.score = score#self说明这不是一个函数而是一个方法，指代类本身#name score 什么的加上self直接就成为成员变量#__init__这个是构造函数的样子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/Python(4)oop/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="1234567891011121314151617181920212223242526def __init__(self, name, score):        self.name = name        self.score = score#self说明这不是一个函数而是一个方法，指代类本身#name score 什么的加上self直接就成为成员变量#__init__这个是构造函数的样子">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-10T01:05:06.566Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="1234567891011121314151617181920212223242526def __init__(self, name, score):        self.name = name        self.score = score#self说明这不是一个函数而是一个方法，指代类本身#name score 什么的加上self直接就成为成员变量#__init__这个是构造函数的样子">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/Python(4)oop/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Python(4)oop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, score)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.score = score</span><br><span class="line"></span><br><span class="line"><span class="comment">#self说明这不是一个函数而是一个方法，指代类本身</span></span><br><span class="line"><span class="comment">#name score 什么的加上self直接就成为成员变量</span></span><br><span class="line"><span class="comment">#__init__这个是构造函数的样子</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span>:</span>    </span><br><span class="line">    kind = <span class="string">'Canine'</span>  <span class="comment"># class variable shared by all instances    </span></span><br><span class="line"> .......</span><br><span class="line"><span class="comment">#这个是个类变量（不叫静态变量） 并且会作为实例变量的默认值  它可以被改变但是这只是被作为一个实例变量 如果Dog.name依然是Canine</span></span><br><span class="line"></span><br><span class="line">但注意如果那个变量是一个列表字典那种东西  往里面添加删除元素什么的是共享的，</span><br><span class="line"></span><br><span class="line">甚至只是用参数初始化也是共享的</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name=<span class="string">''</span>, tricks=[])</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.tricks = tricks</span><br><span class="line">        </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Dog</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name)</span>:</span></span><br><span class="line">            self.name = name</span><br><span class="line">            self.tricks = []</span><br><span class="line">        <span class="comment">#这时候的tricks只能作为实例变量不会共享</span></span><br></pre></td></tr></table></figure>
+<p>•以self作为第一个参数的方法是实例方法(instance method)</p>
+<p>•用前缀装饰器@classmethod指定的方法是类方法(class method)</p>
+<p>•用@staticmethod修饰的方法是静态方法(static method)，既不会影响类也不会影响类的对象</p>
+<p>class A():<br>​     count = 0<br>​     def <strong>init</strong>(self):<br>​         A.count += 1<br>​     def exclaim(self):<br>​         print(“I’m an A!”)<br>​     @classmethod<br>​     def kids(cls):<br>​         print(“A has”, cls.count, “little objects.”)</p>
+<p>​    </p>
+<p>class CoyoteWeapon():<br>​     @staticmethod<br>​     def commercial():<br>​         print(“This CoyoteWeapon has been brought to you by Acme”)</p>
+<p>​    i</p>
+<p>访问限制</p>
+<p>•外部代码可以直接调用实例变量来操作数据</p>
+<p>•实例的变量名以__开头，声明为“私有变量”</p>
+<pre><code>def __init__(self, name, score):
+    self.__name = name
+    self.__score = score
+</code></pre><p>好像不能直接 对象.__name访问对象</p>
+<p>但可以对象.<em>类名__name 来访问对象 而且好像是可以直接 通过 `对象.</em> __name来进行赋值`</p>
+<p>继承 就是在class xx(父类)： 填写继承的类  </p>
+<p>继承方法和成员吧  然后能重写方法  并且能通过super()访问父类域的方法或者成员    </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_twice</span><span class="params">(animal)</span>:</span></span><br><span class="line">    animal.run()</span><br><span class="line">    animal.run()</span><br><span class="line"><span class="comment">#多态 你给不同的类的对象 甚至只是一个 （构造函数/感觉是传递了一个匿名对象）就执行不同类的run方法</span></span><br></pre></td></tr></table></figure>
+<p>•dir()函数 – 获得一个对象的所有属性</p>
+<p>特殊方法</p>
+<p>在类中实现 了 <code>__len__（self）</code>方法就能在外部方法 直接调用len(类的对象名)</p>
+<p>has/set/get attr()  方法是所有类都会支持的方法  这些方法是对类的对象的属性进行操作和读取</p>
+<p>不过返回的好像是属性的地址 可以赋值给一个变量 然后让其将内容显现出来 </p>
+<p>一般是用来作为判断对象中是否拥有某项属性</p>
+<p>if hasattr(fp, ‘read’):<br>​        return readData(fp)</p>
+<p>•创建实例后可动态绑定属性和方法</p>
+<p>class Student(object):<br>​    pass</p>
+<p>s = Student()<br>s.name = ‘Michael’<br>print(s.name)             //虽然之前没有name这个值，但是动态绑定了一个值，所以就可访问  Michael</p>
+<p>除了绑定属性也能绑定函数成为方法</p>
+<p>需要借助MethodType显式声明类型  否则会被当作一个属性来看待</p>
+<p>def set_age(self, age):<br>​     self.age = age</p>
+<p> from types import MethodType<br> s.set_age = MethodType(set_age, s)               //绑定了一个set_age方法，并且通过调用set_age方法动态绑定了一个age<br> s.set_age(25)<br> s.age</p>
+<p>  也能这样绑定，明显更清晰，但有一点局限性</p>
+<p>def set_score(self, score):<br>​     self.score = score</p>
+<p> Student.set_score = set_score     //将方法绑定在类上面  每个对象都能用</p>
+<p>可以限制实例变量的动态绑定</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">__slots__ = (<span class="string">'name'</span>, <span class="string">'age'</span>)</span><br></pre></td></tr></table></figure>
+<p>指明只能动态绑定这两个名字的变量，其他属性的动态绑定会报错</p>
+<p>class Student(object):</p>
+<p>​     @property<br>​     def score(self):<br>​         return self._score</p>
+<p>​     @score.setter<br>​     def score(self, value):<br>​         if not isinstance(value, int):<br>​             raise ValueError(‘score must be an integer!’)<br>​         if value &lt; 0 or value &gt; 100:<br>​             raise ValueError(‘score must between 0 ~ 100!’)<br>​         self._score = value</p>
+<p>   s = Student()<br> s.score = 60    # OK，实际转化为s.set_score(60)<br> s.score         # OK，实际转化为s.get_score()  =&gt; 60<br> s.score = 9999  # ValueError: score must between 0 ~ 100!</p>
+<p>Python类支持多重继承</p>
+<p>多重继承时调用super能跑到你祖父辈的处调用方法  但是self不会变仍是自己  </p>
+<p>如果自己没定义的话 self调用的方法也会找父类们定义的方法</p>
+<p>当你的两个父类BC都定义同一个方法func而自己没有定义的时候</p>
+<p>调用self.func() 和 super().func()   都会指向一个类的方法  是谁在于 class D(B, C)  括号里面谁在前面就优先是谁这里是优先B  如果要调用C 的  则 C.func()  </p>
+<p><code>D.__mro__</code>  能显示你的类的继承关系的大概层次关系</p>
+<p>定制类 和刚刚所说的<code>__len__</code> 方法实现后的类对象可作为len的参数一样</p>
+<p>有很多魔法方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在class定义的方法  假设x y 都是这个类的方法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span> ...    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__contains__</span><span class="params">(self, key)</span>:</span> ...  x el <span class="keyword">in</span>   </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span> ... x &lt; y    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span> ... iter(x)   用于范围<span class="keyword">for</span>  <span class="keyword">for</span> n <span class="keyword">in</span> Fib():</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span> ...  next(x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, key)</span>:</span> ...   下标访问 </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span> ...</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__lt__</span><span class="params">(self, other)</span>:</span> ... x &lt; y    <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__eq__</span><span class="params">(self, other)</span>:</span> ...   x == y   </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span> ...    str(x)   用来直接作为<span class="keyword">print</span>参数时隐式调用</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span> ... </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self,z)</span>:</span>          用来`实例对象()` 调用函数</span><br></pre></td></tr></table></figure>
+<p>#And even more… </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/20/test-my-site/" rel="next" title="test_my_site">
+                <i class="fa fa-chevron-left"></i> test_my_site
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/Python生成器/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
