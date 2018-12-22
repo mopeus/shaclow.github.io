@@ -232,303 +232,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(五)URL和URI/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/Java网络编程(五)URL和URI/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>URL是URI的一种表示方式</p>
-<p>URI的语法</p>
-<p>模式:模式特定部分 （模式特定部分的语法取决于所用的模式）</p>
-<p>data    连接重直接包含的base64编码数据<br>file    本地磁盘文件<br>ftp<br>http<br>mailto  电子邮件地址<br>magnet 对等网络可以下载的资源<br>telnet 与基于telnet的服务的连接</p>
-<p>urn 统一资源名  还有其他非标准的 rmi jar jndi doc</p>
-<p>URI没有特定的语法，不过大都采用一种层次结构的形式</p>
-<p>//authority/path?query</p>
-<p>authority 代表解析该URI的其余部分的授权机构 </p>
-<p>比如  <a href="http://www.baidu.com/ca/abc?key=233" target="_blank" rel="noopener">http://www.baidu.com/ca/abc?key=233</a></p>
-<p>授权机构 <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a><br>路径 /ca/abc              不过这个部分不全是路径  有可能是一个数据库的提取信息的参数 也可以代表一个会话钥匙<br>请求 key=233</p>
-<p>但有些uri表示不分层，也有些是通过.而不是/来进行分层</p>
-<p>非ascll得字母和数字 要用%号进行转移 后面加上它得UTF-8的16进制的编码</p>
-<p>如果没有将非ascll字符按上述编码而是将其直接放在URI中，这个是IRI　但很多协议和软件只接受和支持URI</p>
-<p>如果不是用于特定的部分　／　和　＠都要进行编码</p>
-<h3 id="URL类"><a href="#URL类" class="headerlink" title="URL类"></a>URL类</h3><p>这是一个final类 不能对其派生</p>
-<p>URL 对象是不可改变的，他是线程安全的</p>
-<h4 id="构造URL"><a href="#构造URL" class="headerlink" title="构造URL"></a>构造URL</h4><p>构造函数</p>
-<p>URL(String url)<br>URL(String protocol,String hostname,String file)   file前记得要加/<br>URL(String protocol,String hostname,int port,String file)  port设为-1说明用协议默认端口<br>URL(URL base,String relative)  base是一个完整的指向file的路径了 relative不用/</p>
-<p>除了验证能否识别URL的模式之外，不支持则会抛出MalformedURLException，java不会对url做其他检查</p>
-<p>其他URL对象来源</p>
-<p>java类库中其他的方法也返回URL对象</p>
-<p>applet中调用 getDocumentBase() 返回这个applet的页面的URL getCodeBase() 该applet的class文件的URL</p>
-<p>java.io.File 有一个toURL() 他会返回指定文件匹配的file URL  这个方法会返回URL格式和平台相关</p>
-<p>类加载器能加载资源 它的静态方法  ClassLoader.getSystemResource(String name) 返回URL 通过它可以读取一个资源</p>
-<p>ClassLoader.getSystemResources(String name) 返回一个Enumeration 包含一个URL列表</p>
-<p>getResource(String name) 会在引用类加载器使用的路径中搜索指定资源的URL</p>
-<p>java.swing.JEditorPane的getPage() 和java.net.URLConnection getURL()</p>
-<h4 id="从URL获取数据"><a href="#从URL获取数据" class="headerlink" title="从URL获取数据"></a>从URL获取数据</h4><p>我们接下来介绍如何往URL类压榨数据</p>
-<p>InputStream openStream()<br>URLConnection openConnection()<br>URLConnection openConnection(Proxy proxy)<br>Object getContent()<br>Object getContent(Class[]classes)</p>
-<p>InputStream openStream()  这个对象获得的资源是原始内容未经解释 它不包含任何http首部或者协议相关信息</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">import java.io.BufferedInputStream;</span><br><span class="line">import java.io.IOException;</span><br><span class="line">import java.io.InputStream;</span><br><span class="line">import java.io.InputStreamReader;</span><br><span class="line">import java.io.Reader;</span><br><span class="line">import java.net.URL;</span><br><span class="line">import java.nio.charset.MalformedInputException;</span><br><span class="line"></span><br><span class="line">public class sourceViewer &#123;</span><br><span class="line">	public static void main(String[]args) &#123;</span><br><span class="line">		if(args.length&gt;0) &#123;</span><br><span class="line">			InputStream inputStream=null;</span><br><span class="line">			try &#123;</span><br><span class="line">				URL url=new URL(args[0]);</span><br><span class="line">				inputStream=url.openStream();</span><br><span class="line">				inputStream=new BufferedInputStream(inputStream);</span><br><span class="line">				Reader reader=new InputStreamReader(inputStream);</span><br><span class="line">				int c;</span><br><span class="line">				while((c=reader.read())!=-1) &#123;</span><br><span class="line">					System.out.print((char)c);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			catch(MalformedInputException ex) &#123;</span><br><span class="line">				System.err.println(args[0]+&quot;is not a parseable URL&quot;);</span><br><span class="line">			&#125;</span><br><span class="line">			catch(IOException ex) &#123;</span><br><span class="line">				System.err.println(ex);</span><br><span class="line">			&#125;</span><br><span class="line">			finally &#123;</span><br><span class="line">				if(inputStream!=null) &#123;</span><br><span class="line">					try &#123;</span><br><span class="line">						inputStream.close();</span><br><span class="line">					&#125;</span><br><span class="line">					catch (IOException e) &#123;</span><br><span class="line">						// TODO: handle exception</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个不可靠的地方就是 远程主机和本地客户端可能采用不同的默认字符集。如果页面使用了与Ascll完全不同字符集而无法识别Meta标记或http头部什么的。导致编码错误</p>
-<p>URLConnection openConnection()</p>
-<p>openConnection() 打开socket，并返回一个URLConnection()对象  它表示一个网络资源打开的连接 调用失败出IOException</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">try&#123;</span><br><span class="line">    URL u=new URL(&quot;http://xxxx&quot;);</span><br><span class="line">    try&#123;</span><br><span class="line">        URLConnection uc=u.openConnection();</span><br><span class="line">        &lt;!--通过URLConnection去获取输入流--&gt;</span><br><span class="line">        InputStream in=uc.getInputStream();</span><br><span class="line">    &#125;</span><br><span class="line">    catch(MalformedURLException ex)&#123;</span><br><span class="line">        System.err.println(ex);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>URLConnection允许你访问http首部以及原始的html 除了URL读取，还允许你向url写入数据</p>
-<p>URLConnection openConnection(Proxy proxy)  这个版本就指定通过哪个代理服务器传递连接</p>
-<p>Object getContent()  会根据数据内容尝试建立一个某种类型的对象 如果是文本内容则返回InputStream 如果是图像则返回一个ImageProducer<br>不过返回的是Object 要强制类型转换你要的类型   </p>
-<p>它会从服务器的数据首部查找的Content-type 字段，如果服务器没有MiMe首部或者给了不熟悉的类型就会返回输入流 如果出错则返回IOException</p>
-<p>Object getContent(Class[]classes)   指定你想要返回的类型  你可以传个数组代表你希望返回的类型的优先列表</p>
-<h3 id="分解URL"><a href="#分解URL" class="headerlink" title="分解URL"></a>分解URL</h3><p>URL 对象可以通过一些成员方法得到一些部分的url</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">String getProtocol()  得到模式</span><br><span class="line"></span><br><span class="line">String getHost() 返回主机</span><br><span class="line"></span><br><span class="line">int getPort() 返回端口 没明确指明则返回-1</span><br><span class="line"></span><br><span class="line">int getDefaultPort() URL没有指定端口，该方法返回这个url协议所使用的默认端口</span><br><span class="line"></span><br><span class="line">String getFile() 返回路径 （第一个斜线后的内容到#前）</span><br><span class="line"></span><br><span class="line">String getPath() 返回路径但不包含查询的部分</span><br><span class="line"></span><br><span class="line">String getRef() 返回片段标识符的部分 #后的部分</span><br><span class="line"></span><br><span class="line">String getQuery() 返回查询字符串 如果没有返回null</span><br><span class="line"></span><br><span class="line">String getUserInfo() 返回用户信息 /后 @ 前面的内容  但是对于mailto模式的@ 不代表用户 整个代表路径 其实是指接收方的用户</span><br><span class="line"></span><br><span class="line">String getAuthority() 返回权威机构 // 。。。。/中的内容可能包含 用户信息 和端口内容</span><br></pre></td></tr></table></figure>
-<p>相等性和比较</p>
-<p>URL的比较 是要在同一主机 路径 资源 这才是相同 然后equals() 返回true  equals()通过DNS去解析主机来判断两个主机相同但不会比较两个URL标识的资源 比如加个端口省略默认资源什么的就不认识了</p>
-<p>实际上equals是一个阻塞IO的操作 所以不要将URL存储在依赖equals的数据结构当中比如HashMap 更好选择是URI</p>
-<p>sameFile() 这个比较和equals基本相同 但它不考虑片段的标识符</p>
-<h4 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h4><p>toString()  生成String对象 而且URL时绝对URL  往往是用于做隐式调用的<br>toExternalForm() 将URL对象转为字符串  实际上toString()所做的事情就是返回toExternalForm()<br>toURI() 将URL对象转换为URI对象      </p>
-<p>URI类 提供了比URL类更准确，更符合规范的行为。对于绝对化和编码等操作，应当首选URI类，因为它的equals方法不会阻塞，而URL类应当从事服务器下载的任务</p>
-<p>URI是对URL的抽象，不仅包括统一资源定位符，还包括统一资源名（URN） 实际使用上URI大多是URL 但大多数标准是用URI定义的</p>
-<ul>
-<li>URI类完全有关于资源的标识和URI的解析，它没有提供方法去获取</li>
-<li>URI的规范更加一直</li>
-<li>URI可以代表相对的地址，但URL在存储URI之前会将其绝对化地址</li>
-</ul>
-<p>如果你是想下载一个URL内容，就用URL 如果是完成标识而不是获取，则使用URI类 二者都需要时 其实可以通过toURL 和 toURI 相互转换</p>
-<h3 id="构造URI"><a href="#构造URI" class="headerlink" title="构造URI"></a>构造URI</h3><ul>
-<li>URI(String uri)</li>
-<li>URI(String scheme,String schemeSpecificPart,String fragment)</li>
-<li>URI(String scheme,String host,String path,String fragment)</li>
-<li>URI(String scheme,String authority,String path,String query)</li>
-<li>URI(String scheme,String userInfo,String host,int port,String path,String query,String fragment)</li>
-</ul>
-<p>与URL类不同，URI类不依赖底层协议处理器，所以只要URI语法正确，Java就不需要为了创建URI对象而理解其协议。</p>
-<p><strong>URI(String uri)</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URI voice=<span class="keyword">new</span> URI(<span class="string">"tel:+1-800-9988-9938"</span>);</span><br><span class="line">URI web=<span class="keyword">new</span> URI(<span class="string">"http://www.xml.com/pub/a/..."</span>);</span><br><span class="line">URI book=<span class="keyword">new</span> URI(<span class="string">"urn:isbn:1-565-92870-9"</span>);</span><br></pre></td></tr></table></figure>
-<p>如果语法不正常的话，比如冒号开头，这个构造函数将抛出一个URISyntaxException 异常 这是一个受查异常，所以要捕获这个异常。 或者调用构造函数的方法中声明可能抛出该异常 URI中可以包括其他的Unicode字符</p>
-<p>剩下我就不一个个构造函数讲了，就讲一下参数的意义</p>
-<p>scheme 模式 是URI的协议如http urn tel    必须字母数字 和（+-.） 组成  如果传入null 则省略，创建相对uri</p>
-<p>schemeSpecificPart  模式特定部分，取决于URI模式的语法　　和scheme相关  不和规矩的字符会用百分号来转义</p>
-<p>fragment 片段标识符    #号后面的内容 可以传null</p>
-<p>host/authority path 用于层次的URI 比如http ftp  指定主机和路径  host <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a>  path /xxxb/cc</p>
-<p>query 用于表示？ 之后的东西  代表参数</p>
-<p>userinfo 代表用户信息</p>
-<p>port 代表端口</p>
-<p>如果你确信你的URI是有效的，不违反规则，可以使用静态工厂方法URI.create() 与构造函数不同，不抛出URISyntaxException异常 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">URI styles=URI.create(<span class="string">"xxxxx"</span>);</span><br></pre></td></tr></table></figure>
-<p>如果是不正确的，方法则会抛出一个IlleagalArgumentException的运行异常</p>
-<p>URI各部分的获取</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URISplitter</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;args.length();i++)&#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                URI u=<span class="keyword">new</span> URI(args[i]);</span><br><span class="line">                System.out.println(<span class="string">"The url is "</span>+u);</span><br><span class="line">                <span class="keyword">if</span>(u.isOpaque())&#123;   <span class="comment">//判断是否为层次URI</span></span><br><span class="line">            	  	System.out.println(<span class="string">"这是一个层次URI"</span>);</span><br><span class="line">                	System.out.println(<span class="string">"the scheme is"</span>+u.getScheme());</span><br><span class="line">                  	System.out.println(<span class="string">"the scheme specific part is "</span>+u.getSchemeSpecificPart());</span><br><span class="line">                    System.out.println(<span class="string">"the fragment id is "</span>+u.getFragment());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    System.out.println(<span class="string">"this is a hierarchical url."</span>);</span><br><span class="line">                    System.out.println(<span class="string">"the scheme is"</span>+u.getScheme());</span><br><span class="line">                    <span class="keyword">try</span>&#123;</span><br><span class="line">                        u=u.parseServerAuthority();   <span class="comment">//将authority进行划分？</span></span><br><span class="line">                        System.out.println(<span class="string">"the host is"</span>+u.getHost());</span><br><span class="line">                        System.out.println(<span class="string">"the user info is"</span>+u.getUserInfo());</span><br><span class="line">                        System.out.println(<span class="string">"the port is"</span>+u.getPort());</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">catch</span>(URISyntaxException ex)&#123;</span><br><span class="line">                        System.out.println(<span class="string">"the authority is"</span>+u.getAuthority());</span><br><span class="line">                    &#125;</span><br><span class="line">                    System.out.println(<span class="string">"the path is"</span>+u.getPath());</span><br><span class="line">                    System.out.println(<span class="string">"the query string is"</span>+u.getQuery());</span><br><span class="line">                    System.out.println(<span class="string">"fragment id is"</span>+u.getFragment());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">catch</span>(URISyntaxException ex)&#123;</span><br><span class="line">                System.err.println(args[i]+<span class="string">"does not seem to be a URI."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>解析拼接URI</p>
-<p>主要是两个 resolve(URI/String) relativize(URI)  都返回URI</p>
-<p>resolve用于拼接 而relativize 用于分解</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">URI a=<span class="keyword">new</span> URI(<span class="string">"www.bb.com/"</span>);</span><br><span class="line">URI b=<span class="keyword">new</span> URI(<span class="string">"login.jpg"</span>);</span><br><span class="line">URI c=b.resolve(a);         <span class="comment">//c www.bb.com/login.jpg</span></span><br><span class="line"></span><br><span class="line">URI a=<span class="keyword">new</span> URI(<span class="string">"www.bb.com/login.jpg"</span>);    </span><br><span class="line">URI b=<span class="keyword">new</span> URI(<span class="string">"www.bb.com/"</span>);</span><br><span class="line">URI c=b.relativize(a);           <span class="comment">//c login.jpg</span></span><br></pre></td></tr></table></figure>
-<p>相等性和比较</p>
-<p>可以测试URI的相等性，这不是直接的字符串比较，</p>
-<ul>
-<li>相等的URI必须都是层次的或是不透明的。</li>
-<li>比较时模式和授权机构（不透明）主机（透明）不考虑大小写。  其他则区分</li>
-<li>转义字符比较前不解码</li>
-</ul>
-<p>hashCode()方法和相等性是一样的，相等的URI则有相同的散列码</p>
-<p>比较是从左往右 不过模式比是否层次的优先级更高一点</p>
-<p><strong>URI的字符串表示</strong></p>
-<p>toString()              URI未编码的字符串形式  （所以可能是无法识别的URI）</p>
-<p>toASCLLString()    URI的编码的字符串的形式</p>
-<p>x-www-form-urlencoded</p>
-<p>我们使用Ascll的子集 来作为URL的组成字符</p>
-<p>其他不识别的字符全部转换为字节，每个字节都要写为百分号后面加两个十六进制数字</p>
-<p>空格可以编码为%20 或者+    +号本身可以编码为%2B</p>
-<p>/ # = &amp; ？ 字符用在名字中应当编码，但作为URL各部分的分隔符时不用编码</p>
-<p>用getPath() toExternalForm() 等方法输出时，这样的字符和转义字符不会自动编码或解码</p>
-<p>java提供 URLEncoder 和 URLDecoder</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String encoded=URLEncoder.encode(<span class="string">"hhttp://asd/.."</span>,<span class="string">"UTF-8"</span>);</span><br></pre></td></tr></table></figure>
-<p>他会返回对URL进行编码，甚至将能识别的波浪线感叹号等符号转为百分号转义字符，但URL规范不禁止这种转换，所以Web浏览器会合理地处理这些过度编码URL</p>
-<p>编码最好选择UTF-8更兼容</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加url的参数 但好像构造函数没写好。。。url本身没有，，可以在后期参数加在url中 </span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QueryString</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> StringBuilder query=<span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String name,String value)</span></span>&#123;</span><br><span class="line">        query.append(<span class="string">'&amp;'</span>);</span><br><span class="line">        encode(name,value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">encode</span><span class="params">(String name,String value)</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            query.append(URLEncoder.encode(name,<span class="string">"UTF-8"</span>));</span><br><span class="line">            query.append(<span class="string">'='</span>);</span><br><span class="line">            query.append(URLEncoder.encode(value,<span class="string">"UTF-8"</span>));</span><br><span class="line">        &#125;<span class="keyword">catch</span>(UnsupportedEcodingException ex)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"VM does not support utf-8"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> String <span class="title">getQuery</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> query.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getQuery();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>URLDecoder</p>
-<p>URLDecoder 有一个静态方法decode() 会对用x-www-form-url-encoded 格式编码字符串进行解码 就是编码的逆操作</p>
-<p>static String decode(String s,String encoding) throws UnsupportedEncodingException 编码方式一般为UTF-8</p>
-<p>如果字符串的%号后没有两个十六进制数字，或字符串解码为无效序列，则返回IllegalArgumentException异常</p>
-<p>代理</p>
-<p>如果时用纯粹的http的代理 将http.proxyHost 设置为代理服务器的域名或IP地址，http.proxyPort 设置代理服务器的端口</p>
-<p>还有一些其他方法，包括java代码调用System.setProperty()                   p154-155 不懂克</p>
-<p>Proxy类</p>
-<p>Proxy类允许从java程序中对代理服务器更细粒度的控制  代理本身用java.net.Proxy 实例表示 </p>
-<p>三种代理模式 HTTP SOCKS 和直接链接</p>
-<ul>
-<li>Proxy.Type.DIRECT</li>
-<li>Proxy.Type.HTTP</li>
-<li>Proxy.Type.SOCKS</li>
-</ul>
-<p>关于代理的地址和端口</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SocketAddress addr=<span class="keyword">new</span> InetSocketAddress(<span class="string">"xxx.com"</span>,<span class="number">80</span>);</span><br><span class="line">Proxy proxy=<span class="keyword">new</span> Proxy(Proxy.Type.HTTP,addr);</span><br></pre></td></tr></table></figure>
-<p>ProxySelector 类</p>
-<p>每个运行的虚拟机都有一个proxyselector 对象 用来确定不同链接的代理服务器  默认只会检查各种系统属性和URL协议  我们可以安装自己的ProxySelector子类代替默认的选择器 用它的协议主机路径日期和其他标准选择不同代理</p>
-<p>实现这个类的关键是实现select的方法</p>
-<ol>
-<li><p>abstract List<proxy> select (URI uri)  根据URI对象选择合适的代理放入队列中</proxy></p>
-</li>
-<li><p>void connectFailed(URI uri,SocketAddress addr,IOException ex)  回调方法，用来警告程序这个代理服务器并没有建立链接</p>
-</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">localproxyselector</span> <span class="keyword">extends</span> <span class="title">ProxySelector</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;URI&gt; failed=<span class="keyword">new</span> ArrayList&lt;URI&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Proxy&gt; <span class="title">select</span><span class="params">(URI uri)</span></span>&#123;</span><br><span class="line">        List&lt;Proxy&gt; result=<span class="keyword">new</span> ArrayList&lt;Proxy&gt;();</span><br><span class="line">        <span class="comment">//是失败的uri或者非http协议的uri</span></span><br><span class="line">        <span class="keyword">if</span>(failed.contains(uri)|| !<span class="string">"http"</span>.equalsIgnoreCase(uri.getScheme()))&#123;</span><br><span class="line">            result.add(Proxy.NO_PROXY);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//先建立socketAddress 再建立Proxy</span></span><br><span class="line">            SocketAddress proxyAddress=<span class="keyword">new</span> InetSocketAddress(<span class="string">"proxy.example.com"</span>,<span class="number">8000</span>);</span><br><span class="line">            Proxy proxy=<span class="keyword">new</span> Proxy(Proxy.Type.HTTP,proxyAddress);</span><br><span class="line">            result.add(proxy);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//失败的回调方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">connectFailed</span><span class="params">(URI uri,SocketAddress addr,IOException ex)</span></span>&#123;</span><br><span class="line">        failed.add(uri);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>但前面所述，每个虚拟机只有一个ProxySelector 而且已经有默认的了 需要改变默认的selector</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ProxySelector selector=<span class="keyword">new</span> LocalProxySelector();</span><br><span class="line">ProxySelector.setDefault(selector);</span><br></pre></td></tr></table></figure>
-<p>一般不要在某个servlet中改变proxyselector 因为这会改变整个</p>
-<p>通过GET与服务器端程序通信</p>
-<p>说到底就是从表单获取元素，构造新URL</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">aa</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String target=<span class="string">""</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;args.length;i++)&#123;</span><br><span class="line">            target+=args[i]+<span class="string">" "</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        target=target.trim();</span><br><span class="line">        <span class="comment">//将其包装成QueryString</span></span><br><span class="line">        QueryString query=<span class="keyword">new</span> QueryString();</span><br><span class="line">        query.add(<span class="string">"q"</span>,target);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            URL u=<span class="keyword">new</span> URL(<span class="string">"http://www.xxx.org/search/q?"</span>+query);</span><br><span class="line">            <span class="comment">//通过uri获取输入流 然后将页面写出来</span></span><br><span class="line">            <span class="keyword">try</span>(InputStream in =<span class="keyword">new</span> BufferedInputStream(u.openStream()))&#123;</span><br><span class="line">                InputStreamReader thehtml=<span class="keyword">new</span> InputStreamReader(in);</span><br><span class="line">                <span class="keyword">int</span> c;</span><br><span class="line">                <span class="keyword">while</span>((c=thehtml.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">                    System.out.print((<span class="keyword">char</span>)c);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(MalformedURLException ex)&#123;</span><br><span class="line">            System.err.println(ex);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">            System.err.println(ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>访问口令的保护网站</p>
-<p>Authenticator类 可以用它使用http认证自我保护的网站提供用户名和口令</p>
-<p>但这是个抽象类，必须派生子类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置默认的认证程序</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setDefault</span><span class="params">(Authenticator a)</span></span></span><br></pre></td></tr></table></figure>
-<p>当URL类需要用户名和口令时，会使用Authenticator.requestPasswordAuthentication() 去访问这个Authentication子类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> PasswordAuthentication <span class="title">requestPasswordAuthentication</span><span class="params">(InetAddress addr,<span class="keyword">int</span> port,String protocol,String prompt,String scheme)</span><span class="keyword">throws</span> SecurityException</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>addr 需要认证的主机 </li>
-<li>port是该主机上的端口 </li>
-<li>protocol 访问网站的应用层协议  </li>
-<li>http服务器提供prompt一般是需要认证的域和域名   比如一个大的Web服务器会有多个域 每个域有不同的用户名和口令  </li>
-<li>scheme是所使用的认证模式（不是协议 比如说http的认证模式为basic）</li>
-</ul>
-<p>不可信的applet不允许向用户询问用户名和口令，可信任的才可以访问，但只有在拥有requestPasswordAuthentication NetPermission 权限才允许   否则Authenticator.requestPasswordAuthentication 会抛出一个SecurityException</p>
-<p>Authenticator子类必须覆盖getPasswordAuthentication()方法 在这个方法中，要从用户或其他来源收集用户名和口令，把它作为java.net,PasswordAuthentication 类的一个实例返回</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> PasswordAuthentication <span class="title">getPasswordAuthentication</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-<p>如果不希望对这个请求完成认证，就返回null，Java会告诉服务器它不知道如何认证这个链接。如果你提交了不正确的认证，会再次调用 getPasswordAuthentication()  给你再次输入，连续5次把，如果还是错 则抛出ProtocolException</p>
-<p>用户名和口令将缓存在同一个虚拟机会话中，一旦设置好口令就不应再次询问，除非将包含这个口令的char数组清零</p>
-<p>Authenticator的超类有很多方法 去获得相关请求认证url的各种信息</p>
-<h2 id="PasswordAuthentication"><a href="#PasswordAuthentication" class="headerlink" title="PasswordAuthentication"></a>PasswordAuthentication</h2><p>这是个final类 支持两个只读属性 用户名（String) 口令（char数组） </p>
-<p><code>PasswordAuthentication(String userName,char[] password)</code></p>
-<p><code>public String getUserName()</code></p>
-<p><code>public char[] getPassword()</code></p>
-<h2 id="JPasswordField"><a href="#JPasswordField" class="headerlink" title="JPasswordField"></a>JPasswordField</h2><p>该类用来当作文本域,不过口令部分是变成星号  这是来自swing的组件</p>
-<p><code>public class JPasswordField extends JTextField</code></p>
-<p>它的口令存储为char[]</p>
-<p><code>public char[] getPassword()</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java....</span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DialogAuthenticator</span> <span class="keyword">extends</span> <span class="title">Authenticator</span></span>&#123;   <span class="comment">//继承Authenticator</span></span><br><span class="line">        <span class="keyword">private</span> JDialog passwordDialog;</span><br><span class="line">        <span class="keyword">private</span> JTextField usernameField=<span class="keyword">new</span> JTextField(<span class="number">20</span>);</span><br><span class="line">        <span class="keyword">private</span> JPasswordField passwordField=<span class="keyword">new</span> JPasswordField(<span class="number">20</span>);</span><br><span class="line">        <span class="keyword">private</span> JButton okButton=<span class="keyword">new</span> JButton(<span class="string">"OK"</span>);</span><br><span class="line">        <span class="keyword">private</span> JButton cancelButton=<span class="keyword">new</span> JButton(<span class="string">"Cancel"</span>);</span><br><span class="line">        <span class="keyword">private</span> JLabel mainLabel=<span class="keyword">new</span> JLabel(<span class="string">"Please enter username and password: "</span>);</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">DialogAuthenticator</span><span class="params">(String username,JFrame parent)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.passwordDialog=<span class="keyword">new</span> JDialog(parent,<span class="keyword">true</span>);</span><br><span class="line">            Container pane=passwordDialog.getContentPane();</span><br><span class="line">            pane.setLayout(<span class="keyword">new</span> GridLayout(<span class="number">4</span>,<span class="number">1</span>));</span><br><span class="line">            JLabel userLabel=<span class="keyword">new</span> JLabel(<span class="string">"Username: "</span>);</span><br><span class="line">            JLabel passwordLabel=<span class="keyword">new</span> JLabel(<span class="string">"Password: "</span>);</span><br><span class="line">            pane.add(mainLabel);</span><br><span class="line">            JPanel p2=<span class="keyword">new</span> JPanel();</span><br><span class="line">            p2.add(userLabel);</span><br><span class="line">            p2.add(usernameField);</span><br><span class="line">            usernameField.setText(username);</span><br><span class="line">            pane.add(p2);</span><br><span class="line">            JPanel p3=<span class="keyword">new</span> JPanel();</span><br><span class="line">            p3.add(passwordLabel);</span><br><span class="line">            p3.add(passwordField);</span><br><span class="line">            pane.add(p3);</span><br><span class="line">            JPanel p4=<span class="keyword">new</span> JPanel();</span><br><span class="line">            p4,add(okButton);</span><br><span class="line">            p4.add(cancelButton);</span><br><span class="line">            pane.add(p4);</span><br><span class="line">            passwordDialog.pack();</span><br><span class="line">            </span><br><span class="line">            ActionListener al=<span class="keyword">new</span> OKResponse();</span><br><span class="line">            okButton.addActionListener(al);</span><br><span class="line">            usernameField.addActionListener(al);</span><br><span class="line">            passwordField.addActionListener(al);</span><br><span class="line">            cancelButton.addActionListener(<span class="keyword">new</span> CancelResponse());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span></span>&#123;</span><br><span class="line">            String prompt=<span class="keyword">this</span>.getRequestingPrompt();</span><br><span class="line">            <span class="keyword">if</span>(prompt==<span class="keyword">null</span>)&#123;</span><br><span class="line">                String site=<span class="keyword">this</span>.getRequestingSite().getHostName();</span><br><span class="line">                String protocol=<span class="keyword">this</span>.getRequestingProtocol();</span><br><span class="line">                <span class="keyword">int</span> port=<span class="keyword">this</span>.getRequestingPort();</span><br><span class="line">                <span class="keyword">if</span>(site!=<span class="keyword">null</span>&amp;protocol!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                    prompt=protocol+<span class="string">"://"</span>+site;</span><br><span class="line">                    <span class="keyword">if</span>(port&gt;<span class="number">0</span>)prompt+=<span class="string">":"</span>+port;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span>&#123;</span><br><span class="line">                    prompt=<span class="string">""</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            mainLabel.setText(<span class="string">"Please enter username and password for"</span>+prompt+<span class="string">": "</span>);</span><br><span class="line">            passwordDialog.pack();</span><br><span class="line">            passwordDialog.setVisible(<span class="keyword">true</span>);</span><br><span class="line">        &#125; </span><br><span class="line">        PasswordAuthentication response=<span class="keyword">null</span>;</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">OKResponse</span> <span class="keyword">implements</span> <span class="title">ActionListener</span></span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actionPerformed</span><span class="params">(ActionEvent e)</span></span>&#123;</span><br><span class="line">                passwordDialog.setVisible(<span class="keyword">false</span>);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">char</span>[]password=passwordField.getPassword();</span><br><span class="line">                String username=usernameField.getText();</span><br><span class="line">                passwordField.setText(<span class="string">""</span>);</span><br><span class="line">                response=<span class="keyword">new</span> PasswordAuthentication(username,password);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="class"><span class="keyword">class</span> <span class="title">CancelResponse</span> <span class="keyword">implements</span> <span class="title">ActionListener</span></span>&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">actionPerformed</span><span class="params">(ActionEvent e)</span></span>&#123;</span><br><span class="line">                passwordDialog.setVisible(<span class="keyword">false</span>);</span><br><span class="line">                passwordField.setText(<span class="string">""</span>);</span><br><span class="line">                response=<span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> PasswordAuthentication <span class="title">getPasswordAuthentication</span><span class="params">()</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.show();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.response;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>我们要重写的是Authenticator的子类</li>
-<li>里面有个重要的类PasswordAuthenication  不用重写但需要好好使用<ul>
-<li>通过构造函数 将username 和password构造成PasswordAuthentication对象</li>
-<li>要定义好getPasswordAuthentication() 返回构造完成的PasswordAuthentication对象</li>
-</ul>
-</li>
-<li>需要利用好Swing的组件 利用组件和事件监听及时将username和password进行传递</li>
-</ul>
-<p>但问题是如何设置你得口令什么的是否正确？？？？？？？？？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SecureSourceViewer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">        <span class="comment">//设置验证口令</span></span><br><span class="line">        Authenticator.setDefault(<span class="keyword">new</span> DialogAuthenticator());</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;args.length;i++)&#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                URL u=<span class="keyword">new</span> URL(args[i]);</span><br><span class="line">                <span class="keyword">try</span>(InputStream in =<span class="keyword">new</span> BufferedInputStream(u.openStream()))&#123;</span><br><span class="line">                    Reader r=<span class="keyword">new</span> InputStreamReader(in);</span><br><span class="line">                    <span class="keyword">int</span> c;</span><br><span class="line">                    <span class="keyword">while</span>((c=r.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">                        System.out.print((<span class="keyword">char</span>)c);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">catch</span>(MalformedURLException ex)&#123;</span><br><span class="line">                System.err.println(args[<span class="number">0</span>]+<span class="string">"is not a parseable URL"</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">                System.err.println(ex);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;</span><br><span class="line">        System.exit(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(十二)UDP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -750,7 +453,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(九)服务器Socket/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(十三)组播/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -769,7 +472,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Java网络编程(九)服务器Socket/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/Java网络编程(十三)组播/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -821,41 +524,289 @@
       
         
           
-            <p>服务器和客户端差不多，不过服务器的比较傲娇，需要一个ServerSocket 打头阵</p>
-<p>ServerSocket是用来进行通信监听，到时建立连接，还是会使用一个常规的socket</p>
-<p>服务器的socket的周期</p>
+            <h3 id="IP组播"><a href="#IP组播" class="headerlink" title="IP组播"></a>IP组播</h3><p>IP组播是在广播和点对点通信之间 ，他依靠中间爱你网站的复制和中转信息，将信息传送给下游网站（路由器？）</p>
+<p>路由器会限制广播会仅限于本地网络或者子网</p>
+<p>曾经有种解决方式是 创建静态连接树      数据由起始网站提供给其他服务器，这些服务器再讲将这些数据复制到另外一些路由器，最终复制到客户端。但这种东西比较过时，也因为新网站需要找到一个位置手工加入连接树，而且这个连接树不一定任何时候都是最好的拓扑结构，另外服务器本身需要维护很多指向客户端的点对点连接。所以这是引入组播的理由</p>
+<p>组播相比静态连接树，他的智能之处就是，他是将信息比较准确的复制数据发送到一个范围的组播地址，然后这个组播地址再发送给该组的每一个主机。 但其实在Internent上的组播很少用，组播更多是用在某个组织的防火墙内部使用。注意使用这个的时候有一个叫TTL的首部字段，其实是限制数据包转发的次数，从而限制组播的范围。</p>
+<p>组播地址是有一个相对比较固定的范围<br>比如IPV4 就是 244.0.0.0 到 239.255.255.255 之间  </p>
+<p>组播地址可以有一个主机名，例如 224.0.1.1 就分配有主机名 ntp.mcast.net</p>
+<p>除了一些范围内的组播地址块已经为特殊用途所保留，其他剩余的组播地址都可以由任何人有需要时使用。组播路由器负责确保两个不同的系统不会同时使用相同的地址</p>
+<p>当一台主机打算向组播组发送数据的时候，它会将数据放在组播数据报中，组播数据报就是发送到组播组的UDP数据报而已。 为什么不用TCP，因为TCP会要求主机确认所有已经接受的报，放在多个主机的组播环境下，效率会低得可怕。<br>如果你的应用程序不允许数据的丢失，那你就要负责确定数据是否损坏而且如何处理，比如你可能需要一个分布式的缓存系统，当数据丢失没可能只用使用之前文件的缓存不做改变</p>
+<p>组播和和正常的UDP socket 之间的主要区别是TTL 一般来说</p>
 <ul>
-<li>创建ServerSocket</li>
-<li>使用accept方法 然后返回Socket对象</li>
-<li>获取输入输出流</li>
-<li>进行相互的交互，然后关闭连接</li>
-<li>然后服务器继续使用accept方法监听下次连接</li>
+<li>本地主机 0</li>
+<li>本地子网 1</li>
+<li>本地校园网 16</li>
+<li>同一个国家的高带宽网站 32</li>
+<li>同一个国家所有网站   48</li>
+<li>世界内的所有网站 255</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">timeServer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		ServerSocket server=<span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//监听端口13</span></span><br><span class="line">			server=<span class="keyword">new</span> ServerSocket(<span class="number">13</span>);</span><br><span class="line">			<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">				Socket conn=<span class="keyword">null</span>;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//accept进行阻塞监听</span></span><br><span class="line">					conn=server.accept();</span><br><span class="line">					Writer out=<span class="keyword">new</span> OutputStreamWriter(conn.getOutputStream());</span><br><span class="line">					Date now=<span class="keyword">new</span> Date();</span><br><span class="line">                    <span class="comment">//一定要\r\n 来进行换行</span></span><br><span class="line">					out.write(now.toString()+<span class="string">"\r\n"</span>);</span><br><span class="line">					out.flush();</span><br><span class="line">				&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">					</span><br><span class="line">				&#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">						<span class="keyword">if</span>(conn!=<span class="keyword">null</span>) conn.close();</span><br><span class="line">					&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">						</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="keyword">if</span>(server!=<span class="keyword">null</span>)server.close();</span><br><span class="line">			&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">				<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>发送二进制数据  只需要写一个byte 数组的outstream  不需要一个writer    直接就构建一个byte数组进行传递  问题是如何将文本转换为二进制数组是个问题</p>
-<p>多线程设计</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">multiTimeServer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span>(ServerSocket server=<span class="keyword">new</span> ServerSocket(<span class="number">13</span>))&#123;</span><br><span class="line">			<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span>&#123;</span><br><span class="line">					Socket socket=server.accept();</span><br><span class="line">					Thread task=<span class="keyword">new</span> timeThread(socket);</span><br><span class="line">					task.start();</span><br><span class="line">				&#125;<span class="keyword">catch</span>(IOException e) &#123;</span><br><span class="line">					</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">timeThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Socket socket;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">timeThread</span><span class="params">(Socket connection)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">		<span class="keyword">this</span>.socket=connection;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Writer out=<span class="keyword">new</span> OutputStreamWriter(socket.getOutputStream());</span><br><span class="line">			Date now =<span class="keyword">new</span> Date();</span><br><span class="line">			out.write(now.toString()+<span class="string">"\r\n"</span>);</span><br><span class="line">			out.flush();</span><br><span class="line">		&#125;<span class="keyword">catch</span>(IOException e) &#123;&#125;</span><br><span class="line">		<span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				socket.close();</span><br><span class="line">			&#125;<span class="keyword">catch</span>(IOException e)&#123;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但如果包是发送到 224.0.0.0 - 224.0.0.255 即 local-link地址 则永远不会发送到本地子网之外</p>
+<p>引入组播Socket 导致在任何指定的网段上，相同的数据不会发送多次，实际的路由问题变简化了</p>
+<p>组播最大的限制就是是否有特殊的组播路由器或者路由是否启用组播的功能</p>
+<p>可以尝试 ping 一下组播地址</p>
+<p>ping all-routers.mcast.net 如果有路由器响应，则说明有组播路由器</p>
+<p>但即使ping成功也可能无法让你成功组播</p>
+<p>组播socket</p>
+<p>我们是使用 MulticastSocket 他是DatagramSocket的一个子类</p>
+<p>他和DatagramSocket 很像，需要将数据放在DatagramPacket对象中，然后通过MulticastSocket去收发这个DatagramPacket对象</p>
+<p><code>MulticastSocket ms=new MulticastSocket(2300);</code> 创建socket，参数代表监听端口。</p>
+<p><code>InetAddress group= InetAddress.getByName(&quot;224.2.2.2&quot;);</code><br><code>ms.joinGroup(group);</code><br>将这个socket添加进行组播组</p>
+<p>一旦进入组播组，就像一个正常的DatagramSocket就行</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] buffer=<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">8192</span>];</span><br><span class="line">DatagramPacket dp=<span class="keyword">new</span> DatagramPacket(buffer,buffer.length);</span><br><span class="line">ms.receive(dp);</span><br></pre></td></tr></table></figure>
+<p><code>ms.leaveGroup(group);   ms.close();</code>  离开组播组，然后可以close掉</p>
+<p>向组播地址发送数据也一样<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">InetAddress ia=InetAddress.getByName(<span class="string">"experiment.mcast.net"</span>);</span><br><span class="line"><span class="keyword">byte</span>[] data=<span class="string">"Here is some cast data \r\n"</span>.getBytes(<span class="string">"UTF-8"</span>);</span><br><span class="line"><span class="keyword">int</span> port=<span class="number">4000</span>;</span><br><span class="line">DatagramPacket dp=<span class="keyword">new</span> DatagramPacket(data,data.length,ia,port);</span><br><span class="line">MultiSocket ms=<span class="keyword">new</span> MultiSocket();</span><br><span class="line">ms.send(dp);</span><br></pre></td></tr></table></figure></p>
+<p>组播Socket是一个很大的安全漏洞，所以在SecurityManager控制下运行的不可信代码不允许做任何组播的操作。所以大多数执行远程代码的环境都禁用了组播功能</p>
+<p>构造函数<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MulticastSocket</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MulticastSocket</span><span class="params">(<span class="keyword">int</span> port)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MulticastSocket</span><span class="params">(SocketAddress bindaddr)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>能执行一些socket选项的样子 ms.setReuseAddress(false);</p>
+<p>一旦创建了MulticastSocket</p>
 <ul>
-<li>accept后创建线程 主线程继续监听下一个连接  </li>
-<li>线程获得socket后利用这个socket进行通讯，使用完后将其关闭  这里注意千万别将<code>Socket s=server.accept()</code>放入在try -with-resource 括号中，因为这会在主线程中进行socket关闭，这时候可能线程本身还没完成任务，必须让线程本身对socket进行关闭操作</li>
+<li>加入组播组</li>
+<li>向组中成员发送数据</li>
+<li>接收组中的数据</li>
+<li>离开组播组</li>
 </ul>
-<p>关闭服务器socket后会释放端口，并中断所有被accept还在打开的所有socket</p>
-<p>然后这个ServerSocket 可利用try-with-resources来进行自动close</p>
-<p>并且有<code>isClosed()</code>进行判断  但是如果是 用一个无参函数构造的话  它也会认为是未关闭 isClosed是false</p>
-<p>isBound表示是否绑定端口  但是曾经，如果绑定过端口，现在不绑定也算true 综合来看，</p>
-<p><code>ss.isBound()&amp;&amp;!ss.isClosed()</code> 就可以判断是否是打开的ServerSocket了</p>
-<p>ServerSocket的构造</p>
-<p><code>ServerSocket(int port,int queueLength)和 ServerSocket(int port,int queueLength,InetAddress bindAddress)</code></p>
-<p>其中queueLength代表入站的连接数，这个不能无限制大，要看操作系统规定的最大队列长度的脸色</p>
-<p>第三个参数InetAddress代表只绑定一个特定的本地IP地址，自己的本地IP 这样它只会服务于同一个网络中的本地连接</p>
-<p>端口号可以传0 这样随便找可用的端口</p>
-<p>或者</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket ss=<span class="keyword">new</span> ServerSocket();</span><br><span class="line">SocketAddress http=<span class="keyword">new</span> InetSocketAddress(<span class="number">80</span>);</span><br><span class="line">ss.bind(http);</span><br></pre></td></tr></table></figure>
-<p>ServerSocket信息获取</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">getInetAddress()   <span class="comment">//返回服务器的使用的地址  如果有多个ip则其中返回一个 若未绑定则返回null</span></span><br><span class="line">getLocalPort()     <span class="comment">//返回监听的端口</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket server=<span class="keyword">new</span> ServerSocket(<span class="number">0</span>);   <span class="comment">//随机端口</span></span><br><span class="line">System.out.println(server.getLocalPort());   <span class="comment">//知道其具体绑定的端口，如果未绑定到则返回-1</span></span><br></pre></td></tr></table></figure>
-<p>toString能用来打印信息  addr表示socket绑定的本地网络接口的地址 如果绑定到所有接口则 0.0.0.0？？ port总是显示0</p>
-<p>localhost表示服务器正在连接监听的本地端口   其实没啥用</p>
+<p>必须加入组才能从组接收数据，但向组发送数据并不用先加入组</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">joinGroup</span><span class="params">(InetAddress address)</span>        </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">joinGroup</span><span class="params">(SocketAddress address,NetworkInterface interface)</span>  <span class="comment">//第二个参数指定网络接口，比如网卡</span></span></span><br></pre></td></tr></table></figure>
+<p>试图加入的地址不是组播地址 joinGroup 会抛出IOException</p>
+<p>一个MulticastSocket可以加入多个组播组，组播组的成员信息存储在组播路由器中，不在对象中</p>
+<p><code>leaveGroup(InetAddress)         leaveGroup(SocketAddress  NetworkInterface)</code>l离开组播组</p>
+<p>如果参数不是组播地址 抛出IOException         如果未加入过，则什么都不做</p>
+<p>发送组播数据就将 DatagramPacket 包 给MulticastSocket 进行send </p>
+<p>注意TTL的情况，默认为 1  可以通过  MulticastSocket 的方法 <code>setTimeToLive()</code>设置默认值，也可以直接进行</p>
+<p><code>send(DatagramPacket p,byte ttl)</code>设置ttl,这个优先级比默认的高</p>
+<p><code>getTimeToLive()</code>你懂的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    InetAddress ia=InetAddress.getByName(<span class="string">"xxxx.net"</span>);</span><br><span class="line">    <span class="keyword">byte</span>[]data=<span class="string">"This is a test"</span>;</span><br><span class="line">    <span class="keyword">int</span> port=<span class="number">4396</span>;</span><br><span class="line">    DatagramPacket packet=<span class="keyword">new</span> DatagramPacket(data,data.length,ia,port);</span><br><span class="line">    MulticastSocket ms=<span class="keyword">new</span> MulticastSocket()</span><br><span class="line">     <span class="comment">//MulticastSocket 可以不加入组就能向该组发送组播数据</span></span><br><span class="line">    ms.setTimeToLive(<span class="number">64</span>);</span><br><span class="line">    ms.send(packet);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>回送模式</p>
+<p>你发出去的组播包，是否希望发回来，这个其实取决于平台支不支持，但你可以表达你自己的意愿</p>
+<p><code>set/getLoopbackMode(boolean disabled)</code> true表示不希望获得自己发送的包,但不要保证一定如你所愿。你自己应该要做准备</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(十一)非阻塞IO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/Java网络编程(十一)非阻塞IO/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>NIO用于维护超大量长连接，客户端不会频繁发送数据。这时候用NIO会比多线程好。</p>
+<p>之前有Java NIO的笔记了，可以回看哦，有些细节在那里有就8讲了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">chargenClient</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> Default_Port=<span class="number">19</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">			SocketAddress address=<span class="keyword">new</span> InetSocketAddress(<span class="string">"rama.poly.edu"</span>, <span class="number">19</span>);</span><br><span class="line">			SocketChannel client=SocketChannel.open(address);</span><br><span class="line">			ByteBuffer buffer=ByteBuffer.allocate(<span class="number">74</span>);</span><br><span class="line">			System.out.println(<span class="string">"connect"</span>);</span><br><span class="line">			<span class="comment">//将System.out也包装成channel</span></span><br><span class="line">			WritableByteChannel out=Channels.newChannel(System.out);</span><br><span class="line">			<span class="keyword">while</span>(client.read(buffer)!=-<span class="number">1</span>) &#123;</span><br><span class="line">				buffer.flip();</span><br><span class="line">				out.write(buffer);</span><br><span class="line">				buffer.clear();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">			<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>直接从InetAddress打开SocketChannel</li>
+<li>创建缓存区并立即从SocketChannel读取数据到缓存区</li>
+<li>将System.out也包装成Channel,将缓存数据写入Channel中，over</li>
+</ul>
+<p>read其实是阻塞的一个方法，但是如果你对SocketChannel</p>
+<p><code>client.configureBlocking(false)</code> 开启非阻塞模式，read会在没有读取什么数据也返回0 因此此时做循环有区别了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> n=client.read(buffer);</span><br><span class="line">    <span class="keyword">if</span>(n&gt;<span class="number">0</span>)&#123;</span><br><span class="line">        buffer.flip();</span><br><span class="line">        out.write(buffer);</span><br><span class="line">        buffer.clear();</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(n==-<span class="number">1</span>)&#123;</span><br><span class="line">        <span class="comment">//服务器崩了</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上我们看到客户端用通道和缓存区好像没啥用，感觉这个对服务器才有点作用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先创建一个ServerSocketChannel</span></span><br><span class="line">ServerSocketChannel serverChannel =ServerSocketChannel.open();</span><br><span class="line"></span><br><span class="line"><span class="comment">//这个通道未监听端口，所以要绑定，这个端口通过InetSocketAddress传递</span></span><br><span class="line">ServerSocket ss=serverChannel.socket();</span><br><span class="line">ss.bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">19</span>));</span><br><span class="line"><span class="comment">//或者 serverChannel.bind(new InetSocketAddress(19))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//开始监听  返回一个通道 叫客户端通道</span></span><br><span class="line">SocketChannel clientChannel=serverChannel.accept();</span><br><span class="line"></span><br><span class="line"><span class="comment">//你会希望这个返回的通道是非阻塞的，因为这样允许服务器处理多个并发连接</span></span><br><span class="line">clientChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//ServerSocketChannel设置为非阻塞模式，这个accept方法就不会阻塞了</span></span><br><span class="line">serverChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建Selector</span></span><br><span class="line">Selector selector=Selector.open();</span><br><span class="line"></span><br><span class="line"><span class="comment">//让通道进行注册，然后就能让选择器进行监听</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//服务器通道监听 OP_ACCEPT事件代表该通道准备好接受一个新连接</span></span><br><span class="line">serverChannel.register(selector,SelectionKey.OP_ACCEPT);</span><br><span class="line"></span><br><span class="line"><span class="comment">//客户端也要进行监听注册</span></span><br><span class="line">SelectionKey key=clientChannel.register(selector,SelectionKey.OP_WRITE);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//然后安排监听器的事情</span></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">    selector.select();</span><br><span class="line">    <span class="comment">//xxx</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>监听到事件，找到就绪通道后</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;SelectionKey&gt;readyKeys=selector.selectedKeys();</span><br><span class="line">Iterator iterator=readyKeys.iterator();</span><br><span class="line"><span class="keyword">while</span>(iterator.hasNext())&#123;</span><br><span class="line">    SelectionKey key=iterator.next();</span><br><span class="line">    <span class="keyword">try</span>&#123;   <span class="comment">//可能抛出IOException异常</span></span><br><span class="line">        <span class="comment">//通过事件判断是服务器通道</span></span><br><span class="line">        <span class="keyword">if</span>(key.isAcceptable())&#123;</span><br><span class="line">            ServerSocketChannel server=(ServerSocketChannel)key.channel();</span><br><span class="line">            <span class="comment">//得到一个新的客户端通道</span></span><br><span class="line">            SocketChannel connection=server.accept();</span><br><span class="line">            <span class="comment">//异步处理并交给selector</span></span><br><span class="line">            connection.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">            connection.register(selector,SelectionKey.OP_WRITE);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(key.isWriteable())&#123;</span><br><span class="line">            SocketChannel client=(SocketChannel)key.channel();</span><br><span class="line">            <span class="comment">//数据写入</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//删除该键，代表已处理</span></span><br><span class="line">    iterator.remove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有几个新发现的点</p>
+<ul>
+<li>ServerSocketChannel 也能交个selector上管理 并且知道OP_ACCEPT是用在服务器SocketChannel的</li>
+<li>SelectionKey的迭代对象中的channel方法可获得channel不过要强制转换类型一下</li>
+<li>通过判断事件可以区分两个不同的通道</li>
+<li>实在不行其实可以用两个selector进行区分</li>
+</ul>
+<p>还有key本身是可以加上一个附件 attachment 这个附件一般是缓冲区ByteBuffer</p>
+<p>rewind  把position设为0，limit不变，<strong>一般在把数据重写入Buffer前调用 </strong> 结果却可以调用一些get方法</p>
+<p>有了NIO不代表不需要线程，多线程肯定牛啤酒啦，8过，有了NIO的存在，意味着线程和连接就不用1：1了</p>
+<p>缓冲区中有个很特别的东西</p>
+<p><code>buffer.array()</code>这个是将缓冲区以数组形式返回，这个数组和缓冲区是关联的，修改他们会影响另一个</p>
+<p><code>ByteBuffer.allocateDirect(100)</code> 这种好像是VM在系统的缓冲区上直接使用内存访问，以实现ByteBuffer的分配，不搞花里胡哨的后备数组</p>
+<p>但此时不能直接用array 和 arrayOffset 会出错，直接缓冲区速度更快，对缓冲区很大时更好，但创建它的代价很高，所以只持续时间比较短的时候用。其细节非常依赖VM 所以不要随便弄</p>
+<p>包装</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data=<span class="string">"Some data"</span>.getBytes(<span class="string">"UTF-8"</span>);</span><br><span class="line">ByteBuffer buffer1=ByteBuffer.wrap(data);</span><br><span class="line"><span class="keyword">char</span>[] text=<span class="string">"Some text"</span>.toCharArray();</span><br><span class="line">CharBuffer buffer2=CharBuffer.wrap(text);</span><br></pre></td></tr></table></figure>
+<p>将一个数组直接包装在缓存里面。，其实就是将其作为它的后备数组，这意味着包装创建的缓冲区不是直接缓存区。</p>
+<p>而且意味着缓冲区和数组的数据会相互影响</p>
+<p>buffer.get() 获取该缓存区的元素，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String result=<span class="string">""</span>;</span><br><span class="line"><span class="keyword">while</span>(buffer.hasRemaining())&#123;</span><br><span class="line">    result+=buffer.get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有 buffer.get(int index) 绝对位置的获取   同理有 put(int index,byte b)</p>
+<p>另外绝对位置不会改变position位置</p>
+<p>另外还有批量处理</p>
+<p>get(byte[] ds,int offset,int length)</p>
+<p>get(byte[] ds)</p>
+<p>put(byte[] array, int offset, int length)</p>
+<p>put(byte[] array)</p>
+<p>数据转换  就是ByteBuffer可以弄成其他数据类型</p>
+<p>getChar() /getChar(int index,char value)  getChar(int index)/putChar(int index,char value)</p>
+<p>同理还有short int long float double</p>
+<p>  Buffer可以将字节序列解释为big-endain 或 little-endian 的  int float double 默认是big-endian 可以</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(buffer.order().equals(ByteOrder.BIG_ENDIAN))&#123;</span><br><span class="line">    buffer.order(ByteOrder.LITTLE_ENDIAN);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假如用二进制数据测试网络</p>
+<p>可能会暴露出一些问题 </p>
+<ul>
+<li>老的网关配置会出去每个字节的高位 2^30字节就丢一个字节  或因为预料之外的控制字符进行诊断模式</li>
+</ul>
+<p>视图缓冲区</p>
+<p>虽然Socket连接中你只能用ByteBuffer 但其实你可以以int double等这种更高级的数据类型去看待读写，但这就需要将ByteBuffer进行包装，变成视图缓冲区。注意试图缓冲区和底层缓冲区的影响是共享的。不过他们的位置和限度是相互独立的。</p>
+<p>还要注意在非阻塞工作的时候，读写上层视图缓存区，要将ByteBuffer中数据排空，非阻塞模式不能保证缓存区在排空后仍以int、double\char类型边界对齐，可能到最后只写入一个字节什么的那就坑爹了。</p>
+<p>ShortBuffer asShortBuffer()  这样就让ByteBuffer视图包装成一个ShortByte</p>
+<p>其他的还有char int long float double</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">intgenClient</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> DEFAULT_PORT=<span class="number">1918</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			SocketAddress address=<span class="keyword">new</span> InetSocketAddress(<span class="string">"localhost"</span>, DEFAULT_PORT);</span><br><span class="line">			SocketChannel client=SocketChannel.open(address);</span><br><span class="line">			ByteBuffer buffer=ByteBuffer.allocate(<span class="number">4</span>);</span><br><span class="line">			IntBuffer view=buffer.asIntBuffer();</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> expected=<span class="number">0</span>;;expected++) &#123;</span><br><span class="line">				client.read(buffer);    <span class="comment">//通道读取到ByteBuffer里</span></span><br><span class="line">				<span class="keyword">int</span> actual=view.get();   <span class="comment">//然后通过视图去获得一整个int  直接通过byteBuffer 去get没有用，因为取一个字节没用，</span></span><br><span class="line">				buffer.clear();</span><br><span class="line">				view.rewind();   <span class="comment">//准备再被read</span></span><br><span class="line">				<span class="keyword">if</span>(actual!=expected) &#123;</span><br><span class="line">					System.err.println(<span class="string">"Expected "</span>+expected+<span class="string">"; was "</span>+actual);</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				System.out.println(actual);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子说明视图缓冲区还是很重要的，因为我们知道SocketChannel中的传输都是用ByteBuffer，而有时候我们需要把这些字节解释为Int 这就需要其他的视图缓冲区的帮助</p>
+<p>虽然可以用视图缓冲区进行读入和排空，但是呢 SocketChannel这个傲娇的家伙只允许和ByteBuffer进行交流</p>
+<p>压缩缓冲区</p>
+<p>缓冲有一个 compact方法 ，和clean有点像， 就是将读过的数据清除，然后将还没读取的数据搬到缓冲区前面</p>
+<p>对于非阻塞IO进行复制时（读取一个通道，然后将数据写入另一个通道中），压缩是一个特别有用的操作。</p>
+<p>这样可以读一部分，写一部分，压缩数据。这样一次IO过程就能完成几次随机的交替的读写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(key.isWritable()) &#123;</span><br><span class="line">	SocketChannel client=(SocketChannel)key.channel();</span><br><span class="line">	ByteBuffer buffer=(ByteBuffer)key.attachment();</span><br><span class="line">	buffer.flip();</span><br><span class="line">	client.write(buffer);</span><br><span class="line">	buffer.compact();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种只能解决写的部分，但是读的好像并没有类似的操作。</p>
+<p>复制缓冲区</p>
+<p>如果需要将缓冲区一个相同的信息分发到多个通道，这就需要建立缓冲区的副本，</p>
+<p>duplicate() </p>
+<p>复制的缓冲区共享相同数据，都是共享影响的。但是初始和缓冲区都有独立的标记、限度和位置。这允许每个通道按照自己的速度读取缓冲区什么的，就很好。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(key.isReadable())&#123;</span><br><span class="line">    					SocketChannel client=(SocketChannel)key.channel();</span><br><span class="line">					ByteBuffer buffer=ByteBuffer.allocate(<span class="number">4096</span>);</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">						client.read(buffer);   </span><br><span class="line">                        <span class="comment">//这里其实是应该读取客户端到底发了什么再做响应，但这里就忽略了，发送一样的响应</span></span><br><span class="line">						key.interestOps(SelectionKey.OP_WRITE);      <span class="comment">//这个很有趣更改监听的事件</span></span><br><span class="line">						key.attach(contentBuffer.duplicate());          </span><br><span class="line">                        <span class="comment">//这里将成员变量contentBuffer进行复制</span></span><br><span class="line">					&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的重点就是对数据成员对象contentBuffer的复制，这样多个socket都能共享同一个缓冲区，然后<code>key.interestOps(SelectionKey.OP_WRITE)</code>这个改变了监听事件挺有趣的</p>
+<p>ServerSocketChannel可以在非阻塞模式 <code>configureBlocking(false)</code>工作，这样accept不会阻塞，可能返回null，这适合需要为每个连接完成大量工作的服务器。</p>
+<p>accept方法出错会返回IOException 其实还有几个子类可以指出更详细的问题</p>
+<p>ClosedChannelException </p>
+<p>AsynchronousCloseException </p>
+<p>ClosedByInterruptException </p>
+<p>NotYetBoundException </p>
+<p>SecurityException</p>
+<p>Java7 引入AsynchronousSocketChannel 和 AsynchronousServerSocketChannel类 和SocketChannel 和 ServerSocketChannel很像     但不是子类</p>
+<p>特别的是他们干什么本身就是异步的  甚至在IO完成前就返回。 读/写数据会由一个Future或CompletionHandler进一步处理。connect() 和accept()方法都会异步执行，并且返回Future ，这里就不需要用Selector</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">SocketAddress adress=<span class="keyword">new</span> InetSocketAddress(args[<span class="number">0</span>],port);</span><br><span class="line"><span class="comment">//创建一个AsynchronousSocketChannel</span></span><br><span class="line">AsynchronousSocketChannel client=AsynchronousSocketChannel.open();</span><br><span class="line"><span class="comment">//然后连接返回一个connect对象，代表连接</span></span><br><span class="line">Future&lt;Void&gt; connected=client.connect(address);</span><br><span class="line"></span><br><span class="line">ByteBuffer buffer=ByteBuffer.allocate(<span class="number">74</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//等待连接完成</span></span><br><span class="line">connected.get();</span><br><span class="line"></span><br><span class="line"><span class="comment">//连接读取</span></span><br><span class="line">Future&lt;Integer&gt;future=client.read(buffer);</span><br><span class="line"></span><br><span class="line"><span class="comment">//..做别的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//等待读取完成</span></span><br><span class="line">future.get();</span><br><span class="line"></span><br><span class="line"><span class="comment">//回绕并排空缓冲区</span></span><br><span class="line">buffer.flip();</span><br><span class="line">WritableByteChannel out=Channels.newChannel(System.out);</span><br><span class="line">out.write(buffer);</span><br></pre></td></tr></table></figure>
+<p>这种方法可以用于有顺序的获取结果，如果你不关心顺序，可以用CompletionHandler</p>
+<p>这个接口声明两个接口 completed() failed()   代表完成调用或者出现IO错误</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LineHandler</span> <span class="keyword">implements</span> <span class="title">CompletionHandler</span>&lt;<span class="title">Integer</span>,<span class="title">ByteBuffer</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">completed</span><span class="params">(Integer result,ByteBuffer buffer)</span></span>&#123;</span><br><span class="line">        buffer.flip();</span><br><span class="line">        WritableByteChannel out=Channels.newChanel(System.out);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            out.write(buffer);</span><br><span class="line">        &#125;<span class="keyword">catch</span>(IOException ex)&#123; System.err.println(ex);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">failed</span><span class="params">(Throwable ex,ByteBuffer attachment)</span></span>&#123;</span><br><span class="line">        System.err.println(ex.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer buffer=ByteBuffer.allocate(<span class="number">74</span>);</span><br><span class="line">CompletionHandler&lt;Integer,ByteBuffer&gt;handler=<span class="keyword">new</span> LineHandler();</span><br><span class="line">channel.read(buffer,buffer,handler);</span><br></pre></td></tr></table></figure>
+<p>读取通道，要向read传入一个缓冲区，一个附件和一个CompletionHandler，这里将buffer也作为附件。</p>
+<p>另一个常用的模式是将CompletionHandler作为匿名内部类，缓冲区作为作为一个最终局部变量，将缓冲区放入处理器的作用域当中。</p>
+<p>尽管可以多线程共享一个AsynochronousSocketChannel 或者 xxServerSocketChannel 但是一次只有一个线程可以读取/写入这个通道。（但是可以一个线程读一个线程写）</p>
+<p>Socket选项</p>
+<p>Channel们都实现了NetworkChannel接口用支持TCP选项</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">getOption(SocketOption&lt;T&gt;name)</span><br><span class="line">setOption(SocketOption&lt;T&gt;name,T value)</span><br><span class="line">supportedOptions()</span><br></pre></td></tr></table></figure>
+<p>这个SocketOption 是一些常量 StandardSocketOptions</p>
+<ul>
+<li>IP_MULTICAST_IF</li>
+<li>IP_MULTICAST_LOOP</li>
+<li>IP_TOS</li>
+<li>xxxx</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">NetworkChannel channel=SocketChannel.open();</span><br><span class="line">channel.setOption(StandardSocketOptions.SO_LINGER,<span class="number">240</span>);</span><br></pre></td></tr></table></figure>
+<p>很奇怪虽然supportedOptions 中是有 IP_TOS 而且在StandradSocketOptions 中有设置，但好像并不能 getOptions这个东西，即使设置过了</p>
+<p>注意</p>
+<ul>
+<li>不是所有通道都允许给selector管理的，比如fileChannel 但是网络通信的channel都行</li>
+<li>select(long timeout) 超时设置</li>
+<li>selector.close() 会释放所有键和所有被select阻塞的线程都会通畅</li>
+<li>SelectionKey 的cancel方法 用来撤销注册</li>
+</ul>
 
           
         
@@ -1236,7 +1187,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(九)番外 日志/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(十)安全Socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1255,7 +1206,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Java网络编程(九)番外 日志/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/Java网络编程(十)安全Socket/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -1307,22 +1258,67 @@
       
         
           
-            <p>我们可以为每个类创建一个日志工具</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Logger auditLogger=Logger.getLogger(<span class="string">"requests"</span>);</span><br></pre></td></tr></table></figure>
-<p>日志工具是线程安全的，所以他们存储在共享的静态字段没问题，整个类共用一个，</p>
-<p>多个Logger对象可以输出到同一个日志文件中，但一个Logger只能将日志记录到一个文件中</p>
-<p>参数可能是一个文件名字 可能是一个数据库 可能是一个SOAP服务 同意主机运行的另一个Java程序</p>
-<p>一旦有了日志工具就可以多个方法写入日志</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">catch</span>(RuntimeException ex)&#123;</span><br><span class="line">    logger.log(Level.SEVERE,<span class="string">"unexpected error "</span>+ex.getMessage(),ex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第一个参数代表level  SEVERE WARNING INFO CONFIG FINE FINER FINEST</p>
-<p>一般实际使用上是用前三个 SEVERE WARNING INFO三个 后三个最多也就调试用用</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//记录info </span></span><br><span class="line">logger.info(<span class="keyword">new</span> Date()+<span class="string">" "</span>+connection.getRemoteSocketAddress());</span><br></pre></td></tr></table></figure>
-<p>如果只是记录错误一般就寄生在catch语句块就行</p>
-<p>默认情况下日志是输出在控制台上的但是如果你想放入到一个持久的目标的位置</p>
-<p>可以在代码也可以在配置文件中指定</p>
-<p>java.util.logging.config.file 系统属性采用常规的属性格式指向控制日志记录的一个文件</p>
-<p>可以在启动虚拟机的时候 传入 -Djava.util.logging.config.file=<em>filename</em>参数来设置该属性</p>
-<p>日志属性文件 略 详情看别的地方的介绍</p>
+            <p>创建安全的socket其实很简单</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SocketFactory factory=SSLSocketFactory.getDefault();</span><br><span class="line">Socket socket=factory.createSocket(<span class="string">"xxxx.org"</span>,<span class="number">7000</span>);</span><br></pre></td></tr></table></figure>
+<p>createSocket有多个子方法</p>
+<p> host port InetAddress  这三个为参数随机组合</p>
+<p><code>Socket createSocket(Socket proxy,String host,int port,boolean autoClose)</code></p>
+<p>它以一个连接到代理服务器的现有Socket对象为起点，这个方法返回一个经该代理服务器到指定主机和端口的socket  autoclose表示当这个socket关闭时，底层的socket是否关闭</p>
+<p>实际上createSocket返回的时 SSLSocket，然后获得的socket就正常使用即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SSLSocketFactory factory=(SSLSocketFactory)SSLSocketFactory.getDefault();</span><br><span class="line">SSLSocket socket=<span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">socket=factory.createSocket(host,port);</span><br><span class="line">String[]supported=socket.getSupportedCipherSuites(); <span class="comment">//获取密码组，不一定全都可以在连接上用可能太弱</span></span><br><span class="line"><span class="comment">//getEnabledCipherSuites()</span></span><br><span class="line">socket.setEnableCipherSuites(supported); <span class="comment">//设置可使用的密码组</span></span><br></pre></td></tr></table></figure>
+<p>密码组的算法 分四个部分 协议 密钥交换算法 加密算法 校验和</p>
+<p>一般避免名字包含NULL ANON EXPORT 的密码组</p>
+<p>TLS_ECDHE_WITH_AES_128_CBC_SHA256 是最强密码</p>
+<p>TLS_ECDHE开头 SHA256/384 的密码组都很强</p>
+<p>由于SSL导致网络通信很慢，这时候往往要进行异步处理，握手完成必须进行通知，只要实现</p>
+<p>HandshakeCompletedListener接口</p>
+<p>实现这个接口需要实现方法<code>void handshakeCompleted(HandshakeCompletedEvent)</code></p>
+<p>HandshakeCompletedEvent提供了一一些获取信息的方法</p>
+<ul>
+<li>SSLSession getSession()</li>
+<li>String getCipherSuite()</li>
+<li>getPeerCertificateChain()</li>
+<li>SSLSocket getSocket()</li>
+</ul>
+<p>通过add/remove HandshakeCompletedListener()可以对某个SSLSocket的握手事件进行关注</p>
+<p>由于交换密钥等操作，带SSL的握手需要大量事件，倘若对一个主机的一个端口打开多个安全Socket 这时候JSSE 会自动重用这个会话的密钥</p>
+<p>会话用SSLSocket表示</p>
+<p>有多个方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[]getID()</span><br><span class="line">   <span class="function">SSLSessionContext <span class="title">getSessionContext</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">getCreationTime</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">getLastAccessedTime</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">invalidate</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">putValue</span><span class="params">(String name,Object value)</span></span></span><br><span class="line"><span class="function">Object <span class="title">getValue</span><span class="params">(String name)</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeValue</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">getValueNames</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">getPeerCertificateChain</span><span class="params">()</span> <span class="title">getCipherSuite</span><span class="params">()</span> <span class="title">getPeerHost</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p>如果不想开启多个socket的会话 <code>setEnableSessionCreation(boolean allowSessions)</code></p>
+<p>可以通过<code>getEnableSessionCreation()</code>进行判断</p>
+<p>如果想丢弃之前的证书和密钥，重新开启一个会话，可以用startHandshake()</p>
+<h3 id="创建安全服务器socket"><a href="#创建安全服务器socket" class="headerlink" title="创建安全服务器socket"></a>创建安全服务器socket</h3><p>这需要SSLServerSocket </p>
+<p>而首先需要SSLServerSocketFactory</p>
+<ul>
+<li>SSLServerSocketFactory xx=SSLServerSocketFactory.getDefault()</li>
+<li>SSLServerSocket xxx =xx.createServerSocket(“xx”,3)</li>
+<li>Socket a=xxx.accept()</li>
+</ul>
+<p>这时候a就是SSLSocket</p>
+<p>但不要高兴太早，因为<code>getDefault</code>返回的工厂只支持服务器认证，不支持加密。为了加密需要更多设置  需要一个SSLContext去配置和初始花</p>
+<p>步骤</p>
+<ul>
+<li>使用keytool生成公开密钥和证书</li>
+<li>花钱认证你的证书</li>
+<li>算法创建SSLContext</li>
+<li>为证书源创建一个TrustManagerFactory</li>
+<li>为密钥类型创建一个 KeyManagerFactory</li>
+<li>为密钥和证书数据库创建一个KeyStore对象</li>
+<li>用密钥和证书填充KeyStore</li>
+<li>KeyManagerFactory TrustManagerFactory 随机源 来初始花上下文</li>
+</ul>
+<p>SSLServerSocket 的设置</p>
+<p>其实它的很多设置方法和SSLSocket差不多，8过它针对的是服务器端的所有socket的默认设置进行设置</p>
+<p>比如说设置密码组的一些操作</p>
+<p>get/set Supported/Enabled CipherSuites</p>
+<p>会话的控制</p>
+<p>set/get EnableSessionCreation</p>
+<p>set/get NeddClientAuth                  set/getUseClientMode() 设置客户端模式</p>
+<p>客户端模式其实有点蛋疼</p>
+<p>正常来说如果你服务器端你设置  setUseClientMode(true)你出错的，原因是设置后两边都是客户端，这样两边都打算主动发送handshake请求，这样无法做链接了。</p>
+<p>解决办法让客户端那边变成服务器端 setUseClientMode(false) ，这样配合才行</p>
+<p>效果是让原本客户端那边进行认证，而不是自己这边进行认证，</p>
 
           
         
@@ -1605,7 +1601,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(十)安全Socket/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(九)服务器Socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1624,7 +1620,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Java网络编程(十)安全Socket/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/Java网络编程(九)服务器Socket/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -1676,67 +1672,41 @@
       
         
           
-            <p>创建安全的socket其实很简单</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SocketFactory factory=SSLSocketFactory.getDefault();</span><br><span class="line">Socket socket=factory.createSocket(<span class="string">"xxxx.org"</span>,<span class="number">7000</span>);</span><br></pre></td></tr></table></figure>
-<p>createSocket有多个子方法</p>
-<p> host port InetAddress  这三个为参数随机组合</p>
-<p><code>Socket createSocket(Socket proxy,String host,int port,boolean autoClose)</code></p>
-<p>它以一个连接到代理服务器的现有Socket对象为起点，这个方法返回一个经该代理服务器到指定主机和端口的socket  autoclose表示当这个socket关闭时，底层的socket是否关闭</p>
-<p>实际上createSocket返回的时 SSLSocket，然后获得的socket就正常使用即可</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SSLSocketFactory factory=(SSLSocketFactory)SSLSocketFactory.getDefault();</span><br><span class="line">SSLSocket socket=<span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//...</span></span><br><span class="line">socket=factory.createSocket(host,port);</span><br><span class="line">String[]supported=socket.getSupportedCipherSuites(); <span class="comment">//获取密码组，不一定全都可以在连接上用可能太弱</span></span><br><span class="line"><span class="comment">//getEnabledCipherSuites()</span></span><br><span class="line">socket.setEnableCipherSuites(supported); <span class="comment">//设置可使用的密码组</span></span><br></pre></td></tr></table></figure>
-<p>密码组的算法 分四个部分 协议 密钥交换算法 加密算法 校验和</p>
-<p>一般避免名字包含NULL ANON EXPORT 的密码组</p>
-<p>TLS_ECDHE_WITH_AES_128_CBC_SHA256 是最强密码</p>
-<p>TLS_ECDHE开头 SHA256/384 的密码组都很强</p>
-<p>由于SSL导致网络通信很慢，这时候往往要进行异步处理，握手完成必须进行通知，只要实现</p>
-<p>HandshakeCompletedListener接口</p>
-<p>实现这个接口需要实现方法<code>void handshakeCompleted(HandshakeCompletedEvent)</code></p>
-<p>HandshakeCompletedEvent提供了一一些获取信息的方法</p>
+            <p>服务器和客户端差不多，不过服务器的比较傲娇，需要一个ServerSocket 打头阵</p>
+<p>ServerSocket是用来进行通信监听，到时建立连接，还是会使用一个常规的socket</p>
+<p>服务器的socket的周期</p>
 <ul>
-<li>SSLSession getSession()</li>
-<li>String getCipherSuite()</li>
-<li>getPeerCertificateChain()</li>
-<li>SSLSocket getSocket()</li>
+<li>创建ServerSocket</li>
+<li>使用accept方法 然后返回Socket对象</li>
+<li>获取输入输出流</li>
+<li>进行相互的交互，然后关闭连接</li>
+<li>然后服务器继续使用accept方法监听下次连接</li>
 </ul>
-<p>通过add/remove HandshakeCompletedListener()可以对某个SSLSocket的握手事件进行关注</p>
-<p>由于交换密钥等操作，带SSL的握手需要大量事件，倘若对一个主机的一个端口打开多个安全Socket 这时候JSSE 会自动重用这个会话的密钥</p>
-<p>会话用SSLSocket表示</p>
-<p>有多个方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[]getID()</span><br><span class="line">   <span class="function">SSLSessionContext <span class="title">getSessionContext</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">getCreationTime</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">getLastAccessedTime</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">invalidate</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">putValue</span><span class="params">(String name,Object value)</span></span></span><br><span class="line"><span class="function">Object <span class="title">getValue</span><span class="params">(String name)</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeValue</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">getValueNames</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">getPeerCertificateChain</span><span class="params">()</span> <span class="title">getCipherSuite</span><span class="params">()</span> <span class="title">getPeerHost</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-<p>如果不想开启多个socket的会话 <code>setEnableSessionCreation(boolean allowSessions)</code></p>
-<p>可以通过<code>getEnableSessionCreation()</code>进行判断</p>
-<p>如果想丢弃之前的证书和密钥，重新开启一个会话，可以用startHandshake()</p>
-<h3 id="创建安全服务器socket"><a href="#创建安全服务器socket" class="headerlink" title="创建安全服务器socket"></a>创建安全服务器socket</h3><p>这需要SSLServerSocket </p>
-<p>而首先需要SSLServerSocketFactory</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">timeServer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		ServerSocket server=<span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//监听端口13</span></span><br><span class="line">			server=<span class="keyword">new</span> ServerSocket(<span class="number">13</span>);</span><br><span class="line">			<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">				Socket conn=<span class="keyword">null</span>;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//accept进行阻塞监听</span></span><br><span class="line">					conn=server.accept();</span><br><span class="line">					Writer out=<span class="keyword">new</span> OutputStreamWriter(conn.getOutputStream());</span><br><span class="line">					Date now=<span class="keyword">new</span> Date();</span><br><span class="line">                    <span class="comment">//一定要\r\n 来进行换行</span></span><br><span class="line">					out.write(now.toString()+<span class="string">"\r\n"</span>);</span><br><span class="line">					out.flush();</span><br><span class="line">				&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">					</span><br><span class="line">				&#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">					<span class="keyword">try</span> &#123;</span><br><span class="line">						<span class="keyword">if</span>(conn!=<span class="keyword">null</span>) conn.close();</span><br><span class="line">					&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">						</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="keyword">if</span>(server!=<span class="keyword">null</span>)server.close();</span><br><span class="line">			&#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">				<span class="comment">// <span class="doctag">TODO:</span> handle exception</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发送二进制数据  只需要写一个byte 数组的outstream  不需要一个writer    直接就构建一个byte数组进行传递  问题是如何将文本转换为二进制数组是个问题</p>
+<p>多线程设计</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">multiTimeServer</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span>(ServerSocket server=<span class="keyword">new</span> ServerSocket(<span class="number">13</span>))&#123;</span><br><span class="line">			<span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">				<span class="keyword">try</span>&#123;</span><br><span class="line">					Socket socket=server.accept();</span><br><span class="line">					Thread task=<span class="keyword">new</span> timeThread(socket);</span><br><span class="line">					task.start();</span><br><span class="line">				&#125;<span class="keyword">catch</span>(IOException e) &#123;</span><br><span class="line">					</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(IOException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">timeThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> Socket socket;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">timeThread</span><span class="params">(Socket connection)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated constructor stub</span></span><br><span class="line">		<span class="keyword">this</span>.socket=connection;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Writer out=<span class="keyword">new</span> OutputStreamWriter(socket.getOutputStream());</span><br><span class="line">			Date now =<span class="keyword">new</span> Date();</span><br><span class="line">			out.write(now.toString()+<span class="string">"\r\n"</span>);</span><br><span class="line">			out.flush();</span><br><span class="line">		&#125;<span class="keyword">catch</span>(IOException e) &#123;&#125;</span><br><span class="line">		<span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				socket.close();</span><br><span class="line">			&#125;<span class="keyword">catch</span>(IOException e)&#123;</span><br><span class="line">				</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>SSLServerSocketFactory xx=SSLServerSocketFactory.getDefault()</li>
-<li>SSLServerSocket xxx =xx.createServerSocket(“xx”,3)</li>
-<li>Socket a=xxx.accept()</li>
+<li>accept后创建线程 主线程继续监听下一个连接  </li>
+<li>线程获得socket后利用这个socket进行通讯，使用完后将其关闭  这里注意千万别将<code>Socket s=server.accept()</code>放入在try -with-resource 括号中，因为这会在主线程中进行socket关闭，这时候可能线程本身还没完成任务，必须让线程本身对socket进行关闭操作</li>
 </ul>
-<p>这时候a就是SSLSocket</p>
-<p>但不要高兴太早，因为<code>getDefault</code>返回的工厂只支持服务器认证，不支持加密。为了加密需要更多设置  需要一个SSLContext去配置和初始花</p>
-<p>步骤</p>
-<ul>
-<li>使用keytool生成公开密钥和证书</li>
-<li>花钱认证你的证书</li>
-<li>算法创建SSLContext</li>
-<li>为证书源创建一个TrustManagerFactory</li>
-<li>为密钥类型创建一个 KeyManagerFactory</li>
-<li>为密钥和证书数据库创建一个KeyStore对象</li>
-<li>用密钥和证书填充KeyStore</li>
-<li>KeyManagerFactory TrustManagerFactory 随机源 来初始花上下文</li>
-</ul>
-<p>SSLServerSocket 的设置</p>
-<p>其实它的很多设置方法和SSLSocket差不多，8过它针对的是服务器端的所有socket的默认设置进行设置</p>
-<p>比如说设置密码组的一些操作</p>
-<p>get/set Supported/Enabled CipherSuites</p>
-<p>会话的控制</p>
-<p>set/get EnableSessionCreation</p>
-<p>set/get NeddClientAuth                  set/getUseClientMode() 设置客户端模式</p>
-<p>客户端模式其实有点蛋疼</p>
-<p>正常来说如果你服务器端你设置  setUseClientMode(true)你出错的，原因是设置后两边都是客户端，这样两边都打算主动发送handshake请求，这样无法做链接了。</p>
-<p>解决办法让客户端那边变成服务器端 setUseClientMode(false) ，这样配合才行</p>
-<p>效果是让原本客户端那边进行认证，而不是自己这边进行认证，</p>
+<p>关闭服务器socket后会释放端口，并中断所有被accept还在打开的所有socket</p>
+<p>然后这个ServerSocket 可利用try-with-resources来进行自动close</p>
+<p>并且有<code>isClosed()</code>进行判断  但是如果是 用一个无参函数构造的话  它也会认为是未关闭 isClosed是false</p>
+<p>isBound表示是否绑定端口  但是曾经，如果绑定过端口，现在不绑定也算true 综合来看，</p>
+<p><code>ss.isBound()&amp;&amp;!ss.isClosed()</code> 就可以判断是否是打开的ServerSocket了</p>
+<p>ServerSocket的构造</p>
+<p><code>ServerSocket(int port,int queueLength)和 ServerSocket(int port,int queueLength,InetAddress bindAddress)</code></p>
+<p>其中queueLength代表入站的连接数，这个不能无限制大，要看操作系统规定的最大队列长度的脸色</p>
+<p>第三个参数InetAddress代表只绑定一个特定的本地IP地址，自己的本地IP 这样它只会服务于同一个网络中的本地连接</p>
+<p>端口号可以传0 这样随便找可用的端口</p>
+<p>或者</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket ss=<span class="keyword">new</span> ServerSocket();</span><br><span class="line">SocketAddress http=<span class="keyword">new</span> InetSocketAddress(<span class="number">80</span>);</span><br><span class="line">ss.bind(http);</span><br></pre></td></tr></table></figure>
+<p>ServerSocket信息获取</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">getInetAddress()   <span class="comment">//返回服务器的使用的地址  如果有多个ip则其中返回一个 若未绑定则返回null</span></span><br><span class="line">getLocalPort()     <span class="comment">//返回监听的端口</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket server=<span class="keyword">new</span> ServerSocket(<span class="number">0</span>);   <span class="comment">//随机端口</span></span><br><span class="line">System.out.println(server.getLocalPort());   <span class="comment">//知道其具体绑定的端口，如果未绑定到则返回-1</span></span><br></pre></td></tr></table></figure>
+<p>toString能用来打印信息  addr表示socket绑定的本地网络接口的地址 如果绑定到所有接口则 0.0.0.0？？ port总是显示0</p>
+<p>localhost表示服务器正在连接监听的本地端口   其实没啥用</p>
 
           
         
@@ -1785,7 +1755,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java枚举/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(九)番外 日志/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1804,7 +1774,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Java枚举/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/Java网络编程(九)番外 日志/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -1856,58 +1826,22 @@
       
         
           
-            <p>Enum代表枚举类型</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dayclass</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Monday=<span class="number">233</span>;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种也可以做出枚举，但是很蠢很不专业，所以用enum</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Day&#123;</span><br><span class="line">    MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>枚举值一般用大写字母，然后用逗号分隔</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Day day=Day.MONDAY  <span class="comment">//使用方式异常简单</span></span><br></pre></td></tr></table></figure>
-<p>实际上enum会被编译成一个类class 而且编译器会自动帮忙生成一些方法  它不能被继承</p>
-<p>这个class的简单组成如下 它继承自Enum类  以上面的Day枚举类为例</p>
-<ul>
-<li><p>实现了values 函数 返回的是Day的数组 包含这个类的所有的列举值  父类没有</p>
-</li>
-<li><p>实现了 valueOf(String)  调用父类的valueof方法 通过String 返回对应的Day对象</p>
-</li>
-<li><p>私有的Day构造函数（String, int）</p>
-</li>
-<li><p>没错，每个枚举值都变成一个Day对象（public）  并且实例化  </p>
-<p>你注意到参数二的那个数字 其实就是序号，在内部实现叫ordinal  这个和你在enum的枚举值的书写顺序有关从0开始 </p>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//反编译Day.class</span></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Day</span> <span class="keyword">extends</span> <span class="title">Enum</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">//编译器为我们添加的静态的values()方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Day[] values()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> (Day[])$VALUES.clone();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//编译器为我们添加的静态的valueOf()方法，注意间接调用了Enum也类的valueOf方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Day <span class="title">valueOf</span><span class="params">(String s)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (Day)Enum.valueOf(com/zejian/enumdemo/Day, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//私有构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Day</span><span class="params">(String s, <span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(s, i);</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">//前面定义的7种枚举实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day MONDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day TUESDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day WEDNESDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day THURSDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day FRIDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day SATURDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day SUNDAY;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Day $VALUES[];</span><br><span class="line"><span class="keyword">static</span> </span><br><span class="line">&#123;    </span><br><span class="line">    <span class="comment">//实例化枚举实例</span></span><br><span class="line">    MONDAY = <span class="keyword">new</span> Day(<span class="string">"MONDAY"</span>, <span class="number">0</span>);</span><br><span class="line">    TUESDAY = <span class="keyword">new</span> Day(<span class="string">"TUESDAY"</span>, <span class="number">1</span>);</span><br><span class="line">    WEDNESDAY = <span class="keyword">new</span> Day(<span class="string">"WEDNESDAY"</span>, <span class="number">2</span>);</span><br><span class="line">    THURSDAY = <span class="keyword">new</span> Day(<span class="string">"THURSDAY"</span>, <span class="number">3</span>);</span><br><span class="line">    FRIDAY = <span class="keyword">new</span> Day(<span class="string">"FRIDAY"</span>, <span class="number">4</span>);</span><br><span class="line">    SATURDAY = <span class="keyword">new</span> Day(<span class="string">"SATURDAY"</span>, <span class="number">5</span>);</span><br><span class="line">    SUNDAY = <span class="keyword">new</span> Day(<span class="string">"SUNDAY"</span>, <span class="number">6</span>);</span><br><span class="line">    $VALUES = (<span class="keyword">new</span> Day[] &#123;</span><br><span class="line">        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumDemo2</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		Day[]days=Day.values();</span><br><span class="line">		System.out.println(<span class="string">"days "</span>+Arrays.toString(days));</span><br><span class="line">		Day day1=Day.valueOf(<span class="string">"FRIDAY"</span>);</span><br><span class="line">		System.out.println(<span class="string">"day"</span>+day1);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>抽象Enum类</p>
-<p>实现的方法</p>
-<ul>
-<li>compareTo  比较的其实是 ordinal</li>
-<li>equals  </li>
-<li>getDeclaringClass  返回枚举常量的枚举类型对应的class对象</li>
-<li>name  返回枚举常量的名称</li>
-<li>ordinal 返回枚举常量的序号</li>
-<li>toString  和name差不多</li>
-<li>valueOf(Class<t>,String)   返回带指定名称的指定枚举类型的枚举常量。  这个相比子类的valueOf 多个class的参数</t></li>
-</ul>
-<p>它的getDeclaringClass比较特别给出代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Class&lt;E&gt; <span class="title">getDeclaringClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="comment">//获取class对象引用，getClass()是Object的方法</span></span><br><span class="line">     Class&lt;?&gt; clazz = getClass();</span><br><span class="line">     <span class="comment">//获取父类Class对象引用</span></span><br><span class="line">     Class&lt;?&gt; zuper = clazz.getSuperclass();</span><br><span class="line">     <span class="keyword">return</span> (zuper == Enum.class) ? (Class&lt;E&gt;)clazz : (Class&lt;E&gt;)zuper;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-<p>这个是首先获取对象的类对象，然后再通过<code>getSuperClass</code>方法去获得父类方法，通过判断是否是Enum.class来进行不同处理</p>
-<ul>
-<li>如果不是Enum的派生类就只是返回该对象的父类</li>
-<li>如果是Enum的派生类则返回对象本身的类对象</li>
-</ul>
-<p>虽然values方法是子类独有，父类是没有，所以不能通过向上转型来使用values 但通过Enum的class对象的getEnumConstants方法，我们仍能一次性获取所有的枚举实例常量</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正常使用</span></span><br><span class="line">Day[] ds=Day.values();</span><br><span class="line"><span class="comment">//向上转型Enum</span></span><br><span class="line">Enum e = Day.MONDAY;</span><br><span class="line"><span class="comment">//无法调用,没有此方法</span></span><br><span class="line"><span class="comment">//e.values();</span></span><br><span class="line"><span class="comment">//获取class对象引用</span></span><br><span class="line">Class&lt;?&gt; clasz = e.getDeclaringClass();</span><br><span class="line"><span class="keyword">if</span>(clasz.isEnum()) &#123;</span><br><span class="line">    Day[] dsz = (Day[]) clasz.getEnumConstants();</span><br><span class="line">    System.out.println(<span class="string">"dsz:"</span>+Arrays.toString(dsz));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   输出结果:</span></span><br><span class="line"><span class="comment">   dsz:[MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
-<p>实际上枚举类，它其实可以实现class的功能 我们可以向enum类中添加方法,覆盖方法和变量，甚至是main方法，</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//覆盖方法toString 和实现了自己的getDesc方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Day2 &#123;</span><br><span class="line">	MONDAY(<span class="string">"星期一"</span>),</span><br><span class="line">	TUESDAY(<span class="string">"星期二"</span>),</span><br><span class="line">	WEDNESDAY(<span class="string">"星期三"</span>),</span><br><span class="line">	THURSDAY(<span class="string">"星期四"</span>),</span><br><span class="line">	FRIDAY(<span class="string">"星期五"</span>),</span><br><span class="line">	SATURDAY(<span class="string">"星期六"</span>),</span><br><span class="line">	SUNDAY(<span class="string">"星期日"</span>);</span><br><span class="line">	<span class="keyword">private</span> String desc;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Day2</span><span class="params">(String desc)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.desc=desc;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> desc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//覆盖方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> desc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(Day2 day:Day2.values()) &#123;</span><br><span class="line">			System.out.println(<span class="string">"name: "</span>+day.name()+<span class="string">" ,desc:"</span>+day.getDesc()+<span class="string">"  toString"</span>+day.toString());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>enum与抽象方法</p>
-<p>与常规抽象类一样，enum类允许我们为其定义抽象方法，然后使每个枚举实例都实现该方法，以便产生不同的行为方式，注意abstract关键字对于枚举类不一定需要?(要把？)</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> EnumDemo3 &#123;</span><br><span class="line">	FIRST&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"First time"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//每个实例内实现抽象方法</span></span><br><span class="line">	SECOND&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"Second time"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//定义抽象方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getInfo</span><span class="params">()</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"First: "</span>+EnumDemo3.FIRST.getInfo());</span><br><span class="line">		System.out.println(<span class="string">"Second: "</span>+EnumDemo3.SECOND.getInfo());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有时候我们可以用接口来 将多个实现该接口的枚举类放在一起</p>
-<p>还可以有枚举嵌套</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Meal&#123;</span><br><span class="line">  APPETIZER(Food.Appetizer.class),</span><br><span class="line">  MAINCOURSE(Food.MainCourse.class),</span><br><span class="line">  DESSERT(Food.Dessert.class),</span><br><span class="line">  COFFEE(Food.Coffee.class);</span><br><span class="line">  <span class="keyword">private</span> Food[] values;</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">Meal</span><span class="params">(Class&lt;? extends Food&gt; kind)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//通过class对象获取枚举实例</span></span><br><span class="line">    values = kind.getEnumConstants();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Food</span> </span>&#123;</span><br><span class="line">    <span class="keyword">enum</span> Appetizer implements Food &#123;</span><br><span class="line">      SALAD, SOUP, SPRING_ROLLS;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> MainCourse implements Food &#123;</span><br><span class="line">      LASAGNE, BURRITO, PAD_THAI,</span><br><span class="line">      LENTILS, HUMMOUS, VINDALOO;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> Dessert implements Food &#123;</span><br><span class="line">      TIRAMISU, GELATO, BLACK_FOREST_CAKE,</span><br><span class="line">      FRUIT, CREME_CARAMEL;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> Coffee implements Food &#123;</span><br><span class="line">      BLACK_COFFEE, DECAF_COFFEE, ESPRESSO,</span><br><span class="line">      LATTE, CAPPUCCINO, TEA, HERB_TEA;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>枚举值可以作为switch的判断</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;GREEN,RED,BLUE&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumDemo4</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printName</span><span class="params">(Color color)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (color)&#123;</span><br><span class="line">            <span class="keyword">case</span> BLUE: <span class="comment">//无需使用Color进行引用</span></span><br><span class="line">                System.out.println(<span class="string">"蓝色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RED:</span><br><span class="line">                System.out.println(<span class="string">"红色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> GREEN:</span><br><span class="line">                System.out.println(<span class="string">"绿色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        printName(Color.BLUE);</span><br><span class="line">        printName(Color.RED);</span><br><span class="line">        printName(Color.GREEN);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//蓝色</span></span><br><span class="line">        <span class="comment">//红色</span></span><br><span class="line">        <span class="comment">//绿色</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>未完待续 。。。。主要是枚举的一些的set 和 map</p>
+            <p>我们可以为每个类创建一个日志工具</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Logger auditLogger=Logger.getLogger(<span class="string">"requests"</span>);</span><br></pre></td></tr></table></figure>
+<p>日志工具是线程安全的，所以他们存储在共享的静态字段没问题，整个类共用一个，</p>
+<p>多个Logger对象可以输出到同一个日志文件中，但一个Logger只能将日志记录到一个文件中</p>
+<p>参数可能是一个文件名字 可能是一个数据库 可能是一个SOAP服务 同意主机运行的另一个Java程序</p>
+<p>一旦有了日志工具就可以多个方法写入日志</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">catch</span>(RuntimeException ex)&#123;</span><br><span class="line">    logger.log(Level.SEVERE,<span class="string">"unexpected error "</span>+ex.getMessage(),ex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一个参数代表level  SEVERE WARNING INFO CONFIG FINE FINER FINEST</p>
+<p>一般实际使用上是用前三个 SEVERE WARNING INFO三个 后三个最多也就调试用用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//记录info </span></span><br><span class="line">logger.info(<span class="keyword">new</span> Date()+<span class="string">" "</span>+connection.getRemoteSocketAddress());</span><br></pre></td></tr></table></figure>
+<p>如果只是记录错误一般就寄生在catch语句块就行</p>
+<p>默认情况下日志是输出在控制台上的但是如果你想放入到一个持久的目标的位置</p>
+<p>可以在代码也可以在配置文件中指定</p>
+<p>java.util.logging.config.file 系统属性采用常规的属性格式指向控制日志记录的一个文件</p>
+<p>可以在启动虚拟机的时候 传入 -Djava.util.logging.config.file=<em>filename</em>参数来设置该属性</p>
+<p>日志属性文件 略 详情看别的地方的介绍</p>
 
           
         
@@ -1956,7 +1890,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/javascript补习/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(八)客户端Socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1975,7 +1909,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/javascript补习/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/Java网络编程(八)客户端Socket/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -2027,111 +1961,156 @@
       
         
           
-            <ul>
-<li><p>document.write(“</p><h1>JS可以用来写入元素</h1>“);写入元素<p></p>
+            <p>telnet去研究协议</p>
+<p><code>telnet localhost 25</code></p>
+<p>Socket是在网络上进行网络通信，指定端口和服务器</p>
+<p><code>Socket socket=new Socket(&quot;time.nist.gov&quot;,13);</code></p>
+<p><code>socket.setSoTimeout(15000)</code>毫秒为单位， 建议使用，因为i一个有问题的服务器和你链接，然后停止对华，没有主动关闭连接，设置超时让你能在服务器挂起，超时然后返回一个SocketTimeoutException</p>
+<p>socket和urlconnection差不多，可以获得<code>getInputStream()</code>获取输入流</p>
+<p>不是所有的协议都用ASCII编码去做，甚至不一定用文本来进行数据传输。比如有时候是一个32位无符号二进制数（big-endian）有时候没有合适的api处理你就得咬牙自己编码解决处理</p>
+<p>客户端的服务器写入  socket的请求和写入其实差不多，没有什么限制</p>
+<ul>
+<li><code>socket.getOutputStream</code></li>
+<li><code>new OutputStreamWriter(outputStream,&quot;UTF-8&quot;)</code></li>
+<li><code>writer.write(&quot;xxx&quot;)</code></li>
+<li><code>writer.flush()</code></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Socket socket=<span class="keyword">new</span> Socket(<span class="string">"xx.org"</span>,<span class="number">2333</span>);</span><br><span class="line">socket.setSoTimeout(<span class="number">15000</span>);</span><br><span class="line"></span><br><span class="line">OutputStream out=socket.getOutputStream();</span><br><span class="line">Writer writer=<span class="keyword">new</span> OutputStreamWriter(out,<span class="string">"UTF-8"</span>);</span><br><span class="line">writer=<span class="keyword">new</span> BufferedWriter(writer);</span><br><span class="line"></span><br><span class="line">InputStream in=socket.getInputStream();</span><br><span class="line">BufferedReader reader=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(in,<span class="string">"UTF-8"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line">writer.write(<span class="string">"xxx"</span>);</span><br><span class="line">writer.flush();</span><br><span class="line"></span><br><span class="line"><span class="comment">//按一个个字去读取</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> c=reader.read();c!=-<span class="number">1</span>;c=reader.read())&#123; System.out.println((<span class="keyword">char</span>) c);&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//按一行行去读取</span></span><br><span class="line"><span class="keyword">for</span>(String line=reader.readLine();line!=<span class="keyword">null</span>;line=reader.readLine())&#123;</span><br><span class="line">    <span class="keyword">if</span>(line.startsWith(<span class="string">"xxx"</span>))</span><br><span class="line">        System.out.println(<span class="string">"xxxx"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>输出流的三层包装  先分别从socket 获得输出流 将其保证成一个OuputStreamWriter再包装成成一个BufferedWriter<ul>
+<li>OutputStream out=socket.getOutputStream()</li>
+<li>Writer writer =new OutputStreamWriter(out,”UTF-8”);  注意这里要注意编码</li>
+<li>writer=new BufferedWriter(writer)</li>
+</ul>
 </li>
-<li><p>var k=document.getElementById(“idname”);   获取元素</p>
-<ul>
-<li>k.innerHTML=”heihei”      改变元素内部的内容</li>
-<li>k.src/xxx=””      改变元素的属性</li>
-<li>k.style.xxx 改变标签的样式</li>
+<li>输入流也是三层包装，不过它更加简洁，我感觉更好<ul>
+<li>InputStream in=socket.getInputStream()</li>
+<li>BufferedReader reader=new BufferedReader(new InputStreamReader(in,”UTF-8”))</li>
 </ul>
 </li>
 </ul>
-<p>引入js文件 <code>&lt;script src=&quot;myScript.js&quot;&gt;&lt;/script&gt;</code></p>
-<p>js输出</p>
-<ol>
-<li>window.alert</li>
-<li>document.getElementById(“”).innerHTML();</li>
-<li>document.write()  如果在文档已完成加载后执行 document.write，整个 HTML 页面将被覆盖。但如果直接写的话就是当作一个html标签来看待</li>
-<li>console.log</li>
-</ol>
-<p>js大小写敏感</p>
-<p>代码块以左花括号开始，以右花括号结束。</p>
-<p>代码块的作用是一并地执行语句序列。</p>
-<p>您可以在文本字符串中使用反斜杠对代码行进行换行</p>
-<p>document.write(“你好 \<br>世界!”);</p>
-<p>：JavaScript 是脚本语言。浏览器会在读取代码时，逐行地执行脚本代码。而对于传统编程来说，会在执行前对所有代码进行编译。</p>
-<p>如果重新声明 JavaScript 变量，该变量的值不会丢失：</p>
-<p>在以下两条语句执行后，变量 carname 的值依然是 “Volvo”：</p>
-<p>var carname=”Volvo”;<br>var carname;</p>
-<p>对象</p>
-<p>var person = {<br>​    firstName:”John”,<br>​    lastName:”Doe”,<br>​    age:50,<br>​    eyeColor:”blue”</p>
-<p>​     fullname: function(){</p>
-<p>​    return this.firstName+” “+this.lastName;</p>
-<p>}</p>
-<p>};</p>
-<p>你可以通过两种方式访问对象属性:</p>
+<p>半关闭Socket</p>
+<p>其实就是是关闭一个输入或输出流</p>
+<p><code>shutdownInput()</code> 和 <code>shutdownOutput()</code> 用来关闭输入或输出流</p>
+<p><code>isInputShutdown()</code> 和 <code>isOutputShutdown()</code> 用来判断</p>
+<p>记住关闭后再开启输入或输出流 是直接报错 IOException 不要相信 什么InputStream是返回-1</p>
+<p>构造和连接Socket</p>
+<p><code>Socket(Proxy proxy)</code>  <code>Socket(ScoketImpl impl)</code> 代理或者加密机制</p>
+<p>除了最基本的还有<code>Socket(host,port,InetAddress,localport)</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    InetAddress inward=InetAddress.getByName(<span class="string">"router"</span>);</span><br><span class="line">    Socket socket=<span class="keyword">new</span> Socket(<span class="string">"mail"</span>,<span class="number">25</span>,inward,<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//使用socket</span></span><br><span class="line">&#125;<span class="keyword">catch</span>(IOException e)&#123;</span><br><span class="line">    System.err.println(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过本地端口号传入0，表示不关心什么端口，只希望和本地主机名为 router的绑定网络接口</p>
+<p>如果Socket无法识别服务名，则返回一个UnknownHostException异常 如果是本地接口或者服务器端口或者别的出了问题好像都是IOException异常</p>
+<p>然后这个host可以是localhost挺有意思的，可以查看本机上的端口的服务器</p>
+<p>构造不连接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Socket socket=<span class="keyword">new</span> Socket();</span><br><span class="line">SocketAddress address=<span class="keyword">new</span> InetSocketAddress(host,port);</span><br><span class="line"></span><br><span class="line"><span class="comment">//....</span></span><br><span class="line">socket.connect(address,<span class="number">15000</span>);  <span class="comment">//参数二代表代表超时的加载等待的秒数</span></span><br></pre></td></tr></table></figure>
+<p>Socket地址</p>
+<p>我们可以看到一个很有趣的东西 SocketAddress 这是个只有默认构造的抽象类，说是可以支持非TCP 其实当前只支持TCP/IP的 Socket 实现类都是InetSocketAddress</p>
+<p>SocketAddress主要用途是为暂时的socket连接信息，如IP和端口提供方便的存储，即使最初的socket已经断开并被垃圾回收这些信息可以立即构造一个新的socket</p>
+<p>socket中提供方法去获得连接系统的地址</p>
+<p><code>SocketAddress getRemoteSocketAddress()</code> 和 <code>SocketAddress getLocalSocketAddress()</code> 若socket未连接，则返回null</p>
+<p>上面两个分别代表远程地址 和本地地址  类似有 <code>getPort()</code> <code>getLocalPort()</code> 即使socket关闭也能获取</p>
+<p>一般来说本地的端口不用固定的，实际上默认也是随机的，只要不被占用的端口就行</p>
+<p>InetSocketAddress 构造函数</p>
 <ul>
-<li>person.firstName</li>
-<li>person[“firstName”]</li>
+<li>InetSocketAddress(InetAddress add,int port)</li>
+<li>InetSocketAddress(String host, int port)</li>
+<li>InetSocketAddress(int port)</li>
 </ul>
-<p>访问对象方法 document.write(person.fullname());</p>
-<p>好像变量都是能看作 作为window对象的一个属性所以所有的变量可以通过</p>
+<p>一般第三个好像服务器才能这样用？客户端用前两个？</p>
+<p>还能用静态工厂方法 InetSocketAddress.createUnresolved(host,port) 从而不再在DNS查找主机</p>
+<p><code>static InetSocketAddress createUnresolved(String host,int port)</code></p>
+<p>InetSocketAddress 提供一些信息方法</p>
 <ul>
-<li>window.varname</li>
-<li>this.varname</li>
-<li>varname</li>
+<li>InetAddress getAddress()</li>
+<li>int getPort()</li>
+<li>String getHostName()</li>
 </ul>
-<p>不过如果是没有写var 直接是赋值的那种  是全局对象的可配置属性 可以被delete掉</p>
-<p>全局变量</p>
-<ol>
-<li>在函数外定义的变量</li>
-<li>没有var定义的变量</li>
-</ol>
-<p>所有的全局变量都可通过window访问</p>
-<h2 id="常见的HTML事件"><a href="#常见的HTML事件" class="headerlink" title="常见的HTML事件"></a>常见的HTML事件</h2><p>下面是一些常见的HTML事件的列表:</p>
-<table>
-<thead>
-<tr>
-<th>事件</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>onchange</td>
-<td>HTML 元素改变</td>
-</tr>
-<tr>
-<td>onclick</td>
-<td>用户点击 HTML 元素</td>
-</tr>
-<tr>
-<td>onmouseover</td>
-<td>用户在一个HTML元素上移动鼠标</td>
-</tr>
-<tr>
-<td>onmouseout</td>
-<td>用户从一个HTML元素上移开鼠标</td>
-</tr>
-<tr>
-<td>onkeydown</td>
-<td>用户按下键盘按键</td>
-</tr>
-<tr>
-<td>onload</td>
-<td>浏览器已完成页面的加载</td>
-</tr>
-</tbody>
-</table>
-<p>switch 语句会使用恒等计算符(===)进行比较:</p>
-<h2 id="Undefined-不是-Null"><a href="#Undefined-不是-Null" class="headerlink" title="Undefined 不是 Null"></a>Undefined 不是 Null</h2><p>在 JavaScript 中, <strong>null</strong> 用于对象, <strong>undefined</strong> 用于变量，属性和方法。</p>
-<p>对象只有被定义才有可能为 null，否则为 undefined。</p>
-<p>如果我们想测试对象是否存在，在对象还没定义时将会抛出一个错误。</p>
-<p>错误的使用方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if (myObj !== null &amp;&amp; typeof myObj !== &quot;undefined&quot;)</span><br></pre></td></tr></table></figure>
-<p>正确的方式是我们需要先使用 typeof 来检测对象是否已定义：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if (typeof myObj !== &quot;undefined&quot; &amp;&amp; myObj !== null)</span><br></pre></td></tr></table></figure>
-<p>在每个代码块中 JavaScript 不会创建一个新的作用域，一般各个代码块的作用域都是全局的。</p>
-<p>以下代码的的变量 i 返回 10，而不是 undefined：</p>
-<script>
-for (var i = 0; i < 10; i++) {
-    // some code
-}
-document.getElementById("demo").innerHTML = i;
-</script>
-
+<p>代理服务器</p>
+<p>Socket使用的代理服务器由socksProxyHost socksProxyPort系统属性控制，这些属性应用于系统中所有的socket 但是这个构造函数构建的socket会使用指定的代理服务器    可以传入 Proxy.NO_PROXY 完全绕过所有代理服务器，而直接连接远程主机，如果对方禁止直接连接，则会连接失败</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SocketAddress proxyAddress=<span class="keyword">new</span> InetSocketAddress(<span class="string">"xxx.com"</span>,<span class="number">1080</span>);</span><br><span class="line">Proxy proxy=<span class="keyword">new</span> Proxy(Proxy.Type.SOCKS,proxyAddress);</span><br><span class="line">Socket socket=<span class="keyword">new</span> Socket(proxy);</span><br><span class="line">SocketAddress remote=<span class="keyword">new</span> InetSocketAddress(<span class="string">"xx"</span>,<span class="number">11</span>);</span><br><span class="line">socket.connect(remote);</span><br></pre></td></tr></table></figure>
+<p>分三个步骤</p>
+<ul>
+<li>构建SocketAddress 代表proxy的地址  然后构建Proxy  注意第一个是Proxy.Type.SOCKS</li>
+<li>然后构建Socket(proxy) </li>
+<li>构建SocketAddress 代表将要连接的远程地址 remote</li>
+<li>再 socket.connect(remote)</li>
+</ul>
+<p>Proxy.Type.SOCKS 是java理解的唯一的一个底层代理类型，还有一个高层Proxy.Type.HTTP 用于应用层 还代表无代理的Proxy.Type.DIRECT</p>
+<p>指示关闭</p>
+<p><code>isClosed()</code> 判断socket是否关闭 如果关闭返回true  如果一个socket未开始过连接 会返回false 这是个不太好的判断了</p>
+<p><code>isConnected()</code>不是判断是否连在一个远程主机，而是判断是否重未连接过服务器  如果是连接过关闭了也算true</p>
+<p>所以判断一个连接是否当前正在打开</p>
+<p>boolean connected=socket.isConnected()&amp;&amp; !socket.isClosed()</p>
+<p><code>isBound()</code>告诉你socket是否成功绑定在本地系统的出站端口</p>
+<p>toString() 就是返回之前所讲的host port等信息</p>
+<p>设置Socket选项</p>
+<p>客户端socket还有多个选项</p>
+<p>TCP_NODELAY 默认为false   控制是否缓冲，有缓冲就会检测包是否送达，没缓冲就一有包准备好就发</p>
+<p><code>setTcpNoDelay(boolean)</code> 和 <code>boolean getTcpNoDelay()</code> </p>
+<p>如果socket没有这种支持，就会给出 socketException</p>
+<p>SO_LINGER</p>
+<p>设置close socket前的延迟时间，在准备关闭socket的延迟时间内，socket会会尽量处理数据包，并且阻塞close，一旦时间到了，如果有剩下的数据都会丢弃</p>
+<p><code>setSoLinger(boolean on,int seconds)</code></p>
+<p><code>int getSoLinger()</code>  好像不一定是返回秒数，，但是如果没开启这个功能会返回-1的</p>
+<p>SO_TIMEOUT</p>
+<p><code>void setSoTimeout(int milliseconds)</code>  ` 设置超时时间  毫秒   </p>
+<p>`int getSoTimeout()  0代表无限时间，默认</p>
+<p>不支持抛出socketException</p>
+<p>SO_RCVBUF 和SO_SNDBUF设置缓冲区大小</p>
+<p><code>setReceiveBufferSize(int size)</code> 和<code>int getReceiveBufferSize()</code></p>
+<p><code>setSendBufferSize(int size)</code>和 <code>int getSendBufferSize()</code></p>
+<p>看似是能分别设置输入和输出的缓冲区，实际上输入和输出区的缓冲区会统一取两者中较小的一个，而且set这个方法只是提供建议，实际底层实现可以完全忽略或调整，而且系统本身就有限制缓冲区的最大空间</p>
+<p>SO_KEEPALIVE</p>
+<p>保持服务器的活动的检测，偶尔发一个空闲的数据包（两个小时一次） 如果一段时间未收到响应则关闭客户端</p>
+<p>如果没有keepalive 则可能会出现不活动服务器崩溃的客户端。默认不开启</p>
+<p><code>setKeepAlive(boolean)</code>  和 <code>getKeepAlive()</code></p>
+<p>OOBINLINE </p>
+<p>TCP可以发送一个紧急数据，这个数据会被优先发送，而接收方收到紧急数据时也能知道，优先处理这个数据</p>
+<p>java支持发送和接受这种数据</p>
+<p><code>sendUrgentData(int data)</code> 几乎会立即发送参数中的最低位字节？？啥？ </p>
+<p>接受端的接受方式虽平台和api有区别，有分别接受紧急和正常数据，也有将紧急数据适当顺序放入数据队列，并给出通知，让程序在队列中查找紧急数据</p>
+<p>java 默认会忽略socket接受的紧急数据，如果希望设置</p>
+<p><code>setOOBInline(boolean)</code> 和 <code>boolean getOOBINline()</code></p>
+<p>打开后java也只是将紧急数据和正常数据一样对待，不会优先处理  什么特定字节对你程序特殊含义，而且不出现在常规输入流中，就能更快发送这个字节？？  （程序还会根据你的输入记录进行调整 优先级？？？）</p>
+<p>SO_REUSEADDR</p>
+<p>socket关闭时可能会仍然占用本地端口，传输延迟的数据，会接受但不处理延迟的数据包，保证这些数据不会传到下一个该端口的使用进程</p>
+<p><code>setReuseAddress(boolean on)</code> 和 <code>boolean getReuseAddress()</code> </p>
+<p>开启后,（默认为关闭） 别的socket就会被同样允许绑定到这个端口，这样有可能存在上一个socket未接收的数据</p>
+<p>set这个方法必须在这个端口绑定新socket之前用，这时候意味 socket 使用 无参数构造，然后调用set方法，然后再connect ,而且之前的socket和重用老地址的新socket都要设置 reuseaddr才能有效</p>
+<p>IP_TOS</p>
+<p>好像是用来设置服务质量的 服务优先级</p>
+<p><code>int getTrafficClass()</code> 和 <code>setTrafficClass(int trafficClass)</code></p>
+<p> 业务类型由0-255的int给出 ，只取int的低位8位</p>
+<p>而这个8位二进制数中，高6位属于 差分服务代码点 DSCP 和低2位 显式拥塞通知 ECN</p>
+<p>DSCP最多由2^6 个不同业务流，不过由几个特别常见</p>
+<p>DSCP</p>
+<ul>
+<li>默认  00000  尽力业务流</li>
+<li>加速转发 101110 低损耗低延迟低抖动的业务流 通常仅用于网络容量的30%或更低</li>
+<li>保证转发 多个  保证最多以一个指定速率传送</li>
+<li>类选择器 xxx000 与IPv4 TOS首部向后兼容？（业务类型存储在前三位中）  这种好像比较过时了</li>
+</ul>
+<p>低两位是显式拥塞通知 </p>
+<p>一般加速转发 为 0xB8  10111000</p>
+<p>保证转发有多个细小分支 作用是网络拥塞的丢包优先级，优先级低的更早丢弃，不过<strong>较低</strong>优先级的包不会被完全被丢光</p>
+<p>丢包率           最低                                                                           最高</p>
+<p>低             AF11 001010         AF21 010010      AF31 011010   AF41 100010</p>
+<p>中             AF12 001100                    010100               011100             100100</p>
+<p>高                       001110                    010110                011110             100110</p>
+<p>如果无法提供请求的服务类型会抛出 socketException </p>
+<p><code>setPerformancePreferences(int connectionTime,int latency,int bandwidth)</code> 代表连接时间 延迟 和相对优先级</p>
+<p>这些都是权重 比如 3 2 1 代表最重要的连接时间 其次是延迟 最小是带宽  让vm自己去实现，但可能会无操作</p>
+<p>Socket异常</p>
+<p>SocketException的子类</p>
+<ul>
+<li>BindException  端口占用或无端口权限</li>
+<li>ConnectException  远程主机拒绝（可能是服务器端口在忙，或者服务器本身在忙）</li>
+<li>NoRouteToHostException  连接超时</li>
+</ul>
+<p>IOException子类</p>
+<ul>
+<li>ProtocolException  接收数据违反TCP/IP 规则</li>
+</ul>
 
           
         
@@ -2373,7 +2352,7 @@ document.getElementById("demo").innerHTML = i;
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

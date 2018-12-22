@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Web Service简介/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/SOAP教程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -251,7 +251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Web Service简介/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/SOAP教程/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -303,33 +303,232 @@
       
         
           
-            <p>Web Service</p>
-<p>作用可以将一个应用程序变成Web应用</p>
-<p>Web services 通过Web 进行发布、查找和使用</p>
+            <p>SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议</p>
+<p>通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。</p>
+<p>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。</p>
+<p>一条SOAP信息就是一个普通的xml文档 含下面的元素</p>
 <ul>
-<li>是应用程序组件</li>
-<li>使用开放协议进行通信</li>
-<li>独立且可自我描述 自我发现</li>
-<li>可被其他应用程序使用</li>
+<li>必需的 Envelope元素     将xml文档标识为一条SOAP信息</li>
+<li>可选的Header元素，包含头部信息</li>
+<li>必需的Body元素，包含所有的调用和响应信息</li>
+<li>可选的Fault元素，提供处理此消息所发生的错误信息</li>
 </ul>
-<p>基础的 Web Services 平台是 XML + HTTP。</p>
-<p>Web  service 的元素</p>
+<p>所有以上的元素均被声明于针对 SOAP 封装的默认命名空间中：</p>
+<p><a href="http://www.w3.org/2001/12/soap-envelope" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope</a></p>
+<p>以及针对 SOAP 编码和数据类型的默认命名空间：</p>
+<p><a href="http://www.w3.org/2001/12/soap-encoding" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding</a></p>
+<p>SOAP文档的要求</p>
+<ol>
+<li>SOAP必须用xml来进行编码</li>
+<li>必须使用SOAP Envelope命名空间和SOAP Encoding命名空间</li>
+<li>不能包含DTD引用</li>
+<li>不能包含XML处理指令</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Header</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Header</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">...</span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Envelope元素"><a href="#Envelope元素" class="headerlink" title="Envelope元素"></a>Envelope元素</h3><p>是SOAP的根元素，将其定义成soap信息</p>
+<p>属性</p>
 <ul>
-<li>SOAP (简易对象访问协议)</li>
-<li>UDDI (通用描述、发现及整合)   目录服务，通过它，企业可注册并搜索 Web services</li>
-<li>WSDL (Web services 描述语言)  用于描述 Web Services 以及如何访问 Web Services 的语言。</li>
+<li>xmlns:soap  命名空间 <ul>
+<li>SOAP 消息必须拥有与命名空间 “<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a> 相关联的一个 Envelope 元素</li>
 </ul>
-<p>Web 应用程序是运行在 Web 上的简易应用程序。它们围绕 Web 浏览器标准被进行构建，几乎可被任何平台之上的任何浏览器来使用。通过使用 Web services，您的应用程序可向全世界发布功能或消息</p>
-<p>Web Service 的应用</p>
-<p>可重用组件  连接组件</p>
-<p>任何应用程序都可拥有 Web Service 组件。</p>
-<p>Web Service 的创建与编程语言的种类无关。</p>
-<p>本章节我们将为大家介绍使用 PHP 的 SOAP 扩展来创建 Web Service。</p>
-<p>SOAP有两种操作方式，NO-WSDL 与 WSDL。</p>
+</li>
+<li>xmlns:encodingStyle <ul>
+<li>此属性可出现在任何 SOAP 元素中，并会被应用到元素的内容及元素的所有子元素上。</li>
+<li>SOAP 没有默认编码方式 <a href="http://www.w3.org/2001/12/soap-encoding使用这个就好" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding使用这个就好</a></li>
+</ul>
+</li>
+</ul>
+<p>之后我们就能用 soap 和 encodingStyle 属性</p>
+<h3 id="Header元素"><a href="#Header元素" class="headerlink" title="Header元素"></a>Header元素</h3><p>包含头部信息，一些SOAP/应用程序专用信息    比如认证 支付等</p>
+<p>如果使用header 它一定是第一个子元素</p>
+<p>所有 Header 元素的直接子元素必须是合格的命名空间</p>
+<p>soap在默认的命名空间中 (“<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a>) 定义了三个属性(有一个encodingStyle这里不废话 )这些被定义在 SOAP 头部的属性可定义容器如何对 SOAP 消息进行处理</p>
+<p>mustUnderstand 属性可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的</p>
+<p><code>soap:mustUnderstand=&quot;0|1&quot;</code></p>
+<p>SOAP信息可以沿着信息路径转发，actor用于寻址到下一个特点端点</p>
+<p><code>soap:actor=&quot;URI&quot;</code></p>
+<h3 id="Body元素"><a href="#Body元素" class="headerlink" title="Body元素"></a>Body元素</h3><p>soap的body元素的子元素可以引入合格的命名空间</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 比如下面使用m的getPrice属性，它首先要引入 命名空间m  xmlns:m="xxx" --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Getprice</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.xxxx.com/prices"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">m:item</span>&gt;</span>Apples<span class="tag">&lt;/<span class="name">m:item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">m:Getprice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Fault元素"><a href="#Fault元素" class="headerlink" title="Fault元素"></a>Fault元素</h3><p>Fault一定是Body的子元素，在一条soap内，fault只能出现一次，它用于指示body的错误</p>
+<p>fault拥有子元素</p>
 <ul>
-<li><strong>NO-WSDL模式：</strong>使用参数来传递要使用的信息。</li>
-<li><strong>WSDL模式：</strong> 使用WSDL文件名作为参数，并从WSDL中提取服务所需的信息。</li>
+<li><code>&lt;faultcode&gt;</code>用来识别错误的代码</li>
+<li><code>&lt;faultstring&gt;</code>错误说明</li>
+<li><code>&lt;faultactor&gt;</code> 谁引发的错误</li>
+<li><code>&lt;detail&gt;</code> 涉及body元素的应用程序专用错误信息</li>
 </ul>
+<p>faultcode 有几个错误代码</p>
+<ol>
+<li>versionMismatch envelop元素的无效的命名空间</li>
+<li>MustUnderstand 这是之前header元素中设置了 mustunderstand 的时候出现的错误可能会出现  无法理解</li>
+<li>Client 消息被不正确地构成，或包含不正确的信息</li>
+<li>Server 服务有问题，因此无法处理进行</li>
+</ol>
+<h3 id="HTTP-XML-SOAP"><a href="#HTTP-XML-SOAP" class="headerlink" title="HTTP + XML = SOAP"></a>HTTP + XML = SOAP</h3><p>好像传输soap 需要在contentType上说明</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: application/soap+xml; charset=utf-8</span><br></pre></td></tr></table></figure>
+<h2 id="一个-SOAP-实例"><a href="#一个-SOAP-实例" class="headerlink" title="一个 SOAP 实例"></a>一个 SOAP 实例</h2><p>在下面的例子中，一个 GetStockPrice 请求被发送到了服务器。此请求有一个 StockName 参数，而在响应中则会返回一个 Price 参数。此功能的命名空间被定义在此地址中： “<a href="http://www.example.org/stock&quot;" target="_blank" rel="noopener">http://www.example.org/stock&quot;</a></p>
+<h3 id="SOAP-请求："><a href="#SOAP-请求：" class="headerlink" title="SOAP 请求："></a>SOAP 请求：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /InStock HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:StockName</span>&gt;</span>IBM<span class="tag">&lt;/<span class="name">m:StockName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="SOAP-响应："><a href="#SOAP-响应：" class="headerlink" title="SOAP 响应："></a>SOAP 响应：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Price</span>&gt;</span>34.5<span class="tag">&lt;/<span class="name">m:Price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/RDF教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/RDF教程/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>RDF 资源描述框架 是描述网络资源的W3C标准 </p>
+<p>比如对网页的标题、作者、修改日期、内容以及版权信息</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:si</span>=<span class="string">"http://www.runoob.com/rdf/"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://www.runoob.com"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:title</span>&gt;</span>RUNOOB<span class="tag">&lt;/<span class="name">si:title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">si:author</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>用xml编写</p>
+<p>RDF是W3C的语义网活动的组成部分，</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">RDF</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Description</span> <span class="attr">about</span>=<span class="string">"http://www.runoob.com/rdf"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">homepage</span>&gt;</span>http://www.runoob.com<span class="tag">&lt;/<span class="name">homepage</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>RDF 描述的东西叫资源 资源是拥有 URI 的任何事物   比如 地址是”<a href="http://www.runoob.com/rdf&quot;的一个java文件" target="_blank" rel="noopener">http://www.runoob.com/rdf&quot;的一个java文件</a></p>
+<p>然后标记的属性 就用键值对咯，标签名作为键   标签体作为值</p>
+<p>RDF的描述，可以变成一个个描述句</p>
+<p>陈述：”The homepage of <a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a> is <a href="http://www.runoob.com&quot;" target="_blank" rel="noopener">http://www.runoob.com&quot;</a>.</p>
+<ul>
+<li>陈述的主体是：<a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a></li>
+<li>谓语是：homepage</li>
+<li>客体是：<a href="http://www.runoob.com" target="_blank" rel="noopener">http://www.runoob.com</a></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:cd</span>=<span class="string">"http://www.recshop.fake/cd#"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Hide your heart"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bonnie Tyler<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>UK<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>CBS Records<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>9.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1988<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里使用命名空间，命名空间的定义在开头根元素的 xmlns:rdf=”xxxx”等  开始定义</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span>&gt;</span></span><br><span class="line">  ...Description goes here...</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个网址是不是潜规则一定要引入的呢？我觉得应该是的。官方默认的标准把？</p>
+<p><code>&lt;rdf:Description&gt;</code> 元素可包含描述资源的那些元素：</p>
+<p>但其实里面的描述，就需要这个资源专门的描述 需要专门的命名空间了</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者下面用属性的方式定义--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:artist</span>=<span class="string">"Bob Dylan"</span> <span class="attr">cd:country</span>=<span class="string">"USA"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:company</span>=<span class="string">"Columbia"</span> <span class="attr">cd:price</span>=<span class="string">"10.90"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:year</span>=<span class="string">"1985"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者引入资源   下面的例子中，属性 artist 没有值，但是却引用了一个对包含有关艺术家的信息的资源。--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:resource</span>=<span class="string">"http://www.recshop.fake/cd/dylan"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="RDF容器元素"><a href="#RDF容器元素" class="headerlink" title="RDF容器元素"></a>RDF容器元素</h3><p>容器用来描述一组相同事物 比如某本书的多位作者放在一起</p>
+<h2 id="rdf-Bag-rdf-seq-rdf-alt元素"><a href="#rdf-Bag-rdf-seq-rdf-alt元素" class="headerlink" title="rdf:Bag rdf:seq rdf:alt元素"></a>rdf:Bag rdf:seq rdf:alt元素</h2><p><code>&lt;rdf:Bag&gt;</code>元素用于描述一个规定为无序的值的列表。</p>
+<p><code>&lt;rdf:Bag&gt;</code>元素可包含重复的值。</p>
+<p><code>&lt;rdf:li&gt;</code>作为其子元素</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>John<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Paul<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>George<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Ringo<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;rdf:Seq&gt;</code> 元素用于描述一个规定为有序的值的列表（比如一个字母顺序的排序）</p>
+<p>子元素还是 <code>&lt;rdf:li&gt;</code></p>
+<p><code>&lt;rdf:Alt&gt;</code> 元素用于一个可替换的值的列表（用户仅可选择这些值的其中之一）。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Descriptio</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:format</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>CD<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Record<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Tape<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:format</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Descriptio</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在 RDF 中，这些”值的列表”被称为成员（members）。</p>
+<p>因此，我们可以这么说：</p>
+<ul>
+<li>一个容器是一个包含事物的资源</li>
+<li>被包含的事物被称为成员（不能称为”值的列表”）。</li>
+</ul>
+<p>我们无法关闭一个容器。容器规定了所包含的资源为成员 - 它没有规定其他的成员是不被允许的。</p>
+<h2 id="RDF-集合"><a href="#RDF-集合" class="headerlink" title="RDF 集合"></a>RDF 集合</h2><p>RDF 集合用于描述仅包含指定成员的组。</p>
+<p>集合是通过属性 rdf:parseType=”Collection” 来描述的。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:parseType</span>=<span class="string">"Collection"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/George"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/John"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Paul"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Ringo"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -1015,6 +1214,7 @@
         
           
             <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<p>—                                                                                                                                                                                                  asd                                                                                                                                                                                                                                              —</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
@@ -1108,7 +1308,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

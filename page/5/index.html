@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(六)Selector/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(二)Channel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -251,7 +251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/JavaNIO(六)Selector/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/JavaNIO(二)Channel/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -303,70 +303,19 @@
       
         
           
-            <p>选择器能减少你线程的启用 这会节省cpu的资源和时间，虽然现在操作系统的并行能力变强，多线程能充分利用它的功能</p>
+            <h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>channel你可以同时读入或写入数据 而流只能做其中一项</p>
+<p>channel可以异步读入或写入数据</p>
+<p>channel的数据总是从buffer来</p>
+<p>channel有点像stream 然后接口有三个</p>
 <ul>
-<li><p>创建selector  <code>Selector selector=Selector.open()</code></p>
-</li>
-<li><p>给selector注册channels </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">channel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">SelectionKey key = channel.register(selector, SelectionKey.OP_READ);</span><br></pre></td></tr></table></figure>
-<p>首先channel一定要变成不阻塞模式来给selector后续使用，这意味着你不能将FileChannel交给selector因为这个不能变成no-blocking模式 socketChannel可以</p>
-<p>我们看到register的参数二 代表selector要倾听的事件 </p>
-<ol>
-<li>Connect   channel成功连接到其他服务器</li>
-<li>Accept  socket channel 接受了一个到来的连接</li>
-<li>Read  channel的数据准备被读取</li>
-<li>Write  channel的数据准备去写入</li>
-</ol>
-<p>事件发生的时候是意味着ready 这些事件就用SelectionKey去表示</p>
-<ol>
-<li>SelectionKey.OP_CONNECT</li>
-<li>SelectionKey.OP_ACCEPT</li>
-<li>SelectionKey.OP_READ</li>
-<li>SelectionKey.OP_WRITE</li>
-</ol>
-<p>如果你要监听多个事件可以</p>
-<p><code>int interestSet=SelectionKey.OP_CONNECT| SelectionKey.OP_WRITE</code></p>
-</li>
+<li>FileChannel  文件IO</li>
+<li>DatagramChannel   UDPIO</li>
+<li>SocketChannel  TCPIO</li>
+<li>ServerSocketChannel　　监听连接然后产生SocketChannel</li>
 </ul>
-<p>然后我们看到register方法返回了一个 SelectionKey 这个对象的提供的信息很多</p>
-<ul>
-<li>The interest set</li>
-<li>The ready set</li>
-<li>The Channel</li>
-<li>The Selector</li>
-<li>An attached object (optional)</li>
-</ul>
-<p>注意下面的所谓的selectionKey 或者 SelectionKey 应该只是SelectionKey的一个对象</p>
-<p>InterestSet代表你之前选择的监听事件的爱好的集合，你可以通过以下方式来进行判断</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> interestSet = selectionKey.interestOps();</span><br><span class="line"><span class="comment">//通过 与运算符进行逐个判断</span></span><br><span class="line"><span class="keyword">boolean</span> isInterestedInAccept  = interestSet &amp; SelectionKey.OP_ACCEPT;</span><br><span class="line"><span class="keyword">boolean</span> isInterestedInConnect = interestSet &amp; SelectionKey.OP_CONNECT;</span><br><span class="line"><span class="keyword">boolean</span> isInterestedInRead    = interestSet &amp; SelectionKey.OP_READ;</span><br><span class="line"><span class="keyword">boolean</span> isInterestedInWrite   = interestSet &amp; SelectionKey.OP_WRITE;</span><br></pre></td></tr></table></figure>
-<p>ReadySet是用来返回你的channel准备好的事件</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> readySet = selectionKey.readyOps();</span><br><span class="line"><span class="comment">//然后剩下的操作和上面一样</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者可以通过方法直接获得</span></span><br><span class="line">selectionKey.isAcceptable();</span><br><span class="line">selectionKey.isConnectable();</span><br><span class="line">selectionKey.isReadable();</span><br><span class="line">selectionKey.isWritable();</span><br></pre></td></tr></table></figure>
-<p>Channel和Selector这两个其实并不重要，但仍可以获得</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Channel  channel  = selectionKey.channel();</span><br><span class="line">Selector selector = selectionKey.selector();</span><br></pre></td></tr></table></figure>
-<p>Attaching object 这个是和SelectionKey的关联对象  类似寄存物件那样？的东西</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">selectionKey.attach(theObject);</span><br><span class="line">Object attachObj=selectionKey.attachment();</span><br><span class="line"></span><br><span class="line"><span class="comment">//你也可以register的使用就将Obj加上去了</span></span><br><span class="line">SelectionKey key=channel.register(selector,SelectionKey.OP_READ,theObject);</span><br></pre></td></tr></table></figure>
-<p>通过Selector来进行channel的选择  终于到了重头戏了</p>
-<p>Selector方法</p>
-<p>首先介绍三个select家族的方法</p>
-<ul>
-<li>int select()  用来判断你注册在这个selector的的channel哪个有ready事件了  一直阻塞直到有</li>
-<li>int select(long timeout)   和上面一样，但其只在一定时间内阻塞</li>
-<li>int selectNow()  现在进行select 无论是否有channel ready 它都返回不阻塞</li>
-</ul>
-<p>注意这些select只计算距离上一个select中新增加的ready的channel 上一个select就有而且没被处理的ready channel不被计算内</p>
-<p>一旦你select方法知道有准备好的channel了 然后就可以调用selectedKeys() 去返回准备好的channel了</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;SelectionKey&gt;selectionkeys=selector.selectedKeys();</span><br></pre></td></tr></table></figure>
-<p>其实我们发现register方法好像也会返回这些SelectionKey对象 但它只是表示和这个selector有注册关系了，你可以获取所有的这些keys通过 selectedKeySet()方法  但可能是有些方法是不全的？个人猜测比如成功的事件的判断估计都为false</p>
-<p>我们可以通过遍历去处理所有准备好的channel</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;SelectionKey&gt;selectedKeys=selector.selectedKeys();</span><br><span class="line">Iterator&lt;SelectionKey&gt;keyIterator=selectedKeys.iterator();</span><br><span class="line"><span class="keyword">while</span>(keyIterator.hasNext())&#123;</span><br><span class="line">    SelectionKey key=keyIterator.next();</span><br><span class="line">    <span class="keyword">if</span>(key.isAcceptable())&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(key.isConnectable())&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for reading</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for writing</span></span><br><span class="line">    &#125;</span><br><span class="line">	keyIterator.remove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意最后一定要将这个实例进行删除，因为这个selector不会删除selectionKey的实例  要主动删除</p>
-<p>wakeup方法</p>
-<p>实际上这个select方法 wakeUp() 是通过线程来调用的，但是呢有时候硬是没有新的ready channel这时候就会造成阻塞，</p>
-<p>这时候能通过另外一个未被阻塞的线程调用 <code>selector.wakeup()</code>让阻塞的select（<strong>如果多个线程阻塞,事实上wakeup只能让正在阻塞的一个线程返回</strong>）放过，如果没有线程 如果wakeup的时候没有线程，它就会让下一个call select 的线程立刻唤醒（大概率是得不到想要的结果的</p>
-<p>close方法</p>
-<p>当你用完这个Selector 你就调用call方法，这会让所有的绑定在Selector上的SelectedKey无效， 但channel本身不会被删除</p>
-<p>综合例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">Selector selector = Selector.open();  <span class="comment">//创建 selector</span></span><br><span class="line"></span><br><span class="line">channel.configureBlocking(<span class="keyword">false</span>);   <span class="comment">//更改channel的模式 no-blocking</span></span><br><span class="line"></span><br><span class="line">SelectionKey key = channel.register(selector, SelectionKey.OP_READ);  <span class="comment">//channel 注册</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> readyChannels = selector.select();<span class="comment">// select方法 判断是否有ready channel</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(readyChannels == <span class="number">0</span>) <span class="keyword">continue</span>;  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  Set&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys(); <span class="comment">//取得ready channel</span></span><br><span class="line"></span><br><span class="line">  Iterator&lt;SelectionKey&gt; keyIterator = selectedKeys.iterator();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span>(keyIterator.hasNext()) &#123;  <span class="comment">//遍历</span></span><br><span class="line"></span><br><span class="line">    SelectionKey key = keyIterator.next();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(key.isAcceptable()) &#123;</span><br><span class="line">        <span class="comment">// a connection was accepted by a ServerSocketChannel.</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isConnectable()) &#123;</span><br><span class="line">        <span class="comment">// a connection was established with a remote server.</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for reading</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for writing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    keyIterator.remove();   <span class="comment">//从Set中删除这个SelectionKey实例</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主要是net 和file IO </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">basicChannelTest</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		RandomAccessFile file=<span class="keyword">new</span> RandomAccessFile(<span class="string">"data/nio-data.txt"</span>, <span class="string">"rw"</span>);</span><br><span class="line">		FileChannel inChannel=file.getChannel();</span><br><span class="line">		ByteBuffer buf=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">		<span class="keyword">int</span> bytesRead = inChannel.read(buf);</span><br><span class="line">	    <span class="keyword">while</span> (bytesRead != -<span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">	      System.out.println(<span class="string">"Read "</span> + bytesRead);</span><br><span class="line">	     <span class="comment">//important!!!</span></span><br><span class="line">	      buf.flip();</span><br><span class="line"></span><br><span class="line">	      <span class="keyword">while</span>(buf.hasRemaining())&#123;</span><br><span class="line">	          System.out.print((<span class="keyword">char</span>) buf.get());</span><br><span class="line">	      &#125;</span><br><span class="line"></span><br><span class="line">	      buf.clear();</span><br><span class="line">	      bytesRead = inChannel.read(buf);</span><br><span class="line">	    &#125;</span><br><span class="line">	    file.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先先将数据读入bytebuffer中，然后再System.out出来 记住一定要flip！！！</p>
 
           
         
@@ -415,7 +364,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/hibernate学习(四)持久化类属性的注释/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(七)SocketChannel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -434,7 +383,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/hibernate学习(四)持久化类属性的注释/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/22/JavaNIO(七)SocketChannel/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -486,59 +435,15 @@
       
         
           
-            <p>javax.persistence 和 org.hibernate.annotion的包的注释的区别</p>
-<p>@Generated一定要用hibernate包的</p>
-<p>@Column</p>
-<p>ColumnDefinition 是用来定义属性的属性</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Column</span>(name=<span class="string">"chinesename"</span>,columnDefinition=<span class="string">"varchar(128),not null,unique,updateable"</span>)</span><br><span class="line"> <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line"><span class="comment">//等效为这样</span></span><br><span class="line"> <span class="meta">@Column</span>(length=<span class="number">253</span>,name=<span class="string">"englishname"</span>,nullable=<span class="keyword">false</span>,unique=<span class="keyword">true</span>,updatable=<span class="keyword">true</span>,insertable=<span class="keyword">false</span>)</span><br><span class="line"> <span class="keyword">private</span> String name2;</span><br></pre></td></tr></table></figure>
-<p>看起来columnDefinition可以替代，其实不然，有时候需要长文本，而String只会定义为varchar这时候需要你</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxx"</span>,columnDefinition=<span class="string">"text"</span>)</span><br></pre></td></tr></table></figure>
-<p>scale precision 使用于 decimal类型 对应java的 BigDecimal 大数型</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxx"</span>,precision=<span class="number">5</span>,scale=<span class="number">2</span>)</span><br><span class="line"><span class="keyword">private</span> BigDecimal salary1;</span><br><span class="line"><span class="comment">//相当于</span></span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xx"</span>,columnDefinition=<span class="string">"decimal(5,2)"</span>)</span><br><span class="line"><span class="keyword">private</span> BigDecimal salary2;</span><br></pre></td></tr></table></figure>
-<p>precision 代表有效数字 scale代表支持的小数的位数</p>
-<p>1.double类型将在数据库中映射为double类型，precision和scale属性无效<br>2.double类型若在columnDefinition属性中指定数字类型为decimal并指定精度，则最终以columnDefinition为准</p>
-<p>还有insertable length(大概和varchar有关) nullable unique updateable</p>
-<p>insertable真的要留意 false就对插入免疫了变成null</p>
-<p>table指定该列所属表名 当需要多个表来保存一个实体时要用到</p>
-<p>@Access 和对整个实体使用的方法一样，注解属性是单独改变该属性的访问策略</p>
-<p> hibernate 的@Column注解在的字段上不生效</p>
-<p>@Column的作用范围是根据@Id的作用范围来的，即如果@Id标签放在字段上的，那么@Column就只能作用在字段上，如果@Id放在getter方法上的，那么@Column也得放到getter上。</p>
-<p>org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions Table ‘hibernatetest.cars_inf’ doesn’t exist</p>
-<p>两种情况 一种是你没生成数据库 比如说没在cfg文件上调什么update然后数据库本身也没生成这样的表</p>
-<p>或者你create 了 table但你create失败，就是你语法错误或者方言版本太低的问题</p>
-<p>有时候表已经生成你再修改映射类没用，除非你配置文件是create 这时候要手动删除数据表</p>
-<p>@Formula(value=”(sql语句)”) 就是顾名思义就是通过数据库生成数据，动态计算属性值，所以不会保存在数据库中，数据库也不会出现相应列</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Formula</span>(value=<span class="string">"(select car.amount*car.price from cars_inf car where car.id=id)"</span>)</span><br><span class="line"><span class="keyword">private</span> Integer totalPrice;</span><br></pre></td></tr></table></figure>
-<p>这个就是将表中的两列相乘</p>
-<p>注意 Formula的表达式中 可以直接使用参数 where car.id=id  id就是参数，会将持久化对象的id属性当参数传入</p>
-<p>蛋疼的一点是这个值不是立刻能取得的，你插入对象的时候你是得不到这个计算值的，即使你commit事务以后调用get方法也得不到，必须是要重新get/load才能调用get去计算获得值</p>
-<p>介绍@Generated之前  @Generated 和@Formual有异曲同工之妙，但它是控制数据库生成，也就是控制数据库的触发器</p>
-<p>首先要现在数据库准备好触发器 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">delimiter |</span><br><span class="line">create trigger full_content2 before update on cars_inf</span><br><span class="line">for each row </span><br><span class="line">begin</span><br><span class="line">	set new.fullname = concat(new.chinesename,new.englishname);</span><br><span class="line">end;</span><br><span class="line">|</span><br><span class="line">delimiter ;</span><br></pre></td></tr></table></figure>
-<p>这个触发器学了就忘很烦，简单解释一下  首先一个表上最多建立6个触发器 insert/update/delete * after/before</p>
+            <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">SocketChannel socketChannel=SocketChannel.open();</span><br><span class="line">socketChannel.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"http://xxxx.com"</span>),<span class="number">80</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭SocketChannel </span></span><br><span class="line">socketChannel.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">//从Socketchannel获取数据</span></span><br><span class="line">ByteBuffer buf=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line"><span class="keyword">int</span> bytesRead=socketChannel.read(buf);   <span class="comment">//返回你读取的数目</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//写入</span></span><br><span class="line">String newData=<span class="string">"kinkin牛逼"</span>;</span><br><span class="line">ByteBuffer buffer=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">buffer.clear();</span><br><span class="line">buffer.put(newData.getBytes());</span><br><span class="line">buffer.flip();</span><br><span class="line"><span class="keyword">while</span>(buffer.hasRemaining())&#123;</span><br><span class="line">    channel.write(buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>SocketChannel的 no-blocking</p>
+<p>你可以使用connect这个方法可能会返回一个连接，可以通过finishConnect进行判断    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">socketChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">socketChannel.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"http://jenkov.com"</span>, <span class="number">80</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(! socketChannel.finishConnect() )&#123;</span><br><span class="line">    <span class="comment">//wait, or do something else...    </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>non-blocking下的SocketChannel </p>
+<p>write 和read可能会在没有写入或读取字节的情况下就返回，这个时候</p>
 <ul>
-<li>Insert型触发器：可能通过insert语句，load data语句，replace语句触发；</li>
-<li>Update型触发器：可能通过update语句触发；</li>
-<li>Delete型触发器：可能通过delete语句，replace语句触发</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create trigger triggerName </span><br><span class="line">after/before insert/update/delete on 表名 </span><br><span class="line">for each row #这句话在mysql是固定的 </span><br><span class="line">begin </span><br><span class="line"> sql语句; </span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
-<p>MySQL 中定义了 NEW 和 OLD，用来表示触发器的所在表中，触发了触发器的那一行数据。</p>
-<p>在 INSERT 型触发器中，NEW 用来表示将要（BEFORE）或已经（AFTER）插入的新数据；<br>在 UPDATE 型触发器中，OLD 用来表示将要或已经被修改的原数据，NEW 用来表示将要或已经修改为的新数据；<br>在 DELETE 型触发器中，OLD 用来表示将要或已经被删除的原数据；<br>使用方法： NEW.columnName （columnName 为相应数据表某一列名） </p>
-<p>另外，<strong>OLD 是只读的，而 NEW 则可以在触发器中使用 SET 赋值，这样不会再次触发触发器，造成循环调用。</strong></p>
-<p>然后指定为 @Generated(value=GenerationTime.xxx)</p>
-<p>有三种 ALWAYS/NEVER/INSERT </p>
-<ul>
-<li>NEVER就相当于没设置这个东西</li>
-<li>执行一条insert时（INSERT/ALWAYS）或 update(ALWAYS) 执行 hibernate会立刻执行一条select语句去获得该数据列的值，并将该值赋给该持久化的对象</li>
-</ul>
-<p>实际上，我觉得正常来说是需要insert和update两个触发器得</p>
-<p>有个感觉没什么用的东东</p>
-<p>@Transient 代表临时属性</p>
-<p>枚举注释</p>
-<p>@Enumerated 用来修饰枚举enum  value</p>
-<ul>
-<li>EnumType.STRING 表示数据库中存储的是字符串</li>
-<li>EnumType.ORDINAL 表示数据库中存储的是枚举的序号</li>
+<li>write方法需要一个loop </li>
+<li>read方法需要注意它返回的int值来判断读取是否完成</li>
 </ul>
 
           
@@ -860,6 +765,179 @@
 <p>Selectbeforeupdate有异曲同工之妙，它是用于脱管对象的重新更新，所以它会先生成select语句，然后将只会update修改过的字段</p>
 <p>若没有这两个注释 update就会全部字段都会update</p>
 <p>OptimisticLocking 情况一样不乐观 改变不了</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/hibernate学习(四)持久化类属性的注释/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/hibernate学习(四)持久化类属性的注释/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>javax.persistence 和 org.hibernate.annotion的包的注释的区别</p>
+<p>@Generated一定要用hibernate包的</p>
+<p>@Column</p>
+<p>ColumnDefinition 是用来定义属性的属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Column</span>(name=<span class="string">"chinesename"</span>,columnDefinition=<span class="string">"varchar(128),not null,unique,updateable"</span>)</span><br><span class="line"> <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line"><span class="comment">//等效为这样</span></span><br><span class="line"> <span class="meta">@Column</span>(length=<span class="number">253</span>,name=<span class="string">"englishname"</span>,nullable=<span class="keyword">false</span>,unique=<span class="keyword">true</span>,updatable=<span class="keyword">true</span>,insertable=<span class="keyword">false</span>)</span><br><span class="line"> <span class="keyword">private</span> String name2;</span><br></pre></td></tr></table></figure>
+<p>看起来columnDefinition可以替代，其实不然，有时候需要长文本，而String只会定义为varchar这时候需要你</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxx"</span>,columnDefinition=<span class="string">"text"</span>)</span><br></pre></td></tr></table></figure>
+<p>scale precision 使用于 decimal类型 对应java的 BigDecimal 大数型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxx"</span>,precision=<span class="number">5</span>,scale=<span class="number">2</span>)</span><br><span class="line"><span class="keyword">private</span> BigDecimal salary1;</span><br><span class="line"><span class="comment">//相当于</span></span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xx"</span>,columnDefinition=<span class="string">"decimal(5,2)"</span>)</span><br><span class="line"><span class="keyword">private</span> BigDecimal salary2;</span><br></pre></td></tr></table></figure>
+<p>precision 代表有效数字 scale代表支持的小数的位数</p>
+<p>1.double类型将在数据库中映射为double类型，precision和scale属性无效<br>2.double类型若在columnDefinition属性中指定数字类型为decimal并指定精度，则最终以columnDefinition为准</p>
+<p>还有insertable length(大概和varchar有关) nullable unique updateable</p>
+<p>insertable真的要留意 false就对插入免疫了变成null</p>
+<p>table指定该列所属表名 当需要多个表来保存一个实体时要用到</p>
+<p>@Access 和对整个实体使用的方法一样，注解属性是单独改变该属性的访问策略</p>
+<p> hibernate 的@Column注解在的字段上不生效</p>
+<p>@Column的作用范围是根据@Id的作用范围来的，即如果@Id标签放在字段上的，那么@Column就只能作用在字段上，如果@Id放在getter方法上的，那么@Column也得放到getter上。</p>
+<p>org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions Table ‘hibernatetest.cars_inf’ doesn’t exist</p>
+<p>两种情况 一种是你没生成数据库 比如说没在cfg文件上调什么update然后数据库本身也没生成这样的表</p>
+<p>或者你create 了 table但你create失败，就是你语法错误或者方言版本太低的问题</p>
+<p>有时候表已经生成你再修改映射类没用，除非你配置文件是create 这时候要手动删除数据表</p>
+<p>@Formula(value=”(sql语句)”) 就是顾名思义就是通过数据库生成数据，动态计算属性值，所以不会保存在数据库中，数据库也不会出现相应列</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Formula</span>(value=<span class="string">"(select car.amount*car.price from cars_inf car where car.id=id)"</span>)</span><br><span class="line"><span class="keyword">private</span> Integer totalPrice;</span><br></pre></td></tr></table></figure>
+<p>这个就是将表中的两列相乘</p>
+<p>注意 Formula的表达式中 可以直接使用参数 where car.id=id  id就是参数，会将持久化对象的id属性当参数传入</p>
+<p>蛋疼的一点是这个值不是立刻能取得的，你插入对象的时候你是得不到这个计算值的，即使你commit事务以后调用get方法也得不到，必须是要重新get/load才能调用get去计算获得值</p>
+<p>介绍@Generated之前  @Generated 和@Formual有异曲同工之妙，但它是控制数据库生成，也就是控制数据库的触发器</p>
+<p>首先要现在数据库准备好触发器 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">delimiter |</span><br><span class="line">create trigger full_content2 before update on cars_inf</span><br><span class="line">for each row </span><br><span class="line">begin</span><br><span class="line">	set new.fullname = concat(new.chinesename,new.englishname);</span><br><span class="line">end;</span><br><span class="line">|</span><br><span class="line">delimiter ;</span><br></pre></td></tr></table></figure>
+<p>这个触发器学了就忘很烦，简单解释一下  首先一个表上最多建立6个触发器 insert/update/delete * after/before</p>
+<ul>
+<li>Insert型触发器：可能通过insert语句，load data语句，replace语句触发；</li>
+<li>Update型触发器：可能通过update语句触发；</li>
+<li>Delete型触发器：可能通过delete语句，replace语句触发</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create trigger triggerName </span><br><span class="line">after/before insert/update/delete on 表名 </span><br><span class="line">for each row #这句话在mysql是固定的 </span><br><span class="line">begin </span><br><span class="line"> sql语句; </span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
+<p>MySQL 中定义了 NEW 和 OLD，用来表示触发器的所在表中，触发了触发器的那一行数据。</p>
+<p>在 INSERT 型触发器中，NEW 用来表示将要（BEFORE）或已经（AFTER）插入的新数据；<br>在 UPDATE 型触发器中，OLD 用来表示将要或已经被修改的原数据，NEW 用来表示将要或已经修改为的新数据；<br>在 DELETE 型触发器中，OLD 用来表示将要或已经被删除的原数据；<br>使用方法： NEW.columnName （columnName 为相应数据表某一列名） </p>
+<p>另外，<strong>OLD 是只读的，而 NEW 则可以在触发器中使用 SET 赋值，这样不会再次触发触发器，造成循环调用。</strong></p>
+<p>然后指定为 @Generated(value=GenerationTime.xxx)</p>
+<p>有三种 ALWAYS/NEVER/INSERT </p>
+<ul>
+<li>NEVER就相当于没设置这个东西</li>
+<li>执行一条insert时（INSERT/ALWAYS）或 update(ALWAYS) 执行 hibernate会立刻执行一条select语句去获得该数据列的值，并将该值赋给该持久化的对象</li>
+</ul>
+<p>实际上，我觉得正常来说是需要insert和update两个触发器得</p>
+<p>有个感觉没什么用的东东</p>
+<p>@Transient 代表临时属性</p>
+<p>枚举注释</p>
+<p>@Enumerated 用来修饰枚举enum  value</p>
+<ul>
+<li>EnumType.STRING 表示数据库中存储的是字符串</li>
+<li>EnumType.ORDINAL 表示数据库中存储的是枚举的序号</li>
+</ul>
 
           
         
@@ -1622,6 +1700,152 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Web Service简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/Web Service简介/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Web Service</p>
+<p>作用可以将一个应用程序变成Web应用</p>
+<p>Web services 通过Web 进行发布、查找和使用</p>
+<ul>
+<li>是应用程序组件</li>
+<li>使用开放协议进行通信</li>
+<li>独立且可自我描述 自我发现</li>
+<li>可被其他应用程序使用</li>
+</ul>
+<p>基础的 Web Services 平台是 XML + HTTP。</p>
+<p>Web  service 的元素</p>
+<ul>
+<li>SOAP (简易对象访问协议)</li>
+<li>UDDI (通用描述、发现及整合)   目录服务，通过它，企业可注册并搜索 Web services</li>
+<li>WSDL (Web services 描述语言)  用于描述 Web Services 以及如何访问 Web Services 的语言。</li>
+</ul>
+<p>Web 应用程序是运行在 Web 上的简易应用程序。它们围绕 Web 浏览器标准被进行构建，几乎可被任何平台之上的任何浏览器来使用。通过使用 Web services，您的应用程序可向全世界发布功能或消息</p>
+<p>Web Service 的应用</p>
+<p>可重用组件  连接组件</p>
+<p>任何应用程序都可拥有 Web Service 组件。</p>
+<p>Web Service 的创建与编程语言的种类无关。</p>
+<p>本章节我们将为大家介绍使用 PHP 的 SOAP 扩展来创建 Web Service。</p>
+<p>SOAP有两种操作方式，NO-WSDL 与 WSDL。</p>
+<ul>
+<li><strong>NO-WSDL模式：</strong>使用参数来传递要使用的信息。</li>
+<li><strong>WSDL模式：</strong> 使用WSDL文件名作为参数，并从WSDL中提取服务所需的信息。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/WSDL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1793,351 +2017,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/SOAP教程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/SOAP教程/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议</p>
-<p>通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。</p>
-<p>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。</p>
-<p>一条SOAP信息就是一个普通的xml文档 含下面的元素</p>
-<ul>
-<li>必需的 Envelope元素     将xml文档标识为一条SOAP信息</li>
-<li>可选的Header元素，包含头部信息</li>
-<li>必需的Body元素，包含所有的调用和响应信息</li>
-<li>可选的Fault元素，提供处理此消息所发生的错误信息</li>
-</ul>
-<p>所有以上的元素均被声明于针对 SOAP 封装的默认命名空间中：</p>
-<p><a href="http://www.w3.org/2001/12/soap-envelope" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope</a></p>
-<p>以及针对 SOAP 编码和数据类型的默认命名空间：</p>
-<p><a href="http://www.w3.org/2001/12/soap-encoding" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding</a></p>
-<p>SOAP文档的要求</p>
-<ol>
-<li>SOAP必须用xml来进行编码</li>
-<li>必须使用SOAP Envelope命名空间和SOAP Encoding命名空间</li>
-<li>不能包含DTD引用</li>
-<li>不能包含XML处理指令</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Header</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Header</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">...</span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Envelope元素"><a href="#Envelope元素" class="headerlink" title="Envelope元素"></a>Envelope元素</h3><p>是SOAP的根元素，将其定义成soap信息</p>
-<p>属性</p>
-<ul>
-<li>xmlns:soap  命名空间 <ul>
-<li>SOAP 消息必须拥有与命名空间 “<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a> 相关联的一个 Envelope 元素</li>
-</ul>
-</li>
-<li>xmlns:encodingStyle <ul>
-<li>此属性可出现在任何 SOAP 元素中，并会被应用到元素的内容及元素的所有子元素上。</li>
-<li>SOAP 没有默认编码方式 <a href="http://www.w3.org/2001/12/soap-encoding使用这个就好" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding使用这个就好</a></li>
-</ul>
-</li>
-</ul>
-<p>之后我们就能用 soap 和 encodingStyle 属性</p>
-<h3 id="Header元素"><a href="#Header元素" class="headerlink" title="Header元素"></a>Header元素</h3><p>包含头部信息，一些SOAP/应用程序专用信息    比如认证 支付等</p>
-<p>如果使用header 它一定是第一个子元素</p>
-<p>所有 Header 元素的直接子元素必须是合格的命名空间</p>
-<p>soap在默认的命名空间中 (“<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a>) 定义了三个属性(有一个encodingStyle这里不废话 )这些被定义在 SOAP 头部的属性可定义容器如何对 SOAP 消息进行处理</p>
-<p>mustUnderstand 属性可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的</p>
-<p><code>soap:mustUnderstand=&quot;0|1&quot;</code></p>
-<p>SOAP信息可以沿着信息路径转发，actor用于寻址到下一个特点端点</p>
-<p><code>soap:actor=&quot;URI&quot;</code></p>
-<h3 id="Body元素"><a href="#Body元素" class="headerlink" title="Body元素"></a>Body元素</h3><p>soap的body元素的子元素可以引入合格的命名空间</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 比如下面使用m的getPrice属性，它首先要引入 命名空间m  xmlns:m="xxx" --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Getprice</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.xxxx.com/prices"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">m:item</span>&gt;</span>Apples<span class="tag">&lt;/<span class="name">m:item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">m:Getprice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Fault元素"><a href="#Fault元素" class="headerlink" title="Fault元素"></a>Fault元素</h3><p>Fault一定是Body的子元素，在一条soap内，fault只能出现一次，它用于指示body的错误</p>
-<p>fault拥有子元素</p>
-<ul>
-<li><code>&lt;faultcode&gt;</code>用来识别错误的代码</li>
-<li><code>&lt;faultstring&gt;</code>错误说明</li>
-<li><code>&lt;faultactor&gt;</code> 谁引发的错误</li>
-<li><code>&lt;detail&gt;</code> 涉及body元素的应用程序专用错误信息</li>
-</ul>
-<p>faultcode 有几个错误代码</p>
-<ol>
-<li>versionMismatch envelop元素的无效的命名空间</li>
-<li>MustUnderstand 这是之前header元素中设置了 mustunderstand 的时候出现的错误可能会出现  无法理解</li>
-<li>Client 消息被不正确地构成，或包含不正确的信息</li>
-<li>Server 服务有问题，因此无法处理进行</li>
-</ol>
-<h3 id="HTTP-XML-SOAP"><a href="#HTTP-XML-SOAP" class="headerlink" title="HTTP + XML = SOAP"></a>HTTP + XML = SOAP</h3><p>好像传输soap 需要在contentType上说明</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: application/soap+xml; charset=utf-8</span><br></pre></td></tr></table></figure>
-<h2 id="一个-SOAP-实例"><a href="#一个-SOAP-实例" class="headerlink" title="一个 SOAP 实例"></a>一个 SOAP 实例</h2><p>在下面的例子中，一个 GetStockPrice 请求被发送到了服务器。此请求有一个 StockName 参数，而在响应中则会返回一个 Price 参数。此功能的命名空间被定义在此地址中： “<a href="http://www.example.org/stock&quot;" target="_blank" rel="noopener">http://www.example.org/stock&quot;</a></p>
-<h3 id="SOAP-请求："><a href="#SOAP-请求：" class="headerlink" title="SOAP 请求："></a>SOAP 请求：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /InStock HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:StockName</span>&gt;</span>IBM<span class="tag">&lt;/<span class="name">m:StockName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="SOAP-响应："><a href="#SOAP-响应：" class="headerlink" title="SOAP 响应："></a>SOAP 响应：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Price</span>&gt;</span>34.5<span class="tag">&lt;/<span class="name">m:Price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/RDF教程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/RDF教程/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>RDF 资源描述框架 是描述网络资源的W3C标准 </p>
-<p>比如对网页的标题、作者、修改日期、内容以及版权信息</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:si</span>=<span class="string">"http://www.runoob.com/rdf/"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://www.runoob.com"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:title</span>&gt;</span>RUNOOB<span class="tag">&lt;/<span class="name">si:title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">si:author</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>用xml编写</p>
-<p>RDF是W3C的语义网活动的组成部分，</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">RDF</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Description</span> <span class="attr">about</span>=<span class="string">"http://www.runoob.com/rdf"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">homepage</span>&gt;</span>http://www.runoob.com<span class="tag">&lt;/<span class="name">homepage</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>RDF 描述的东西叫资源 资源是拥有 URI 的任何事物   比如 地址是”<a href="http://www.runoob.com/rdf&quot;的一个java文件" target="_blank" rel="noopener">http://www.runoob.com/rdf&quot;的一个java文件</a></p>
-<p>然后标记的属性 就用键值对咯，标签名作为键   标签体作为值</p>
-<p>RDF的描述，可以变成一个个描述句</p>
-<p>陈述：”The homepage of <a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a> is <a href="http://www.runoob.com&quot;" target="_blank" rel="noopener">http://www.runoob.com&quot;</a>.</p>
-<ul>
-<li>陈述的主体是：<a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a></li>
-<li>谓语是：homepage</li>
-<li>客体是：<a href="http://www.runoob.com" target="_blank" rel="noopener">http://www.runoob.com</a></li>
-</ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:cd</span>=<span class="string">"http://www.recshop.fake/cd#"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Hide your heart"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bonnie Tyler<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>UK<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>CBS Records<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>9.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1988<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里使用命名空间，命名空间的定义在开头根元素的 xmlns:rdf=”xxxx”等  开始定义</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span>&gt;</span></span><br><span class="line">  ...Description goes here...</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这个网址是不是潜规则一定要引入的呢？我觉得应该是的。官方默认的标准把？</p>
-<p><code>&lt;rdf:Description&gt;</code> 元素可包含描述资源的那些元素：</p>
-<p>但其实里面的描述，就需要这个资源专门的描述 需要专门的命名空间了</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者下面用属性的方式定义--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:artist</span>=<span class="string">"Bob Dylan"</span> <span class="attr">cd:country</span>=<span class="string">"USA"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:company</span>=<span class="string">"Columbia"</span> <span class="attr">cd:price</span>=<span class="string">"10.90"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:year</span>=<span class="string">"1985"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者引入资源   下面的例子中，属性 artist 没有值，但是却引用了一个对包含有关艺术家的信息的资源。--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:resource</span>=<span class="string">"http://www.recshop.fake/cd/dylan"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="RDF容器元素"><a href="#RDF容器元素" class="headerlink" title="RDF容器元素"></a>RDF容器元素</h3><p>容器用来描述一组相同事物 比如某本书的多位作者放在一起</p>
-<h2 id="rdf-Bag-rdf-seq-rdf-alt元素"><a href="#rdf-Bag-rdf-seq-rdf-alt元素" class="headerlink" title="rdf:Bag rdf:seq rdf:alt元素"></a>rdf:Bag rdf:seq rdf:alt元素</h2><p><code>&lt;rdf:Bag&gt;</code>元素用于描述一个规定为无序的值的列表。</p>
-<p><code>&lt;rdf:Bag&gt;</code>元素可包含重复的值。</p>
-<p><code>&lt;rdf:li&gt;</code>作为其子元素</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>John<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Paul<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>George<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Ringo<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><code>&lt;rdf:Seq&gt;</code> 元素用于描述一个规定为有序的值的列表（比如一个字母顺序的排序）</p>
-<p>子元素还是 <code>&lt;rdf:li&gt;</code></p>
-<p><code>&lt;rdf:Alt&gt;</code> 元素用于一个可替换的值的列表（用户仅可选择这些值的其中之一）。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Descriptio</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:format</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>CD<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Record<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Tape<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:format</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Descriptio</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在 RDF 中，这些”值的列表”被称为成员（members）。</p>
-<p>因此，我们可以这么说：</p>
-<ul>
-<li>一个容器是一个包含事物的资源</li>
-<li>被包含的事物被称为成员（不能称为”值的列表”）。</li>
-</ul>
-<p>我们无法关闭一个容器。容器规定了所包含的资源为成员 - 它没有规定其他的成员是不被允许的。</p>
-<h2 id="RDF-集合"><a href="#RDF-集合" class="headerlink" title="RDF 集合"></a>RDF 集合</h2><p>RDF 集合用于描述仅包含指定成员的组。</p>
-<p>集合是通过属性 rdf:parseType=”Collection” 来描述的。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:parseType</span>=<span class="string">"Collection"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/George"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/John"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Paul"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Ringo"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2188,7 +2067,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

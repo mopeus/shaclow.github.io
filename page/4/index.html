@@ -232,275 +232,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java网络编程(八)客户端Socket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/Java网络编程(八)客户端Socket/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>telnet去研究协议</p>
-<p><code>telnet localhost 25</code></p>
-<p>Socket是在网络上进行网络通信，指定端口和服务器</p>
-<p><code>Socket socket=new Socket(&quot;time.nist.gov&quot;,13);</code></p>
-<p><code>socket.setSoTimeout(15000)</code>毫秒为单位， 建议使用，因为i一个有问题的服务器和你链接，然后停止对华，没有主动关闭连接，设置超时让你能在服务器挂起，超时然后返回一个SocketTimeoutException</p>
-<p>socket和urlconnection差不多，可以获得<code>getInputStream()</code>获取输入流</p>
-<p>不是所有的协议都用ASCII编码去做，甚至不一定用文本来进行数据传输。比如有时候是一个32位无符号二进制数（big-endian）有时候没有合适的api处理你就得咬牙自己编码解决处理</p>
-<p>客户端的服务器写入  socket的请求和写入其实差不多，没有什么限制</p>
-<ul>
-<li><code>socket.getOutputStream</code></li>
-<li><code>new OutputStreamWriter(outputStream,&quot;UTF-8&quot;)</code></li>
-<li><code>writer.write(&quot;xxx&quot;)</code></li>
-<li><code>writer.flush()</code></li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Socket socket=<span class="keyword">new</span> Socket(<span class="string">"xx.org"</span>,<span class="number">2333</span>);</span><br><span class="line">socket.setSoTimeout(<span class="number">15000</span>);</span><br><span class="line"></span><br><span class="line">OutputStream out=socket.getOutputStream();</span><br><span class="line">Writer writer=<span class="keyword">new</span> OutputStreamWriter(out,<span class="string">"UTF-8"</span>);</span><br><span class="line">writer=<span class="keyword">new</span> BufferedWriter(writer);</span><br><span class="line"></span><br><span class="line">InputStream in=socket.getInputStream();</span><br><span class="line">BufferedReader reader=<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(in,<span class="string">"UTF-8"</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line">writer.write(<span class="string">"xxx"</span>);</span><br><span class="line">writer.flush();</span><br><span class="line"></span><br><span class="line"><span class="comment">//按一个个字去读取</span></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> c=reader.read();c!=-<span class="number">1</span>;c=reader.read())&#123; System.out.println((<span class="keyword">char</span>) c);&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//按一行行去读取</span></span><br><span class="line"><span class="keyword">for</span>(String line=reader.readLine();line!=<span class="keyword">null</span>;line=reader.readLine())&#123;</span><br><span class="line">    <span class="keyword">if</span>(line.startsWith(<span class="string">"xxx"</span>))</span><br><span class="line">        System.out.println(<span class="string">"xxxx"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>输出流的三层包装  先分别从socket 获得输出流 将其保证成一个OuputStreamWriter再包装成成一个BufferedWriter<ul>
-<li>OutputStream out=socket.getOutputStream()</li>
-<li>Writer writer =new OutputStreamWriter(out,”UTF-8”);  注意这里要注意编码</li>
-<li>writer=new BufferedWriter(writer)</li>
-</ul>
-</li>
-<li>输入流也是三层包装，不过它更加简洁，我感觉更好<ul>
-<li>InputStream in=socket.getInputStream()</li>
-<li>BufferedReader reader=new BufferedReader(new InputStreamReader(in,”UTF-8”))</li>
-</ul>
-</li>
-</ul>
-<p>半关闭Socket</p>
-<p>其实就是是关闭一个输入或输出流</p>
-<p><code>shutdownInput()</code> 和 <code>shutdownOutput()</code> 用来关闭输入或输出流</p>
-<p><code>isInputShutdown()</code> 和 <code>isOutputShutdown()</code> 用来判断</p>
-<p>记住关闭后再开启输入或输出流 是直接报错 IOException 不要相信 什么InputStream是返回-1</p>
-<p>构造和连接Socket</p>
-<p><code>Socket(Proxy proxy)</code>  <code>Socket(ScoketImpl impl)</code> 代理或者加密机制</p>
-<p>除了最基本的还有<code>Socket(host,port,InetAddress,localport)</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    InetAddress inward=InetAddress.getByName(<span class="string">"router"</span>);</span><br><span class="line">    Socket socket=<span class="keyword">new</span> Socket(<span class="string">"mail"</span>,<span class="number">25</span>,inward,<span class="number">0</span>);</span><br><span class="line">    <span class="comment">//使用socket</span></span><br><span class="line">&#125;<span class="keyword">catch</span>(IOException e)&#123;</span><br><span class="line">    System.err.println(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过本地端口号传入0，表示不关心什么端口，只希望和本地主机名为 router的绑定网络接口</p>
-<p>如果Socket无法识别服务名，则返回一个UnknownHostException异常 如果是本地接口或者服务器端口或者别的出了问题好像都是IOException异常</p>
-<p>然后这个host可以是localhost挺有意思的，可以查看本机上的端口的服务器</p>
-<p>构造不连接</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Socket socket=<span class="keyword">new</span> Socket();</span><br><span class="line">SocketAddress address=<span class="keyword">new</span> InetSocketAddress(host,port);</span><br><span class="line"></span><br><span class="line"><span class="comment">//....</span></span><br><span class="line">socket.connect(address,<span class="number">15000</span>);  <span class="comment">//参数二代表代表超时的加载等待的秒数</span></span><br></pre></td></tr></table></figure>
-<p>Socket地址</p>
-<p>我们可以看到一个很有趣的东西 SocketAddress 这是个只有默认构造的抽象类，说是可以支持非TCP 其实当前只支持TCP/IP的 Socket 实现类都是InetSocketAddress</p>
-<p>SocketAddress主要用途是为暂时的socket连接信息，如IP和端口提供方便的存储，即使最初的socket已经断开并被垃圾回收这些信息可以立即构造一个新的socket</p>
-<p>socket中提供方法去获得连接系统的地址</p>
-<p><code>SocketAddress getRemoteSocketAddress()</code> 和 <code>SocketAddress getLocalSocketAddress()</code> 若socket未连接，则返回null</p>
-<p>上面两个分别代表远程地址 和本地地址  类似有 <code>getPort()</code> <code>getLocalPort()</code> 即使socket关闭也能获取</p>
-<p>一般来说本地的端口不用固定的，实际上默认也是随机的，只要不被占用的端口就行</p>
-<p>InetSocketAddress 构造函数</p>
-<ul>
-<li>InetSocketAddress(InetAddress add,int port)</li>
-<li>InetSocketAddress(String host, int port)</li>
-<li>InetSocketAddress(int port)</li>
-</ul>
-<p>一般第三个好像服务器才能这样用？客户端用前两个？</p>
-<p>还能用静态工厂方法 InetSocketAddress.createUnresolved(host,port) 从而不再在DNS查找主机</p>
-<p><code>static InetSocketAddress createUnresolved(String host,int port)</code></p>
-<p>InetSocketAddress 提供一些信息方法</p>
-<ul>
-<li>InetAddress getAddress()</li>
-<li>int getPort()</li>
-<li>String getHostName()</li>
-</ul>
-<p>代理服务器</p>
-<p>Socket使用的代理服务器由socksProxyHost socksProxyPort系统属性控制，这些属性应用于系统中所有的socket 但是这个构造函数构建的socket会使用指定的代理服务器    可以传入 Proxy.NO_PROXY 完全绕过所有代理服务器，而直接连接远程主机，如果对方禁止直接连接，则会连接失败</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SocketAddress proxyAddress=<span class="keyword">new</span> InetSocketAddress(<span class="string">"xxx.com"</span>,<span class="number">1080</span>);</span><br><span class="line">Proxy proxy=<span class="keyword">new</span> Proxy(Proxy.Type.SOCKS,proxyAddress);</span><br><span class="line">Socket socket=<span class="keyword">new</span> Socket(proxy);</span><br><span class="line">SocketAddress remote=<span class="keyword">new</span> InetSocketAddress(<span class="string">"xx"</span>,<span class="number">11</span>);</span><br><span class="line">socket.connect(remote);</span><br></pre></td></tr></table></figure>
-<p>分三个步骤</p>
-<ul>
-<li>构建SocketAddress 代表proxy的地址  然后构建Proxy  注意第一个是Proxy.Type.SOCKS</li>
-<li>然后构建Socket(proxy) </li>
-<li>构建SocketAddress 代表将要连接的远程地址 remote</li>
-<li>再 socket.connect(remote)</li>
-</ul>
-<p>Proxy.Type.SOCKS 是java理解的唯一的一个底层代理类型，还有一个高层Proxy.Type.HTTP 用于应用层 还代表无代理的Proxy.Type.DIRECT</p>
-<p>指示关闭</p>
-<p><code>isClosed()</code> 判断socket是否关闭 如果关闭返回true  如果一个socket未开始过连接 会返回false 这是个不太好的判断了</p>
-<p><code>isConnected()</code>不是判断是否连在一个远程主机，而是判断是否重未连接过服务器  如果是连接过关闭了也算true</p>
-<p>所以判断一个连接是否当前正在打开</p>
-<p>boolean connected=socket.isConnected()&amp;&amp; !socket.isClosed()</p>
-<p><code>isBound()</code>告诉你socket是否成功绑定在本地系统的出站端口</p>
-<p>toString() 就是返回之前所讲的host port等信息</p>
-<p>设置Socket选项</p>
-<p>客户端socket还有多个选项</p>
-<p>TCP_NODELAY 默认为false   控制是否缓冲，有缓冲就会检测包是否送达，没缓冲就一有包准备好就发</p>
-<p><code>setTcpNoDelay(boolean)</code> 和 <code>boolean getTcpNoDelay()</code> </p>
-<p>如果socket没有这种支持，就会给出 socketException</p>
-<p>SO_LINGER</p>
-<p>设置close socket前的延迟时间，在准备关闭socket的延迟时间内，socket会会尽量处理数据包，并且阻塞close，一旦时间到了，如果有剩下的数据都会丢弃</p>
-<p><code>setSoLinger(boolean on,int seconds)</code></p>
-<p><code>int getSoLinger()</code>  好像不一定是返回秒数，，但是如果没开启这个功能会返回-1的</p>
-<p>SO_TIMEOUT</p>
-<p><code>void setSoTimeout(int milliseconds)</code>  ` 设置超时时间  毫秒   </p>
-<p>`int getSoTimeout()  0代表无限时间，默认</p>
-<p>不支持抛出socketException</p>
-<p>SO_RCVBUF 和SO_SNDBUF设置缓冲区大小</p>
-<p><code>setReceiveBufferSize(int size)</code> 和<code>int getReceiveBufferSize()</code></p>
-<p><code>setSendBufferSize(int size)</code>和 <code>int getSendBufferSize()</code></p>
-<p>看似是能分别设置输入和输出的缓冲区，实际上输入和输出区的缓冲区会统一取两者中较小的一个，而且set这个方法只是提供建议，实际底层实现可以完全忽略或调整，而且系统本身就有限制缓冲区的最大空间</p>
-<p>SO_KEEPALIVE</p>
-<p>保持服务器的活动的检测，偶尔发一个空闲的数据包（两个小时一次） 如果一段时间未收到响应则关闭客户端</p>
-<p>如果没有keepalive 则可能会出现不活动服务器崩溃的客户端。默认不开启</p>
-<p><code>setKeepAlive(boolean)</code>  和 <code>getKeepAlive()</code></p>
-<p>OOBINLINE </p>
-<p>TCP可以发送一个紧急数据，这个数据会被优先发送，而接收方收到紧急数据时也能知道，优先处理这个数据</p>
-<p>java支持发送和接受这种数据</p>
-<p><code>sendUrgentData(int data)</code> 几乎会立即发送参数中的最低位字节？？啥？ </p>
-<p>接受端的接受方式虽平台和api有区别，有分别接受紧急和正常数据，也有将紧急数据适当顺序放入数据队列，并给出通知，让程序在队列中查找紧急数据</p>
-<p>java 默认会忽略socket接受的紧急数据，如果希望设置</p>
-<p><code>setOOBInline(boolean)</code> 和 <code>boolean getOOBINline()</code></p>
-<p>打开后java也只是将紧急数据和正常数据一样对待，不会优先处理  什么特定字节对你程序特殊含义，而且不出现在常规输入流中，就能更快发送这个字节？？  （程序还会根据你的输入记录进行调整 优先级？？？）</p>
-<p>SO_REUSEADDR</p>
-<p>socket关闭时可能会仍然占用本地端口，传输延迟的数据，会接受但不处理延迟的数据包，保证这些数据不会传到下一个该端口的使用进程</p>
-<p><code>setReuseAddress(boolean on)</code> 和 <code>boolean getReuseAddress()</code> </p>
-<p>开启后,（默认为关闭） 别的socket就会被同样允许绑定到这个端口，这样有可能存在上一个socket未接收的数据</p>
-<p>set这个方法必须在这个端口绑定新socket之前用，这时候意味 socket 使用 无参数构造，然后调用set方法，然后再connect ,而且之前的socket和重用老地址的新socket都要设置 reuseaddr才能有效</p>
-<p>IP_TOS</p>
-<p>好像是用来设置服务质量的 服务优先级</p>
-<p><code>int getTrafficClass()</code> 和 <code>setTrafficClass(int trafficClass)</code></p>
-<p> 业务类型由0-255的int给出 ，只取int的低位8位</p>
-<p>而这个8位二进制数中，高6位属于 差分服务代码点 DSCP 和低2位 显式拥塞通知 ECN</p>
-<p>DSCP最多由2^6 个不同业务流，不过由几个特别常见</p>
-<p>DSCP</p>
-<ul>
-<li>默认  00000  尽力业务流</li>
-<li>加速转发 101110 低损耗低延迟低抖动的业务流 通常仅用于网络容量的30%或更低</li>
-<li>保证转发 多个  保证最多以一个指定速率传送</li>
-<li>类选择器 xxx000 与IPv4 TOS首部向后兼容？（业务类型存储在前三位中）  这种好像比较过时了</li>
-</ul>
-<p>低两位是显式拥塞通知 </p>
-<p>一般加速转发 为 0xB8  10111000</p>
-<p>保证转发有多个细小分支 作用是网络拥塞的丢包优先级，优先级低的更早丢弃，不过<strong>较低</strong>优先级的包不会被完全被丢光</p>
-<p>丢包率           最低                                                                           最高</p>
-<p>低             AF11 001010         AF21 010010      AF31 011010   AF41 100010</p>
-<p>中             AF12 001100                    010100               011100             100100</p>
-<p>高                       001110                    010110                011110             100110</p>
-<p>如果无法提供请求的服务类型会抛出 socketException </p>
-<p><code>setPerformancePreferences(int connectionTime,int latency,int bandwidth)</code> 代表连接时间 延迟 和相对优先级</p>
-<p>这些都是权重 比如 3 2 1 代表最重要的连接时间 其次是延迟 最小是带宽  让vm自己去实现，但可能会无操作</p>
-<p>Socket异常</p>
-<p>SocketException的子类</p>
-<ul>
-<li>BindException  端口占用或无端口权限</li>
-<li>ConnectException  远程主机拒绝（可能是服务器端口在忙，或者服务器本身在忙）</li>
-<li>NoRouteToHostException  连接超时</li>
-</ul>
-<p>IOException子类</p>
-<ul>
-<li>ProtocolException  接收数据违反TCP/IP 规则</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaSE(一)Void和void/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -578,6 +309,401 @@
 <p>例如<code>Future&lt;T&gt;</code>用来保存结果。Future的get方法会返回结果(类型为T)。 如果操作并没有返回值，用Void调用get后结果计算完毕则返回后将会返回null。</p>
 <p>Void也用于无值的Map中，例如<code>Map&lt;T,Void&gt;</code>这样map将具<code>Set&lt;T&gt;</code>有一样的功能</p>
 <p>同理Callable<void>也是同理 好像是没 Callable<void>的</void></void></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Java枚举/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/Java枚举/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Enum代表枚举类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Dayclass</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> Monday=<span class="number">233</span>;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种也可以做出枚举，但是很蠢很不专业，所以用enum</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Day&#123;</span><br><span class="line">    MONDAY,TUESDAY,WEDNESDAY,THURSDAY,FRIDAY,SATURDAY,SUNDAY</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>枚举值一般用大写字母，然后用逗号分隔</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Day day=Day.MONDAY  <span class="comment">//使用方式异常简单</span></span><br></pre></td></tr></table></figure>
+<p>实际上enum会被编译成一个类class 而且编译器会自动帮忙生成一些方法  它不能被继承</p>
+<p>这个class的简单组成如下 它继承自Enum类  以上面的Day枚举类为例</p>
+<ul>
+<li><p>实现了values 函数 返回的是Day的数组 包含这个类的所有的列举值  父类没有</p>
+</li>
+<li><p>实现了 valueOf(String)  调用父类的valueof方法 通过String 返回对应的Day对象</p>
+</li>
+<li><p>私有的Day构造函数（String, int）</p>
+</li>
+<li><p>没错，每个枚举值都变成一个Day对象（public）  并且实例化  </p>
+<p>你注意到参数二的那个数字 其实就是序号，在内部实现叫ordinal  这个和你在enum的枚举值的书写顺序有关从0开始 </p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//反编译Day.class</span></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Day</span> <span class="keyword">extends</span> <span class="title">Enum</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">//编译器为我们添加的静态的values()方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Day[] values()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> (Day[])$VALUES.clone();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//编译器为我们添加的静态的valueOf()方法，注意间接调用了Enum也类的valueOf方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Day <span class="title">valueOf</span><span class="params">(String s)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (Day)Enum.valueOf(com/zejian/enumdemo/Day, s);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//私有构造函数</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Day</span><span class="params">(String s, <span class="keyword">int</span> i)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(s, i);</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">//前面定义的7种枚举实例</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day MONDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day TUESDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day WEDNESDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day THURSDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day FRIDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day SATURDAY;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Day SUNDAY;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Day $VALUES[];</span><br><span class="line"><span class="keyword">static</span> </span><br><span class="line">&#123;    </span><br><span class="line">    <span class="comment">//实例化枚举实例</span></span><br><span class="line">    MONDAY = <span class="keyword">new</span> Day(<span class="string">"MONDAY"</span>, <span class="number">0</span>);</span><br><span class="line">    TUESDAY = <span class="keyword">new</span> Day(<span class="string">"TUESDAY"</span>, <span class="number">1</span>);</span><br><span class="line">    WEDNESDAY = <span class="keyword">new</span> Day(<span class="string">"WEDNESDAY"</span>, <span class="number">2</span>);</span><br><span class="line">    THURSDAY = <span class="keyword">new</span> Day(<span class="string">"THURSDAY"</span>, <span class="number">3</span>);</span><br><span class="line">    FRIDAY = <span class="keyword">new</span> Day(<span class="string">"FRIDAY"</span>, <span class="number">4</span>);</span><br><span class="line">    SATURDAY = <span class="keyword">new</span> Day(<span class="string">"SATURDAY"</span>, <span class="number">5</span>);</span><br><span class="line">    SUNDAY = <span class="keyword">new</span> Day(<span class="string">"SUNDAY"</span>, <span class="number">6</span>);</span><br><span class="line">    $VALUES = (<span class="keyword">new</span> Day[] &#123;</span><br><span class="line">        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumDemo2</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		Day[]days=Day.values();</span><br><span class="line">		System.out.println(<span class="string">"days "</span>+Arrays.toString(days));</span><br><span class="line">		Day day1=Day.valueOf(<span class="string">"FRIDAY"</span>);</span><br><span class="line">		System.out.println(<span class="string">"day"</span>+day1);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抽象Enum类</p>
+<p>实现的方法</p>
+<ul>
+<li>compareTo  比较的其实是 ordinal</li>
+<li>equals  </li>
+<li>getDeclaringClass  返回枚举常量的枚举类型对应的class对象</li>
+<li>name  返回枚举常量的名称</li>
+<li>ordinal 返回枚举常量的序号</li>
+<li>toString  和name差不多</li>
+<li>valueOf(Class<t>,String)   返回带指定名称的指定枚举类型的枚举常量。  这个相比子类的valueOf 多个class的参数</t></li>
+</ul>
+<p>它的getDeclaringClass比较特别给出代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> Class&lt;E&gt; <span class="title">getDeclaringClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="comment">//获取class对象引用，getClass()是Object的方法</span></span><br><span class="line">     Class&lt;?&gt; clazz = getClass();</span><br><span class="line">     <span class="comment">//获取父类Class对象引用</span></span><br><span class="line">     Class&lt;?&gt; zuper = clazz.getSuperclass();</span><br><span class="line">     <span class="keyword">return</span> (zuper == Enum.class) ? (Class&lt;E&gt;)clazz : (Class&lt;E&gt;)zuper;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>这个是首先获取对象的类对象，然后再通过<code>getSuperClass</code>方法去获得父类方法，通过判断是否是Enum.class来进行不同处理</p>
+<ul>
+<li>如果不是Enum的派生类就只是返回该对象的父类</li>
+<li>如果是Enum的派生类则返回对象本身的类对象</li>
+</ul>
+<p>虽然values方法是子类独有，父类是没有，所以不能通过向上转型来使用values 但通过Enum的class对象的getEnumConstants方法，我们仍能一次性获取所有的枚举实例常量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//正常使用</span></span><br><span class="line">Day[] ds=Day.values();</span><br><span class="line"><span class="comment">//向上转型Enum</span></span><br><span class="line">Enum e = Day.MONDAY;</span><br><span class="line"><span class="comment">//无法调用,没有此方法</span></span><br><span class="line"><span class="comment">//e.values();</span></span><br><span class="line"><span class="comment">//获取class对象引用</span></span><br><span class="line">Class&lt;?&gt; clasz = e.getDeclaringClass();</span><br><span class="line"><span class="keyword">if</span>(clasz.isEnum()) &#123;</span><br><span class="line">    Day[] dsz = (Day[]) clasz.getEnumConstants();</span><br><span class="line">    System.out.println(<span class="string">"dsz:"</span>+Arrays.toString(dsz));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   输出结果:</span></span><br><span class="line"><span class="comment">   dsz:[MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<p>实际上枚举类，它其实可以实现class的功能 我们可以向enum类中添加方法,覆盖方法和变量，甚至是main方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//覆盖方法toString 和实现了自己的getDesc方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Day2 &#123;</span><br><span class="line">	MONDAY(<span class="string">"星期一"</span>),</span><br><span class="line">	TUESDAY(<span class="string">"星期二"</span>),</span><br><span class="line">	WEDNESDAY(<span class="string">"星期三"</span>),</span><br><span class="line">	THURSDAY(<span class="string">"星期四"</span>),</span><br><span class="line">	FRIDAY(<span class="string">"星期五"</span>),</span><br><span class="line">	SATURDAY(<span class="string">"星期六"</span>),</span><br><span class="line">	SUNDAY(<span class="string">"星期日"</span>);</span><br><span class="line">	<span class="keyword">private</span> String desc;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="title">Day2</span><span class="params">(String desc)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.desc=desc;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getDesc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> desc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//覆盖方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> desc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(Day2 day:Day2.values()) &#123;</span><br><span class="line">			System.out.println(<span class="string">"name: "</span>+day.name()+<span class="string">" ,desc:"</span>+day.getDesc()+<span class="string">"  toString"</span>+day.toString());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>enum与抽象方法</p>
+<p>与常规抽象类一样，enum类允许我们为其定义抽象方法，然后使每个枚举实例都实现该方法，以便产生不同的行为方式，注意abstract关键字对于枚举类不一定需要?(要把？)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> EnumDemo3 &#123;</span><br><span class="line">	FIRST&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"First time"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//每个实例内实现抽象方法</span></span><br><span class="line">	SECOND&#123;</span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">getInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"Second time"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//定义抽象方法</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getInfo</span><span class="params">()</span></span>;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"First: "</span>+EnumDemo3.FIRST.getInfo());</span><br><span class="line">		System.out.println(<span class="string">"Second: "</span>+EnumDemo3.SECOND.getInfo());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有时候我们可以用接口来 将多个实现该接口的枚举类放在一起</p>
+<p>还可以有枚举嵌套</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Meal&#123;</span><br><span class="line">  APPETIZER(Food.Appetizer.class),</span><br><span class="line">  MAINCOURSE(Food.MainCourse.class),</span><br><span class="line">  DESSERT(Food.Dessert.class),</span><br><span class="line">  COFFEE(Food.Coffee.class);</span><br><span class="line">  <span class="keyword">private</span> Food[] values;</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">Meal</span><span class="params">(Class&lt;? extends Food&gt; kind)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//通过class对象获取枚举实例</span></span><br><span class="line">    values = kind.getEnumConstants();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Food</span> </span>&#123;</span><br><span class="line">    <span class="keyword">enum</span> Appetizer implements Food &#123;</span><br><span class="line">      SALAD, SOUP, SPRING_ROLLS;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> MainCourse implements Food &#123;</span><br><span class="line">      LASAGNE, BURRITO, PAD_THAI,</span><br><span class="line">      LENTILS, HUMMOUS, VINDALOO;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> Dessert implements Food &#123;</span><br><span class="line">      TIRAMISU, GELATO, BLACK_FOREST_CAKE,</span><br><span class="line">      FRUIT, CREME_CARAMEL;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">enum</span> Coffee implements Food &#123;</span><br><span class="line">      BLACK_COFFEE, DECAF_COFFEE, ESPRESSO,</span><br><span class="line">      LATTE, CAPPUCCINO, TEA, HERB_TEA;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>枚举值可以作为switch的判断</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;GREEN,RED,BLUE&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumDemo4</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printName</span><span class="params">(Color color)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (color)&#123;</span><br><span class="line">            <span class="keyword">case</span> BLUE: <span class="comment">//无需使用Color进行引用</span></span><br><span class="line">                System.out.println(<span class="string">"蓝色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RED:</span><br><span class="line">                System.out.println(<span class="string">"红色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> GREEN:</span><br><span class="line">                System.out.println(<span class="string">"绿色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        printName(Color.BLUE);</span><br><span class="line">        printName(Color.RED);</span><br><span class="line">        printName(Color.GREEN);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//蓝色</span></span><br><span class="line">        <span class="comment">//红色</span></span><br><span class="line">        <span class="comment">//绿色</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>未完待续 。。。。主要是枚举的一些的set 和 map</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/javascript补习/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/javascript补习/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li><p>document.write(“</p><h1>JS可以用来写入元素</h1>“);写入元素<p></p>
+</li>
+<li><p>var k=document.getElementById(“idname”);   获取元素</p>
+<ul>
+<li>k.innerHTML=”heihei”      改变元素内部的内容</li>
+<li>k.src/xxx=””      改变元素的属性</li>
+<li>k.style.xxx 改变标签的样式</li>
+</ul>
+</li>
+</ul>
+<p>引入js文件 <code>&lt;script src=&quot;myScript.js&quot;&gt;&lt;/script&gt;</code></p>
+<p>js输出</p>
+<ol>
+<li>window.alert</li>
+<li>document.getElementById(“”).innerHTML();</li>
+<li>document.write()  如果在文档已完成加载后执行 document.write，整个 HTML 页面将被覆盖。但如果直接写的话就是当作一个html标签来看待</li>
+<li>console.log</li>
+</ol>
+<p>js大小写敏感</p>
+<p>代码块以左花括号开始，以右花括号结束。</p>
+<p>代码块的作用是一并地执行语句序列。</p>
+<p>您可以在文本字符串中使用反斜杠对代码行进行换行</p>
+<p>document.write(“你好 \<br>世界!”);</p>
+<p>：JavaScript 是脚本语言。浏览器会在读取代码时，逐行地执行脚本代码。而对于传统编程来说，会在执行前对所有代码进行编译。</p>
+<p>如果重新声明 JavaScript 变量，该变量的值不会丢失：</p>
+<p>在以下两条语句执行后，变量 carname 的值依然是 “Volvo”：</p>
+<p>var carname=”Volvo”;<br>var carname;</p>
+<p>对象</p>
+<p>var person = {<br>​    firstName:”John”,<br>​    lastName:”Doe”,<br>​    age:50,<br>​    eyeColor:”blue”</p>
+<p>​     fullname: function(){</p>
+<p>​    return this.firstName+” “+this.lastName;</p>
+<p>}</p>
+<p>};</p>
+<p>你可以通过两种方式访问对象属性:</p>
+<ul>
+<li>person.firstName</li>
+<li>person[“firstName”]</li>
+</ul>
+<p>访问对象方法 document.write(person.fullname());</p>
+<p>好像变量都是能看作 作为window对象的一个属性所以所有的变量可以通过</p>
+<ul>
+<li>window.varname</li>
+<li>this.varname</li>
+<li>varname</li>
+</ul>
+<p>不过如果是没有写var 直接是赋值的那种  是全局对象的可配置属性 可以被delete掉</p>
+<p>全局变量</p>
+<ol>
+<li>在函数外定义的变量</li>
+<li>没有var定义的变量</li>
+</ol>
+<p>所有的全局变量都可通过window访问</p>
+<h2 id="常见的HTML事件"><a href="#常见的HTML事件" class="headerlink" title="常见的HTML事件"></a>常见的HTML事件</h2><p>下面是一些常见的HTML事件的列表:</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onchange</td>
+<td>HTML 元素改变</td>
+</tr>
+<tr>
+<td>onclick</td>
+<td>用户点击 HTML 元素</td>
+</tr>
+<tr>
+<td>onmouseover</td>
+<td>用户在一个HTML元素上移动鼠标</td>
+</tr>
+<tr>
+<td>onmouseout</td>
+<td>用户从一个HTML元素上移开鼠标</td>
+</tr>
+<tr>
+<td>onkeydown</td>
+<td>用户按下键盘按键</td>
+</tr>
+<tr>
+<td>onload</td>
+<td>浏览器已完成页面的加载</td>
+</tr>
+</tbody>
+</table>
+<p>switch 语句会使用恒等计算符(===)进行比较:</p>
+<h2 id="Undefined-不是-Null"><a href="#Undefined-不是-Null" class="headerlink" title="Undefined 不是 Null"></a>Undefined 不是 Null</h2><p>在 JavaScript 中, <strong>null</strong> 用于对象, <strong>undefined</strong> 用于变量，属性和方法。</p>
+<p>对象只有被定义才有可能为 null，否则为 undefined。</p>
+<p>如果我们想测试对象是否存在，在对象还没定义时将会抛出一个错误。</p>
+<p>错误的使用方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if (myObj !== null &amp;&amp; typeof myObj !== &quot;undefined&quot;)</span><br></pre></td></tr></table></figure>
+<p>正确的方式是我们需要先使用 typeof 来检测对象是否已定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">if (typeof myObj !== &quot;undefined&quot; &amp;&amp; myObj !== null)</span><br></pre></td></tr></table></figure>
+<p>在每个代码块中 JavaScript 不会创建一个新的作用域，一般各个代码块的作用域都是全局的。</p>
+<p>以下代码的的变量 i 返回 10，而不是 undefined：</p>
+<script>
+for (var i = 0; i < 10; i++) {
+    // some code
+}
+document.getElementById("demo").innerHTML = i;
+</script>
+
 
           
         
@@ -890,6 +1016,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(四)Scatter和Gather/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/JavaNIO(四)Scatter和Gather/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>分散器 Scatter 和聚集器 Gather 分别用与从channel读取数据到buffer和 从buffer写入到channel中的方法</p>
+<p>就是进行分部分分别传输的方法</p>
+<p>Scatter的作用是将一个channel的数据分到三个Buffer中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer header=ByteBuffer.allocate(<span class="number">128</span>);</span><br><span class="line">ByteBuffer body=ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">ByteBuffer []bufferArray=&#123;header,body&#125;;</span><br><span class="line">channel.read(bufferArray);</span><br></pre></td></tr></table></figure>
+<p>这样channel的数据就会按照数组的出现的顺序对 buffer进行依次填充，<strong>填满</strong>了就找下一个</p>
+<p>Gather Write</p>
+<p>就是就是多个buffer写到同一个channel中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer header = ByteBuffer.allocate(<span class="number">128</span>);</span><br><span class="line">ByteBuffer body   = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//write data into buffers</span></span><br><span class="line"></span><br><span class="line">ByteBuffer[] bufferArray = &#123; header, body &#125;;</span><br><span class="line"></span><br><span class="line">channel.write(bufferArray);</span><br></pre></td></tr></table></figure>
+<p>buffer中如果你没填满数据，write到末尾，她也会切换到下一个buffer进行write</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/javascript表单验证/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1016,134 +1270,6 @@
 </tr>
 </tbody>
 </table>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(四)Scatter和Gather/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/JavaNIO(四)Scatter和Gather/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>分散器 Scatter 和聚集器 Gather 分别用与从channel读取数据到buffer和 从buffer写入到channel中的方法</p>
-<p>就是进行分部分分别传输的方法</p>
-<p>Scatter的作用是将一个channel的数据分到三个Buffer中</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer header=ByteBuffer.allocate(<span class="number">128</span>);</span><br><span class="line">ByteBuffer body=ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">ByteBuffer []bufferArray=&#123;header,body&#125;;</span><br><span class="line">channel.read(bufferArray);</span><br></pre></td></tr></table></figure>
-<p>这样channel的数据就会按照数组的出现的顺序对 buffer进行依次填充，<strong>填满</strong>了就找下一个</p>
-<p>Gather Write</p>
-<p>就是就是多个buffer写到同一个channel中</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ByteBuffer header = ByteBuffer.allocate(<span class="number">128</span>);</span><br><span class="line">ByteBuffer body   = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//write data into buffers</span></span><br><span class="line"></span><br><span class="line">ByteBuffer[] bufferArray = &#123; header, body &#125;;</span><br><span class="line"></span><br><span class="line">channel.write(bufferArray);</span><br></pre></td></tr></table></figure>
-<p>buffer中如果你没填满数据，write到末尾，她也会切换到下一个buffer进行write</p>
 
           
         
@@ -1347,267 +1473,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(二)Channel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/JavaNIO(二)Channel/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>channel你可以同时读入或写入数据 而流只能做其中一项</p>
-<p>channel可以异步读入或写入数据</p>
-<p>channel的数据总是从buffer来</p>
-<p>channel有点像stream 然后接口有三个</p>
-<ul>
-<li>FileChannel  文件IO</li>
-<li>DatagramChannel   UDPIO</li>
-<li>SocketChannel  TCPIO</li>
-<li>ServerSocketChannel　　监听连接然后产生SocketChannel</li>
-</ul>
-<p>主要是net 和file IO </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">basicChannelTest</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		RandomAccessFile file=<span class="keyword">new</span> RandomAccessFile(<span class="string">"data/nio-data.txt"</span>, <span class="string">"rw"</span>);</span><br><span class="line">		FileChannel inChannel=file.getChannel();</span><br><span class="line">		ByteBuffer buf=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">		<span class="keyword">int</span> bytesRead = inChannel.read(buf);</span><br><span class="line">	    <span class="keyword">while</span> (bytesRead != -<span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">	      System.out.println(<span class="string">"Read "</span> + bytesRead);</span><br><span class="line">	     <span class="comment">//important!!!</span></span><br><span class="line">	      buf.flip();</span><br><span class="line"></span><br><span class="line">	      <span class="keyword">while</span>(buf.hasRemaining())&#123;</span><br><span class="line">	          System.out.print((<span class="keyword">char</span>) buf.get());</span><br><span class="line">	      &#125;</span><br><span class="line"></span><br><span class="line">	      buf.clear();</span><br><span class="line">	      bytesRead = inChannel.read(buf);</span><br><span class="line">	    &#125;</span><br><span class="line">	    file.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>首先先将数据读入bytebuffer中，然后再System.out出来 记住一定要flip！！！</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(七)SocketChannel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/JavaNIO(七)SocketChannel/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">SocketChannel socketChannel=SocketChannel.open();</span><br><span class="line">socketChannel.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"http://xxxx.com"</span>),<span class="number">80</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭SocketChannel </span></span><br><span class="line">socketChannel.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">//从Socketchannel获取数据</span></span><br><span class="line">ByteBuffer buf=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line"><span class="keyword">int</span> bytesRead=socketChannel.read(buf);   <span class="comment">//返回你读取的数目</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//写入</span></span><br><span class="line">String newData=<span class="string">"kinkin牛逼"</span>;</span><br><span class="line">ByteBuffer buffer=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">buffer.clear();</span><br><span class="line">buffer.put(newData.getBytes());</span><br><span class="line">buffer.flip();</span><br><span class="line"><span class="keyword">while</span>(buffer.hasRemaining())&#123;</span><br><span class="line">    channel.write(buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>SocketChannel的 no-blocking</p>
-<p>你可以使用connect这个方法可能会返回一个连接，可以通过finishConnect进行判断    </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">socketChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">socketChannel.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"http://jenkov.com"</span>, <span class="number">80</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(! socketChannel.finishConnect() )&#123;</span><br><span class="line">    <span class="comment">//wait, or do something else...    </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>non-blocking下的SocketChannel </p>
-<p>write 和read可能会在没有写入或读取字节的情况下就返回，这个时候</p>
-<ul>
-<li>write方法需要一个loop </li>
-<li>read方法需要注意它返回的int值来判断读取是否完成</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(八)ServerSocketChannel/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1718,6 +1583,189 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(六)Selector/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/22/JavaNIO(六)Selector/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>选择器能减少你线程的启用 这会节省cpu的资源和时间，虽然现在操作系统的并行能力变强，多线程能充分利用它的功能</p>
+<ul>
+<li><p>创建selector  <code>Selector selector=Selector.open()</code></p>
+</li>
+<li><p>给selector注册channels </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">channel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">SelectionKey key = channel.register(selector, SelectionKey.OP_READ);</span><br></pre></td></tr></table></figure>
+<p>首先channel一定要变成不阻塞模式来给selector后续使用，这意味着你不能将FileChannel交给selector因为这个不能变成no-blocking模式 socketChannel可以</p>
+<p>我们看到register的参数二 代表selector要倾听的事件 </p>
+<ol>
+<li>Connect   channel成功连接到其他服务器</li>
+<li>Accept  socket channel 接受了一个到来的连接</li>
+<li>Read  channel的数据准备被读取</li>
+<li>Write  channel的数据准备去写入</li>
+</ol>
+<p>事件发生的时候是意味着ready 这些事件就用SelectionKey去表示</p>
+<ol>
+<li>SelectionKey.OP_CONNECT</li>
+<li>SelectionKey.OP_ACCEPT</li>
+<li>SelectionKey.OP_READ</li>
+<li>SelectionKey.OP_WRITE</li>
+</ol>
+<p>如果你要监听多个事件可以</p>
+<p><code>int interestSet=SelectionKey.OP_CONNECT| SelectionKey.OP_WRITE</code></p>
+</li>
+</ul>
+<p>然后我们看到register方法返回了一个 SelectionKey 这个对象的提供的信息很多</p>
+<ul>
+<li>The interest set</li>
+<li>The ready set</li>
+<li>The Channel</li>
+<li>The Selector</li>
+<li>An attached object (optional)</li>
+</ul>
+<p>注意下面的所谓的selectionKey 或者 SelectionKey 应该只是SelectionKey的一个对象</p>
+<p>InterestSet代表你之前选择的监听事件的爱好的集合，你可以通过以下方式来进行判断</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> interestSet = selectionKey.interestOps();</span><br><span class="line"><span class="comment">//通过 与运算符进行逐个判断</span></span><br><span class="line"><span class="keyword">boolean</span> isInterestedInAccept  = interestSet &amp; SelectionKey.OP_ACCEPT;</span><br><span class="line"><span class="keyword">boolean</span> isInterestedInConnect = interestSet &amp; SelectionKey.OP_CONNECT;</span><br><span class="line"><span class="keyword">boolean</span> isInterestedInRead    = interestSet &amp; SelectionKey.OP_READ;</span><br><span class="line"><span class="keyword">boolean</span> isInterestedInWrite   = interestSet &amp; SelectionKey.OP_WRITE;</span><br></pre></td></tr></table></figure>
+<p>ReadySet是用来返回你的channel准备好的事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> readySet = selectionKey.readyOps();</span><br><span class="line"><span class="comment">//然后剩下的操作和上面一样</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者可以通过方法直接获得</span></span><br><span class="line">selectionKey.isAcceptable();</span><br><span class="line">selectionKey.isConnectable();</span><br><span class="line">selectionKey.isReadable();</span><br><span class="line">selectionKey.isWritable();</span><br></pre></td></tr></table></figure>
+<p>Channel和Selector这两个其实并不重要，但仍可以获得</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Channel  channel  = selectionKey.channel();</span><br><span class="line">Selector selector = selectionKey.selector();</span><br></pre></td></tr></table></figure>
+<p>Attaching object 这个是和SelectionKey的关联对象  类似寄存物件那样？的东西</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">selectionKey.attach(theObject);</span><br><span class="line">Object attachObj=selectionKey.attachment();</span><br><span class="line"></span><br><span class="line"><span class="comment">//你也可以register的使用就将Obj加上去了</span></span><br><span class="line">SelectionKey key=channel.register(selector,SelectionKey.OP_READ,theObject);</span><br></pre></td></tr></table></figure>
+<p>通过Selector来进行channel的选择  终于到了重头戏了</p>
+<p>Selector方法</p>
+<p>首先介绍三个select家族的方法</p>
+<ul>
+<li>int select()  用来判断你注册在这个selector的的channel哪个有ready事件了  一直阻塞直到有</li>
+<li>int select(long timeout)   和上面一样，但其只在一定时间内阻塞</li>
+<li>int selectNow()  现在进行select 无论是否有channel ready 它都返回不阻塞</li>
+</ul>
+<p>注意这些select只计算距离上一个select中新增加的ready的channel 上一个select就有而且没被处理的ready channel不被计算内</p>
+<p>一旦你select方法知道有准备好的channel了 然后就可以调用selectedKeys() 去返回准备好的channel了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;SelectionKey&gt;selectionkeys=selector.selectedKeys();</span><br></pre></td></tr></table></figure>
+<p>其实我们发现register方法好像也会返回这些SelectionKey对象 但它只是表示和这个selector有注册关系了，你可以获取所有的这些keys通过 selectedKeySet()方法  但可能是有些方法是不全的？个人猜测比如成功的事件的判断估计都为false</p>
+<p>我们可以通过遍历去处理所有准备好的channel</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;SelectionKey&gt;selectedKeys=selector.selectedKeys();</span><br><span class="line">Iterator&lt;SelectionKey&gt;keyIterator=selectedKeys.iterator();</span><br><span class="line"><span class="keyword">while</span>(keyIterator.hasNext())&#123;</span><br><span class="line">    SelectionKey key=keyIterator.next();</span><br><span class="line">    <span class="keyword">if</span>(key.isAcceptable())&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(key.isConnectable())&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for reading</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for writing</span></span><br><span class="line">    &#125;</span><br><span class="line">	keyIterator.remove();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意最后一定要将这个实例进行删除，因为这个selector不会删除selectionKey的实例  要主动删除</p>
+<p>wakeup方法</p>
+<p>实际上这个select方法 wakeUp() 是通过线程来调用的，但是呢有时候硬是没有新的ready channel这时候就会造成阻塞，</p>
+<p>这时候能通过另外一个未被阻塞的线程调用 <code>selector.wakeup()</code>让阻塞的select（<strong>如果多个线程阻塞,事实上wakeup只能让正在阻塞的一个线程返回</strong>）放过，如果没有线程 如果wakeup的时候没有线程，它就会让下一个call select 的线程立刻唤醒（大概率是得不到想要的结果的</p>
+<p>close方法</p>
+<p>当你用完这个Selector 你就调用call方法，这会让所有的绑定在Selector上的SelectedKey无效， 但channel本身不会被删除</p>
+<p>综合例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">Selector selector = Selector.open();  <span class="comment">//创建 selector</span></span><br><span class="line"></span><br><span class="line">channel.configureBlocking(<span class="keyword">false</span>);   <span class="comment">//更改channel的模式 no-blocking</span></span><br><span class="line"></span><br><span class="line">SelectionKey key = channel.register(selector, SelectionKey.OP_READ);  <span class="comment">//channel 注册</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> readyChannels = selector.select();<span class="comment">// select方法 判断是否有ready channel</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(readyChannels == <span class="number">0</span>) <span class="keyword">continue</span>;  </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  Set&lt;SelectionKey&gt; selectedKeys = selector.selectedKeys(); <span class="comment">//取得ready channel</span></span><br><span class="line"></span><br><span class="line">  Iterator&lt;SelectionKey&gt; keyIterator = selectedKeys.iterator();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span>(keyIterator.hasNext()) &#123;  <span class="comment">//遍历</span></span><br><span class="line"></span><br><span class="line">    SelectionKey key = keyIterator.next();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(key.isAcceptable()) &#123;</span><br><span class="line">        <span class="comment">// a connection was accepted by a ServerSocketChannel.</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isConnectable()) &#123;</span><br><span class="line">        <span class="comment">// a connection was established with a remote server.</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for reading</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">        <span class="comment">// a channel is ready for writing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    keyIterator.remove();   <span class="comment">//从Set中删除这个SelectionKey实例</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -1768,7 +1816,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-count">57</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
