@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="JDBC最常见的异常是 SQLException 获取错误的信息的一些方法 通过SQLException对象来调用    getErrorCode( ) 获取与异常关联的错误代码。     getMessage( ) 获取驱动程序处理的错误的JDBC驱动程序的错误消息，或获取数据库错误的Oracle错误代码和消息。   getSQLState( ) 获取XOPEN SQLstate字符串。 对于J">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDBC(七)异常">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/JDBC(七)异常/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="JDBC最常见的异常是 SQLException 获取错误的信息的一些方法 通过SQLException对象来调用    getErrorCode( ) 获取与异常关联的错误代码。     getMessage( ) 获取驱动程序处理的错误的JDBC驱动程序的错误消息，或获取数据库错误的Oracle错误代码和消息。   getSQLState( ) 获取XOPEN SQLstate字符串。 对于J">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-22T16:53:04.588Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JDBC(七)异常">
+<meta name="twitter:description" content="JDBC最常见的异常是 SQLException 获取错误的信息的一些方法 通过SQLException对象来调用    getErrorCode( ) 获取与异常关联的错误代码。     getMessage( ) 获取驱动程序处理的错误的JDBC驱动程序的错误消息，或获取数据库错误的Oracle错误代码和消息。   getSQLState( ) 获取XOPEN SQLstate字符串。 对于J">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/JDBC(七)异常/"/>
+
+
+
+
+
+  <title>JDBC(七)异常 | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(七)异常/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JDBC(七)异常</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JDBC最常见的异常是 SQLException</p>
+<p>获取错误的信息的一些方法 通过SQLException对象来调用</p>
+<table>
+<thead>
+<tr>
+<th><code>getErrorCode( )</code></th>
+<th>获取与异常关联的错误代码。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getMessage( )</code></td>
+<td>获取驱动程序处理的错误的JDBC驱动程序的错误消息，或获取数据库错误的Oracle错误代码和消息。</td>
+</tr>
+<tr>
+<td><code>getSQLState( )</code></td>
+<td>获取XOPEN SQLstate字符串。 对于JDBC驱动程序错误，不会从此方法返回有用的信息。 对于数据库错误，返回五位数的XOPEN SQLstate代码。 此方法可以返回<code>null</code>。</td>
+</tr>
+<tr>
+<td><code>getNextException( )</code></td>
+<td>获取异常链中的下一个<code>Exception</code>对象。</td>
+</tr>
+<tr>
+<td><code>printStackTrace( )</code></td>
+<td>打印当前异常或可抛出的异常，并将其追溯到标准错误流。</td>
+</tr>
+<tr>
+<td><code>printStackTrace(PrintStream s)</code></td>
+<td>将此<code>throwable</code>及其回溯打印到指定的打印流。</td>
+</tr>
+<tr>
+<td><code>printStackTrace(PrintWriter w)</code></td>
+<td>打印这个<code>throwable</code>，它是回溯到指定的打印器(<code>PrintWriter</code>)。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="批量处理"><a href="#批量处理" class="headerlink" title="批量处理"></a>批量处理</h3><p>一次性向数据库发送多个sql语句可以减少通信花销提高性能</p>
+<p>首先得看看jdbc驱动是否支持该功能</p>
+<p>使用 <code>DatabaseMetaData.supportsBatchUpdates()</code> 去检查目标数据库和驱动是否支持把？ 如果支持则返回true</p>
+<ul>
+<li>用Statement和其兄弟的addBatch 将单个语句添加到批处理 executeBatch() 执行批量处理的所有语句</li>
+<li>我们可以使用clearBatch()删除等待执行的批量处理的所有语句，不过是全部删除，不能单个删除</li>
+</ul>
+<p>感觉PreparedStatement和Statement差不多，不过好像没有CallableStatement的用法</p>
+<ul>
+<li>创建Statement/PreparedStatement 对象</li>
+<li>conn.setAutoCommit(false)</li>
+<li>addBatch()  将构造好的Statement对象传进去，注意prepareStatement的sql也是填好参数了，Statement就在addBatch参数传入sql语句</li>
+<li>executeBatch() 执行所有sql语句</li>
+<li>commit 提交事务</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//假装statement/preparedStatement构造完成</span></span><br><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">stmt.setXXX(...); stmt.addBatch();  /stmt.addBatch(sql);</span><br><span class="line"></span><br><span class="line"><span class="comment">//好像是能返回结果的？ 不过如果太多怎么处理？</span></span><br><span class="line">stmt.executeBatch();</span><br><span class="line">conn.commit()</span><br></pre></td></tr></table></figure>
+<p>JDBC的SQL转义语法</p>
+<h2 id="JDBC-SQL转义语法"><a href="#JDBC-SQL转义语法" class="headerlink" title="JDBC SQL转义语法"></a>JDBC SQL转义语法</h2><p>通过使用标准JDBC方法和属性，转义语法使您能够灵活地使用不可用的数据库特定功能。</p>
+<p>一般SQL转义语法格式如下 -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;keyword &apos;parameters&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>以下是以下转义序列，在执行JDBC编程时非常有用 -</p>
+<p><strong>d, t, ts关键字</strong></p>
+<p>它们用于帮助确定日期，时间和时间戳文字。没有哪两个DBMS表示时间和日期的方式相同。 该转义语法告诉驱动程序以目标数据库的格式呈现日期或时间。 例如 -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;d &apos;yyyy-mm-dd&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p><code>yyyy</code>=年份，<code>mm</code>=月份; <code>dd</code>=日期。 使用这种语法<code>{d&#39;2019-09-03&#39;}</code>表示的是2019年3月9日。</p>
+<p>这是一个简单的示例，显示如何将日期插入表中 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create a Statement object</span></span><br><span class="line">stmt = conn.createStatement();</span><br><span class="line"><span class="comment">//Insert data ==&gt; ID, First Name, Last Name, DOB</span></span><br><span class="line">String sql=<span class="string">"INSERT INTO STUDENTS VALUES"</span> +</span><br><span class="line">             <span class="string">"(100,'Kobe','Bryant', &#123;d '2002-12-16'&#125;)"</span>;</span><br><span class="line"></span><br><span class="line">stmt.executeUpdate(sql);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Java</span><br></pre></td></tr></table></figure>
+<p>同样，还可以使用以下两种语法：<code>t</code>或<code>ts</code> -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;t &apos;hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，<code>hh</code>=小时，<code>mm</code> =分钟， <code>ss</code> =秒。 使用这种语法<code>{t &#39;13:30:29&#39;}</code>是<code>1:30:29 PM</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;ts &apos;yyyy-mm-dd hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里“<code>d</code>”和“<code>t</code>”是上述两种语法的组合语法来表示时间戳。</p>
+<p><strong>escape关键字</strong></p>
+<p><code>escape</code>关键字标识<code>LIKE</code>子句中使用转义字符。 使用SQL通配符<code>%</code>(与<code>0</code>个或多个字符匹配)时很有用。 例如 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT symbol FROM MathSymbols</span></span><br><span class="line"><span class="string">              WHERE symbol LIKE '\%' &#123;escape '\'&#125;"</span>;     <span class="comment">//escape声明 \是转义字符</span></span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
+<p>如果使用反斜杠字符(<code>\</code>)作为转义字符，则还必须在Java字符串文字中使用<strong>两个反斜杠</strong>字符，因为反斜杠也是Java转义字符。</p>
+<p><strong>fn 关键字</strong></p>
+<p>这个关键字表示DBMS中使用的标量函数。 例如，可以使用SQL函数长度来获取字符串的长度 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">fn <span class="title">length</span><span class="params">(<span class="string">'Hello World'</span>)</span>&#125;</span></span><br></pre></td></tr></table></figure>
+<p>上面语句返回结果值为：<code>11</code>，也就是字符串’<code>Hello World</code>‘的长度。</p>
+<p><strong>call 关键字</strong></p>
+<p>此关键字用于调用存储过程。 例如，对于需要<code>IN</code>参数的存储过程，请使用以下语法 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;</span><br><span class="line">&#123;? = <span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;   <span class="comment">//感觉这个不像是存储过程的啊，像是存储函数的</span></span><br></pre></td></tr></table></figure>
+<p>有一个博客是这样调用存储函数的，但是好像没怎么见到是这样调用存储过程的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFuntion</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//jdbc调用存储函数sql语句：</span></span><br><span class="line">        <span class="comment">//&#123;?= call &lt;procedure-name&gt;[(&lt;arg1&gt;,&lt;arg2&gt;, ...)]&#125;</span></span><br><span class="line">        String sql = <span class="string">"&#123;? = call queryEmpIncome(?)&#125;"</span>;</span><br><span class="line">        </span><br><span class="line">        Connection conn = <span class="keyword">null</span>;</span><br><span class="line">        CallableStatement call = <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            conn = JDBCUtils.getConnection();</span><br><span class="line">            call = conn.prepareCall(sql);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//注册输出参数</span></span><br><span class="line">            call.registerOutParameter(<span class="number">1</span>, OracleTypes.NUMBER);</span><br><span class="line">            <span class="comment">//输入参数</span></span><br><span class="line">            call.setInt(<span class="number">2</span>, <span class="number">7839</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//执行</span></span><br><span class="line">            call.execute();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//取出返回值</span></span><br><span class="line">            <span class="keyword">double</span> income = call.getDouble(<span class="number">1</span>);</span><br><span class="line">            System.out.println(<span class="string">"年薪："</span>+income);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            JDBCUtils.release(conn, call, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">也有这样调用</span><br><span class="line"></span><br><span class="line">            String sql = <span class="string">"select fun_avg_dept(?) from dual"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//调用方式还是和使用ps调用普通SQL一样</span></span><br><span class="line">            PreparedStatement ps = conn.prepareStatement(sql);</span><br><span class="line"></span><br><span class="line">            ps.setObject(<span class="number">1</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">            ResultSet rs = ps.executeQuery();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (rs.next()) &#123;</span><br><span class="line">                System.out.println(rs.getObject(<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>oj关键字</strong></p>
+<p>此关键字用于表示外部连接。 语法如下 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;oj outer-join&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，<em>outer-join = table {LEFT|RIGHT|FULL} OUTERJOIN {table | outer-join}</em> 搜索条件。 例如 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT Employees </span></span><br><span class="line"><span class="string">              FROM &#123;oj ThisTable RIGHT</span></span><br><span class="line"><span class="string">              OUTER JOIN ThatTable on id = '100'&#125;"</span>;</span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
+<p><code>PreparedStatement</code>对象可以使用输入和输出流来提供参数数据。能够将整个文件放入可以容纳大值的数据库列，例如<code>CLOB</code>和<code>BLOB</code>数据类型。</p>
+<p>有以下方法可用于流式传输数据 -</p>
+<ul>
+<li><code>setAsciiStream()</code>：此方法用于提供大的ASCII值。</li>
+<li><code>setCharacterStream()</code>：此方法用于提供较大的UNICODE值。</li>
+<li><code>setBinaryStream()</code>：此方法用于提供较大的二进制值。</li>
+</ul>
+<p><code>setXXXStream()</code>方法除了参数占位符之外还需要额外的参数和文件大小。此参数通知驱动程序使用流向数据库发送多少数据。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>考虑要将XML文件<code>xml_data.xml</code>上传到数据库表中。下面是XML文件的内容 -</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>125<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">first</span>&gt;</span>Max<span class="tag">&lt;/<span class="name">first</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">last</span>&gt;</span>Su<span class="tag">&lt;/<span class="name">last</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Salary</span>&gt;</span>18000<span class="tag">&lt;/<span class="name">Salary</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Dob</span>&gt;</span>18-08-1978<span class="tag">&lt;/<span class="name">Dob</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">XML</span><br></pre></td></tr></table></figure>
+<p>将此XML文件保存在要运行此示例的同一目录中。</p>
+<p>此示例将在数据库创建一个表：<em>xml_data</em>，然后将文件<code>xml_data.xml</code>上传到此表中。</p>
+<p>复制以下示例代码，并保存在文件：<em>StreamingData.java</em> 中，编译并运行如下 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Import required packages</span></span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamingData</span> </span>&#123;</span><br><span class="line">   <span class="comment">// JDBC driver name and database URL</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String JDBC_DRIVER = <span class="string">"com.mysql.jdbc.Driver"</span>;  </span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">"jdbc:mysql://localhost/EMP"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//  Database credentials</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">"root"</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String PASS = <span class="string">"123456"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Connection conn = <span class="keyword">null</span>;</span><br><span class="line">   PreparedStatement pstmt = <span class="keyword">null</span>;</span><br><span class="line">   Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">   ResultSet rs = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="comment">// Register JDBC driver</span></span><br><span class="line">      Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Open a connection</span></span><br><span class="line">      System.out.println(<span class="string">"Connecting to database..."</span>);</span><br><span class="line">      conn = DriverManager.getConnection(DB_URL,USER,PASS);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create a Statement object and build table</span></span><br><span class="line">      stmt = conn.createStatement();</span><br><span class="line">      createXMLTable(stmt);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Open a FileInputStream</span></span><br><span class="line">      File f = <span class="keyword">new</span> File(<span class="string">"xml_data.xml"</span>);</span><br><span class="line">      <span class="keyword">long</span> fileLength = f.length();</span><br><span class="line">      FileInputStream fis = <span class="keyword">new</span> FileInputStream(f);   <span class="comment">//构造文件流</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create PreparedStatement and stream data</span></span><br><span class="line">      String SQL = <span class="string">"INSERT INTO XML_Data VALUES (?,?)"</span>;</span><br><span class="line">      pstmt = conn.prepareStatement(SQL);</span><br><span class="line">      pstmt.setInt(<span class="number">1</span>,<span class="number">125</span>);</span><br><span class="line">      pstmt.setAsciiStream(<span class="number">2</span>,fis,(<span class="keyword">int</span>)fileLength);  <span class="comment">//传递文件流 并且设置文件长度</span></span><br><span class="line">      pstmt.execute();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Close input stream</span></span><br><span class="line">      fis.close();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Do a query to get the row</span></span><br><span class="line">      SQL = <span class="string">"SELECT Data FROM XML_Data WHERE id=125"</span>;</span><br><span class="line">      rs = stmt.executeQuery (SQL);</span><br><span class="line">      <span class="comment">// Get the first row</span></span><br><span class="line">      <span class="keyword">if</span> (rs.next ())&#123;</span><br><span class="line">         </span><br><span class="line">         InputStream xmlInputStream = rs.getAsciiStream (<span class="number">1</span>);   </span><br><span class="line">          <span class="comment">//从resultset得到ascll流后将其转为byte的数组流</span></span><br><span class="line">         <span class="keyword">int</span> c;</span><br><span class="line">         ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">         <span class="keyword">while</span> (( c = xmlInputStream.read ()) != -<span class="number">1</span>)</span><br><span class="line">            bos.write(c);</span><br><span class="line">         <span class="comment">//Print results</span></span><br><span class="line">         System.out.println(bos.toString());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// Clean-up environment</span></span><br><span class="line">      rs.close();</span><br><span class="line">      stmt.close();</span><br><span class="line">      pstmt.close();</span><br><span class="line">      conn.close();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for JDBC</span></span><br><span class="line">      se.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for Class.forName</span></span><br><span class="line">      e.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      <span class="comment">//finally block used to close resources</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(stmt!=<span class="keyword">null</span>)</span><br><span class="line">            stmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(pstmt!=<span class="keyword">null</span>)</span><br><span class="line">            pstmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">         se.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end finally try</span></span><br><span class="line">   &#125;<span class="comment">//end try</span></span><br><span class="line">   System.out.println(<span class="string">"Goodbye!"</span>);</span><br><span class="line">&#125;<span class="comment">//end main</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createXMLTable</span><span class="params">(Statement stmt)</span> </span></span><br><span class="line"><span class="function">   <span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">   System.out.println(<span class="string">"Creating XML_Data table..."</span> );</span><br><span class="line">   <span class="comment">//Create SQL Statement</span></span><br><span class="line">   String streamingDataSql = <span class="string">"CREATE TABLE XML_Data "</span> +</span><br><span class="line">                             <span class="string">"(id INTEGER, Data LONG)"</span>;     <span class="comment">//存储类型是的是Long</span></span><br><span class="line">   <span class="comment">//Drop table first if it exists.</span></span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      stmt.executeUpdate(<span class="string">"DROP TABLE XML_Data"</span>);</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">   &#125;<span class="comment">// do nothing</span></span><br><span class="line">   <span class="comment">//Build table.</span></span><br><span class="line">   stmt.executeUpdate(streamingDataSql);</span><br><span class="line">&#125;<span class="comment">//end createXMLTable</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/23/JDBC(五)数据类型/" rel="next" title="JDBC(五)数据类型">
+                <i class="fa fa-chevron-left"></i> JDBC(五)数据类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/23/JDBC(四)ResultSet/" rel="prev" title="JDBC(四)ResultSet">
+                JDBC(四)ResultSet <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#批量处理"><span class="nav-number">1.</span> <span class="nav-text">批量处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDBC-SQL转义语法"><span class="nav-number"></span> <span class="nav-text">JDBC SQL转义语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实例"><span class="nav-number"></span> <span class="nav-text">实例</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

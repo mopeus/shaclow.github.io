@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/我真帅/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/mysql临时表复制表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -251,7 +251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/23/我真帅/" itemprop="url">我真帅</a></h1>
+                <a class="post-title-link" href="/2018/12/23/mysql临时表复制表/" itemprop="url">mysql临时表复制表</a></h1>
         
 
         <div class="post-meta">
@@ -263,7 +263,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:33:30+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
                 2018-12-23
               </time>
             
@@ -303,9 +303,56 @@
       
         
           
-            <p>title: 我真帅<br>title: C:<br>title: C:<br>title: 数据通信\新建文件夹\我真帅<br>title: C:/Users/10483/Desktop/数据通信\新建文件夹\我真帅</p>
-<p>adsad</p>
-<p>你真的牛啤</p>
+            <p>临时表 </p>
+<p>就是临时保存的表，关闭客户端后将其删除，你用show tables 并不能看到他， 你也可以在使用完后主动drop 他</p>
+<p><code>create temporary table xxx(xxx xxx,xxx,xxx);</code></p>
+<p>mysql的表复制</p>
+<p><code>show create table tablename \G</code> 这样就会出现你想要的表的创建信息，你复制就行，不过你第一行要改一下表名字</p>
+<p>然后insert into clonetable (col1,col2,col3…) select col1,col2,col3,…. from tablename;进行数据的复制</p>
+<p>完整复制表的其他方法，感觉这个完爆好吧</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE targetTable LIKE sourceTable;</span><br><span class="line">INSERT INTO targetTable SELECT * FROM sourceTable;</span><br></pre></td></tr></table></figure>
+<p>这种好像无法模仿索引神魔的 默认值？</p>
+<p>可以拷贝一个表中其中的一些字段:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT username, password FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以将新建的表的字段改名:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(  </span><br><span class="line">    SELECT id, username AS uname, password AS pass FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以拷贝一部分数据:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin WHERE LEFT(username,1) = &apos;s&apos;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以在创建表的同时定义表中的字段信息:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin</span><br><span class="line">(</span><br><span class="line">    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY</span><br><span class="line">)</span><br><span class="line">AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><strong>第一、只复制表结构到新表</strong></p>
+<p>create table 新表 select * from 旧表 where 1=2</p>
+<p>或者</p>
+<p>create table 新表 like 旧表 </p>
+<p><strong>第二、复制表结构及数据到新表</strong></p>
+<p>create table新表 select * from 旧表 </p>
+<p>服务器元数据</p>
+<table>
+<thead>
+<tr>
+<th>SELECT VERSION( )</th>
+<th>服务器版本信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT DATABASE( )</td>
+<td>当前数据库名 (或者返回空)</td>
+</tr>
+<tr>
+<td>SELECT USER( )</td>
+<td>当前用户名</td>
+</tr>
+<tr>
+<td>SHOW STATUS</td>
+<td>服务器状态</td>
+</tr>
+<tr>
+<td>SHOW VARIABLES</td>
+<td>服务器配置变量</td>
+</tr>
+</tbody>
+</table>
 
           
         
@@ -354,7 +401,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/利用CookieManager管理Cookie/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/mysql表不能删除修改/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -373,7 +420,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/利用CookieManager管理Cookie/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/mysql表不能删除修改/" itemprop="url">mysql表不能删除修改</a></h1>
         
 
         <div class="post-meta">
@@ -385,8 +432,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -425,7 +472,16 @@
       
         
           
-            
+            <p>MySQL如果频繁的修改一个表的数据，那么这么表会被锁死。造成假死现象。</p>
+<p>比如用Navicat等连接工具操作，Navicat会直接未响应，只能强制关闭软件，但是重启后依然无效。</p>
+<p>解决办法：</p>
+<p>首先执行：</p>
+<p>show full processlist;  //列出当前的操作process，一般会看到很多waiting的process，说明已经有卡住的proces了，我们要杀死这些process！！</p>
+<p>再执行：</p>
+<p>kill processid;  //processid表示process的id，比如kill 3301，就会将id为3301的process杀死。</p>
+<p>使用 kill 将所有的 id 杀死。然后重启MySQL，一般就会解决了。如果还不行，那应该是不可能的吧。。。</p>
+<p>重启MySQL：</p>
+
           
         
       
@@ -473,7 +529,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/自定义标签/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Mysql 的外键/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -492,7 +548,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/自定义标签/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/Mysql 的外键/" itemprop="url">Mysql 的外键</a></h1>
         
 
         <div class="post-meta">
@@ -504,8 +560,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -544,54 +600,46 @@
       
         
           
-            <p>自定义标签</p>
-<p>一个tld文件 一个特殊的实现类 一个标签的使用</p>
-<p>类</p>
+            <p>Mysql 的外键</p>
+<p>感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的</p>
+<p>数据库中其实外键有两种说法啦，</p>
+<p>一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联）</p>
+<p>真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。</p>
+<p>首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的列（可以名字不同，但一般名字相同方便思考）这时候，一个表A把这个列定义为唯一索引（可以为unique也可以primary key），一定要（这个表就是主表）。</p>
+<p>另一个表B则要将这个键定义成外键 连接到上一个表的的唯一索引（称为从表）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">create table orders(</span><br><span class="line">O_id int not null,</span><br><span class="line">P_id int ,PRIMARY KEY (O_id),FOREIGN KEY (P_id) references Person(P_id)</span><br><span class="line">)</span><br><span class="line">-- 在Person中P_id是主键   foreign key 等的括号不能省略</span><br><span class="line"></span><br><span class="line">-- alter修改</span><br><span class="line">alter table orders add constraint fk_foreignkey foreign key (P_id) references Person(P_id);</span><br><span class="line"></span><br><span class="line">-- 撤销外键</span><br><span class="line">alter table orders drop foreign key fk_foreignkey  (外键名字)</span><br><span class="line"></span><br><span class="line">-- 删除外键关系时会有点小尴尬，因为一定要外键名字，而你大概率是没有设置或者不记得的，你可以用show create table xxx查看</span><br><span class="line"></span><br><span class="line">-- 禁用约束（子表的外键约束）  好像是用在 oracle的 mysql好像不行  启用是enable</span><br><span class="line">ALTER TABLE 表名 disable constraint 约束名;</span><br></pre></td></tr></table></figure>
+<p><strong>谁是谁的外键？</strong></p>
+<p>说了这么多到底谁是外键呢？你以为是B的那个索引是外键？太天真了 naive 是A的那个主键是B的外键。竟然是主表的键是从表的外键太奇怪了。。</p>
+<p>外键约束</p>
+<p>外键约束咧应该是本来是不能违反的 但是你可以设置违反响应事件？</p>
+<p>   <strong>外键约束事件触发</strong>。既然有外键约束，当违反约束时会发生什么？我们把它的反应看作事件，一共有四种： </p>
+<p>定义方式在最后面加  比如  <code>FOREIGN KEY (main_id) REFERENCES test_main ON DELETE SET NULL;</code></p>
+<p>​        1、级联：当主表更改时，从表跟从更改。  on delete/update cascade</p>
+<p>​        2、不执行任何操作。           默认的外键触发</p>
+<p>​        3、设置null。                        // on delete set null </p>
+<p>​        4、设置默认值。    难道是set 加参数值？   </p>
+<p>   <code>alter table 表名 add constraint DF_字段名 default &#39;默认值&#39; for 字段名--其中的&#39;默认值&#39;为你想要默认的值，注意&#39;for&#39;</code></p>
+<p>外键作用可以说是：保持数据一致性，完整性，关联性，主要目的是控制存储在外键表中的数据。就是当你对一个表的数据进行操作，和他有关联的一个或更多表的数据能够同时发生改变，<strong>避免无效或是无用的改变和孤立的数据</strong>。</p>
+<p>​        <strong>建键原则</strong>：</p>
+<p>​       1、 外键字段为主键<br>　　2、 所有的键都必须唯一<br>　　3、避免使用复合键<br>　　4、外键总是关联唯一的键字段</p>
+<p>总之</p>
 <ul>
-<li><p>SimpleTagSupport接口的实现  （doTag()）</p>
+<li><p>删除  要先删除子表所关联的数据再删除父表数据   级联删除 可以删父表的同时删除子表数据</p>
 </li>
-<li><p>带属性的标签需要 get/set方法</p>
+<li><p>更新 更新父表（应该是主键值）会违反约束 但可以修改子表（外键列）（不过该外键不能改成父表没有的 ）  和父表的非主键值   级联更新  可以修改父表的同时修改子表</p>
+<p>其实是可以修改主键的，但是呢和删除数据一样   前提是从表没有连接到它的行</p>
 </li>
-<li><p>getJspContext().getAttribute(xx,PageContext.xxxx_SCOPE) 可以获取jsp页面各种作用域的属性</p>
-<ul>
-<li>或者是 getJspContext().setAttribute(String,object)设置属性不过好像就是pageScope属性的</li>
-</ul>
-</li>
-<li><p>getJspContext().getOut()获取Writer 输出页面</p>
-</li>
-<li><p>getJspBody().invoke(null) 输出标签体内的内容</p>
-<ul>
-<li>这有个很骚的操作 标签体为 ${pageScope.xxx} 然后在一个循环中一边 getJspContext().setAttribute(String,object)设置更改属性，一遍getJspBody().invoke(null)去输出，这样就能实现遍历</li>
-<li>好像就算是<code>&lt;jsp:attribute name=&quot;xxx&quot;&gt;</code>标签包裹的的标签体作为属性，她在类里面也只是个JspFragment也只是能invoke而已</li>
-</ul>
-<p>还有动态属性这比较麻烦，二七</p>
+<li><p>插入时 父表可以插入 子表插入如果插入的外键列是父表没有的值的时候会违反约束，子表的数据一定要有父表做依据  </p>
+<p>给出的错误提示<code>Cannot add or update a child row: a foreign key constraint fails</code>  </p>
 </li>
 </ul>
-<p>tld文件</p>
-<ul>
-<li>放在WEB-INF文件夹下</li>
-<li>taglib标签为根标签<ul>
-<li>uri标签</li>
-<li>tag标签<ul>
-<li>name</li>
-<li>tag-class</li>
-<li>body-content</li>
-<li>attribute<ul>
-<li>name required fragment</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>使用标签</p>
-<ul>
-<li><code>&lt;%@taglib uri=&quot;&quot; prefix%&gt;</code>声明</li>
-<li><code>&lt;前缀：tagname attributename=&quot;value&quot;&gt;</code></li>
-<li>标签体做属性 用 jsp:attribute标签包裹</li>
-</ul>
-<p>传递集合的时候，只能通过session 属性进行获取传递</p>
+<p>总的来说 先有父表再有子表    父表数据先看子表，甚至不能改</p>
+<p>级联都是针对改变主表主键/删除主表数据   从表的外键也修改/从表数据删除 的情况 </p>
+<p>已经经过实操过所有例子大概率没有任何问题</p>
+<p>然而并没有级联插入</p>
+<p>或者我们可以用触发器实现级联删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TRIGGER [dbo].[trigCascadeDelete]    --触发器名</span><br><span class="line">   ON  [dbo].[main]      ---作用于哪张表</span><br><span class="line">   instead of  delete    ---什么动作触发</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	declare @id int   --声明@id变量</span><br><span class="line">	select @id=id from deleted --取出要删除的id</span><br><span class="line">	delete from branch where mainId =@id  --先删除从表中的数据行</span><br><span class="line">	delete from main where id =@id   ---再删除主表中的数据行</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>外键并不能帮助我们对查询有什么帮助，我们只能老老实实用联合查询 什么子查询那种东西去做多表查询</p>
 
           
         
@@ -640,7 +688,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/正则表达式/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Mysql再补习(一)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -659,7 +707,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/正则表达式/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/Mysql再补习(一)/" itemprop="url">Mysql再补习(一)</a></h1>
         
 
         <div class="post-meta">
@@ -671,440 +719,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>  正则表达式是由普通字符（例如字符 a 到 z）以及特殊字符（称为”元字符”）组成的文字模式。模式描述在搜索文本时要匹配的一个或多个字符串。正则表达式作为一个模板，将某个字符模式与所搜索的字符串进行匹配。</p>
-<p>？ 代表0或1个字符</p>
-<p>*代表0或多个字符</p>
-<p>^ 匹配输入字符串的开始位置</p>
-<p>[0-9] 匹配单个数字 + 匹配一个或多个</p>
-<p>abc$ 匹配字母abc并以abc结尾 $撇皮字符串的结束位置</p>
-<p>^[a-z0-9_-]{3,15}$ </p>
-<p>^匹配开始   [] 匹配 字母数字 下划线和连接字符   {3，15}$ 指定字符串的长度为3-15个  </p>
-<p>+号 代表前面的字符 至少出现一次 </p>
-<p>runoo+b  =&gt;  runooooooooob runoob</p>
-<p>runoo*b 可以出现0次或更多</p>
-<p>runoo?b  出现一次或0次</p>
-<p>转义字符</p>
-<table>
-<thead>
-<tr>
-<th>\cx</th>
-<th>匹配由x指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。x 的值必须为 A-Z 或 a-z 之一。否则，将 c 视为一个原义的 ‘c’ 字符。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>\f</td>
-<td>匹配一个换页符。等价于 \x0c 和 \cL。</td>
-</tr>
-<tr>
-<td>\n</td>
-<td>匹配一个换行符。等价于 \x0a 和 \cJ。</td>
-</tr>
-<tr>
-<td>\r</td>
-<td>匹配一个回车符。等价于 \x0d 和 \cM。</td>
-</tr>
-<tr>
-<td>\s</td>
-<td>匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。注意 Unicode 正则表达式会匹配全角空格符。</td>
-</tr>
-<tr>
-<td>\S</td>
-<td>匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</td>
-</tr>
-</tbody>
-</table>
-<p>元字符就是特殊字符</p>
-<p>如果要真正当作正常字符匹配他们 前面加 \</p>
-<table>
-<thead>
-<tr>
-<th>$</th>
-<th>匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 ‘\n’ 或 ‘\r’。要匹配 $ 字符本身，请使用 \ $。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>( )</td>
-<td>标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。</td>
-</tr>
-<tr>
-<td>*</td>
-<td>匹配前面的子表达式零次或多次。</td>
-</tr>
-<tr>
-<td>+</td>
-<td>匹配前面的子表达式一次或多次。</td>
-</tr>
-<tr>
-<td>.</td>
-<td>匹配除换行符 \n 之外的任何单字符。</td>
-</tr>
-<tr>
-<td>[</td>
-<td>标记一个中括号表达式的开始。</td>
-</tr>
-<tr>
-<td>?</td>
-<td>匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。</td>
-</tr>
-<tr>
-<td>\</td>
-<td>将下一个字符标记为或特殊字符、或原义字符、或向后引用、或八进制转义符。例如， ‘n’ 匹配字符 ‘n’。’\n’ 匹配换行符。</td>
-</tr>
-<tr>
-<td>^</td>
-<td>匹配输入字符串的开始位置，除非在方括号表达式中使用，此时它表示不接受该字符集合。</td>
-</tr>
-<tr>
-<td>{</td>
-<td>标记限定符表达式的开始。</td>
-</tr>
-<tr>
-<td>\</td>
-<td></td>
-<td>指明两项之间的一个选择。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="限定符"><a href="#限定符" class="headerlink" title="限定符"></a>限定符</h2><p>限定符用来指定正则表达式的一个给定组件必须要出现多少次才能满足匹配。有 * 或 + 或 ? 或 {n} 或 {n,} 或 {n,m} 共6种。</p>
-<table>
-<thead>
-<tr>
-<th>字符</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>*</td>
-<td>匹配前面的子表达式零次或多次。例如，zo<em> 能匹配 “z” 以及 “zoo”。</em> 等价于{0,}。</td>
-</tr>
-<tr>
-<td>+</td>
-<td>匹配前面的子表达式一次或多次。例如，’zo+’ 能匹配 “zo” 以及 “zoo”，但不能匹配 “z”。+ 等价于 {1,}。</td>
-</tr>
-<tr>
-<td>?</td>
-<td>匹配前面的子表达式零次或一次。例如，”do(es)?” 可以匹配 “do” 、 “does” 中的 “does” 、 “doxy” 中的 “do” 。? 等价于 {0,1}。</td>
-</tr>
-<tr>
-<td>{n}</td>
-<td>n 是一个非负整数。匹配确定的 n 次。例如，’o{2}’ 不能匹配 “Bob” 中的 ‘o’，但是能匹配 “food” 中的两个 o。</td>
-</tr>
-<tr>
-<td>{n,}</td>
-<td>n 是一个非负整数。至少匹配n 次。例如，’o{2,}’ 不能匹配 “Bob” 中的 ‘o’，但能匹配 “foooood” 中的所有 o。’o{1,}’ 等价于 ‘o+’。’o{0,}’ 则等价于 ‘o*’。</td>
-</tr>
-<tr>
-<td>{n,m}</td>
-<td>m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m 次。例如，”o{1,3}” 将匹配 “fooooood” 中的前三个 o。’o{0,1}’ 等价于 ‘o?’。请注意在逗号和两个数之间不能有空格。</td>
-</tr>
-</tbody>
-</table>
-<p>贪婪与最小匹配</p>
-<p><strong>*、+限定符都是贪婪的，因为它们会尽可能多的匹配文字，只有在它们的后面加上一个?就可以实现非贪婪或最小匹配</strong></p>
-<p>通过在 *、+  限定符之后放置 ?，该表达式从”贪心”表达式转换为”非贪心”表达式或者最小匹配。</p>
-<h2 id="定位符"><a href="#定位符" class="headerlink" title="定位符"></a>定位符</h2><p>定位符使您能够将正则表达式固定到行首或行尾。</p>
-<table>
-<thead>
-<tr>
-<th>^</th>
-<th>匹配输入字符串开始的位置。如果设置了 RegExp 对象的 Multiline 属性，^ 还会与 \n 或 \r 之后的位置匹配。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>$</td>
-<td>匹配输入字符串结尾的位置。如果设置了 RegExp 对象的 Multiline 属性，$ 还会与 \n 或 \r 之前的位置匹配。</td>
-</tr>
-<tr>
-<td>\b</td>
-<td>匹配一个单词边界，即字与空格间的位置。</td>
-</tr>
-<tr>
-<td>\B</td>
-<td>非单词边界匹配。</td>
-</tr>
-</tbody>
-</table>
-<p>感觉\b \B 表现很奇怪   \b可以表示一个单词后面的空格前面为止的匹配，\B就很奇怪  不奇怪</p>
-<p>下面的表达式匹配 Chapter 中的字符串 apt，但不匹配 aptitude 中的字符串 apt：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/\Bapt/</span><br></pre></td></tr></table></figure>
-<p>而且好像他们不能和$组合一起</p>
-<p>而且所谓的^ 和$ 其实是代表行首和行尾懂8</p>
-<p>捕获缓存</p>
-<p>对一个正则表达式模式或部分模式两边添加圆括号将导致相关匹配存储到一个临时缓冲区中，所捕获的每个子匹配都按照在正则表达式模式中从左到右出现的顺序存储。缓冲区编号从 1 开始，最多可存储 99 个捕获的子表达式。每个缓冲区都可以使用 \n 访问，其中 n 为一个标识特定缓冲区的一位或两位十进制数。</p>
-<p>可以使用非捕获元字符 ?:、?= 或 ?! 来重写捕获，忽略对相关匹配的保存。</p>
-<p>反向引用的最简单的、最有用的应用之一，是提供查找文本中两个相同的相邻单词的匹配项的能力。</p>
-<p>var str = “Is is the cost of of gasoline going up up”; var patt1 = /\b([a-z]+) \1\b/ig; document.write(str.match(patt1));</p>
-<p>Is is,of of,up up</p>
-<p>捕获的表达式，正如 [a-z]+ 指定的，包括一个或多个字母。正则表达式的第二部分是对以前捕获的子匹配项的引用，即，单词的第二个匹配项正好由括号表达式匹配。\1 指定第一个子匹配项。</p>
-<p>单词边界元字符确保只检测整个单词。否则，诸如 “is issued” 或 “this is” 之类的词组将不能正确地被此表达式识别。</p>
-<p>正则表达式后面的全局标记 g 指定将该表达式应用到输入字符串中能够查找到的尽可能多的匹配。</p>
-<p>表达式的结尾处的不区分大小写 i 标记指定不区分大小写。</p>
-<p>多行标记指定换行符的两边可能出现潜在的匹配。</p>
-<p>反向引用还可以将通用资源指示符 (URI) 分解为其组件。假定您想将下面的 URI 分解为协议（ftp、http 等等）、域地址和页/路径：</p>
-<p>. 特殊字符在中括号表达式时 如 [.] 只会匹配 .字符，等价于 .，而非匹配除换行符 <strong>\n</strong> 外的所有字符。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/数据库常识2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/数据库常识2/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:29+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="1-DDL-Data-Definition-Language"><a href="#1-DDL-Data-Definition-Language" class="headerlink" title="1. DDL - Data Definition Language"></a>1. DDL - Data Definition Language</h3><p>数据库定义语言：定义数据库的结构。</p>
-<p>其主要命令有CREATE，ALTER，DROP等，该语言不需要commit，因此慎重。</p>
-<p>还有其他的：</p>
-<p>TRUNCATE - 截断表内容（开发期，还是挺常用的）</p>
-<p>COMMENT - 为数据字典添加备注</p>
-<h3 id="2-DML-Data-Manipulation-Language"><a href="#2-DML-Data-Manipulation-Language" class="headerlink" title="2. DML - Data Manipulation Language"></a>2. DML - Data Manipulation Language</h3><p>数据库操作语言：SQL中处理数据库中的数据</p>
-<p>其主要命令有INSERT,UPDATE,DELETE等，这些例子大家常用就不一一介绍了。该语言需要commit。还</p>
-<p>有常用的 LOCK TABLE ,记得写过锁的博客 - <a href="http://www.bysocket.com/?p=191" target="_blank" rel="noopener">传送门</a></p>
-<p>还有其他不熟悉的：</p>
-<p>CALL - 调用一个PL/SQL或Java子程序<br>EXPLAIN PLAN - 解析分析数据访问路径</p>
-<h3 id="3-DCL-Data-Control-Language"><a href="#3-DCL-Data-Control-Language" class="headerlink" title="3. DCL - Data Control Language"></a>3. DCL - Data Control Language</h3><p>数据库控制语言：授权，角色控制等</p>
-<p>GRANT - 为用户赋予访问权限</p>
-<p>REVOKE - 撤回授权权限</p>
-<h3 id="4-TCL-Transaction-Control-Language"><a href="#4-TCL-Transaction-Control-Language" class="headerlink" title="4. TCL - Transaction Control Language"></a>4. TCL - Transaction Control Language</h3><p>事务控制语言</p>
-<p>COMMIT - 保存已完成的工作</p>
-<p>SAVEPOINT - 在事务中设置保存点，可以回滚到此处</p>
-<p>ROLLBACK - 回滚</p>
-<p>SET TRANSACTION - 改变事务选项</p>
-<p>有一种说法是将 select  where 这种说是DQL  但也有一种说法是归于DML中</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Mysql再补习(一)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/Mysql再补习(一)/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -1280,7 +896,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/mysql表不能删除修改/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/mysql索引/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1299,7 +915,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/mysql表不能删除修改/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/mysql索引/" itemprop="url">mysql索引</a></h1>
         
 
         <div class="post-meta">
@@ -1311,136 +927,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>MySQL如果频繁的修改一个表的数据，那么这么表会被锁死。造成假死现象。</p>
-<p>比如用Navicat等连接工具操作，Navicat会直接未响应，只能强制关闭软件，但是重启后依然无效。</p>
-<p>解决办法：</p>
-<p>首先执行：</p>
-<p>show full processlist;  //列出当前的操作process，一般会看到很多waiting的process，说明已经有卡住的proces了，我们要杀死这些process！！</p>
-<p>再执行：</p>
-<p>kill processid;  //processid表示process的id，比如kill 3301，就会将id为3301的process杀死。</p>
-<p>使用 kill 将所有的 id 杀死。然后重启MySQL，一般就会解决了。如果还不行，那应该是不可能的吧。。。</p>
-<p>重启MySQL：</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/mysql索引/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/mysql索引/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -1595,7 +1083,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/mysql临时表复制表/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1614,7 +1102,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/mysql临时表复制表/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/JDBC/" itemprop="url">JDBC</a></h1>
         
 
         <div class="post-meta">
@@ -1626,8 +1114,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -1666,56 +1154,61 @@
       
         
           
-            <p>临时表 </p>
-<p>就是临时保存的表，关闭客户端后将其删除，你用show tables 并不能看到他， 你也可以在使用完后主动drop 他</p>
-<p><code>create temporary table xxx(xxx xxx,xxx,xxx);</code></p>
-<p>mysql的表复制</p>
-<p><code>show create table tablename \G</code> 这样就会出现你想要的表的创建信息，你复制就行，不过你第一行要改一下表名字</p>
-<p>然后insert into clonetable (col1,col2,col3…) select col1,col2,col3,…. from tablename;进行数据的复制</p>
-<p>完整复制表的其他方法，感觉这个完爆好吧</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE targetTable LIKE sourceTable;</span><br><span class="line">INSERT INTO targetTable SELECT * FROM sourceTable;</span><br></pre></td></tr></table></figure>
-<p>这种好像无法模仿索引神魔的 默认值？</p>
-<p>可以拷贝一个表中其中的一些字段:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT username, password FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>可以将新建的表的字段改名:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(  </span><br><span class="line">    SELECT id, username AS uname, password AS pass FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>可以拷贝一部分数据:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin WHERE LEFT(username,1) = &apos;s&apos;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>可以在创建表的同时定义表中的字段信息:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin</span><br><span class="line">(</span><br><span class="line">    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY</span><br><span class="line">)</span><br><span class="line">AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p><strong>第一、只复制表结构到新表</strong></p>
-<p>create table 新表 select * from 旧表 where 1=2</p>
-<p>或者</p>
-<p>create table 新表 like 旧表 </p>
-<p><strong>第二、复制表结构及数据到新表</strong></p>
-<p>create table新表 select * from 旧表 </p>
-<p>服务器元数据</p>
-<table>
-<thead>
-<tr>
-<th>SELECT VERSION( )</th>
-<th>服务器版本信息</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SELECT DATABASE( )</td>
-<td>当前数据库名 (或者返回空)</td>
-</tr>
-<tr>
-<td>SELECT USER( )</td>
-<td>当前用户名</td>
-</tr>
-<tr>
-<td>SHOW STATUS</td>
-<td>服务器状态</td>
-</tr>
-<tr>
-<td>SHOW VARIABLES</td>
-<td>服务器配置变量</td>
-</tr>
-</tbody>
-</table>
+            <p>JDBC代表Java数据库连接(<strong>J</strong>ava <strong>D</strong>ata<strong>b</strong>ase <strong>C</strong>onnectivity)，它是用于Java编程语言和数据库之间的数据库无关连接的标准Java API，换句话说：JDBC是用于在Java语言编程中与数据库连接的API。</p>
+<p>JDBC库包括通常与数据库使用相关，如下面提到的每个任务的API -</p>
+<p>从根本上说，JDBC是一个规范，它提供了一整套接口，允许以一种可移植的访问底层数据库API。 Java可以用它来编写不同类型的可执行文件，如 -</p>
+<ul>
+<li>Java应用程序</li>
+<li>Java Applet</li>
+<li>Java Servlets</li>
+<li>Java ServerPages(<a href="http://www.yiibai.com/jsp/" target="_blank" rel="noopener">JSP</a>)</li>
+<li>企业级JavaBeans(EJB)</li>
+</ul>
+<p>所有这些不同的可执行文件都能够使用JDBC驱动程序来访问数据库，并用于存储数据到数据库中。</p>
+<p>JDBC提供与ODBC相同的功能，允许Java程序包含与数据库无关的代码(同样的代码，只需要指定使用的数据库类型，不需要重修改数据库查询或操作代码)。</p>
+<h2 id="JDBC架构"><a href="#JDBC架构" class="headerlink" title="JDBC架构"></a>JDBC架构</h2><p>JDBC API支持用于数据库访问的两层和三层处理模型，但通常，JDBC体系结构由两层组成：</p>
+<ul>
+<li>JDBC API：提供应用程序到JDBC管理器连接。</li>
+<li>JDBC驱动程序API：支持JDBC管理器到驱动程序连接。</li>
+</ul>
+<p>JDBC API使用驱动程序管理器并指定数据库的驱动程序来提供与异构数据库的透明连接。</p>
+<p>JDBC驱动程序管理器确保使用正确的驱动程序来访问每个数据源。 驱动程序管理器能够支持连接到多个异构数据库的多个并发驱动程序。</p>
+<p><img src="http://www.yiibai.com/uploads/images/201705/3005/659080547_64242.jpg" alt="img"></p>
+<h2 id="常见的JDBC组件"><a href="#常见的JDBC组件" class="headerlink" title="常见的JDBC组件"></a>常见的JDBC组件</h2><p>JDBC API提供以下接口和类 </p>
+<ul>
+<li><code>DriverManager</code>：此类管理数据库驱动程序列表。 使用通信子协议将来自java应用程序的连接请求与适当的数据库驱动程序进行匹配。在JDBC下识别某个子协议的第一个驱动程序将用于建立数据库连接。</li>
+<li><code>Driver</code>：此接口处理与数据库服务器的通信。我们很少会直接与<code>Driver</code>对象进行交互。 但会使用<code>DriverManager</code>对象来管理这种类型的对象。 它还提取与使用<code>Driver</code>对象相关的信息。</li>
+<li><code>Connection</code>：此接口具有用于联系数据库的所有方法。 连接(<code>Connection</code>)对象表示通信上下文，即，与数据库的所有通信仅通过连接对象。</li>
+<li><code>Statement</code>：使用从此接口创建的对象将SQL语句提交到数据库。 除了执行存储过程之外，一些派生接口还接受参数。</li>
+<li><code>ResultSet</code>：在使用<code>Statement</code>对象执行SQL查询后，这些对象保存从数据库检索的数据。 它作为一个迭代器并可移动<code>ResultSet</code>对象查询的数据。</li>
+<li><code>SQLException</code>：此类处理数据库应用程序中发生的任何错误。</li>
+</ul>
+<h2 id="JDBC-4-0包"><a href="#JDBC-4-0包" class="headerlink" title="JDBC 4.0包"></a>JDBC 4.0包</h2><p><code>java.sql</code>和<code>javax.sql</code>是JDBC 4.0的主要包。这是编写本教程时最新的JDBC版本。 它提供了与数据源进行交互的主要类。</p>
+<h2 id="DBC驱动程序是什么？"><a href="#DBC驱动程序是什么？" class="headerlink" title="DBC驱动程序是什么？"></a><strong>DBC驱动程序是什么？</strong></h2><p>JDBC驱动程序在JDBC API中实现定义的接口，用于与数据库服务器进行交互。</p>
+<p>例如，使用JDBC驱动程序，可以通过发送SQL或数据库命令，然后使用Java接收结果来打开数据库连接并与数据库进行交互。</p>
+<p>JDK附带的<code>Java.sql</code>包包含各种类，其类的行为被定义，实现在第三方驱动程序中完成。 第三方供应商在其数据库驱动程序中实现<code>java.sql.Driver</code>接口。</p>
+<h2 id="JDBC驱动程序类型"><a href="#JDBC驱动程序类型" class="headerlink" title="JDBC驱动程序类型"></a>JDBC驱动程序类型</h2><p>JDBC驱动程序实现因Java运行的各种操作系统和硬件平台而异。 Sun将实现类型分为四种类型，分别为<code>1</code>,<code>2</code>,<code>3`</code>4`类型，如下所述：</p>
+<h3 id="类型1：JDBC-ODBC桥驱动程序"><a href="#类型1：JDBC-ODBC桥驱动程序" class="headerlink" title="类型1：JDBC-ODBC桥驱动程序"></a>类型1：JDBC-ODBC桥驱动程序</h3><p>在<strong>类型1</strong>驱动程序中，JDBC桥接器用于访问安装在每台客户机上的ODBC驱动程序。 使用ODBC需要在系统上配置表示目标数据库的数据源名称(DSN)。</p>
+<p>当Java第一次出现时，这是一个驱动程序，因为大多数数据库仅支持ODBC访问，但现在这种类型的驱动程序仅推荐用于实验性使用或没有其他替代方案时使用。</p>
+<p><img src="http://www.yiibai.com/uploads/images/201705/3005/696110505_18575.jpg" alt="img"></p>
+<p><strong>JDK 1.2</strong>附带的JDBC-ODBC桥接是这种驱动程序的一个很好的例子。</p>
+<h3 id="类型2：JDBC本地API"><a href="#类型2：JDBC本地API" class="headerlink" title="类型2：JDBC本地API"></a>类型2：JDBC本地API</h3><p>在<strong>类型2</strong>驱动程序中，JDBC API调用将转换为本地C/C++ API调用，这是数据库唯一的。 这些驱动程序通常由数据库供应商提供，并以与JDBC-ODBC桥接相同的方式使用。 必须在每个客户机上安装供应商特定的驱动程序。</p>
+<p>如果要更改数据库，则必须更改原生API，因为它特定于数据库，并且现在大部分已经过时，但是使用<strong>类型2</strong>驱动程序实现了一些扩展功能的开发，它消除了ODBC的开销。</p>
+<p><img src="http://www.yiibai.com/uploads/images/201705/3005/881110514_49239.jpg" alt="img"></p>
+<p>Oracle调用接口(OCI)驱动程序是<strong>类型2</strong>驱动程序的示例。</p>
+<h3 id="类型3：JDBC-Net纯Java"><a href="#类型3：JDBC-Net纯Java" class="headerlink" title="类型3：JDBC-Net纯Java"></a>类型3：JDBC-Net纯Java</h3><p>在<strong>类型3</strong>驱动程序中，使用三层方法访问数据库。 JDBC客户端使用标准网络套接字与中间件应用程序服务器进行通信。 套接字信息随后由中间件应用服务器转换成DBMS所需的调用格式，并转发到数据库服务器。</p>
+<p>这种驱动程序是非常灵活的，因为它不需要在客户端上安装代码，<strong>一个驱动程序实际上可以提供多个数据库的访问。</strong></p>
+<p><img src="http://www.yiibai.com/uploads/images/201705/3005/700110516_88885.jpg" alt="img"></p>
+<p>可以将应用程序服务器视为JDBC“代理”，它会调用客户端应用程序。 因此，我们需要了解应用程序服务器的配置，才能有效地使用此驱动程序类型。</p>
+<p>应用程序服务器可能会使用类型1,2或4驱动程序与数据库通信，了解细微差别对理解JDBC是有帮助的。</p>
+<h3 id="类型4：100％纯Java"><a href="#类型4：100％纯Java" class="headerlink" title="类型4：100％纯Java"></a>类型4：100％纯Java</h3><p>在<strong>类型4</strong>驱动程序中，基于纯Java的驱动程序通过套接字连接与供应商的数据库直接通信。 这是数据库可用的最高性能驱动程序，通常由供应商自己提供。</p>
+<p>这种驱动是非常灵活的，不需要在客户端或服务器上安装特殊的软件。 此外，这些驱动程序可以动态下载。</p>
+<p><img src="http://www.yiibai.com/uploads/images/201705/3005/770110529_65984.jpg" alt="img"></p>
+<p>MySQL <code>Connector/J</code>驱动程序是<strong>类型4</strong>驱动程序。 由于其网络协议的专有性质，数据库供应商通常提供<strong>类型4</strong>驱动程序。</p>
+<h2 id="应该使用哪个驱动程序？"><a href="#应该使用哪个驱动程序？" class="headerlink" title="应该使用哪个驱动程序？"></a>应该使用哪个驱动程序？</h2><p>如果您正在访问一种类型的数据库，例如Oracle，Sybase或IBM DB2，则首选驱动程序类型为<strong>类型4</strong>。</p>
+<p>如果Java应用程序同时访问多种类型的数据库，则<strong>类型3</strong>是首选驱动程序。</p>
+<p><strong>类型2</strong>驱动程序在数据库不可用的<strong>类型3</strong>或<strong>类型4</strong>驱动程序的情况下使用。</p>
+<p><strong>类型1</strong>驱动程序不被视为部署级驱动程序，通常仅用于开发和测试目的。</p>
 
           
         
@@ -1764,7 +1257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Mysql 的外键/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/js 和 jsp变量的传递/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1783,7 +1276,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Mysql 的外键/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/js 和 jsp变量的传递/" itemprop="url">js 和 jsp变量的传递</a></h1>
         
 
         <div class="post-meta">
@@ -1795,8 +1288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -1835,46 +1328,559 @@
       
         
           
-            <p>Mysql 的外键</p>
-<p>感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的</p>
-<p>数据库中其实外键有两种说法啦，</p>
-<p>一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联）</p>
-<p>真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。</p>
-<p>首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的列（可以名字不同，但一般名字相同方便思考）这时候，一个表A把这个列定义为唯一索引（可以为unique也可以primary key），一定要（这个表就是主表）。</p>
-<p>另一个表B则要将这个键定义成外键 连接到上一个表的的唯一索引（称为从表）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">create table orders(</span><br><span class="line">O_id int not null,</span><br><span class="line">P_id int ,PRIMARY KEY (O_id),FOREIGN KEY (P_id) references Person(P_id)</span><br><span class="line">)</span><br><span class="line">-- 在Person中P_id是主键   foreign key 等的括号不能省略</span><br><span class="line"></span><br><span class="line">-- alter修改</span><br><span class="line">alter table orders add constraint fk_foreignkey foreign key (P_id) references Person(P_id);</span><br><span class="line"></span><br><span class="line">-- 撤销外键</span><br><span class="line">alter table orders drop foreign key fk_foreignkey  (外键名字)</span><br><span class="line"></span><br><span class="line">-- 删除外键关系时会有点小尴尬，因为一定要外键名字，而你大概率是没有设置或者不记得的，你可以用show create table xxx查看</span><br><span class="line"></span><br><span class="line">-- 禁用约束（子表的外键约束）  好像是用在 oracle的 mysql好像不行  启用是enable</span><br><span class="line">ALTER TABLE 表名 disable constraint 约束名;</span><br></pre></td></tr></table></figure>
-<p><strong>谁是谁的外键？</strong></p>
-<p>说了这么多到底谁是外键呢？你以为是B的那个索引是外键？太天真了 naive 是A的那个主键是B的外键。竟然是主表的键是从表的外键太奇怪了。。</p>
-<p>外键约束</p>
-<p>外键约束咧应该是本来是不能违反的 但是你可以设置违反响应事件？</p>
-<p>   <strong>外键约束事件触发</strong>。既然有外键约束，当违反约束时会发生什么？我们把它的反应看作事件，一共有四种： </p>
-<p>定义方式在最后面加  比如  <code>FOREIGN KEY (main_id) REFERENCES test_main ON DELETE SET NULL;</code></p>
-<p>​        1、级联：当主表更改时，从表跟从更改。  on delete/update cascade</p>
-<p>​        2、不执行任何操作。           默认的外键触发</p>
-<p>​        3、设置null。                        // on delete set null </p>
-<p>​        4、设置默认值。    难道是set 加参数值？   </p>
-<p>   <code>alter table 表名 add constraint DF_字段名 default &#39;默认值&#39; for 字段名--其中的&#39;默认值&#39;为你想要默认的值，注意&#39;for&#39;</code></p>
-<p>外键作用可以说是：保持数据一致性，完整性，关联性，主要目的是控制存储在外键表中的数据。就是当你对一个表的数据进行操作，和他有关联的一个或更多表的数据能够同时发生改变，<strong>避免无效或是无用的改变和孤立的数据</strong>。</p>
-<p>​        <strong>建键原则</strong>：</p>
-<p>​       1、 外键字段为主键<br>　　2、 所有的键都必须唯一<br>　　3、避免使用复合键<br>　　4、外键总是关联唯一的键字段</p>
-<p>总之</p>
+            <p>js 和 jsp变量的传递</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a=<span class="string">"&lt;%= xxxList%&gt;"</span>;         </span><br><span class="line"><span class="comment">//传递list值直接传递 不过一定要加双引号，这能避免很多莫名其妙的麻烦</span></span><br><span class="line"><span class="comment">//比如你如果是纯数字可以不加，但其他比如字符串什么的一定要加</span></span><br><span class="line"><span class="keyword">var</span> id=<span class="string">"&lt;%= request.getAttribute("</span>xxxParam<span class="string">")%&gt;"</span>;</span><br><span class="line">&lt;% <span class="built_in">String</span> s=<span class="string">"abc"</span>;%&gt;</span><br><span class="line"><span class="keyword">var</span> s=<span class="string">"&lt;%= s%&gt;"</span>;</span><br></pre></td></tr></table></figure>
+<p>注意传递数组的时候  不能像list那样直接传递给js变量 这样得到的值是java.lang.String</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在js和jsp页面中巧妙交换实现数组传递</span></span><br><span class="line"><span class="keyword">var</span> arr=<span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line">&lt;% <span class="keyword">for</span> (int i=<span class="number">0</span>;i&lt;archiveArr.length;i++)&#123;%&gt;</span><br><span class="line">    arr[<span class="xml"><span class="tag">&lt;<span class="name">%=i%</span>&gt;</span>]="<span class="tag">&lt;<span class="name">%=archiveArr[i]%</span>&gt;</span>";   //<span class="tag">&lt;<span class="name">%=</span> <span class="attr">i</span>%&gt;</span>中i是纯数字所以加不加双引号没所谓</span></span><br><span class="line"><span class="xml"> <span class="tag">&lt;<span class="name">%&#125;%</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>jsp使用js定义的变量，只能使用js代码，将对应的变量放到表单里面或通过url（window.open拼接上变量）的方式。传递给jsp.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JSP杂谈/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/JSP杂谈/" itemprop="url">JSP杂谈</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>针对JSP 这种 自动解释html标签的情况 我们可以使用 转移字符 &lt; 来表示相应的尖括号</p>
+<p>EL中隐式参数的使用 </p>
+<p>param 和 paramValues </p>
+<p>比如${param.name}  name对应表单中input的 name属性 </p>
+<p>当一个表单中有多个input对应同一个name这时候通过param来识别是远远不够的</p>
+<p>这时候 采用 ${paramValues.name[]} paramValues 返回一个name数组你就根据顺序找到 对应的数组元素</p>
+<p>这个 可建立一个jsp进行实验</p>
+<p>我们需要从头部获取信息 这儿时候采用隐式对象header可以实现  比如 ${header.host}  或者 ${header[“host”]}  倘若有多个值对应的首部 可以采用 headerValues 工作原理和paramValues相同</p>
+<p>得到request的性质 比如他的请求返回方法  比如 post get这种 </p>
+<p>我们可以用 scriptlet 这种 实现 &lt;%=request.getMethod()%&gt;     但是对于EL他没有request对象 requestscope也不是得到request对象本身的信息 他只是会得到请求的属性</p>
+<p>无法处理的事情交给pageContext 去得到剩下的一切</p>
+<p>${pageContext.request.method}   通过pageContext 就可以得到request对象了？</p>
+<p>如果你是想获得特定作用域的属性  请在属性名前 加上所属的作用于 比如 ${requestScope.person.name}  倘若你不是加作用域 他就按之前所讲的顺序遍历作用域 直到找到所要的属性</p>
+<p>但倘若属性名写得不规范  比如 setAttribute(“foo.person”,p);   ${foo.person.name} 这种是错误的   因为程序会寻找一个叫foo的作用域    所以要采用 ${requestScope[“foo.person”].name}</p>
+<p>通过EL得到cookie和初始化参数</p>
+<p>我们可以采用脚本 request.getCookies();  然后遍历cookies数组 找到对应的cookie</p>
+<p>但EL 可以采用  ${cookie.userName.value}  只需要提供名字就可以找到相应的值</p>
+<p>上下文初始化 </p>
+<p>可以通过 &lt;%=application.getInitParameter(“xxx”)%&gt;     ${initParam.xxx}   注意initParam 对应是 application的参数 不是某个 config的</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(四)ResultSet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/JDBC(四)ResultSet/" itemprop="url">JDBC(四)ResultSet</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>ResultSet 就是个结果集，但其实他是有很多性质可以订制的。</p>
+<p>ResultSet的方法有三类</p>
 <ul>
-<li><p>删除  要先删除子表所关联的数据再删除父表数据   级联删除 可以删父表的同时删除子表数据</p>
-</li>
-<li><p>更新 更新父表（应该是主键值）会违反约束 但可以修改子表（外键列）（不过该外键不能改成父表没有的 ）  和父表的非主键值   级联更新  可以修改父表的同时修改子表</p>
-<p>其实是可以修改主键的，但是呢和删除数据一样   前提是从表没有连接到它的行</p>
-</li>
-<li><p>插入时 父表可以插入 子表插入如果插入的外键列是父表没有的值的时候会违反约束，子表的数据一定要有父表做依据  </p>
-<p>给出的错误提示<code>Cannot add or update a child row: a foreign key constraint fails</code>  </p>
-</li>
+<li>浏览方法  就是移动结果集的光标</li>
+<li>获取方法 查看光标指向的数据</li>
+<li>更新方法 更新行的数据，然后在数据库中更新</li>
 </ul>
-<p>总的来说 先有父表再有子表    父表数据先看子表，甚至不能改</p>
-<p>级联都是针对改变主表主键/删除主表数据   从表的外键也修改/从表数据删除 的情况 </p>
-<p>已经经过实操过所有例子大概率没有任何问题</p>
-<p>然而并没有级联插入</p>
-<p>或者我们可以用触发器实现级联删除</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TRIGGER [dbo].[trigCascadeDelete]    --触发器名</span><br><span class="line">   ON  [dbo].[main]      ---作用于哪张表</span><br><span class="line">   instead of  delete    ---什么动作触发</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	declare @id int   --声明@id变量</span><br><span class="line">	select @id=id from deleted --取出要删除的id</span><br><span class="line">	delete from branch where mainId =@id  --先删除从表中的数据行</span><br><span class="line">	delete from main where id =@id   ---再删除主表中的数据行</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>外键并不能帮助我们对查询有什么帮助，我们只能老老实实用联合查询 什么子查询那种东西去做多表查询</p>
+<p>ResultSet定制是从创建它的Statement中就要进行设置了，我们知道Statement有三种类型</p>
+<p>对应三种创建的Statement构造函数</p>
+<ul>
+<li>createStatement(int RSType,int RSConcurrency)</li>
+<li>prepareStatement(String sql,int RSType,int RSConcurrency)</li>
+<li>prepareCall(String sql,int RSType,int RSConcurrency)</li>
+</ul>
+<p>发现我们好像有没有使用的参数 RSType 和 RSConcurrency 这就是用来定制ResultSet的性质的两个参数</p>
+<p>RSType 定制光标的移动</p>
+<ul>
+<li>ResultSet.TYPE_FORWARD_ONLY 光标只能在结果集中往前移动</li>
+<li>ResultSet.TYPE_SCROLL_INSENSITIVE 光标可前后移动 但对创建结果集后数据库的变化不敏感</li>
+<li>ResultSet.TYPE_SCROLL_SENSITIVE 光标可前后移动，结果集对数据库之后的变化敏感</li>
+</ul>
+<p>RSConcurrency 定制并发性</p>
+<ul>
+<li>ResultSet.CONCUR_READ_ONLY 只读结果集 默认</li>
+<li>ResultSet.CONCUR_UPDATABLE 可更新结果集</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE)</span><br></pre></td></tr></table></figure>
+<p>ResultSet相关方法</p>
+<ul>
+<li>beforeFirst()     </li>
+<li>afterLast()</li>
+</ul>
+<p>移到第一行之前或之后 感觉不是用来插入数据的，应该是搭配next previous 做遍历的</p>
+<ul>
+<li>first() 第一行</li>
+<li>last() </li>
+</ul>
+<ul>
+<li>absolute(int row) boolean</li>
+<li>boolean relative(int row)</li>
+</ul>
+<p>将光标移动到指定行，分为绝对位移和相对位移</p>
+<ul>
+<li>boolean previous()</li>
+<li>boolean next()</li>
+</ul>
+<ul>
+<li>int getRow() 返回当前行序号</li>
+</ul>
+<ul>
+<li>moveToInsertRow()</li>
+<li>moveToCurrentRow()</li>
+</ul>
+<p>插入行和当前行切换，随时随地插入还能回来，如果已经是插入行或当前行还不报错，美滋滋</p>
+<p>获取数据方法 getXXX</p>
+<p>XXX 可以很多 比如Int String URL Object Date 等等</p>
+<p>获取方法有两种，重载了</p>
+<p>int getInt(String colname) 根据列名获取数据</p>
+<p>int getInt(int colindex) 根据列序号获取数据</p>
+<p>我们获得数据集后还是能进行更新的</p>
+<p>updateXXX(int colinext,String s)  根据序号进行更新</p>
+<p>updateXXX(String colname,String s) 根据索引更新</p>
+<p>如果要将数据集的更改同步的数据库中，要继续调用以下方法</p>
+<ul>
+<li>updateRow() 更新</li>
+<li>deleteRow() 删除该行</li>
+</ul>
+<ul>
+<li>refreshRow() 刷新结果集中的数据以反映数据库中最近的任何更改   (ROW??)</li>
+<li>cancelRowUpdates() 取消对该行更新</li>
+<li>insertRow() 在数据库中插入一行。 只有当光标指向插入行时，才能调用此方法。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(七)异常/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/JDBC(七)异常/" itemprop="url">JDBC(七)异常</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>JDBC最常见的异常是 SQLException</p>
+<p>获取错误的信息的一些方法 通过SQLException对象来调用</p>
+<table>
+<thead>
+<tr>
+<th><code>getErrorCode( )</code></th>
+<th>获取与异常关联的错误代码。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getMessage( )</code></td>
+<td>获取驱动程序处理的错误的JDBC驱动程序的错误消息，或获取数据库错误的Oracle错误代码和消息。</td>
+</tr>
+<tr>
+<td><code>getSQLState( )</code></td>
+<td>获取XOPEN SQLstate字符串。 对于JDBC驱动程序错误，不会从此方法返回有用的信息。 对于数据库错误，返回五位数的XOPEN SQLstate代码。 此方法可以返回<code>null</code>。</td>
+</tr>
+<tr>
+<td><code>getNextException( )</code></td>
+<td>获取异常链中的下一个<code>Exception</code>对象。</td>
+</tr>
+<tr>
+<td><code>printStackTrace( )</code></td>
+<td>打印当前异常或可抛出的异常，并将其追溯到标准错误流。</td>
+</tr>
+<tr>
+<td><code>printStackTrace(PrintStream s)</code></td>
+<td>将此<code>throwable</code>及其回溯打印到指定的打印流。</td>
+</tr>
+<tr>
+<td><code>printStackTrace(PrintWriter w)</code></td>
+<td>打印这个<code>throwable</code>，它是回溯到指定的打印器(<code>PrintWriter</code>)。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="批量处理"><a href="#批量处理" class="headerlink" title="批量处理"></a>批量处理</h3><p>一次性向数据库发送多个sql语句可以减少通信花销提高性能</p>
+<p>首先得看看jdbc驱动是否支持该功能</p>
+<p>使用 <code>DatabaseMetaData.supportsBatchUpdates()</code> 去检查目标数据库和驱动是否支持把？ 如果支持则返回true</p>
+<ul>
+<li>用Statement和其兄弟的addBatch 将单个语句添加到批处理 executeBatch() 执行批量处理的所有语句</li>
+<li>我们可以使用clearBatch()删除等待执行的批量处理的所有语句，不过是全部删除，不能单个删除</li>
+</ul>
+<p>感觉PreparedStatement和Statement差不多，不过好像没有CallableStatement的用法</p>
+<ul>
+<li>创建Statement/PreparedStatement 对象</li>
+<li>conn.setAutoCommit(false)</li>
+<li>addBatch()  将构造好的Statement对象传进去，注意prepareStatement的sql也是填好参数了，Statement就在addBatch参数传入sql语句</li>
+<li>executeBatch() 执行所有sql语句</li>
+<li>commit 提交事务</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//假装statement/preparedStatement构造完成</span></span><br><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">stmt.setXXX(...); stmt.addBatch();  /stmt.addBatch(sql);</span><br><span class="line"></span><br><span class="line"><span class="comment">//好像是能返回结果的？ 不过如果太多怎么处理？</span></span><br><span class="line">stmt.executeBatch();</span><br><span class="line">conn.commit()</span><br></pre></td></tr></table></figure>
+<p>JDBC的SQL转义语法</p>
+<h2 id="JDBC-SQL转义语法"><a href="#JDBC-SQL转义语法" class="headerlink" title="JDBC SQL转义语法"></a>JDBC SQL转义语法</h2><p>通过使用标准JDBC方法和属性，转义语法使您能够灵活地使用不可用的数据库特定功能。</p>
+<p>一般SQL转义语法格式如下 -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;keyword &apos;parameters&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>以下是以下转义序列，在执行JDBC编程时非常有用 -</p>
+<p><strong>d, t, ts关键字</strong></p>
+<p>它们用于帮助确定日期，时间和时间戳文字。没有哪两个DBMS表示时间和日期的方式相同。 该转义语法告诉驱动程序以目标数据库的格式呈现日期或时间。 例如 -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;d &apos;yyyy-mm-dd&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p><code>yyyy</code>=年份，<code>mm</code>=月份; <code>dd</code>=日期。 使用这种语法<code>{d&#39;2019-09-03&#39;}</code>表示的是2019年3月9日。</p>
+<p>这是一个简单的示例，显示如何将日期插入表中 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create a Statement object</span></span><br><span class="line">stmt = conn.createStatement();</span><br><span class="line"><span class="comment">//Insert data ==&gt; ID, First Name, Last Name, DOB</span></span><br><span class="line">String sql=<span class="string">"INSERT INTO STUDENTS VALUES"</span> +</span><br><span class="line">             <span class="string">"(100,'Kobe','Bryant', &#123;d '2002-12-16'&#125;)"</span>;</span><br><span class="line"></span><br><span class="line">stmt.executeUpdate(sql);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Java</span><br></pre></td></tr></table></figure>
+<p>同样，还可以使用以下两种语法：<code>t</code>或<code>ts</code> -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;t &apos;hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，<code>hh</code>=小时，<code>mm</code> =分钟， <code>ss</code> =秒。 使用这种语法<code>{t &#39;13:30:29&#39;}</code>是<code>1:30:29 PM</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;ts &apos;yyyy-mm-dd hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里“<code>d</code>”和“<code>t</code>”是上述两种语法的组合语法来表示时间戳。</p>
+<p><strong>escape关键字</strong></p>
+<p><code>escape</code>关键字标识<code>LIKE</code>子句中使用转义字符。 使用SQL通配符<code>%</code>(与<code>0</code>个或多个字符匹配)时很有用。 例如 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT symbol FROM MathSymbols</span></span><br><span class="line"><span class="string">              WHERE symbol LIKE '\%' &#123;escape '\'&#125;"</span>;     <span class="comment">//escape声明 \是转义字符</span></span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
+<p>如果使用反斜杠字符(<code>\</code>)作为转义字符，则还必须在Java字符串文字中使用<strong>两个反斜杠</strong>字符，因为反斜杠也是Java转义字符。</p>
+<p><strong>fn 关键字</strong></p>
+<p>这个关键字表示DBMS中使用的标量函数。 例如，可以使用SQL函数长度来获取字符串的长度 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">fn <span class="title">length</span><span class="params">(<span class="string">'Hello World'</span>)</span>&#125;</span></span><br></pre></td></tr></table></figure>
+<p>上面语句返回结果值为：<code>11</code>，也就是字符串’<code>Hello World</code>‘的长度。</p>
+<p><strong>call 关键字</strong></p>
+<p>此关键字用于调用存储过程。 例如，对于需要<code>IN</code>参数的存储过程，请使用以下语法 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;</span><br><span class="line">&#123;? = <span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;   <span class="comment">//感觉这个不像是存储过程的啊，像是存储函数的</span></span><br></pre></td></tr></table></figure>
+<p>有一个博客是这样调用存储函数的，但是好像没怎么见到是这样调用存储过程的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFuntion</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//jdbc调用存储函数sql语句：</span></span><br><span class="line">        <span class="comment">//&#123;?= call &lt;procedure-name&gt;[(&lt;arg1&gt;,&lt;arg2&gt;, ...)]&#125;</span></span><br><span class="line">        String sql = <span class="string">"&#123;? = call queryEmpIncome(?)&#125;"</span>;</span><br><span class="line">        </span><br><span class="line">        Connection conn = <span class="keyword">null</span>;</span><br><span class="line">        CallableStatement call = <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            conn = JDBCUtils.getConnection();</span><br><span class="line">            call = conn.prepareCall(sql);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//注册输出参数</span></span><br><span class="line">            call.registerOutParameter(<span class="number">1</span>, OracleTypes.NUMBER);</span><br><span class="line">            <span class="comment">//输入参数</span></span><br><span class="line">            call.setInt(<span class="number">2</span>, <span class="number">7839</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//执行</span></span><br><span class="line">            call.execute();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//取出返回值</span></span><br><span class="line">            <span class="keyword">double</span> income = call.getDouble(<span class="number">1</span>);</span><br><span class="line">            System.out.println(<span class="string">"年薪："</span>+income);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            JDBCUtils.release(conn, call, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">也有这样调用</span><br><span class="line"></span><br><span class="line">            String sql = <span class="string">"select fun_avg_dept(?) from dual"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//调用方式还是和使用ps调用普通SQL一样</span></span><br><span class="line">            PreparedStatement ps = conn.prepareStatement(sql);</span><br><span class="line"></span><br><span class="line">            ps.setObject(<span class="number">1</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">            ResultSet rs = ps.executeQuery();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (rs.next()) &#123;</span><br><span class="line">                System.out.println(rs.getObject(<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>oj关键字</strong></p>
+<p>此关键字用于表示外部连接。 语法如下 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;oj outer-join&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，<em>outer-join = table {LEFT|RIGHT|FULL} OUTERJOIN {table | outer-join}</em> 搜索条件。 例如 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT Employees </span></span><br><span class="line"><span class="string">              FROM &#123;oj ThisTable RIGHT</span></span><br><span class="line"><span class="string">              OUTER JOIN ThatTable on id = '100'&#125;"</span>;</span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
+<p><code>PreparedStatement</code>对象可以使用输入和输出流来提供参数数据。能够将整个文件放入可以容纳大值的数据库列，例如<code>CLOB</code>和<code>BLOB</code>数据类型。</p>
+<p>有以下方法可用于流式传输数据 -</p>
+<ul>
+<li><code>setAsciiStream()</code>：此方法用于提供大的ASCII值。</li>
+<li><code>setCharacterStream()</code>：此方法用于提供较大的UNICODE值。</li>
+<li><code>setBinaryStream()</code>：此方法用于提供较大的二进制值。</li>
+</ul>
+<p><code>setXXXStream()</code>方法除了参数占位符之外还需要额外的参数和文件大小。此参数通知驱动程序使用流向数据库发送多少数据。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>考虑要将XML文件<code>xml_data.xml</code>上传到数据库表中。下面是XML文件的内容 -</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>125<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">first</span>&gt;</span>Max<span class="tag">&lt;/<span class="name">first</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">last</span>&gt;</span>Su<span class="tag">&lt;/<span class="name">last</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Salary</span>&gt;</span>18000<span class="tag">&lt;/<span class="name">Salary</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Dob</span>&gt;</span>18-08-1978<span class="tag">&lt;/<span class="name">Dob</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">XML</span><br></pre></td></tr></table></figure>
+<p>将此XML文件保存在要运行此示例的同一目录中。</p>
+<p>此示例将在数据库创建一个表：<em>xml_data</em>，然后将文件<code>xml_data.xml</code>上传到此表中。</p>
+<p>复制以下示例代码，并保存在文件：<em>StreamingData.java</em> 中，编译并运行如下 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Import required packages</span></span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamingData</span> </span>&#123;</span><br><span class="line">   <span class="comment">// JDBC driver name and database URL</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String JDBC_DRIVER = <span class="string">"com.mysql.jdbc.Driver"</span>;  </span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">"jdbc:mysql://localhost/EMP"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//  Database credentials</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">"root"</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String PASS = <span class="string">"123456"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Connection conn = <span class="keyword">null</span>;</span><br><span class="line">   PreparedStatement pstmt = <span class="keyword">null</span>;</span><br><span class="line">   Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">   ResultSet rs = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="comment">// Register JDBC driver</span></span><br><span class="line">      Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Open a connection</span></span><br><span class="line">      System.out.println(<span class="string">"Connecting to database..."</span>);</span><br><span class="line">      conn = DriverManager.getConnection(DB_URL,USER,PASS);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create a Statement object and build table</span></span><br><span class="line">      stmt = conn.createStatement();</span><br><span class="line">      createXMLTable(stmt);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Open a FileInputStream</span></span><br><span class="line">      File f = <span class="keyword">new</span> File(<span class="string">"xml_data.xml"</span>);</span><br><span class="line">      <span class="keyword">long</span> fileLength = f.length();</span><br><span class="line">      FileInputStream fis = <span class="keyword">new</span> FileInputStream(f);   <span class="comment">//构造文件流</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create PreparedStatement and stream data</span></span><br><span class="line">      String SQL = <span class="string">"INSERT INTO XML_Data VALUES (?,?)"</span>;</span><br><span class="line">      pstmt = conn.prepareStatement(SQL);</span><br><span class="line">      pstmt.setInt(<span class="number">1</span>,<span class="number">125</span>);</span><br><span class="line">      pstmt.setAsciiStream(<span class="number">2</span>,fis,(<span class="keyword">int</span>)fileLength);  <span class="comment">//传递文件流 并且设置文件长度</span></span><br><span class="line">      pstmt.execute();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Close input stream</span></span><br><span class="line">      fis.close();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Do a query to get the row</span></span><br><span class="line">      SQL = <span class="string">"SELECT Data FROM XML_Data WHERE id=125"</span>;</span><br><span class="line">      rs = stmt.executeQuery (SQL);</span><br><span class="line">      <span class="comment">// Get the first row</span></span><br><span class="line">      <span class="keyword">if</span> (rs.next ())&#123;</span><br><span class="line">         </span><br><span class="line">         InputStream xmlInputStream = rs.getAsciiStream (<span class="number">1</span>);   </span><br><span class="line">          <span class="comment">//从resultset得到ascll流后将其转为byte的数组流</span></span><br><span class="line">         <span class="keyword">int</span> c;</span><br><span class="line">         ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">         <span class="keyword">while</span> (( c = xmlInputStream.read ()) != -<span class="number">1</span>)</span><br><span class="line">            bos.write(c);</span><br><span class="line">         <span class="comment">//Print results</span></span><br><span class="line">         System.out.println(bos.toString());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// Clean-up environment</span></span><br><span class="line">      rs.close();</span><br><span class="line">      stmt.close();</span><br><span class="line">      pstmt.close();</span><br><span class="line">      conn.close();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for JDBC</span></span><br><span class="line">      se.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for Class.forName</span></span><br><span class="line">      e.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      <span class="comment">//finally block used to close resources</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(stmt!=<span class="keyword">null</span>)</span><br><span class="line">            stmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(pstmt!=<span class="keyword">null</span>)</span><br><span class="line">            pstmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">         se.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end finally try</span></span><br><span class="line">   &#125;<span class="comment">//end try</span></span><br><span class="line">   System.out.println(<span class="string">"Goodbye!"</span>);</span><br><span class="line">&#125;<span class="comment">//end main</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createXMLTable</span><span class="params">(Statement stmt)</span> </span></span><br><span class="line"><span class="function">   <span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">   System.out.println(<span class="string">"Creating XML_Data table..."</span> );</span><br><span class="line">   <span class="comment">//Create SQL Statement</span></span><br><span class="line">   String streamingDataSql = <span class="string">"CREATE TABLE XML_Data "</span> +</span><br><span class="line">                             <span class="string">"(id INTEGER, Data LONG)"</span>;     <span class="comment">//存储类型是的是Long</span></span><br><span class="line">   <span class="comment">//Drop table first if it exists.</span></span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      stmt.executeUpdate(<span class="string">"DROP TABLE XML_Data"</span>);</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">   &#125;<span class="comment">// do nothing</span></span><br><span class="line">   <span class="comment">//Build table.</span></span><br><span class="line">   stmt.executeUpdate(streamingDataSql);</span><br><span class="line">&#125;<span class="comment">//end createXMLTable</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1960,7 +1966,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

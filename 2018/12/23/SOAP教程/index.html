@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议 通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。 SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。 一条SOAP信息就是一个普通的xml文档 含下面">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SOAP教程">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/SOAP教程/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议 通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。 SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。 一条SOAP信息就是一个普通的xml文档 含下面">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-22T16:53:04.641Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SOAP教程">
+<meta name="twitter:description" content="SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议 通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。 SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。 一条SOAP信息就是一个普通的xml文档 含下面">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/SOAP教程/"/>
+
+
+
+
+
+  <title>SOAP教程 | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/SOAP教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SOAP教程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议</p>
+<p>通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。</p>
+<p>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。</p>
+<p>一条SOAP信息就是一个普通的xml文档 含下面的元素</p>
+<ul>
+<li>必需的 Envelope元素     将xml文档标识为一条SOAP信息</li>
+<li>可选的Header元素，包含头部信息</li>
+<li>必需的Body元素，包含所有的调用和响应信息</li>
+<li>可选的Fault元素，提供处理此消息所发生的错误信息</li>
+</ul>
+<p>所有以上的元素均被声明于针对 SOAP 封装的默认命名空间中：</p>
+<p><a href="http://www.w3.org/2001/12/soap-envelope" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope</a></p>
+<p>以及针对 SOAP 编码和数据类型的默认命名空间：</p>
+<p><a href="http://www.w3.org/2001/12/soap-encoding" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding</a></p>
+<p>SOAP文档的要求</p>
+<ol>
+<li>SOAP必须用xml来进行编码</li>
+<li>必须使用SOAP Envelope命名空间和SOAP Encoding命名空间</li>
+<li>不能包含DTD引用</li>
+<li>不能包含XML处理指令</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Header</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Header</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">...</span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Envelope元素"><a href="#Envelope元素" class="headerlink" title="Envelope元素"></a>Envelope元素</h3><p>是SOAP的根元素，将其定义成soap信息</p>
+<p>属性</p>
+<ul>
+<li>xmlns:soap  命名空间 <ul>
+<li>SOAP 消息必须拥有与命名空间 “<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a> 相关联的一个 Envelope 元素</li>
+</ul>
+</li>
+<li>xmlns:encodingStyle <ul>
+<li>此属性可出现在任何 SOAP 元素中，并会被应用到元素的内容及元素的所有子元素上。</li>
+<li>SOAP 没有默认编码方式 <a href="http://www.w3.org/2001/12/soap-encoding使用这个就好" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding使用这个就好</a></li>
+</ul>
+</li>
+</ul>
+<p>之后我们就能用 soap 和 encodingStyle 属性</p>
+<h3 id="Header元素"><a href="#Header元素" class="headerlink" title="Header元素"></a>Header元素</h3><p>包含头部信息，一些SOAP/应用程序专用信息    比如认证 支付等</p>
+<p>如果使用header 它一定是第一个子元素</p>
+<p>所有 Header 元素的直接子元素必须是合格的命名空间</p>
+<p>soap在默认的命名空间中 (“<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a>) 定义了三个属性(有一个encodingStyle这里不废话 )这些被定义在 SOAP 头部的属性可定义容器如何对 SOAP 消息进行处理</p>
+<p>mustUnderstand 属性可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的</p>
+<p><code>soap:mustUnderstand=&quot;0|1&quot;</code></p>
+<p>SOAP信息可以沿着信息路径转发，actor用于寻址到下一个特点端点</p>
+<p><code>soap:actor=&quot;URI&quot;</code></p>
+<h3 id="Body元素"><a href="#Body元素" class="headerlink" title="Body元素"></a>Body元素</h3><p>soap的body元素的子元素可以引入合格的命名空间</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 比如下面使用m的getPrice属性，它首先要引入 命名空间m  xmlns:m="xxx" --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Getprice</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.xxxx.com/prices"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">m:item</span>&gt;</span>Apples<span class="tag">&lt;/<span class="name">m:item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">m:Getprice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Fault元素"><a href="#Fault元素" class="headerlink" title="Fault元素"></a>Fault元素</h3><p>Fault一定是Body的子元素，在一条soap内，fault只能出现一次，它用于指示body的错误</p>
+<p>fault拥有子元素</p>
+<ul>
+<li><code>&lt;faultcode&gt;</code>用来识别错误的代码</li>
+<li><code>&lt;faultstring&gt;</code>错误说明</li>
+<li><code>&lt;faultactor&gt;</code> 谁引发的错误</li>
+<li><code>&lt;detail&gt;</code> 涉及body元素的应用程序专用错误信息</li>
+</ul>
+<p>faultcode 有几个错误代码</p>
+<ol>
+<li>versionMismatch envelop元素的无效的命名空间</li>
+<li>MustUnderstand 这是之前header元素中设置了 mustunderstand 的时候出现的错误可能会出现  无法理解</li>
+<li>Client 消息被不正确地构成，或包含不正确的信息</li>
+<li>Server 服务有问题，因此无法处理进行</li>
+</ol>
+<h3 id="HTTP-XML-SOAP"><a href="#HTTP-XML-SOAP" class="headerlink" title="HTTP + XML = SOAP"></a>HTTP + XML = SOAP</h3><p>好像传输soap 需要在contentType上说明</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: application/soap+xml; charset=utf-8</span><br></pre></td></tr></table></figure>
+<h2 id="一个-SOAP-实例"><a href="#一个-SOAP-实例" class="headerlink" title="一个 SOAP 实例"></a>一个 SOAP 实例</h2><p>在下面的例子中，一个 GetStockPrice 请求被发送到了服务器。此请求有一个 StockName 参数，而在响应中则会返回一个 Price 参数。此功能的命名空间被定义在此地址中： “<a href="http://www.example.org/stock&quot;" target="_blank" rel="noopener">http://www.example.org/stock&quot;</a></p>
+<h3 id="SOAP-请求："><a href="#SOAP-请求：" class="headerlink" title="SOAP 请求："></a>SOAP 请求：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /InStock HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:StockName</span>&gt;</span>IBM<span class="tag">&lt;/<span class="name">m:StockName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="SOAP-响应："><a href="#SOAP-响应：" class="headerlink" title="SOAP 响应："></a>SOAP 响应：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Price</span>&gt;</span>34.5<span class="tag">&lt;/<span class="name">m:Price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/23/Web Service简介/" rel="next" title="Web Service简介">
+                <i class="fa fa-chevron-left"></i> Web Service简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/23/利用CookieManager管理Cookie/" rel="prev" title="利用CookieManager管理Cookie">
+                利用CookieManager管理Cookie <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Envelope元素"><span class="nav-number">1.</span> <span class="nav-text">Envelope元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Header元素"><span class="nav-number">2.</span> <span class="nav-text">Header元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Body元素"><span class="nav-number">3.</span> <span class="nav-text">Body元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Fault元素"><span class="nav-number">4.</span> <span class="nav-text">Fault元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-XML-SOAP"><span class="nav-number">5.</span> <span class="nav-text">HTTP + XML = SOAP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一个-SOAP-实例"><span class="nav-number"></span> <span class="nav-text">一个 SOAP 实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SOAP-请求："><span class="nav-number">1.</span> <span class="nav-text">SOAP 请求：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SOAP-响应："><span class="nav-number">2.</span> <span class="nav-text">SOAP 响应：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

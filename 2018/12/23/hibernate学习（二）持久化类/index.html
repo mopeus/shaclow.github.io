@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="持久化类使用和操作 持久化类的要求  无参构造器，好像不一定要public 但至少包可见 标识属性，主键  最好用8种基本类型的包装类型，虽然用基本类型也行  这样方便 提供set和get方法 使用非final类  因为如果持久化类没实现接口，hibernate就使用javassist生成代理，这个代理对象是持久化类的子类实例   还有一个实现所有方法都是public的接口，此时使用jdk动态代理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hibernate学习（二）持久化类">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/hibernate学习（二）持久化类/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="持久化类使用和操作 持久化类的要求  无参构造器，好像不一定要public 但至少包可见 标识属性，主键  最好用8种基本类型的包装类型，虽然用基本类型也行  这样方便 提供set和get方法 使用非final类  因为如果持久化类没实现接口，hibernate就使用javassist生成代理，这个代理对象是持久化类的子类实例   还有一个实现所有方法都是public的接口，此时使用jdk动态代理">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-22T16:53:04.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hibernate学习（二）持久化类">
+<meta name="twitter:description" content="持久化类使用和操作 持久化类的要求  无参构造器，好像不一定要public 但至少包可见 标识属性，主键  最好用8种基本类型的包装类型，虽然用基本类型也行  这样方便 提供set和get方法 使用非final类  因为如果持久化类没实现接口，hibernate就使用javassist生成代理，这个代理对象是持久化类的子类实例   还有一个实现所有方法都是public的接口，此时使用jdk动态代理">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/hibernate学习（二）持久化类/"/>
+
+
+
+
+
+  <title>hibernate学习（二）持久化类 | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/hibernate学习（二）持久化类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hibernate学习（二）持久化类</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>持久化类使用和操作</p>
+<p>持久化类的要求</p>
+<ul>
+<li>无参构造器，好像不一定要public 但至少包可见</li>
+<li>标识属性，主键  最好用8种基本类型的包装类型，虽然用基本类型也行  这样方便</li>
+<li>提供set和get方法</li>
+<li>使用非final类  因为如果持久化类没实现接口，hibernate就使用javassist生成代理，这个代理对象是持久化类的子类实例   还有一个实现所有方法都是public的接口，此时使用jdk动态代理。避免声明public final 方法  如果必须要用public final 方法的类，用lazy=false禁用代理</li>
+<li>重写equals 和 hashCode  如果将持久化类的实例放入set中就要提供这些方法，最常见的equals就是比较标识属性,但是如果是标识属性是自动生成的话不能比较标识属性，因为刚加进去的对象未被持久化是没有标识属性的，会在save的时候进行生成和分配</li>
+</ul>
+<p>持久化对象有三个情况</p>
+<p>瞬态 持久化 脱管   （持久化和脱管可相互转换，脱管状态下的改变不会影响数据库，而持久化会）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">News n=<span class="keyword">new</span> News();</span><br><span class="line">n.setTitle(<span class="string">"xxx"</span>);</span><br><span class="line">n.setContent(<span class="string">"xxx"</span>);</span><br><span class="line">sess.save(n);       <span class="comment">//持久化类 将瞬态/脱管类保存在会话中</span></span><br></pre></td></tr></table></figure>
+<p>在持久化的过程中，底层会生成一条insert语句</p>
+<p>还有个persist()方法和save()一样，不过save()返回标识属性值，而persist不反悔，而且persist保证它在一个事务外部被调用的时候 并不立即转换为insert语句  这对需要封装长会话流程很有用</p>
+<p>加载持久化实体  底层为seletct  + where 语句</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">News n=sess.load(News.class,pk);   <span class="comment">//pk值是持久化实例的标识属性</span></span><br></pre></td></tr></table></figure>
+<p>还有个get方法一样  不过get不支持延迟加载，若不存在就返回null  load支持延迟加载，若不存在对象返回一个未初始化的代理对象  延迟加载就是实际上使用对象的方法的时候才会真正向数据库加载</p>
+<p>load和get还有 LockOptions 提供READ和UPGRADE代表共享 修改锁</p>
+<p>还有用sess.buildLockRequest(LockOptions.xx).lock(n);来持久化的，不过要求这个n不能有修改，没啥用 </p>
+<p>更新</p>
+<ol>
+<li><p>其实是加载持久化对象的基础上，调用方法进行修改然后再更新数据库中  更新的时候不用save，因为它就是持久化实体  用<code>sess.flush()</code></p>
+</li>
+<li><p>关闭会话后原来的持久化对象就脱管了，此时对其修改要保存到数据库中，需要重新创建session  然后<code>sess.update(n);</code>进行更新 类似的方法有merge 不过它的特定是不会持久化实例n，而是返回一个n的副本，该副本被持久化了 如果用merge保存程序对脱管对象做的修改时，如果会话有相同的持久化对象，merge提供的对象会覆盖它</p>
+</li>
+</ol>
+<p>如果不知道这个对象是否持久化过，就用updateOrSave()方法就行</p>
+<p>删除</p>
+<p><code>sess.delete(n)</code></p>
+<p>注意Session类不是平时用的tomcat的类 是hibernate的类 用来存储实例化类</p>
+<h1 id="org-hibernate-resource-jdbc-internal-LogicalConnectionManagedImpl-21456e12-is-closed"><a href="#org-hibernate-resource-jdbc-internal-LogicalConnectionManagedImpl-21456e12-is-closed" class="headerlink" title="org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@21456e12 is closed"></a>org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@21456e12 is closed</h1><p>在调用session.close()的时候，该函数就已经将 trans.commit()执行了。所以最后一句代码显然就是多余的，将最后的trans.commit()这一句删除就好了。</p>
+<p>所以想让脱离的对象重新持久化，那个事务要分开两个，因为中途会有session.close</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/23/hibernate4/" rel="next" title="hibernate4">
+                <i class="fa fa-chevron-left"></i> hibernate4
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/23/hibernate学习(三)持久化类的注释/" rel="prev" title="hibernate学习(三)持久化类的注释">
+                hibernate学习(三)持久化类的注释 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#org-hibernate-resource-jdbc-internal-LogicalConnectionManagedImpl-21456e12-is-closed"><span class="nav-number">1.</span> <span class="nav-text">org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@21456e12 is closed</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

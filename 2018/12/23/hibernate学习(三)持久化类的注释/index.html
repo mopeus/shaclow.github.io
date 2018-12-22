@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这个注释感觉有点复杂 分成两个部分好了 一个是对表的注释一个是对里面属性的注释 一个PO类 123456789101112131415161718192021222324252627282930313233343536373839404142@Entity    //代表这个是一个实例@Access(value = AccessType.PROPERTY)  //代表这个访问属性方式是用get/s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hibernate学习(三)持久化类的注释">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/hibernate学习(三)持久化类的注释/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="这个注释感觉有点复杂 分成两个部分好了 一个是对表的注释一个是对里面属性的注释 一个PO类 123456789101112131415161718192021222324252627282930313233343536373839404142@Entity    //代表这个是一个实例@Access(value = AccessType.PROPERTY)  //代表这个访问属性方式是用get/s">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-22T16:53:04.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hibernate学习(三)持久化类的注释">
+<meta name="twitter:description" content="这个注释感觉有点复杂 分成两个部分好了 一个是对表的注释一个是对里面属性的注释 一个PO类 123456789101112131415161718192021222324252627282930313233343536373839404142@Entity    //代表这个是一个实例@Access(value = AccessType.PROPERTY)  //代表这个访问属性方式是用get/s">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/hibernate学习(三)持久化类的注释/"/>
+
+
+
+
+
+  <title>hibernate学习(三)持久化类的注释 | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/hibernate学习(三)持久化类的注释/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">hibernate学习(三)持久化类的注释</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这个注释感觉有点复杂</p>
+<p>分成两个部分好了 一个是对表的注释一个是对里面属性的注释</p>
+<p>一个PO类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span>    <span class="comment">//代表这个是一个实例</span></span><br><span class="line"><span class="meta">@Access</span>(value = AccessType.PROPERTY)  </span><br><span class="line"><span class="comment">//代表这个访问属性方式是用get/set方法 不是直接操作成员变量（AccessType.Field）</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"books_inf"</span>,uniqueConstraints=<span class="meta">@UniqueConstraint</span>(columnNames = &#123; <span class="string">"price"</span> &#125;),indexes=&#123;<span class="meta">@Index</span>(name=<span class="string">"name_index"</span>, columnList = <span class="string">"price"</span>,unique=<span class="keyword">false</span>)&#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta">@DynamicUpdate</span>(value=<span class="keyword">true</span>)</span><br><span class="line"><span class="comment">//默认为false update语句是否动态生成，更新那些改变过的字段（代价是需要更多时间去生成sql）</span></span><br><span class="line"><span class="meta">@OptimisticLocking</span>(type=OptimisticLockType.VERSION)</span><br><span class="line"><span class="meta">@SelectBeforeUpdate</span>(value=<span class="keyword">false</span>)</span><br><span class="line"><span class="meta">@Where</span>(clause=<span class="string">"id=3"</span>)</span><br><span class="line"><span class="comment">//每个查询加载语句后一定有 clause加上的条件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)</span><br><span class="line">	<span class="keyword">private</span> Integer id;</span><br><span class="line">	<span class="keyword">private</span> String bookname;</span><br><span class="line">	<span class="keyword">private</span> Integer price;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getBookname</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> bookname;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getPrice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> price;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPrice</span><span class="params">(Integer price)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.price = price;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBookname</span><span class="params">(String bookname)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.bookname = bookname;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Table</span>(name=<span class="string">"books_inf"</span>,uniqueConstraints=<span class="meta">@UniqueConstraint</span>(columnNames = &#123; <span class="string">"price"</span> &#125;),indexes=&#123;<span class="meta">@Index</span>(name=<span class="string">"name_index"</span>, columnList = <span class="string">"price"</span>,unique=<span class="keyword">false</span>)&#125;)</span><br></pre></td></tr></table></figure>
+<p>Table注解的 name 代表数据库名字 uniqueConstraints（里面的columnnames是一个字符串数组，指定多个列都有唯一索引） 和indexes差不多都是索引  </p>
+<p>不过uniqueConstraints是唯一索引，就是unique是true  所以@Index也可以做到 uniqueConstraint的样子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@OptimisticLocking</span>(type=OptimisticLockType.VERSION)</span><br><span class="line"><span class="meta">@SelectBeforeUpdate</span>(value=<span class="keyword">false</span>)</span><br></pre></td></tr></table></figure>
+<p>在打开DynamicUpdate之后金额图指定乐观锁@OptimisticLocking 乐观锁就是</p>
+<p>悲观锁，正如其名，它指的是对数据被外界（包括本系统当前的其他事务，以及来自外部系统的事务处理）修改持保守态度(悲观)，因此，在整个数据处理过程中，将数据处于锁定状态。大家要拿到锁才能进行数据访问操作 悲观锁的实现，往往依靠数据库提供的锁机制 （也只有数据库层提供的锁机制才能真正保证数据访问的排他性，否则，即使在本系统中实现了加锁机制，也无法保证外部系统不会修改数据）</p>
+<p>安全但降低并行性而且慢且增加死锁的情况</p>
+<p>乐观锁（ Optimistic Locking ） 相对悲观锁而言，乐观锁假设认为数据一般情况下不会造成冲突，所以在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，如果发现冲突了，则让返回用户错误的信息，让用户决定如何去做。</p>
+<p>乐观锁相信事务之间的数据竞争(data race)的概率是比较小的，因此尽可能直接做下去，直到提交的时候才去锁定， 如果直接简单这么做，还是有可能会遇到不可预期的结果，例如两个事务都读取了数据库的某一行，经过修改以后写回数据库，这时就遇到了问题，他就返回错误信息，让用户决定做法</p>
+<p>倘若出现错误代码将在tx.commit()处抛出<strong>StaleObjectStateException</strong>异 常，并指出版本检查失败，</p>
+<p>@OptimisticLocking有多个策略</p>
+<ul>
+<li>OptmisticLockType<ul>
+<li>Version 检查version/timestamp</li>
+<li>ALL 检查所有字段</li>
+<li>DIRTY 检查要更新的字段</li>
+<li>NONE 不使用</li>
+</ul>
+</li>
+</ul>
+<p>所谓检查字段，就是先select一下，然后将实体更改update时，看当前的字段有没有变化，最简单的就是version，提供version字段，修改后就version+=1 用于识别是否更改</p>
+<p>所以好像要添加一个字段 然后注释@version</p>
+<p>@Check </p>
+<ul>
+<li>constraints=”xx”   check约束条件</li>
+</ul>
+<p>@Subselect这个比较特别 用了这个说明是将这个对象用来存放视图 不能修改只能读取</p>
+<ul>
+<li>指明实际使用的的sql语句 然后将每一列都安排到相应的属性上（应该是每个属性都对应一个列）然后就可以通过这个类去做访问了，但只读不能写，写了无法保存数据库</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"test_summary"</span>)</span><br><span class="line"><span class="meta">@Subselect</span>(<span class="string">"SELECT i.name AS itemName, MAX(b.amount) AS amountMax, COUNT(*) AS itemCount "</span></span><br><span class="line">		+ <span class="string">"FROM test_item i "</span></span><br><span class="line">		+ <span class="string">"INNER JOIN test_bid b ON i.item_id = b.id "</span></span><br><span class="line">		+ <span class="string">"GROUP BY i.name"</span>)</span><br><span class="line"><span class="meta">@Synchronize</span>( &#123; <span class="string">"test_item"</span>, <span class="string">"test_bid"</span> &#125;)</span><br><span class="line"><span class="comment">// tables impacted</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Summary</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">3647575276389635849L</span>;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@Column</span>(name = <span class="string">"itemName"</span>)</span><br><span class="line">	<span class="keyword">private</span> String itemName;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@Column</span>(name = <span class="string">"amountMax"</span>)</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> amountMax;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@Column</span>(name = <span class="string">"itemCount"</span>)</span><br><span class="line">	<span class="keyword">private</span> Integer itemCount;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Summary</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Summary</span><span class="params">(String itemName, <span class="keyword">double</span> amountMax, Integer itemCount)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">		<span class="keyword">this</span>.itemName = itemName;</span><br><span class="line">		<span class="keyword">this</span>.amountMax = amountMax;</span><br><span class="line">		<span class="keyword">this</span>.itemCount = itemCount;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getItemName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> itemName;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setItemName</span><span class="params">(String itemName)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.itemName = itemName;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getAmountMax</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> amountMax;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAmountMax</span><span class="params">(<span class="keyword">double</span> amountMax)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.amountMax = amountMax;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getItemCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> itemCount;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setItemCount</span><span class="params">(Integer itemCount)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.itemCount = itemCount;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Session session = <span class="keyword">null</span>;</span><br><span class="line">		Transaction tx = <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			session = HibernateUtil.getSession();</span><br><span class="line">			tx = session.beginTransaction();</span><br><span class="line"> </span><br><span class="line">			String hql = <span class="string">"from Summary"</span>;     <span class="comment">//接实例类</span></span><br><span class="line">			Query query = session.createQuery(hql);</span><br><span class="line">			List&lt;Summary&gt; list = query.list();</span><br><span class="line">			<span class="comment">// System.out.println(list.size());</span></span><br><span class="line">			<span class="keyword">for</span> (Summary summary : list) &#123;</span><br><span class="line">				System.out.println(summary.getItemName() + <span class="string">"\t"</span></span><br><span class="line">						+ summary.getAmountMax() + <span class="string">"\t"</span></span><br><span class="line">						+ summary.getItemCount());</span><br><span class="line">			&#125;</span><br><span class="line">			tx.commit();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (HibernateException e) &#123;</span><br><span class="line">			<span class="keyword">if</span> (tx.isActive()) &#123;</span><br><span class="line">				tx.rollback();</span><br><span class="line">			&#125;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>@BatchSize 单次抓取的实体的数量</p>
+<p>@PolymorphismType 用来指定隐式多态查询 比如访问父类就是操控他的实际子类什么的</p>
+<p> @DynamicUpdate     动态修改，它会判断持久化对象中属性，哪些属性值发生了改变就会生成update的语句。(持久化状态下做修改)     </p>
+<p>@SelectBeforeUpdate   修改之前先查询，查询得到持久化对象再与脱管状态下的对象进行比较,哪些属性值发生了改变就会生成update的语句。(脱管状态下做修改)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"books_inf"</span>,uniqueConstraints=<span class="meta">@UniqueConstraint</span>(columnNames = &#123; <span class="string">"amount"</span> &#125;),indexes=&#123;<span class="meta">@Index</span>(name=<span class="string">"price_index"</span>, columnList = <span class="string">"price"</span>,unique=<span class="keyword">false</span>)&#125;)</span><br><span class="line"><span class="meta">@DynamicUpdate</span>(value=<span class="keyword">true</span>)</span><br><span class="line"><span class="meta">@OptimisticLocking</span>(type=OptimisticLockType.VERSION)</span><br><span class="line"><span class="meta">@SelectBeforeUpdate</span>(value=<span class="keyword">false</span>)</span><br><span class="line"><span class="meta">@Where</span>(clause=<span class="string">"price=233"</span>)</span><br><span class="line"><span class="meta">@Check</span>(constraints = <span class="string">"id&gt;0"</span>)</span><br><span class="line"><span class="meta">@Access</span>(value = AccessType.PROPERTY)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)</span><br><span class="line">	<span class="keyword">private</span> Integer id;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> String bookname;</span><br><span class="line">	<span class="keyword">private</span> Integer price;</span><br><span class="line">	<span class="keyword">private</span> Integer amount;</span><br><span class="line">	<span class="meta">@Version</span></span><br><span class="line">	<span class="keyword">private</span> Integer version;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有个很奇怪的一点，发现好像同时加了index和uniqueconstraints之后 它就会报错说没有主键，但我已经在id上标好@Id和@GeneratedValue <strong>此时就要在getId方法上加上@Id  而且还要给上相应的GeneratedValue</strong> </p>
+<p>注意load/get方法去获取实体对象的时候</p>
+<p>会使用select语句 这时候@Where的条件就会使用，这时候如果没select到可能就得不到相应的对象了，但我感觉更新应该是一样的。</p>
+<p>发现两个很骚的东西</p>
+<p>好像hibernate的操作必须要放在事务中，不放在事务中就不会实现</p>
+<p>还有DynamicUpdate 的确是只会更新修改过的字段，相同的字段是不会放入update中的，</p>
+<p><del>倘若都一样不会生成update语句 而且好像如果不是动态生成的update是不会显示在tomcat中的</del></p>
+<p>Selectbeforeupdate有异曲同工之妙，它是用于脱管对象的重新更新，所以它会先生成select语句，然后将只会update修改过的字段</p>
+<p>若没有这两个注释 update就会全部字段都会update</p>
+<p>OptimisticLocking 情况一样不乐观 改变不了</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/23/hibernate学习（二）持久化类/" rel="next" title="hibernate学习（二）持久化类">
+                <i class="fa fa-chevron-left"></i> hibernate学习（二）持久化类
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/23/hibernate学习(四)持久化类属性的注释/" rel="prev" title="hibernate学习(四)持久化类属性的注释">
+                hibernate学习(四)持久化类属性的注释 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

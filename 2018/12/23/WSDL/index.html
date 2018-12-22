@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="WSDL是用于描述如何访问Web Service 语言 12345678910111213141516171819&amp;lt;definitions&amp;gt;&amp;lt;types&amp;gt;  web service 使用的数据类型&amp;lt;/types&amp;gt;&amp;lt;message&amp;gt;  web service 定义一个操作的数据元素&amp;lt;/message&amp;gt;&amp;lt;portType&amp;gt;  we">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WSDL">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/WSDL/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="WSDL是用于描述如何访问Web Service 语言 12345678910111213141516171819&amp;lt;definitions&amp;gt;&amp;lt;types&amp;gt;  web service 使用的数据类型&amp;lt;/types&amp;gt;&amp;lt;message&amp;gt;  web service 定义一个操作的数据元素&amp;lt;/message&amp;gt;&amp;lt;portType&amp;gt;  we">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-22T16:53:04.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="WSDL">
+<meta name="twitter:description" content="WSDL是用于描述如何访问Web Service 语言 12345678910111213141516171819&amp;lt;definitions&amp;gt;&amp;lt;types&amp;gt;  web service 使用的数据类型&amp;lt;/types&amp;gt;&amp;lt;message&amp;gt;  web service 定义一个操作的数据元素&amp;lt;/message&amp;gt;&amp;lt;portType&amp;gt;  we">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/WSDL/"/>
+
+
+
+
+
+  <title>WSDL | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/WSDL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">WSDL</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>WSDL是用于描述如何访问Web Service 语言</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">definitions</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span></span><br><span class="line">  web service 使用的数据类型</span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span></span><br><span class="line">  web service 定义一个操作的数据元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span>&gt;</span></span><br><span class="line">  web service要执行的操作 </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">binding</span>&gt;</span></span><br><span class="line">  web service 使用的通信协议 消息格式和协议细节</span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">definitions</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermRequest"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermResponse"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"value"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerms"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"getTermRequest"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"getTermResponse"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，把 “getTerm” 定义为某个<em>操作</em>的名称。</p>
+<p>操作 “getTerm” 拥有一个名为 “getTermRequest” 的<em>输入消息</em>，以及一个名为 “getTermResponse” 的<em>输出消息</em>。</p>
+<p><code>&lt;message&gt;</code> 元素可定义每个消息的<em>部件</em>，其实就是作为一个operation的一个输入和输出的参数的定义而已</p>
+<p>对比传统的编程，<code>&lt;portType&gt;</code>是一个函数库，描述各种函数的签名</p>
+<p>里面的 <code>&lt;operation&gt;</code> 则是定义的一个个函数</p>
+<p>比如 “getTerm” 是带有输入参数 “getTermRequest” 和返回参数 getTermResponse 的一个函数</p>
+<p><code>&lt;binding&gt;</code>是将<code>&lt;portType&gt;</code>标签定义的每一个操作在此实现</p>
+<p><code>&lt;service&gt;</code> 确定每一个标签的端口地址</p>
+<p>总的来说WSDL文档分成两个部分 一个是抽象层，一个就是具体实现层  </p>
+<p><code>&lt;binding&gt;</code>和<code>&lt;service&gt;</code>就是具体实现层</p>
+<p>operation的构造有下面几种形式</p>
+<table>
+<thead>
+<tr>
+<th>One-way</th>
+<th>此操作可接受消息，但不会返回响应。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Request-response</td>
+<td>此操作可接受一个请求并会返回一个响应</td>
+</tr>
+<tr>
+<td>Solicit-response</td>
+<td>此操作可发送一个请求，并会等待一个响应。</td>
+</tr>
+<tr>
+<td>Notification</td>
+<td>此操作可发送一条消息，但不会等待响应。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- One way 操作的例子，其实就是一个带参数的void函数--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"newTermValues"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param1"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerm"</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"setTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"newTerm"</span> <span class="attr">message</span>=<span class="string">"newTermValues"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的setTerm就是个one -way 方法 他只接收一个名叫newTerm的 newTermValues的消息？（我是把newTermValues理解成一个消息格式），这个参数由两个 xs:string  param1 param2 组成</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Request-Response操作--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term2"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"goodTerms"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"p1"</span> <span class="attr">message</span>=<span class="string">"Term1"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">output</span> <span class="attr">name</span>=<span class="string">"p2"</span> <span class="attr">message</span>=<span class="string">"Term2"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>发现一个更好的WSDL文档的网站 补充下  感谢 51cto的一篇文章，虽然他也是转载</p>
+<p><code>&lt;definitions  xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot;  xmlns:tns=&quot;http://www.jsoso.com/wstest&quot;   xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;   xmlns=&quot;http://schemas.xmlsoap.org/wsdl/&quot;   targetNamespace=&quot;http://www.jsoso.com/wstest&quot;  name=&quot;Example&quot;&gt;</code></p>
+<p>这个作为根元素，它定义文档用到各种xml元素的namespace 缩写，本文档自己的targetNamespace记录了自己的namespace  其他xml元素引用本文档的xml元素，要声明这个namespace       注意xmlns:tns它其实就是将tns这个前缀指向自身的命名空间。</p>
+<p>xmlns=”xxx” 叫默认名称空间 没有取名         xmlns:PART =”xxx”  这种叫源名称空间  </p>
+<p>xmlns:targetNamespace=”xx” 目标命名空间</p>
+<p>其实不要觉得这些命名空间随便给，每个网址都是有特殊意义的</p>
+<p>比如说大名鼎鼎的 xsd 代表的 <a href="http://www,w3.org/2001/XMLSchema" target="_blank" rel="noopener">http://www,w3.org/2001/XMLSchema</a>  代表的就是一种代替DTD 的XSD语言很牛逼 还有专门的xsd文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:import</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">schemaLocation</span>=<span class="string">"http://localhost:8080/hello?xsd=1"</span>&gt;</span><span class="tag">&lt;/<span class="name">xsd:import</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们要引入的schema定义 schemaLocation=”<a href="http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。" target="_blank" rel="noopener">http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。</a>  </p>
+<p>这个其实import 和 schema是涉及到xsd本身的语法，它这里的schema+import应该是属于拓展命名空间,然后这个大概是xsd文件本身没有定义 targetNamespace 而 我们自己写的文件中有 targetNamespace 是 “http://…../wstest”然后就要这么写具体看<a href="http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html</a>  然后这个xsd就引入了 我们定义的文件的类型</p>
+<p>然后他们一起定义在types里面作为文档的数据类型？？</p>
+<p><code>&lt;types&gt;</code>定义了当前文档的数据类型，为了保持平台中立性，WSDL使用XML Schema 语法来定义数据类型 这些数据类型来定义参数方法和参数值  也就是之前定义的xsd的前缀代表的命名空间，这个命名空间本身就定义了一些常用的数据类型 integer boolean char float等 </p>
+<p>然后一些 tns前缀的变量其实就是我们自定义文件中的自定义变量  我有点没懂，怎么和xsd一点关系也没，import过来干嘛。。但是好像用tns 前缀好像又和 <code>&lt;types&gt;</code>定义的有关</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"fault"</span> <span class="attr">element</span>=<span class="string">"tns:HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">part</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"userName"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:toSayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:toSayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"person arg1"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:sayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">message</span>=<span class="string">"tns:HelloException"</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;input&gt;</code> 和 <code>&lt;output&gt;</code> </p>
+<p><code>&lt;operation&gt;</code>元素中，name属性表示服务方法名，parameterOrder属性表示方法的参数顺序，使用空格符分割多个参数</p>
+<p>“parameterOrder=”person arg1”  这个和input 对应的message 对应的各种数据类型有关</p>
+<p>子标签<input>表示输入参数说明，它引用＜message＞标签中的输入参数。<output>表示输出参数说明，它引用＜message＞标签中的输出参数。<fault>标签在Java方法中的特别用来表示异常（其它语言有对应的错误处理机制），它引用＜message＞标签中的错误参数。 </fault></output></p>
+<p><binding>标签是完整描述协议、序列化和编码的地方，<types>,<message>和<porttype>标签处理抽象的数据内容，而<binding>标签是处理数据传输的物理实现。 </binding></porttype></message></types></binding></p>
+<p><binding>标签把前三部分的抽象定义具体化。 </binding></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">binding</span> <span class="attr">name</span>=<span class="string">"ExamplePortBinding"</span> <span class="attr">type</span>=<span class="string">"tns:Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:binding</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">transport</span>=<span class="string">"http://schemas.xmlsoap.org/soap/http"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">style</span>=<span class="string">"rpc"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:binding</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span> <span class="attr">use</span>=<span class="string">"literal"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>首先<binding>标签使用<a href="soap:binding" target="_blank" rel="noopener">soap:binding</a>的transport和style属性定义了Web Service的通讯协议HTTP和SOAP的请求风格RPC。其次<operation>子标签将portType中定义的 operation同SOAP的请求绑定，定义了操作名称soapAction，输出输入参数和异常的编码方式及命名空间。 </operation></binding></p>
+<p>   service是一套＜port＞元素。在一一对应形式下，每个＜port＞元素都和一个location关联。如果同一个＜binding＞有多个＜port＞元素与之关联，可以使用额外的URL地址作为替换。 </p>
+<p>一个WSDL文档中可以有多个＜service＞元素，而且多个＜service＞元素十分有用，其中之一就是可以根据目标URL来组织端口。在一个 WSDL文档中，＜service＞的name属性用来区分不同的service。在同一个service中，不同端口，使用端口的”name”属性区分。   </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">port</span> <span class="attr">name</span>=<span class="string">"ExamplePort"</span> <span class="attr">binding</span>=<span class="string">"tns:ExamplePortBinding"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:address</span> <span class="attr">location</span>=<span class="string">"http://localhost:8080/hello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:address</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">port</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/23/Realm/" rel="next" title="Realm">
+                <i class="fa fa-chevron-left"></i> Realm
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/23/Web Service简介/" rel="prev" title="Web Service简介">
+                Web Service简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

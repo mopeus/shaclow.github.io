@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(二)Channel/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/hibernate4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -251,7 +251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/JavaNIO(二)Channel/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/hibernate4/" itemprop="url">hibernate4</a></h1>
         
 
         <div class="post-meta">
@@ -263,8 +263,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -303,19 +303,29 @@
       
         
           
-            <h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>channel你可以同时读入或写入数据 而流只能做其中一项</p>
-<p>channel可以异步读入或写入数据</p>
-<p>channel的数据总是从buffer来</p>
-<p>channel有点像stream 然后接口有三个</p>
+            <p>关联映射</p>
+<p>单向N-1映射</p>
+<p>无论是否单向还是双向都需要在N一端使用@ManyToOne修饰代表关联实体的属性</p>
+<p>@ManyToOne</p>
 <ul>
-<li>FileChannel  文件IO</li>
-<li>DatagramChannel   UDPIO</li>
-<li>SocketChannel  TCPIO</li>
-<li>ServerSocketChannel　　监听连接然后产生SocketChannel</li>
+<li>cascade级联策略<ul>
+<li>ALL所有持久化操作都级联到关联实体</li>
+<li>MERGE merge操作级联到关联实体</li>
+<li>PERSIST 指定将persist操作级联到关联实体</li>
+<li>REFREASH 指定将refresh操作级联到关联实体</li>
+<li>REMOVE 将remove操作级联到关联实体</li>
 </ul>
-<p>主要是net 和file IO </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">basicChannelTest</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		RandomAccessFile file=<span class="keyword">new</span> RandomAccessFile(<span class="string">"data/nio-data.txt"</span>, <span class="string">"rw"</span>);</span><br><span class="line">		FileChannel inChannel=file.getChannel();</span><br><span class="line">		ByteBuffer buf=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">		<span class="keyword">int</span> bytesRead = inChannel.read(buf);</span><br><span class="line">	    <span class="keyword">while</span> (bytesRead != -<span class="number">1</span>) &#123;</span><br><span class="line"></span><br><span class="line">	      System.out.println(<span class="string">"Read "</span> + bytesRead);</span><br><span class="line">	     <span class="comment">//important!!!</span></span><br><span class="line">	      buf.flip();</span><br><span class="line"></span><br><span class="line">	      <span class="keyword">while</span>(buf.hasRemaining())&#123;</span><br><span class="line">	          System.out.print((<span class="keyword">char</span>) buf.get());</span><br><span class="line">	      &#125;</span><br><span class="line"></span><br><span class="line">	      buf.clear();</span><br><span class="line">	      bytesRead = inChannel.read(buf);</span><br><span class="line">	    &#125;</span><br><span class="line">	    file.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>首先先将数据读入bytebuffer中，然后再System.out出来 记住一定要flip！！！</p>
+</li>
+<li>fetch 抓取策略  <ul>
+<li>FetchType.EAGER 抓取实体，立即抓取关联实体，这是默认值</li>
+<li>FetchType.LAZY 抓取实体时，延迟抓取，等到真正用到关联实体才去抓取</li>
+</ul>
+</li>
+<li>optional 该属性指定的关联关系是否可选</li>
+<li>targetEntity 该属性指定的关联实体的类名，默认是用反射来识别  一般来说如果是指向是N的话就要将其类型指出</li>
+</ul>
+<p>@JoinColumn 注解代表外键列 </p>
+<p>一般处理关联关系的时候 一般分成 新建中间表和用外键列</p>
 
           
         
@@ -364,7 +374,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/JavaNIO(七)SocketChannel/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/hibernate3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -383,7 +393,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/JavaNIO(七)SocketChannel/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/hibernate3/" itemprop="url">hibernate3</a></h1>
         
 
         <div class="post-meta">
@@ -395,8 +405,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
               </time>
             
 
@@ -435,336 +445,315 @@
       
         
           
-            <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">SocketChannel socketChannel=SocketChannel.open();</span><br><span class="line">socketChannel.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"http://xxxx.com"</span>),<span class="number">80</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//关闭SocketChannel </span></span><br><span class="line">socketChannel.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">//从Socketchannel获取数据</span></span><br><span class="line">ByteBuffer buf=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line"><span class="keyword">int</span> bytesRead=socketChannel.read(buf);   <span class="comment">//返回你读取的数目</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//写入</span></span><br><span class="line">String newData=<span class="string">"kinkin牛逼"</span>;</span><br><span class="line">ByteBuffer buffer=ByteBuffer.allocate(<span class="number">48</span>);</span><br><span class="line">buffer.clear();</span><br><span class="line">buffer.put(newData.getBytes());</span><br><span class="line">buffer.flip();</span><br><span class="line"><span class="keyword">while</span>(buffer.hasRemaining())&#123;</span><br><span class="line">    channel.write(buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>SocketChannel的 no-blocking</p>
-<p>你可以使用connect这个方法可能会返回一个连接，可以通过finishConnect进行判断    </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">socketChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">socketChannel.connect(<span class="keyword">new</span> InetSocketAddress(<span class="string">"http://jenkov.com"</span>, <span class="number">80</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(! socketChannel.finishConnect() )&#123;</span><br><span class="line">    <span class="comment">//wait, or do something else...    </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>non-blocking下的SocketChannel </p>
-<p>write 和read可能会在没有写入或读取字节的情况下就返回，这个时候</p>
+            <p>深入理解Hibernate映射</p>
+<p>@Entity 被该注释修饰的POJO就是一个实体，里面有属性如下</p>
 <ul>
-<li>write方法需要一个loop </li>
-<li>read方法需要注意它返回的int值来判断读取是否完成</li>
+<li>name 指定实体类的名称，如果没有指定自动用类名作为实体类的名称</li>
 </ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/hibernate学习（二）持久化类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/hibernate学习（二）持久化类/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>持久化类使用和操作</p>
-<p>持久化类的要求</p>
+<p>@Table 指定持久化类映射的表</p>
 <ul>
-<li>无参构造器，好像不一定要public 但至少包可见</li>
-<li>标识属性，主键  最好用8种基本类型的包装类型，虽然用基本类型也行  这样方便</li>
-<li>提供set和get方法</li>
-<li>使用非final类  因为如果持久化类没实现接口，hibernate就使用javassist生成代理，这个代理对象是持久化类的子类实例   还有一个实现所有方法都是public的接口，此时使用jdk动态代理。避免声明public final 方法  如果必须要用public final 方法的类，用lazy=false禁用代理</li>
-<li>重写equals 和 hashCode  如果将持久化类的实例放入set中就要提供这些方法，最常见的equals就是比较标识属性,但是如果是标识属性是自动生成的话不能比较标识属性，因为刚加进去的对象未被持久化是没有标识属性的，会在save的时候进行生成和分配</li>
+<li>name指定所映射表的表明，如果没指定就默认和持久化类的类名相同</li>
+<li>index为持久化类所映射的表建立索引，该属性的值是一个@Index注解的数组</li>
 </ul>
-<p>持久化对象有三个情况</p>
-<p>瞬态 持久化 脱管   （持久化和脱管可相互转换，脱管状态下的改变不会影响数据库，而持久化会）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">News n=<span class="keyword">new</span> News();</span><br><span class="line">n.setTitle(<span class="string">"xxx"</span>);</span><br><span class="line">n.setContent(<span class="string">"xxx"</span>);</span><br><span class="line">sess.save(n);       <span class="comment">//持久化类 将瞬态/脱管类保存在会话中</span></span><br></pre></td></tr></table></figure>
-<p>在持久化的过程中，底层会生成一条insert语句</p>
-<p>还有个persist()方法和save()一样，不过save()返回标识属性值，而persist不反悔，而且persist保证它在一个事务外部被调用的时候 并不立即转换为insert语句  这对需要封装长会话流程很有用</p>
-<p>加载持久化实体  底层为seletct  + where 语句</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">News n=sess.load(News.class,pk);   <span class="comment">//pk值是持久化实例的标识属性</span></span><br></pre></td></tr></table></figure>
-<p>还有个get方法一样  不过get不支持延迟加载，若不存在就返回null  load支持延迟加载，若不存在对象返回一个未初始化的代理对象  延迟加载就是实际上使用对象的方法的时候才会真正向数据库加载</p>
-<p>load和get还有 LockOptions 提供READ和UPGRADE代表共享 修改锁</p>
-<p>还有用sess.buildLockRequest(LockOptions.xx).lock(n);来持久化的，不过要求这个n不能有修改，没啥用 </p>
-<p>更新</p>
+<p>@UniqueConstraint 用于为数据表定义唯一约束</p>
+<ul>
+<li>columnNames 该属性值一个字符串数组，每个字符串代表一个数据列</li>
+</ul>
+<p>唯一约束保证在一个字段或者一组字段（感觉是将一组字段是当作一个整体来比较）里的数据与表中其它行的数据相比是唯一的</p>
+<p>@Index 用于数据表定义索引</p>
+<ul>
+<li>columnList 设置对哪些列建立索引，该属性值课指定多个数据列的列名</li>
+<li>name 索引的名字</li>
+<li>unique 该索引是否具有唯一性</li>
+</ul>
+<p>@Access 用于修改属性访问策略</p>
+<ul>
+<li><p>value值 AccessType.PROPERTY(默认) AccessType.FIELD 两个值</p>
+<p>PROPERTY要使用set/get去访问属性值，FIELD则直接通过成员变量来访问属性（一般不建议）</p>
+</li>
+</ul>
+<p>@Proxy 该注解的proxyClass属性指定一个接口，在延迟加载时作为代理使用，也可以在这里指定该类自己的名字</p>
+<p>@DynamicInsert 指定insert语句是否在运行时动态生成，并只插入非空的字段，默认为false,因为这会降低性能</p>
+<p>@DynamicUpdate 和上面差不多 可以指定乐观锁</p>
+<p>@OptimisticLockType 乐观锁</p>
+<ul>
+<li>VERSION 检查version/timestamp字段   （推荐）</li>
+<li>ALL 检查全部字段</li>
+<li>DIRTY 只检查修改过的字段</li>
+<li>NONE 不使用乐观锁定</li>
+</ul>
+<p>@SelectBeforeUpdate 指定Hibernate在update某个持久化对象前是否进行一次查询。如果该注解的value值设为true，则可以保证只有持久化对象状态被修改过才会update，若相同则不会update</p>
+<p>@PolymorphismType 隐式多态循环¿</p>
+<p>@Where </p>
+<ul>
+<li>clause 指定一个附加的SQL语句过滤条件(类似添加where子句)如果指定该注解，则不管采用load()/get()或其他查询方法，只要加载持久化类的对象时，这个where条件才生效，只有符合条件的记录才会被加载</li>
+</ul>
+<p>@BatchSize Hibernate抓取集合属性或延迟加载的实体，该注解的size属性指定每批抓取的实例数</p>
+<p>@Check 可通过constraints属性制定一个sql表达，用于为该持久化类所对应的表指定一个check约束</p>
+<p>@Subselect 该注解用于映射不可变、只读实体</p>
+<h3 id="数据库映射"><a href="#数据库映射" class="headerlink" title="数据库映射"></a>数据库映射</h3><p>@Column 代表映射的具体的列</p>
+<p>@Formula 该注解的value属性可以指定一个sql表达式 指定该属性值是由这个这个表达式计算的  该属性是动态计算的，<strong>不保存在数据库</strong></p>
 <ol>
-<li><p>其实是加载持久化对象的基础上，调用方法进行修改然后再更新数据库中  更新的时候不用save，因为它就是持久化实体  用<code>sess.flush()</code></p>
-</li>
-<li><p>关闭会话后原来的持久化对象就脱管了，此时对其修改要保存到数据库中，需要重新创建session  然后<code>sess.update(n);</code>进行更新 类似的方法有merge 不过它的特定是不会持久化实例n，而是返回一个n的副本，该副本被持久化了 如果用merge保存程序对脱管对象做的修改时，如果会话有相同的持久化对象，merge提供的对象会覆盖它</p>
-</li>
+<li>表达式要加括号 </li>
+<li>括号中的是SQL表达式，里面的列名和表名和数据库对应，不和持久化对象属性对应  可以用数据库内置的函数　</li>
+<li>不过可以将属性作为参数传入到where这种东西里</li>
 </ol>
-<p>如果不知道这个对象是否持久化过，就用updateOrSave()方法就行</p>
-<p>删除</p>
-<p><code>sess.delete(n)</code></p>
-<p>注意Session类不是平时用的tomcat的类 是hibernate的类 用来存储实例化类</p>
-<h1 id="org-hibernate-resource-jdbc-internal-LogicalConnectionManagedImpl-21456e12-is-closed"><a href="#org-hibernate-resource-jdbc-internal-LogicalConnectionManagedImpl-21456e12-is-closed" class="headerlink" title="org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@21456e12 is closed"></a>org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@21456e12 is closed</h1><p>在调用session.close()的时候，该函数就已经将 trans.commit()执行了。所以最后一句代码显然就是多余的，将最后的trans.commit()这一句删除就好了。</p>
-<p>所以想让脱离的对象重新持久化，那个事务要分开两个，因为中途会有session.close</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/hibernate学习(三)持久化类的注释/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/hibernate学习(三)持久化类的注释/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这个注释感觉有点复杂</p>
-<p>分成两个部分好了 一个是对表的注释一个是对里面属性的注释</p>
-<p>一个PO类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span>    <span class="comment">//代表这个是一个实例</span></span><br><span class="line"><span class="meta">@Access</span>(value = AccessType.PROPERTY)  </span><br><span class="line"><span class="comment">//代表这个访问属性方式是用get/set方法 不是直接操作成员变量（AccessType.Field）</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"books_inf"</span>,uniqueConstraints=<span class="meta">@UniqueConstraint</span>(columnNames = &#123; <span class="string">"price"</span> &#125;),indexes=&#123;<span class="meta">@Index</span>(name=<span class="string">"name_index"</span>, columnList = <span class="string">"price"</span>,unique=<span class="keyword">false</span>)&#125;)</span><br><span class="line"></span><br><span class="line"><span class="meta">@DynamicUpdate</span>(value=<span class="keyword">true</span>)</span><br><span class="line"><span class="comment">//默认为false update语句是否动态生成，更新那些改变过的字段（代价是需要更多时间去生成sql）</span></span><br><span class="line"><span class="meta">@OptimisticLocking</span>(type=OptimisticLockType.VERSION)</span><br><span class="line"><span class="meta">@SelectBeforeUpdate</span>(value=<span class="keyword">false</span>)</span><br><span class="line"><span class="meta">@Where</span>(clause=<span class="string">"id=3"</span>)</span><br><span class="line"><span class="comment">//每个查询加载语句后一定有 clause加上的条件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)</span><br><span class="line">	<span class="keyword">private</span> Integer id;</span><br><span class="line">	<span class="keyword">private</span> String bookname;</span><br><span class="line">	<span class="keyword">private</span> Integer price;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getBookname</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> bookname;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getPrice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> price;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPrice</span><span class="params">(Integer price)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.price = price;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBookname</span><span class="params">(String bookname)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.bookname = bookname;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Table</span>(name=<span class="string">"books_inf"</span>,uniqueConstraints=<span class="meta">@UniqueConstraint</span>(columnNames = &#123; <span class="string">"price"</span> &#125;),indexes=&#123;<span class="meta">@Index</span>(name=<span class="string">"name_index"</span>, columnList = <span class="string">"price"</span>,unique=<span class="keyword">false</span>)&#125;)</span><br></pre></td></tr></table></figure>
-<p>Table注解的 name 代表数据库名字 uniqueConstraints（里面的columnnames是一个字符串数组，指定多个列都有唯一索引） 和indexes差不多都是索引  </p>
-<p>不过uniqueConstraints是唯一索引，就是unique是true  所以@Index也可以做到 uniqueConstraint的样子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@OptimisticLocking</span>(type=OptimisticLockType.VERSION)</span><br><span class="line"><span class="meta">@SelectBeforeUpdate</span>(value=<span class="keyword">false</span>)</span><br></pre></td></tr></table></figure>
-<p>在打开DynamicUpdate之后金额图指定乐观锁@OptimisticLocking 乐观锁就是</p>
-<p>悲观锁，正如其名，它指的是对数据被外界（包括本系统当前的其他事务，以及来自外部系统的事务处理）修改持保守态度(悲观)，因此，在整个数据处理过程中，将数据处于锁定状态。大家要拿到锁才能进行数据访问操作 悲观锁的实现，往往依靠数据库提供的锁机制 （也只有数据库层提供的锁机制才能真正保证数据访问的排他性，否则，即使在本系统中实现了加锁机制，也无法保证外部系统不会修改数据）</p>
-<p>安全但降低并行性而且慢且增加死锁的情况</p>
-<p>乐观锁（ Optimistic Locking ） 相对悲观锁而言，乐观锁假设认为数据一般情况下不会造成冲突，所以在数据进行提交更新的时候，才会正式对数据的冲突与否进行检测，如果发现冲突了，则让返回用户错误的信息，让用户决定如何去做。</p>
-<p>乐观锁相信事务之间的数据竞争(data race)的概率是比较小的，因此尽可能直接做下去，直到提交的时候才去锁定， 如果直接简单这么做，还是有可能会遇到不可预期的结果，例如两个事务都读取了数据库的某一行，经过修改以后写回数据库，这时就遇到了问题，他就返回错误信息，让用户决定做法</p>
-<p>倘若出现错误代码将在tx.commit()处抛出<strong>StaleObjectStateException</strong>异 常，并指出版本检查失败，</p>
-<p>@OptimisticLocking有多个策略</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Formula</span>(<span class="string">"(select concat(nt.title,nt.content) from news_inf nt where nt.id=id)"</span>)</span><br><span class="line"><span class="keyword">private</span> String fullContent;                                              <span class="comment">//id是对象属性值</span></span><br></pre></td></tr></table></figure>
+<p>我们可以从上述的代码可以看出这个fullcontent虽然是从数据库获取信息，但其实是在java代码中写好的。如果是要直接在数据库中生成数据，则可以用@Generated</p>
+<p>@Generated 每当hibernate中执行一条insert(@Generated value是INSERT或者ALWAYS)或是update (@Generated value是ALWAYS) hibernante会执行一条select语句去获得该数据列的值并赋给实例对象的属性，而这个值实在数据库运算得出的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="meta">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)</span><br><span class="line"><span class="keyword">private</span> Integer id;</span><br><span class="line"><span class="keyword">private</span> String content;</span><br><span class="line"><span class="meta">@Generated</span>(GenerationTime.ALWAYS)</span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"full_content"</span>)</span><br><span class="line"><span class="keyword">private</span> String fullContent;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> news_in(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> auto_increment primary <span class="keyword">key</span>,</span><br><span class="line">    title <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">    <span class="keyword">content</span> <span class="built_in">varchar</span>(<span class="number">255</span>),</span><br><span class="line">    full_content <span class="built_in">varchar</span>(<span class="number">255</span>)</span><br><span class="line">);</span><br><span class="line"># 创建触发器</span><br><span class="line">DELIMITER |</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">trigger</span> t_full_content_gen <span class="keyword">BEFORE</span> <span class="keyword">INSERT</span> <span class="keyword">ON</span> news_inf</span><br><span class="line">	<span class="keyword">FOR</span> <span class="keyword">EACH</span> <span class="keyword">ROW</span></span><br><span class="line">	<span class="keyword">BEGIN</span></span><br><span class="line">		<span class="keyword">set</span> new.full_content=<span class="keyword">concat</span>(new.title,new.content);</span><br><span class="line">	<span class="keyword">END</span>;</span><br><span class="line">|</span><br><span class="line">DELMITER;</span><br></pre></td></tr></table></figure>
+<p>数据库中在MySQL中用<code>old</code>和<code>new</code>表示执行前和执行后的数据</p>
+<p>在对new赋值的时候只能在触发器before中用 ，在after的触发器中，new的赋值已经结束了，只能读取内容。 如果使用after不能使用new赋值，只能取值，否则会出错误</p>
+<p>old在用于取值？因为赋值没意义？</p>
+<p>DELIMITER 的作用 设置结束符         比如DELIMITER | 则设置结束符为 |</p>
+<p>告诉mysql解释器，当看到 |  的时候该段命令已经结束了，mysql可以执行了。默认情况下，delimiter是分号 ;</p>
+<p>所以最后要 DELIMITER ; 将其结束符改回来</p>
+<p>这样就在数据插入的时候触发触发器生成full_content列的数据，将其插入数据库中</p>
+<p>但是咧，一定要实例化对象是保存在会话的时候才会进行数据库插入进行触发计算，所以如果在保存会话前取full_content是没有值的</p>
+<p>@Transient 修饰不想持久保存的属性</p>
+<p>默认情况下持久化类的属性都会映射到数据表中数据列，如果不想持久保存一些属性，可以用@Transient修饰</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transient</span></span><br><span class="line"><span class="keyword">private</span> String content;</span><br></pre></td></tr></table></figure>
+<p>感觉这个和@Formula的区别是这个的数据不是自动生成的，可能需要对象某种方法赋值什么的</p>
+<p>@Enumerated 修饰枚举类型的属性</p>
+<p>这里的属性要是枚举类型</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Fruit&#123;</span><br><span class="line">    apple,banana,orange,grape</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于枚举来说，apple的枚举值可以用名称代表，也可用枚举值的序号0代表，同样底层数据库可以保存名字或者序号</p>
+<p>EnumType.STRING 底层数据库保存枚举值的名称 EnumType.ORDINAL 保存的是枚举值的数字</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Enumerated</span> (EnumType.ORDINAL)</span><br><span class="line"><span class="meta">@Column</span> (name=<span class="string">"smallfruit"</span>)   <span class="comment">//保存数字</span></span><br><span class="line"><span class="keyword">private</span> Fruit aa;</span><br></pre></td></tr></table></figure>
+<p>@Lob @Basic</p>
+<p>@Lob 可以表示两种类型分别为数据库保存图片和文本</p>
+<p>@Lob修饰的属性是 byte[] Byte[] java.io.Serializable时，它们会被映射成Blob类型，用于保存图片</p>
+<p>@Lob修饰的属性是 char[] Character[] java.lang.String 他们会映射成Clob列 用来保存长文本</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//保存图片</span></span><br><span class="line">File file=<span class="keyword">new</span> File(<span class="string">"aab.jpg"</span>);</span><br><span class="line"><span class="keyword">byte</span>[] content=<span class="keyword">new</span> <span class="keyword">byte</span>[(<span class="keyword">int</span>)file.length()];</span><br><span class="line"><span class="keyword">new</span> FileInputStream(file).read(content);       <span class="comment">//创建文件读入流将文件读入content数组中</span></span><br><span class="line">person.setPic(content);          <span class="comment">//存储在持久化对象的@lob修饰的byte数组</span></span><br><span class="line">sess.save(person);</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+<p>但实际上@Lob通常会配一个@Basic 因为这种大数据量的东西，如果每次都加载而不需要的话就会造成性能的极大损耗，所以采取<strong>延迟加载</strong>，只有真正需要该属性时才从数据库加载。</p>
+<p>@Basic</p>
 <ul>
-<li>OptmisticLockType<ul>
-<li>Version 检查version/timestamp</li>
-<li>ALL 检查所有字段</li>
-<li>DIRTY 检查要更新的字段</li>
-<li>NONE 不使用</li>
+<li>fetch 接收 FetchType.EAGER/LAZY 前者立即加载后者延时加载</li>
+<li>optional 属性映射的数据列是否允许null</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Lob</span></span><br><span class="line"><span class="meta">@Basic</span> (fetch=FetchType.LAZY)</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">byte</span>[] pic;</span><br></pre></td></tr></table></figure>
+<p>@Temporal 修饰日期</p>
+<p>对于日期，java基本上使用Date，但数据库有很多类型date time timestamp等</p>
+<p>属性value支持 TemporalType.DATE/TIME/TIMESTAMP</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Temporal</span>(TemporalType.DATE)</span><br><span class="line"><span class="keyword">private</span> Date bbb;</span><br></pre></td></tr></table></figure>
+<p>所以会出现数据截取的情况，比如TemporalType.DATE 只取日期的部分 TIME只取时间的部分</p>
+<p>映射主键</p>
+<p>建议为持久化类定义一个标识属性，这就是底层数据库中的主键</p>
+<p>现代数据库建模理论都推荐 不要使用物理主键（甚至是联合主键）（带语义的列） 而是使用逻辑主键 则建立外键列则方便很多，主从表的约束关系清晰</p>
+<p>根据之前的经验，我们是用@Id去修饰该实体的属性</p>
+<p>由于逻辑主键没有意义，所以Hibernate可以为这种主键提供主键生成器，负责为每个持久化实例生成唯一的逻辑主键值，我们是使用@GeneratedValue</p>
+<p>@GeneratedValue</p>
+<ul>
+<li>strategy <ul>
+<li>GenerationType.AUTO 自动选择最适合底层数据库的主键生成策略 默认</li>
+<li>GenerationType.IDENTITY 对mysql,sqlserver 选择自增长的主键生成策略</li>
+<li>GenerationType.SEQUENCE 对于oracle数据库，选择基于sequence主键生成策略 （和@SequenceGenerator使用）</li>
+<li>GenerationType.TABLE 使用辅助表来生成主键 和@TableGenerator配合使用</li>
 </ul>
 </li>
+<li></li>
+<li>generator GenerationType.SEQUENCE和GenerationType.TABLE 该属性引用@SequenceGenerator @TableGenerator所定义的生成器的名称</li>
 </ul>
-<p>所谓检查字段，就是先select一下，然后将实体更改update时，看当前的字段有没有变化，最简单的就是version，提供version字段，修改后就version+=1 用于识别是否更改</p>
-<p>所以好像要添加一个字段 然后注释@version</p>
-<p>@Check </p>
+<p>@SequenceGenerator 定义生成器的配置</p>
 <ul>
-<li>constraints=”xx”   check约束条件</li>
+<li>name 主键生成器的名称</li>
+<li>catalog schema 将底层的sequence放入指定catalog schema中</li>
+<li>initialValue 指定Sequence的初始值</li>
+<li>sequenceName 指定列的名称</li>
 </ul>
-<p>@Subselect这个比较特别 用了这个说明是将这个对象用来存放视图 不能修改只能读取</p>
+<p>@TableGenerator 定义的主键生成器会在底层数据库中额外生成一个辅助表</p>
 <ul>
-<li>指明实际使用的的sql语句 然后将每一列都安排到相应的属性上（应该是每个属性都对应一个列）然后就可以通过这个类去做访问了，但只读不能写，写了无法保存数据库</li>
+<li>name</li>
+<li>catalog schema</li>
+<li>table 指定表名</li>
+<li>pkColumnName 指定存放主键名</li>
+<li>valueColumnName 指定主键值的列名</li>
+<li>indexes 该属性值的是一个@Index数组，用于辅助表定义索引</li>
+<li>uniqueConstraints 属性值@UniqueConstraint数组，用于为辅助表创建唯一约束</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name = <span class="string">"test_summary"</span>)</span><br><span class="line"><span class="meta">@Subselect</span>(<span class="string">"SELECT i.name AS itemName, MAX(b.amount) AS amountMax, COUNT(*) AS itemCount "</span></span><br><span class="line">		+ <span class="string">"FROM test_item i "</span></span><br><span class="line">		+ <span class="string">"INNER JOIN test_bid b ON i.item_id = b.id "</span></span><br><span class="line">		+ <span class="string">"GROUP BY i.name"</span>)</span><br><span class="line"><span class="meta">@Synchronize</span>( &#123; <span class="string">"test_item"</span>, <span class="string">"test_bid"</span> &#125;)</span><br><span class="line"><span class="comment">// tables impacted</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Summary</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">3647575276389635849L</span>;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@Column</span>(name = <span class="string">"itemName"</span>)</span><br><span class="line">	<span class="keyword">private</span> String itemName;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@Column</span>(name = <span class="string">"amountMax"</span>)</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">double</span> amountMax;</span><br><span class="line"> </span><br><span class="line">	<span class="meta">@Column</span>(name = <span class="string">"itemCount"</span>)</span><br><span class="line">	<span class="keyword">private</span> Integer itemCount;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Summary</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Summary</span><span class="params">(String itemName, <span class="keyword">double</span> amountMax, Integer itemCount)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>();</span><br><span class="line">		<span class="keyword">this</span>.itemName = itemName;</span><br><span class="line">		<span class="keyword">this</span>.amountMax = amountMax;</span><br><span class="line">		<span class="keyword">this</span>.itemCount = itemCount;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getItemName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> itemName;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setItemName</span><span class="params">(String itemName)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.itemName = itemName;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getAmountMax</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> amountMax;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAmountMax</span><span class="params">(<span class="keyword">double</span> amountMax)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.amountMax = amountMax;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getItemCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> itemCount;</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setItemCount</span><span class="params">(Integer itemCount)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.itemCount = itemCount;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		Session session = <span class="keyword">null</span>;</span><br><span class="line">		Transaction tx = <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			session = HibernateUtil.getSession();</span><br><span class="line">			tx = session.beginTransaction();</span><br><span class="line"> </span><br><span class="line">			String hql = <span class="string">"from Summary"</span>;     <span class="comment">//接实例类</span></span><br><span class="line">			Query query = session.createQuery(hql);</span><br><span class="line">			List&lt;Summary&gt; list = query.list();</span><br><span class="line">			<span class="comment">// System.out.println(list.size());</span></span><br><span class="line">			<span class="keyword">for</span> (Summary summary : list) &#123;</span><br><span class="line">				System.out.println(summary.getItemName() + <span class="string">"\t"</span></span><br><span class="line">						+ summary.getAmountMax() + <span class="string">"\t"</span></span><br><span class="line">						+ summary.getItemCount());</span><br><span class="line">			&#125;</span><br><span class="line">			tx.commit();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (HibernateException e) &#123;</span><br><span class="line">			<span class="keyword">if</span> (tx.isActive()) &#123;</span><br><span class="line">				tx.rollback();</span><br><span class="line">			&#125;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-<p>@BatchSize 单次抓取的实体的数量</p>
-<p>@PolymorphismType 用来指定隐式多态查询 比如访问父类就是操控他的实际子类什么的</p>
-<p> @DynamicUpdate     动态修改，它会判断持久化对象中属性，哪些属性值发生了改变就会生成update的语句。(持久化状态下做修改)     </p>
-<p>@SelectBeforeUpdate   修改之前先查询，查询得到持久化对象再与脱管状态下的对象进行比较,哪些属性值发生了改变就会生成update的语句。(脱管状态下做修改)</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"books_inf"</span>,uniqueConstraints=<span class="meta">@UniqueConstraint</span>(columnNames = &#123; <span class="string">"amount"</span> &#125;),indexes=&#123;<span class="meta">@Index</span>(name=<span class="string">"price_index"</span>, columnList = <span class="string">"price"</span>,unique=<span class="keyword">false</span>)&#125;)</span><br><span class="line"><span class="meta">@DynamicUpdate</span>(value=<span class="keyword">true</span>)</span><br><span class="line"><span class="meta">@OptimisticLocking</span>(type=OptimisticLockType.VERSION)</span><br><span class="line"><span class="meta">@SelectBeforeUpdate</span>(value=<span class="keyword">false</span>)</span><br><span class="line"><span class="meta">@Where</span>(clause=<span class="string">"price=233"</span>)</span><br><span class="line"><span class="meta">@Check</span>(constraints = <span class="string">"id&gt;0"</span>)</span><br><span class="line"><span class="meta">@Access</span>(value = AccessType.PROPERTY)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">	<span class="meta">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)</span><br><span class="line">	<span class="keyword">private</span> Integer id;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> String bookname;</span><br><span class="line">	<span class="keyword">private</span> Integer price;</span><br><span class="line">	<span class="keyword">private</span> Integer amount;</span><br><span class="line">	<span class="meta">@Version</span></span><br><span class="line">	<span class="keyword">private</span> Integer version;</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>有个很奇怪的一点，发现好像同时加了index和uniqueconstraints之后 它就会报错说没有主键，但我已经在id上标好@Id和@GeneratedValue <strong>此时就要在getId方法上加上@Id  而且还要给上相应的GeneratedValue</strong> </p>
-<p>注意load/get方法去获取实体对象的时候</p>
-<p>会使用select语句 这时候@Where的条件就会使用，这时候如果没select到可能就得不到相应的对象了，但我感觉更新应该是一样的。</p>
-<p>发现两个很骚的东西</p>
-<p>好像hibernate的操作必须要放在事务中，不放在事务中就不会实现</p>
-<p>还有DynamicUpdate 的确是只会更新修改过的字段，相同的字段是不会放入update中的，</p>
-<p><del>倘若都一样不会生成update语句 而且好像如果不是动态生成的update是不会显示在tomcat中的</del></p>
-<p>Selectbeforeupdate有异曲同工之妙，它是用于脱管对象的重新更新，所以它会先生成select语句，然后将只会update修改过的字段</p>
-<p>若没有这两个注释 update就会全部字段都会update</p>
-<p>OptimisticLocking 情况一样不乐观 改变不了</p>
+<p>反正这两个Generator定义了一个生成器后这个name要给到@GeneratedValue 注解的generator属性值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="meta">@TableGenerator</span>(name=<span class="string">"newsGen"</span>,table=<span class="string">"newidgen"</span>,pkColumnName=<span class="string">"gen_key"</span>, valueColumnName=<span class="string">"gen_value"</span>, pkColumnValue=<span class="string">"news_id"</span>)</span><br><span class="line"><span class="meta">@GeneratedValue</span>(strategy=GenerationType.TABLE,generator=<span class="string">"newsGen"</span>)</span><br><span class="line"><span class="keyword">private</span> Integer id;</span><br></pre></td></tr></table></figure>
+<p>创建了一个新表 newidgen 里面有两列 分别是两行gen_key gen_value  有一行gen_key的值为 news_id gen_value是自动生成的1</p>
+<p>其实Sequence和Table主键生成器虽然允许你做一些配置，但实际上是已经是固定好生成器策略了，但实际上Hibernate还能支持其他的生成器和策略  </p>
+<p>如果需要，则使用Hibernate 提供的@GenericGenerator       其实就是把其他别的统一定义为@GenericGenerator</p>
+<ul>
+<li>name 主键生成器名称</li>
+<li>strategy 主键生成器的主键生成策略</li>
+</ul>
+<p>strategy 属性可以是自定义的主键生成类（需要实现Hibernate的IdentifierGenerator接口），也可以是Hibernate提供的 （奇了怪了这些定义好的为啥不各自分配一个注释？）</p>
+<p>Hibernate提供的实现类</p>
+<ul>
+<li>IncrementGenerator 用数字类型添加主键 没有其他进程使用同一个数据库时使用</li>
+<li>IdentityGenerator 实现自增长</li>
+<li>SequenceStyleGenerator </li>
+<li>。。。</li>
+<li>UUIDGenerator 用UUID算法实现一个字符串类型的标识符</li>
+<li>。。。。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Id</span></span><br><span class="line"><span class="meta">@GenericGenerator</span>(name=<span class="string">"aa"</span>, strategy=<span class="string">"org.hibernate.id.xxxx"</span>)</span><br><span class="line"><span class="meta">@GeneratedValue</span>(generator=<span class="string">"aa"</span>)</span><br><span class="line">xxx</span><br></pre></td></tr></table></figure>
+<p>映射集合</p>
+<p>Hibernate中持久化对象中的集合字段必须声明为接口，比如Set Collection List Map SortedSet SortedMap 甚至时自定义类型 （只要实现 UserCollectionType接口</p>
+<p>Hibernate在持久化某个实例的时候，会自动把程序中的集合实现类替换成它自己的实现类，所以千万不要将集合属性转换为集合实现类HashMap等 但Set Map 可以</p>
+<p>集合属性会跟随持久化对象持久化，当持久化对象删除时，集合属性的内容也会删，将集合从一个持久化对象移动到另一个对象，集合元素的数据记录也会从一个表移动到下一个</p>
+<p>我们采用注解 @ElementCollection 进行标记</p>
+<ul>
+<li>fetch FetchType.LAZY/EAGER</li>
+<li>targetClass 集合元素的类型</li>
+</ul>
+<p>由于集合元素常要保存另一个数据表，所以需要一个@CollectionTable 代表保存集合属性的表 和外键列 @JoinColumn</p>
+<p>@CollectionTable</p>
+<ul>
+<li>name</li>
+<li>catalog schema</li>
+<li>indexes</li>
+<li>joinColumns       该属性值实要一个注解为@JoinColumn 的数组/单个元素   每个元素映射一个外键列</li>
+<li>uniqueConstraints</li>
+</ul>
+<p>@JoinColumn 定义外键列  常用的部分的  其实都是部分的属性</p>
+<ul>
+<li>name 外间列名字</li>
+<li>columnDefinition 指定Hibernate使用该属性指定的SQL片段创建外键列</li>
+<li>table 指定列所在数据表的表名</li>
+<li>unique 是否为该列添加唯一约束</li>
+<li>referencedColumnName 指定该列参照的主键列的列名</li>
+</ul>
+<p>存储集合类型分成三种 List  Set  Map</p>
+<p>@OrderColumn 定义List和数组的索引</p>
+<ul>
+<li>集合元素是基本类型及其包装类型字符串日期 用@ElementCollection映射集合 并且用普通的@Column映射集合元素对应的列</li>
+<li>集合元素是组件 （非持久化的类（复合类型））就用@Element Collection + @Embeddable 修饰非持久类</li>
+<li>集合元素是关联的持久化实体，这时候就要用@OneToMany @ManyToMany 进行关联什么的</li>
+</ul>
+<p>下面是List作为属性的例子</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ElementCollection</span>(targetClass=String.class)</span><br><span class="line"><span class="meta">@CollectionTable</span>(name=<span class="string">"school_inf"</span>,joinColumn=<span class="meta">@JoinColumn</span>(name=<span class="string">"person_id"</span>,nullable=<span class="keyword">false</span>))</span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"school_name"</span>)</span><br><span class="line"><span class="meta">@OrderColumn</span>(name=<span class="string">"list_order"</span>)</span><br><span class="line"><span class="keyword">private</span> List&lt;String&gt; schools =<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>从上面分析一下构建的思路</p>
+<ol>
+<li>@ElementCollection 首先表明下面是个集合属性 而且value targetClass 中可以指明集合元素中的类型</li>
+<li>由于集合是要单独放在一个表中，所以要用@CollectionTable 构建表 name代表表名 joinColumn 指明外键，要注意这个外键是放在集合所在表中，name是取外键列的名字  但实际上是主表的哪一列呢？我猜测是默认取主键列！</li>
+<li>设置@Column给自己的集合元素存放信息的列</li>
+<li>@OrderColumn 由于是有序集合 添加一个索引列，它会自动帮你完成索引内容的填充</li>
+<li>列集合属性要用接口来声明  但要用具体类实例化</li>
+</ol>
+<p>这样我们持久化什么之类以后          就会多一个school_inf表 表示集合  并且表中会让外键列和索引列作为联合主键</p>
+<p>题外话有一种奇怪的打开Session方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Session session=HibernateUtil.currentSession();</span><br><span class="line">....</span><br><span class="line">HibernateUtil.closeSession();</span><br></pre></td></tr></table></figure>
+<p>数组和List完全一样不过没搞明白的是它是<code>private String[]schools;</code>  并没有实例化？？？？？然后他说数组和List的区别在于数组的长度不可变？？</p>
+<p>Set和List的区别也不大，就是Set不用设置@OrderColumn  Set其他和List一样 具体实例化是 <code>Set&lt;String&gt;ss=new HashSet&lt;&gt;()</code>  不过注意要再@Column中添加nullable=false  保证元素列不为空  因为Set的表由于没有索引列，则默认采取外键和元素列作为联合主键。如果没有这么写则该表没有主键</p>
+<p>Map</p>
+<ul>
+<li>ElementCollection</li>
+<li>CollectionTable</li>
+<li>Column</li>
+</ul>
+<hr>
+<ul>
+<li>MapKeyColumn</li>
+<li>MapKeyClass</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ElementCollection</span>(targetClass=Float.class)</span><br><span class="line"><span class="meta">@CollectionTable</span>(name=<span class="string">"xx_inf"</span>,joinColumns=<span class="meta">@JoinColumn</span>(name=<span class="string">"xxid"</span>,nullable=<span class="keyword">false</span>))</span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"aa"</span>)</span><br><span class="line"><span class="meta">@MapKeyColumn</span>(name=<span class="string">"aa_key"</span>)</span><br><span class="line"><span class="meta">@MapKeyClass</span>(String.class)</span><br><span class="line"><span class="keyword">private</span> Map&lt;String,Float&gt;xxx=<span class="keyword">new</span> HashMap&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>Map表中取外键和key列作为联合主键</p>
+<p>集合属性通常推荐使用 延迟加载策略，Hibernate对集合属性默认采用延迟加载，在某些情况下可以</p>
+<p>@ElementCollection(fetch=FetchType.EAGER) 取消延迟加载</p>
+<p>有序集合：集合元素可以根据key或index访问</p>
+<p>无序集合：集合里的元素只能遍历</p>
+<p>Hibernate </p>
+<p>并不会立即更新该元素对应的数据行，因此对于Set集合而言，只有执行插入和删除操作时改变才有效</p>
+<p>一般来说1-N的关联关系来说一般1会放弃控制权，所有的更新操作都会放在N一端进行处理。</p>
+<p>而未初始化集合元素（从数据库中获取）情况下直接向List集合中添加新元素是正确的，总是可行的。然而Set不同，由于要保证元素不能重复，则要加入新元素时需要加载Set对象 性能就受到影响</p>
+<p>Hibernate 删除集合的元素的时候如果删除全部元素，就直接整个集合delete就行，但如果是删剩下一条的话，就会一条条删然后就剩下那条。但其实其实作为开发者，你可以先delete整个集合然后再insert一条记录</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; tmp=person.getSchools();   <span class="comment">//返回一个String集合</span></span><br><span class="line">person.setSchools(<span class="keyword">null</span>);  <span class="comment">//调用delete删除person的关联的全部集合元素</span></span><br><span class="line"><span class="comment">//....对tmp这个List集合进行删除19个元素什么的</span></span><br><span class="line">person.setSchools(tmp);        <span class="comment">//进行insert的一个操作</span></span><br></pre></td></tr></table></figure>
+<p>集合的元素可以当作“从属于”（感觉不是真正意义上的从属因为不是关联）主表的实体，所以主类的记录删除，集合中相应的记录也会删除。而且Hibernate无法直接加载和查询集合属性表的记录，必须先加载主类实体再通过主类实体去加载</p>
+<h2 id="有序集合映射"><a href="#有序集合映射" class="headerlink" title="有序集合映射"></a>有序集合映射</h2><p>除了List，Hibernate SortedSet 和 SortedMap  两个有序集合，</p>
+<ul>
+<li><p>当需要映射这种有序集合必须 @SortNatural 或者 @SortComparator 注解 前者表明对集合元素采用默认的排序，后者则表明对集合元素采用自定义排序</p>
+</li>
+<li><p>@SortComparator 必须指定value 值为Comparator的实现类</p>
+</li>
+<li><p>而实例化SortedSet 和SortedMap 则用 TreeSet 和 TreeMap</p>
+</li>
+<li>其他的之前介绍的集合属性的注解也不能漏</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ElementCollection</span>(targetClass=String.class)</span><br><span class="line"><span class="meta">@CollectionTable</span>(name=<span class="string">"person_id"</span>,joinColumns=<span class="meta">@JoinColumn</span>(name=<span class="string">"person_id"</span>,nullable=<span class="keyword">false</span>))</span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxxvalue"</span>,nullable=<span class="keyword">false</span>)</span><br><span class="line"><span class="meta">@SortNatural</span></span><br><span class="line"><span class="keyword">private</span> SortedSet&lt;String&gt; train=<span class="keyword">new</span> TreeSet&lt;&gt;();    </span><br><span class="line"></span><br><span class="line"><span class="comment">//如果是SortedMap 就要加上一些@MapKeyColumn  @MapKeyClass 这种 并且实例化为TreeMap</span></span><br></pre></td></tr></table></figure>
+<p>其实所谓有序是按照插入顺序，先来的就排在前面 默认排序下（@SortNatural）</p>
+<p>不过的话，要保证hibernate.cfg.xml 中的hbm2.auto属性为update，保证添加元素不会导致重建表</p>
+<p>这样一个主类对象就可以添加多个集合元素并存储在表中</p>
+<p>实际上我们如果想要集合所谓的字符比较排序的话 可以@OrderBy来进行注解</p>
+<p>需要JDK 1.4以上 它实在SQL查询中进行排序</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ElementCollection</span>(targetClass=String.class)</span><br><span class="line"><span class="meta">@CollectionTable</span>(name=<span class="string">"xx_inf"</span>,joinColumns=<span class="meta">@JoinColumn</span>(name=<span class="string">"xx_id"</span>,nullable=<span class="keyword">false</span>))</span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxxvalue"</span>)</span><br><span class="line"><span class="meta">@OrderBy</span>(<span class="string">"xxxxvalue desc"</span>)</span><br><span class="line"><span class="keyword">private</span> Set&lt;String&gt; tt=<span class="keyword">new</span> HashSet&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>@OrderBy 导致的改变是在sql查询的时候添加了  order by xxxxvalue desc 子句</p>
+<h3 id="映射表中建立对象"><a href="#映射表中建立对象" class="headerlink" title="映射表中建立对象"></a>映射表中建立对象</h3><p>如果希望在映射文件中创建删除触发器存储过程等数据库对象， 一般来说我们用不到映射文件因为我们是用注解的</p>
+<p>注意映射文件不是hibernate.cfg.xml  而是创建某个类中定义的文件 比如     class A  对应的映射文件A.hbm.xml文件</p>
+<p>看网上感觉<a href="http://blog.sina.com.cn/s/blog_86f4502c0101fm8l.html好像是一个映射文件就要一个类对应，所以就建个空类吧嘻嘻" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_86f4502c0101fm8l.html好像是一个映射文件就要一个类对应，所以就建个空类吧嘻嘻</a></p>
+<p>这时候你就可以使用<code>&lt;database-object&gt;</code>标签</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">a.hbm.xml</span><br><span class="line">....</span><br><span class="line"><span class="tag">&lt;<span class="name">hibernate-mapping</span>&gt;</span>   <span class="comment">&lt;!--这是根元素--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">database-object</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">create</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">create</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">drop</span>&gt;</span>xxx<span class="tag">&lt;/<span class="name">drop</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 要在指定数据库方言下才有效--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dialect-scope</span> <span class="attr">name</span>=<span class="string">"org.hibernate.MySQL5Dialect"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dialect-scope</span> <span class="attr">name</span>=<span class="string">"org.hibernate.MySQL5InnoDBDialect"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">database-object</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">hibernate-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>create中上的内容就是以完整的DDL的语句  要配上分号</p>
+<p>比如创建一个表 创建一个触发器  create table test(xxname varchar(233));</p>
+<p>而drop也定义了删除指定数据库对象的DDL   怀疑是drop一个表什么的</p>
+<p>方法二 我们也可以不用create 和drop 直接在 <code>&lt;database-object&gt;</code>中 添加<code>&lt;definition class=&quot;xxx&quot;&gt;</code> 这个类必须实现 org.hibernate.mapping.AuxiliaryDatabaseObject 接口 它直到如何组织create 和drop命令</p>
+<p>注意实际上我们在hibernate.cfg.xml文件中要指明映射文件</p>
+<p><code>&lt;mapping resource=&quot;xxx/a.hbm.xml&quot;&gt;&lt;/mapping&gt;</code></p>
+<p>而且注意修改属性</p>
+<p><code>&lt;property name=&quot;hibernate.hbm2ddl.auto&quot;&gt;create&lt;/property&gt;</code></p>
+<p>然后我们就按照之前的获取Configuration 然后创建什么SessionFactory 就行了 甚至不用获取一个session  在创建SessionFactory对象时就会生成映射文件对应的数据库对象</p>
+<p>不过下面提供一个Hibernate 5.x 推荐的创建SessionFactory方式  前面是传统创建方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StandardServiceRegistry registry =<span class="keyword">new</span> StandardServiceRegistryBuilder().configure().build();</span><br><span class="line">Metadata metadata=<span class="keyword">new</span> MetadataSources(registry).buildMetadata();</span><br><span class="line">metadata.buildSessionFactory();   <span class="comment">//采用Metadata去创建SessionFactory</span></span><br></pre></td></tr></table></figure>
+<p>感觉有点点复杂 </p>
+<p>EnumSet 是一个接口好像 然后是抽取这是一个高性能集合实现，比HashSet快得多</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumSet</span>&lt;<span class="title">E</span> <span class="keyword">extends</span> <span class="title">Enum</span>&lt;<span class="title">E</span>&gt;&gt;</span></span><br><span class="line"><span class="class">要求元素必须是枚举类型</span></span><br></pre></td></tr></table></figure>
+<p>每个EnumSet实例的所有元素必须是单个枚举类型的元素。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">// Java program to illustrate working of EnumSet and</span></span><br><span class="line"><span class="comment">// its functions.</span></span><br><span class="line"><span class="keyword">import</span> java.util.EnumSet;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">enum</span> Gfg </span><br><span class="line">&#123;</span><br><span class="line">    CODE, LEARN, CONTRIBUTE, QUIZ, MCQ</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Example</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// create a set</span></span><br><span class="line">        EnumSet&amp;lt;Gfg&amp;gt; set1, set2, set3, set4;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// add elements</span></span><br><span class="line">        set1 = EnumSet.of(Gfg.QUIZ, Gfg.CONTRIBUTE, Gfg.LEARN, Gfg.CODE);</span><br><span class="line">        <span class="comment">//创建一个具有与指定枚举集相同元素类型的枚举集，最初包含此类型中未包含在指定集中的所有元素。</span></span><br><span class="line">        set2 = EnumSet.complementOf(set1); </span><br><span class="line">        <span class="comment">//创建一个包含指定元素类型中所有元素的枚举集</span></span><br><span class="line">        set3 = EnumSet.allOf(Gfg.class);</span><br><span class="line">        <span class="comment">//创建最初包含由两个指定端点定义的范围内的所有元素的枚举集</span></span><br><span class="line">        set4 = EnumSet.range(Gfg.CODE, Gfg.CONTRIBUTE);</span><br><span class="line">        System.out.println(<span class="string">"Set 1: "</span> + set1);</span><br><span class="line">        System.out.println(<span class="string">"Set 2: "</span> + set2);</span><br><span class="line">        System.out.println(<span class="string">"Set 3: "</span> + set3);</span><br><span class="line">        System.out.println(<span class="string">"Set 4: "</span> + set4);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">Set <span class="number">1</span>: [CODE, LEARN, CONTRIBUTE, QUIZ]</span><br><span class="line">Set <span class="number">2</span>: [MCQ]</span><br><span class="line">Set <span class="number">3</span>: [CODE, LEARN, CONTRIBUTE, QUIZ, MCQ]</span><br><span class="line">Set <span class="number">4</span>: [CODE, LEARN, CONTRIBUTE]</span><br></pre></td></tr></table></figure>
+<p>实际上如果只是将其根据映射文件来生成数据库对象 可以使用SchemaExport工具 而不一定要需要创建会话工厂</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">org.hibernate.service.ServiceRegistry serviceRegistry = <span class="keyword">new</span> StandardServiceRegistryBuilder().configure().build();</span><br><span class="line">Metadata metadata = <span class="keyword">new</span> MetadataSources(serviceRegistry).buildMetadata();</span><br><span class="line">SchemaExport schemaExport = <span class="keyword">new</span> SchemaExport();		schemaExport.create(EnumSet.of(TargetType.DATABASE), metadata);</span><br><span class="line"><span class="comment">//或者  我不知道这个是只给出文档不创建数据库 还是又创建数据库又创建文档，感觉像后者</span></span><br><span class="line"><span class="comment">//我想是的因为 create函数是只执行create table操作 而text是仅生成sql脚本而不生成实际对象</span></span><br><span class="line">schemaExport.setFormat(<span class="keyword">true</span>).setOutputFile(<span class="string">"news.sql"</span>).create(EnumSet.of(TargetType.SCRIPT),metadata);</span><br></pre></td></tr></table></figure>
+<p>TargetType 是一个枚举类型 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">enum</span> TargetType &#123;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">// * Export to the database.   //感觉这个才是创建数据库的  （好像只是创建数据库？）</span></span><br><span class="line">    DATABASE,</span><br><span class="line">     <span class="comment">//* Write to a script file.</span></span><br><span class="line">    SCRIPT,</span><br><span class="line">     <span class="comment">//* Write to &#123;@link System#out&#125;   //输出屏幕的样子</span></span><br><span class="line">    STDOUT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上SchemaExport 甚至执行它的main函数，它提供很多不同的参数功能，我想这些在代码中有相应的函数</p>
+<p>p430</p>
+<p>组件属性 </p>
+<p>就是作为一个类做其他类属性</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="meta">@Table</span>(name=<span class="string">"person_inf"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    xxxx</span><br><span class="line">    <span class="keyword">private</span> Name name;   <span class="comment">//name 是一个类</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>让name成为一个组件属性使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Embeddable</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Name</span></span>&#123;</span><br><span class="line">    <span class="meta">@Column</span>(name=<span class="string">"person_firstname"</span>)</span><br><span class="line">    <span class="keyword">private</span> String fitst;</span><br><span class="line">    <span class="meta">@Column</span>(name=<span class="string">"person_secondname"</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Parent</span></span><br><span class="line">    <span class="keyword">private</span> Person owner;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Name</span><span class="params">()</span></span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NAme</span><span class="params">(String s1,String s2)</span></span>&#123;</span><br><span class="line">        first=s1;</span><br><span class="line">        second=s2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//省略setter和getter的东西</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们通过上面实例可以知道映射组件属性需要做到的几点</p>
+<ul>
+<li>@Embeddable  注释整个组件类</li>
+<li>@Column 注释组件类中的属性，将来是将这些属性拆开成一列列数据而已</li>
+<li>@Parent 这个挺特别的 组件类中要有一个主人类的一个对象指向的就是Name主人的实体，而且要用@Parent注释它，估计注释后到时就会给这个owner自动赋值</li>
+</ul>
+<p>然后使用过程中就当Name是person的一个普通属性即可</p>
+<p>最后这个组件属性并不是另外创建一个表，而是将其内容拆开，其一个个属性成为一列列补充在person_inf 中</p>
+<p>实际上也有另外一种注释方法，不在组件类中进行属性 直接在持久化类进行注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    xx</span><br><span class="line">    <span class="meta">@Embedded</span></span><br><span class="line">    <span class="meta">@AttributeOverrides</span>(&#123;</span><br><span class="line">            <span class="meta">@AttributeOverride</span>(name=<span class="string">"first"</span>,column=<span class="meta">@Column</span>(name=<span class="string">"person_firstname"</span>))</span><br><span class="line">            <span class="meta">@AttributeOverride</span>(name=<span class="string">"second"</span>,column=<span class="meta">@Column</span>(name=<span class="string">"person_lastname"</span>))</span><br><span class="line">        &#125;)</span><br><span class="line">   <span class="keyword">private</span> Name name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Embedded注解</p>
+<p>@AttrbuteOverrides下包含多个@AttributeOverride 里面name指明属性名 column指明映射的列的名字</p>
+<p>但我觉得是不是组件类不用说明@Parent了？？？</p>
+<p>如果<strong>组件属性类中的属性有那种集合类型</strong> 其实就不用对他进行什么操作，之前怎么做就怎么安排</p>
+<p>实际上我们从底层数据库是看不出 这个集合的数据表 是数据person类 还是属于name类的，但其实没关系，毕竟如果属于name的话也是属于person的</p>
+<p><strong>集合属性的元素为类</strong></p>
+<p>比如<code>private List&lt;Name&gt;x=new ArrayList&lt;&gt;();</code>  <code>private Map&lt;String,Name&gt;x=new HashMap&lt;&gt;();</code></p>
+<p>其他照旧 讲一下区别   程序不在用@Column映射为保存集合元素 而是用@Embeddable修饰组件类（Name）</p>
+<p>组件类该干嘛干嘛</p>
+<p>这样底层表的区别是  集合的那个表 由一列表示值变成多列表示值</p>
+<p><strong>组件作为Map的索引</strong></p>
+<p>这个时候@Column就要重出江湖，因为组件类不充当值了，而@MapKeyClass 就最好要明确指明类型</p>
+<p>而且由于作为Map的key，所以这个组件类除了各种注解什么的 还要重写 equals 和 hashCode方法</p>
+<p>在底层的表中 Map的映射表 会将外键列和Name属性对应的多个列 组成联合主键</p>
+<p><strong>组件作为复合(联合)主键</strong></p>
+<p>作为复合主键，对于组件类有了更高的要求</p>
+<ul>
+<li>有无参数构造器</li>
+<li>必须实现java.io.Serializable  其实也是实现boolean equals(Object obj) 和 int hashCode()</li>
+<li>重写equals和hashCode方法，定义来区分对象的规则</li>
+</ul>
+<p>这里给出的组件类的注解是写在持久化类中 所以不知道组件类注解是否可行????????????????????</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span>&#123;</span><br><span class="line">    <span class="meta">@EmbeddedId</span>             <span class="comment">//不是@Embedded</span></span><br><span class="line">    <span class="meta">@AttributeOverrides</span>(&#123;</span><br><span class="line">        xxxxx</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">private</span> Name name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>多列作为联合主键</strong></p>
+<p>其实比起将一个组件属性类当作一个复合主键，让多个列形成联合主键这种情况更加常见</p>
+<ul>
+<li>持久化类实现 java.io.Serializable接口</li>
+<li>实现hashCode()和equals(Object obj)</li>
+<li>然后将你想要的普通属性加上@Id  如果是那些特殊的组件类的请看上面</li>
+</ul>
 
           
         
@@ -813,7 +802,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/hibernate学习(四)持久化类属性的注释/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/big-endian和little-endian/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -832,7 +821,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/hibernate学习(四)持久化类属性的注释/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/big-endian和little-endian/" itemprop="url">big-endian和little-endian</a></h1>
         
 
         <div class="post-meta">
@@ -844,8 +833,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
               </time>
             
 
@@ -884,60 +873,13 @@
       
         
           
-            <p>javax.persistence 和 org.hibernate.annotion的包的注释的区别</p>
-<p>@Generated一定要用hibernate包的</p>
-<p>@Column</p>
-<p>ColumnDefinition 是用来定义属性的属性</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Column</span>(name=<span class="string">"chinesename"</span>,columnDefinition=<span class="string">"varchar(128),not null,unique,updateable"</span>)</span><br><span class="line"> <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line"><span class="comment">//等效为这样</span></span><br><span class="line"> <span class="meta">@Column</span>(length=<span class="number">253</span>,name=<span class="string">"englishname"</span>,nullable=<span class="keyword">false</span>,unique=<span class="keyword">true</span>,updatable=<span class="keyword">true</span>,insertable=<span class="keyword">false</span>)</span><br><span class="line"> <span class="keyword">private</span> String name2;</span><br></pre></td></tr></table></figure>
-<p>看起来columnDefinition可以替代，其实不然，有时候需要长文本，而String只会定义为varchar这时候需要你</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxx"</span>,columnDefinition=<span class="string">"text"</span>)</span><br></pre></td></tr></table></figure>
-<p>scale precision 使用于 decimal类型 对应java的 BigDecimal 大数型</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xxx"</span>,precision=<span class="number">5</span>,scale=<span class="number">2</span>)</span><br><span class="line"><span class="keyword">private</span> BigDecimal salary1;</span><br><span class="line"><span class="comment">//相当于</span></span><br><span class="line"><span class="meta">@Column</span>(name=<span class="string">"xx"</span>,columnDefinition=<span class="string">"decimal(5,2)"</span>)</span><br><span class="line"><span class="keyword">private</span> BigDecimal salary2;</span><br></pre></td></tr></table></figure>
-<p>precision 代表有效数字 scale代表支持的小数的位数</p>
-<p>1.double类型将在数据库中映射为double类型，precision和scale属性无效<br>2.double类型若在columnDefinition属性中指定数字类型为decimal并指定精度，则最终以columnDefinition为准</p>
-<p>还有insertable length(大概和varchar有关) nullable unique updateable</p>
-<p>insertable真的要留意 false就对插入免疫了变成null</p>
-<p>table指定该列所属表名 当需要多个表来保存一个实体时要用到</p>
-<p>@Access 和对整个实体使用的方法一样，注解属性是单独改变该属性的访问策略</p>
-<p> hibernate 的@Column注解在的字段上不生效</p>
-<p>@Column的作用范围是根据@Id的作用范围来的，即如果@Id标签放在字段上的，那么@Column就只能作用在字段上，如果@Id放在getter方法上的，那么@Column也得放到getter上。</p>
-<p>org.hibernate.engine.jdbc.spi.SqlExceptionHelper.logExceptions Table ‘hibernatetest.cars_inf’ doesn’t exist</p>
-<p>两种情况 一种是你没生成数据库 比如说没在cfg文件上调什么update然后数据库本身也没生成这样的表</p>
-<p>或者你create 了 table但你create失败，就是你语法错误或者方言版本太低的问题</p>
-<p>有时候表已经生成你再修改映射类没用，除非你配置文件是create 这时候要手动删除数据表</p>
-<p>@Formula(value=”(sql语句)”) 就是顾名思义就是通过数据库生成数据，动态计算属性值，所以不会保存在数据库中，数据库也不会出现相应列</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Formula</span>(value=<span class="string">"(select car.amount*car.price from cars_inf car where car.id=id)"</span>)</span><br><span class="line"><span class="keyword">private</span> Integer totalPrice;</span><br></pre></td></tr></table></figure>
-<p>这个就是将表中的两列相乘</p>
-<p>注意 Formula的表达式中 可以直接使用参数 where car.id=id  id就是参数，会将持久化对象的id属性当参数传入</p>
-<p>蛋疼的一点是这个值不是立刻能取得的，你插入对象的时候你是得不到这个计算值的，即使你commit事务以后调用get方法也得不到，必须是要重新get/load才能调用get去计算获得值</p>
-<p>介绍@Generated之前  @Generated 和@Formual有异曲同工之妙，但它是控制数据库生成，也就是控制数据库的触发器</p>
-<p>首先要现在数据库准备好触发器 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">delimiter |</span><br><span class="line">create trigger full_content2 before update on cars_inf</span><br><span class="line">for each row </span><br><span class="line">begin</span><br><span class="line">	set new.fullname = concat(new.chinesename,new.englishname);</span><br><span class="line">end;</span><br><span class="line">|</span><br><span class="line">delimiter ;</span><br></pre></td></tr></table></figure>
-<p>这个触发器学了就忘很烦，简单解释一下  首先一个表上最多建立6个触发器 insert/update/delete * after/before</p>
-<ul>
-<li>Insert型触发器：可能通过insert语句，load data语句，replace语句触发；</li>
-<li>Update型触发器：可能通过update语句触发；</li>
-<li>Delete型触发器：可能通过delete语句，replace语句触发</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create trigger triggerName </span><br><span class="line">after/before insert/update/delete on 表名 </span><br><span class="line">for each row #这句话在mysql是固定的 </span><br><span class="line">begin </span><br><span class="line"> sql语句; </span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
-<p>MySQL 中定义了 NEW 和 OLD，用来表示触发器的所在表中，触发了触发器的那一行数据。</p>
-<p>在 INSERT 型触发器中，NEW 用来表示将要（BEFORE）或已经（AFTER）插入的新数据；<br>在 UPDATE 型触发器中，OLD 用来表示将要或已经被修改的原数据，NEW 用来表示将要或已经修改为的新数据；<br>在 DELETE 型触发器中，OLD 用来表示将要或已经被删除的原数据；<br>使用方法： NEW.columnName （columnName 为相应数据表某一列名） </p>
-<p>另外，<strong>OLD 是只读的，而 NEW 则可以在触发器中使用 SET 赋值，这样不会再次触发触发器，造成循环调用。</strong></p>
-<p>然后指定为 @Generated(value=GenerationTime.xxx)</p>
-<p>有三种 ALWAYS/NEVER/INSERT </p>
-<ul>
-<li>NEVER就相当于没设置这个东西</li>
-<li>执行一条insert时（INSERT/ALWAYS）或 update(ALWAYS) 执行 hibernate会立刻执行一条select语句去获得该数据列的值，并将该值赋给该持久化的对象</li>
-</ul>
-<p>实际上，我觉得正常来说是需要insert和update两个触发器得</p>
-<p>有个感觉没什么用的东东</p>
-<p>@Transient 代表临时属性</p>
-<p>枚举注释</p>
-<p>@Enumerated 用来修饰枚举enum  value</p>
-<ul>
-<li>EnumType.STRING 表示数据库中存储的是字符串</li>
-<li>EnumType.ORDINAL 表示数据库中存储的是枚举的序号</li>
-</ul>
+            <p>Big-endian 和 small-endian其实不是数据类型 是字节序的问题</p>
+<p>其实和CPU有关，也和编程语言有关    比如数字 0x12345678</p>
+<p>big-endian会在低位存放 12 而small-endian会在低位存放 78</p>
+<p>big-endian 会在内存低位存数据高位  small-endian 会在内存低位存数据低位  </p>
+<p>所有网络协议也都是采用big endian的方式来传输数据的。所以有时我们也会把big endian方式称之为网络字节序</p>
+<p>C/C++语言编写的程序里数据存储顺序是跟编译平台所在的CPU相关的，而JAVA编写的程序则唯一采用big endian方式来存储数据</p>
+<p><strong>X86 系列 CPU都是 little－endian</strong> </p>
 
           
         
@@ -986,7 +928,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/git简单入门/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/git简单入门/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1005,7 +947,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/git简单入门/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/git简单入门/" itemprop="url">git简单入门</a></h1>
         
 
         <div class="post-meta">
@@ -1017,8 +959,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
               </time>
             
 
@@ -1176,7 +1118,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/big-endian和little-endian/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/自定义标签/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1195,7 +1137,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/big-endian和little-endian/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/自定义标签/" itemprop="url">自定义标签</a></h1>
         
 
         <div class="post-meta">
@@ -1207,8 +1149,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:06+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
               </time>
             
 
@@ -1247,13 +1189,54 @@
       
         
           
-            <p>Big-endian 和 small-endian其实不是数据类型 是字节序的问题</p>
-<p>其实和CPU有关，也和编程语言有关    比如数字 0x12345678</p>
-<p>big-endian会在低位存放 12 而small-endian会在低位存放 78</p>
-<p>big-endian 会在内存低位存数据高位  small-endian 会在内存低位存数据低位  </p>
-<p>所有网络协议也都是采用big endian的方式来传输数据的。所以有时我们也会把big endian方式称之为网络字节序</p>
-<p>C/C++语言编写的程序里数据存储顺序是跟编译平台所在的CPU相关的，而JAVA编写的程序则唯一采用big endian方式来存储数据</p>
-<p><strong>X86 系列 CPU都是 little－endian</strong> </p>
+            <p>自定义标签</p>
+<p>一个tld文件 一个特殊的实现类 一个标签的使用</p>
+<p>类</p>
+<ul>
+<li><p>SimpleTagSupport接口的实现  （doTag()）</p>
+</li>
+<li><p>带属性的标签需要 get/set方法</p>
+</li>
+<li><p>getJspContext().getAttribute(xx,PageContext.xxxx_SCOPE) 可以获取jsp页面各种作用域的属性</p>
+<ul>
+<li>或者是 getJspContext().setAttribute(String,object)设置属性不过好像就是pageScope属性的</li>
+</ul>
+</li>
+<li><p>getJspContext().getOut()获取Writer 输出页面</p>
+</li>
+<li><p>getJspBody().invoke(null) 输出标签体内的内容</p>
+<ul>
+<li>这有个很骚的操作 标签体为 ${pageScope.xxx} 然后在一个循环中一边 getJspContext().setAttribute(String,object)设置更改属性，一遍getJspBody().invoke(null)去输出，这样就能实现遍历</li>
+<li>好像就算是<code>&lt;jsp:attribute name=&quot;xxx&quot;&gt;</code>标签包裹的的标签体作为属性，她在类里面也只是个JspFragment也只是能invoke而已</li>
+</ul>
+<p>还有动态属性这比较麻烦，二七</p>
+</li>
+</ul>
+<p>tld文件</p>
+<ul>
+<li>放在WEB-INF文件夹下</li>
+<li>taglib标签为根标签<ul>
+<li>uri标签</li>
+<li>tag标签<ul>
+<li>name</li>
+<li>tag-class</li>
+<li>body-content</li>
+<li>attribute<ul>
+<li>name required fragment</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>使用标签</p>
+<ul>
+<li><code>&lt;%@taglib uri=&quot;&quot; prefix%&gt;</code>声明</li>
+<li><code>&lt;前缀：tagname attributename=&quot;value&quot;&gt;</code></li>
+<li>标签体做属性 用 jsp:attribute标签包裹</li>
+</ul>
+<p>传递集合的时候，只能通过session 属性进行获取传递</p>
 
           
         
@@ -1302,7 +1285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Realm/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/正则表达式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1321,7 +1304,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Realm/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/正则表达式/" itemprop="url">正则表达式</a></h1>
         
 
         <div class="post-meta">
@@ -1333,8 +1316,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
               </time>
             
 
@@ -1373,615 +1356,747 @@
       
         
           
-            <h1 id="Realm-配置"><a href="#Realm-配置" class="headerlink" title="Realm 配置"></a>Realm 配置</h1><h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><p>本文档介绍了如何借助一个“数据库”来配置 Tomcat ，从而实现<strong>容器管理安全性</strong>。所要连接的这种数据库含有用户名、密码以及用户角色。你只需知道的是，如果使用的 Web 应用含有一个或多个 <code>&lt;security-constraint&gt;</code> 元素，<code>&lt;login-config&gt;</code> 元素定义了用户验证的必需细节信息。如果你不打算使用这些功能，则可以忽略这篇文档。</p>
-<p>关于容器管理安全性的基础知识，可参考 <a href="http://wiki.apache.org/tomcat/Specifications" target="_blank" rel="noopener">Servlet Specification (Version 2.4)</a> 中的第 12 节内容。</p>
-<p>关于如何使用 Tomcat 中的<strong>单点登录</strong>（用户只需验证一次，就能够登录一个虚拟主机的所有 Web 应用）功能，请参看<a href="http://tomcat.apache.org/tomcat-8.0-doc/config/host.html#Single_Sign_On" target="_blank" rel="noopener">该文档</a>。</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="什么是-Realm"><a href="#什么是-Realm" class="headerlink" title="什么是 Realm"></a>什么是 Realm</h3><p><strong>Realm</strong>（安全域）其实就是一个存储用户名和密码的“数据库”再加上一个枚举列表。“数据库”中的用户名和密码是用来验证 Web 应用（或 Web 应用集合）用户合法性的，而每一合法用户所对应的<strong>角色</strong>存储在枚举列表中。可以把这些角色看成是类似 UNIX 系统中的 group（分组），因为只有能够拥有特定角色的用户才能访问特定的 Web 应用资源（而不是通过对用户名列表进行枚举适配）。特定用户的用户名下可以配置多个角色。</p>
-<p>虽然 Servlet 规范描述了一个可移植机制，使应用可以在 <code>web.xml</code> 部署描述符中声明它们的安全需求，但却没有提供一种可移植 API 来定义出 Servlet 容器与相应用户及角色信息的接口。然而，在很多情况下，非常适于将 Servlet 容器与一些已有的验证数据库或者生产环境中已存在的机制“连接”起来。因此，Tomcat 定义了一个 Java 接口（<code>org.apache.catalina.Realm</code>），通过“插入”组件来建立连接。提供了 6 种标准插件，支持与各种验证信息源的连接：</p>
-<ul>
-<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JDBCRealm" target="_blank" rel="noopener">JDBCRealm</a>——通过 JDBC 驱动器来访问保存在关系型数据库中的验证信息。</li>
-<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#DataSourceRealm" target="_blank" rel="noopener">DataSourceRealm</a>——访问保存在关系型数据库中的验证信息。</li>
-<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JNDIRealm" target="_blank" rel="noopener">JNDIRealm</a>——访问保存在 LDAP 目录服务器中的验证信息。</li>
-<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#UserDatabaseRealm" target="_blank" rel="noopener">UserDatabaseRealm</a>——访问存储在一个 UserDatabase JNDI 数据源中的认证信息，通常依赖一个 XML 文档（<code>conf/tomcat-users.xml</code>）。</li>
-<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#MemoryRealm" target="_blank" rel="noopener">MemoryRealm</a>——访问存储在一个内存中对象集合中的认证信息，通过 XML 文档初始化（<code>conf/tomcat-users.xml</code>）。</li>
-<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JAASRealm" target="_blank" rel="noopener">JAASRealm</a>——通过 Java 认证与授权服务（JAAS）架构来获取认证信息。</li>
-</ul>
-<p>另外，还可以编写自定义 <code>Realm</code> 实现，将其整合到 Tomcat 中，只需这样做：</p>
-<ul>
-<li>实现 <code>org.apache.catalina.Realm</code> 接口。</li>
-<li>将编译好的 realm 放到 $CATALINA_HOME/lib 中。</li>
-<li>声明自定义 realm，具体方法详见<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">“配置 Realm”一节</a>。</li>
-<li>在 MBeans 描述符文件中声明自定义realm。</li>
-</ul>
-<h3 id="配置-Realm"><a href="#配置-Realm" class="headerlink" title="配置 Realm"></a>配置 Realm</h3><p>在详细介绍标准 Realm 实现之前，简要了解 Realm 的配置方式是很关键的一步。大体来说，就是需要在<code>conf/server.xml</code> 配置文件中添加一个 XML 元素，如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;... class name for this implementation&quot;</span><br><span class="line">       ... other attributes for this implementation .../&gt;</span><br></pre></td></tr></table></figure>
-<p><code>&lt;Realm&gt;</code> 可以嵌入以下任何一种 <code>Container</code> 元素中。Realm 元素的位置至关重要，它会对 Realm 的“范围”（比如说哪个 Web 应用能够共享同一验证信息）有直接的影响。</p>
-<ul>
-<li><strong><engine> 元素</engine></strong> 内嵌入该元素中的这种 Realm 元素可以被<strong>所有</strong>虚拟主机上的<strong>所有</strong> Web 应用所共享，除非该 Realm 元素被内嵌入下属 <code>&lt;Host&gt;</code> 或 <code>&lt;Context&gt;</code> 元素的 Realm 元素所覆盖。</li>
-<li><strong><host> 元素</host></strong> 内嵌入该元素中的这种 Realm 元素可以被<strong>这一</strong>虚拟主机上的<strong>所有</strong> Web 应用所共享。除非该 Realm 元素被内嵌入下属 <code>&lt;Context&gt;</code> 元素的 Realm 元素所覆盖。</li>
-<li><strong><context> 元素</context></strong> 内嵌入该元素中的这种 Realm 元素<strong>只能</strong>被这一 Web 应用所使用。</li>
-</ul>
-<h2 id="常用特性"><a href="#常用特性" class="headerlink" title="常用特性"></a>常用特性</h2><h3 id="摘要式密码"><a href="#摘要式密码" class="headerlink" title="摘要式密码"></a>摘要式密码</h3><p>对于每种标准 <code>Realm</code> 实现来说，用户的密码默认都是以明文方式保存的。在很多情况下，这种方式都非常糟糕，即使是一般的用户也能收集到足够的验证信息，从而以其他用户的信息成功登录。为了避免这种情况的发生，标准 <code>Realm</code> 实现支持一种对用户密码进行<strong>摘要式处理</strong>的机制，它能以无法轻易破解的形式对存储的密码进行加密处理，同时保证<code>Realm</code> 实现仍能使用这种加密后的密码进行验证。</p>
-<p>在标准的 Realm 验证时，会将存储的密码与用户所提供的密码进行比对，这时，我们可以通过指定 <code>&lt;Realm&gt;</code> 元素中的 <code>digest</code> 属性来选择摘要式密码。该属性值必须是一种<code>java.security.MessageDigest</code> 类所支持的摘要式算法（SHA、MD2、或 MD5）。当你选择该属性值时，存储在 Realm 中的密码内容必须是明文格式，随后它将被你所指定的算法进行摘要式加密。</p>
-<p>在调用 Realm 的 <code>authenticate()</code> 方法后，用户所提供的明文密码同样也会利用上述你所指定的加密算法进行加密，加密结果与 Realm 的返回值相比较。如果两者相等，则表明原始密码的明文形式更用户所提供的密码完全等同，因此该用户身份验证成功。</p>
-<p>可以采用以下两种比较便利的方法来计算明文密码的摘要值：</p>
-<ul>
-<li>如果应用需要动态计算摘要式密码，调用 <code>org.apache.catalina.realm.RealmBase</code> 类的静态 <code>Digest()</code> 方法，传入明文密码和摘要式算法名称及字符编码方案。该方法返回摘要式密码。</li>
-<li>如果想执行命令行工具来计算摘要式密码，只需执行：<br><code>CATALINA_HOME/bin/digest.[bat|sh] -a {algorithm} {cleartext-password}</code><br>标准输出将返回明文密码的摘要式形式。</li>
-</ul>
-<p>如果使用 DIGEST 验证的摘要式密码，用来生成摘要密码的明文密码则将有所不同，而且必须使用一次不加盐的 MD5 算法。对应到上面的范例，那就是必须把 <code>{cleartext-password}</code> 替换成 <code>{username}:{realm}:{cleartext-password}</code>。再比如说，在一个开发环境中，可能采用这种形式：<code>testUser:Authentication required:testPassword</code>。<code>{realm}</code> 的值取自 Web 应用 <code>&lt;login-config&gt;</code> 的 <code>&lt;realm-name&gt;</code> 元素。如果没有在 web.xml 中指定，则使用默认的<code>Authentication required</code>。</p>
-<p>若要使用非平台默认编码的用户名和（或）密码，则命令如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CATALINA_HOME/bin/digest.[bat|sh] -a &#123;algorithm&#125; -e &#123;encoding&#125; &#123;input&#125;</span><br></pre></td></tr></table></figure>
-<p>但需要注意的是，一定要确保输入正确地传入摘要。摘要返回 <code>{input}:{digest}</code>。如果输入在返回时出现损坏，摘要则将无效。</p>
-<p>摘要的输出格式为 <code>{salt}${iterations}${digest}</code>。如果盐的长度为 0，迭代次数为 1，则输出将简化为 <code>{digest}</code>。</p>
-<p><code>CATALINA_HOME/bin/digest.[bat|sh]</code> 的完整格式如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CATALINA_HOME/bin/digest.[bat|sh] [-a &lt;algorithm&gt;] [-e &lt;encoding&gt;]</span><br><span class="line">        [-i &lt;iterations&gt;] [-s &lt;salt-length&gt;] [-k &lt;key-length&gt;]</span><br><span class="line">        [-h &lt;handler-class-name&gt;] &lt;credentials&gt;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>-a</code> 用来生成存储凭证的算法。如未指定，将使用凭证处理器（CredentialHandler）的默认值，如果认证处理器和算法均未指定，则使用默认值 <code>SHA-512</code>。</li>
-<li><code>-e</code> 指定用于任何必要的字节与字符间转换的字符编码方案。如未指定，使用系统默认的字符编码方案 <code>Charset#defaultCharset()</code>。</li>
-<li><code>-i</code> 生成存储的凭证时所使用的迭代次数。如未指定，使用 CredentialHandler 的默认值。</li>
-<li><code>-s</code> 生成并存储到认证中的盐的长度（字节）。如未指定，使用 CredentialHandler 的默认值。</li>
-<li><code>-k</code> （生成凭证时，如果随带创建了）键的长度（位）。如未指定，则使用 CredentialHandler 的默认值</li>
-<li><code>-h</code> CredentialHandler 使用的完整类名。如未指定，则轮流使用内建的凭证处理器（<code>MessageDigestCredentialHandler</code>，然后是 <code>SecretKeyCredentialHandler</code>），将使用第一个接受指定算法的凭证处理器。</li>
-</ul>
-<h3 id="范例应用"><a href="#范例应用" class="headerlink" title="范例应用"></a>范例应用</h3><p>Tomcat 自带的范例应用中包含一个受到安全限制保护的区域，使用表单式登录方式。为了访问它，在你的浏览器地址栏中输入 <code>http://localhost:8080/examples/jsp/security/protected/</code>，并使用 <a href="http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#UserDatabaseRealm" target="_blank" rel="noopener">UserDatabaseRealm</a> 默认的用户名和密码进行登录。</p>
-<h3 id="Manager-应用"><a href="#Manager-应用" class="headerlink" title="Manager 应用"></a>Manager 应用</h3><p>如果你希望使用 Manager 应用在一个运行的 Tomcat 安装上来部署或取消部署 Web 应用，那么<strong>必须</strong>在一个选定的 Realm 实现上，将 <strong>manager-gui</strong> 角色添加到至少一个用户名上。这是因为 Manager 自身使用一个安全限制，要想在该应用的 HTML 界面中访问请求 URI，就必须要有 manager-gui 角色。</p>
-<p>出于安全性考虑，默认情况下，Realm 中的用户名（比如使用 <code>conf/tomcat-users.xml</code>）没有被分配 manager-gui 角色。因此，用户起初无法使用这个功能，除非 Tomcat 管理员特意将这一角色分配给他们。</p>
-<h3 id="Realm-日志"><a href="#Realm-日志" class="headerlink" title="Realm 日志"></a>Realm 日志</h3><p>Realm 的容器（Context、Host 及 Engine）所对应的日志配置文件将记录 <code>Realm</code> 所记录下的调试和异常信息。</p>
-<h2 id="标准-Realm-实现"><a href="#标准-Realm-实现" class="headerlink" title="标准 Realm 实现"></a>标准 Realm 实现</h2><h3 id="JDBCRealm"><a href="#JDBCRealm" class="headerlink" title="JDBCRealm"></a>JDBCRealm</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p><strong>JDBCRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，它通过 JDBC 驱动程序在关系型数据库中查找用户。只要数据库结构符合下列要求，你可以通过大量的配置来灵活地修改现有的表与列名。</p>
-<ul>
-<li><p>必须有一张<strong>用户表</strong>（<em>users table</em>）。它包含着一个由 <code>Realm</code> 所能识别的所有合法用户所构成的行。</p>
-</li>
-<li><p>用户表</p>
-<p>必须至少包含两列（当然，如果现有应用确实需要，则同样也可以包含更多的列）：</p>
-<ul>
-<li>用户名。当用户登录时，能被 Tomcat 识别的用户名。</li>
-<li>密码。当用户登录时，能被 Tomcat 所识别的密码。该列中的值可能是明文，也可能是摘要式密码，稍后详述。</li>
-</ul>
-</li>
-<li><p>必须有一张<strong>用户角色表</strong>（<em>user roles table</em>）。该表包含一个角色行，包含着可能指定给特定用户的每个合法角色。一个用户可以没有角色，也可以有一个或多个角色，这都是合法的。</p>
-</li>
-<li><p>用户角色表</p>
-</li>
-</ul>
-<p>  至少应包含两列（如果现有应用确实需要，则也可以包含更多的列）：</p>
-<ul>
-<li>用户名。Tomcat 所能识别的用户名（与用户表中指定的值相同）。</li>
-<li>用户所对应的合法角色名。</li>
-</ul>
-<h4 id="快速入门-1"><a href="#快速入门-1" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了设置 Tomcat 从而使用 JDBCRealm，需要执行以下步骤：</p>
-<ol>
-<li>在数据库中创建符合上述规范的表与列。</li>
-<li>配置一个 Tomcat 使用的数据库用户名与密码，并且至少有只读权限（Tomcat 永远都不会去修改那些表中的数据）。</li>
-<li>将用到的 JDBC 驱动程序复制到 <code>$CATALINA_HOME/lib</code> 目录中。注意<strong>只能</strong>识别 JAR 文件！</li>
-<li>在 <code>$CATALINA_BASE/conf/server.xml</code> 目录中设置一个 <code>&lt;Realm&gt;</code> 元素。这一点下文将会详细叙述。</li>
-<li>如果 Tomcat 处于运行状态，则重启它。</li>
-</ol>
-<h4 id="Realm-元素属性"><a href="#Realm-元素属性" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>如上所述，为了配置 JDBCRealm，需要创建一个 <code>Realm</code> 元素，并把它放在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中。JDBCRealm 的属性都定义在 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm</a> 配置文档中。</p>
-<h4 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h4><p>下面这个 SQL 脚本范例创建了我们所需的表（根据你所用的数据库，可以相应修改其中的语法）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table users (</span><br><span class="line">  user_name         varchar(15) not null primary key,</span><br><span class="line">  user_pass         varchar(15) not null</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table user_roles (</span><br><span class="line">  user_name         varchar(15) not null,</span><br><span class="line">  role_name         varchar(15) not null,</span><br><span class="line">  primary key (user_name, role_name)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<p><code>Realm</code> 元素包含在默认的 <code>$CATALINA_BASE/conf/server.xml</code> 文件中（被注释掉了）。在下面的范例中，有一个名为 authority 的数据库，它包含上述创建的表，通过用户名“dbuser”和密码“dbpass”进行访问。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.JDBCRealm&quot;</span><br><span class="line">      driverName=&quot;org.gjt.mm.mysql.Driver&quot;</span><br><span class="line">   connectionURL=&quot;jdbc:mysql://localhost/authority?user=dbuser&amp;amp;password=dbpass&quot;</span><br><span class="line">       userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">   userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="特别注意事项"><a href="#特别注意事项" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>JDBCRealm 必须遵循以下规则：</p>
-<ul>
-<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
-<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
-<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
-</ul>
-<h3 id="DataSourceRealm"><a href="#DataSourceRealm" class="headerlink" title="DataSourceRealm"></a>DataSourceRealm</h3><h4 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h4><p><strong>DataSourceRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，它通过一个 JNDI 命名的 JDBC 数据源在关系型数据库中查找用户。只要数据库结构符合下列要求，你可以通过大量的配置来灵活地修改现有的表与列名。</p>
-<ul>
-<li><p>必须有一张<strong>用户表</strong>（<em>users table</em>）。它包含着一个由 <code>Realm</code> 所能识别的所有合法用户所构成的行。</p>
-</li>
-<li><p>用户表</p>
-<p>必须至少包含两列（当然，如果现有应用确实需要，则同样也可以包含更多的列）：</p>
-<ul>
-<li>用户名。当用户登录时，能被 Tomcat 识别的用户名。</li>
-<li>密码。当用户登录时，能被 Tomcat 所识别的密码。该列中的值可能是明文，也可能是摘要式密码，稍后详述。</li>
-</ul>
-</li>
-<li><p>必须有一张<strong>用户角色表</strong>（<em>user roles table</em>）。该表包含一个角色行，包含着可能指定给特定用户的每个合法角色。一个用户可以没有角色，也可以有一个或多个角色，这都是合法的。</p>
-</li>
-<li><p>用户角色表</p>
-</li>
-</ul>
-<p>  至少应包含两列（如果现有应用确实需要，则也可以包含更多的列）：</p>
-<ul>
-<li>用户名。Tomcat 所能识别的用户名（与用户表中指定的值相同）。</li>
-<li>用户所对应的合法角色名。</li>
-</ul>
-<h4 id="快速入门-2"><a href="#快速入门-2" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了设置 Tomcat 从而使用 DataSourceRealm，需要执行以下步骤：</p>
-<ol>
-<li>在数据库中创建符合上述规范的表与列。</li>
-<li>配置一个 Tomcat 使用的数据库用户名与密码，并且至少有只读权限（Tomcat 永远都不会去修改那些表中的数据）。</li>
-<li>为数据库配置一个 JNDI 命名的 JDBC DataSource。详情可参考<a href="http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html" target="_blank" rel="noopener">JNDI DataSource Example HOW-TO》应该链接至相应中文页面》</a>。</li>
-<li>在 <code>$CATALINA_BASE/conf/server.xml</code> 目录中设置一个 <code>&lt;Realm&gt;</code> 元素。这一点下文将会详细叙述。</li>
-<li>如果 Tomcat 处于运行状态，则重启它。</li>
-</ol>
-<h4 id="范例-1"><a href="#范例-1" class="headerlink" title="范例"></a>范例</h4><p>下面这个 SQL 脚本范例创建了我们所需的表（根据你所用的数据库，可以相应修改其中的语法）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table users (</span><br><span class="line">  user_name         varchar(15) not null primary key,</span><br><span class="line">  user_pass         varchar(15) not null</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table user_roles (</span><br><span class="line">  user_name         varchar(15) not null,</span><br><span class="line">  role_name         varchar(15) not null,</span><br><span class="line">  primary key (user_name, role_name)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<p>在下面的范例中，有一个名为 authority 的 MySQL 数据库，它包含上述创建的表，通过名为 “<code>java:/comp/env/jdbc/authority</code>” 的 JNDI 命名的 JDBC 数据源来访问。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.DataSourceRealm&quot;</span><br><span class="line">   dataSourceName=&quot;jdbc/authority&quot;</span><br><span class="line">   userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">   userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="特别注意事项-1"><a href="#特别注意事项-1" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 DataSourceRealm 时必须遵守下列规则：</p>
-<ul>
-<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
-<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
-<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
-</ul>
-<h3 id="JNDIRealm"><a href="#JNDIRealm" class="headerlink" title="JNDIRealm"></a>JNDIRealm</h3><h4 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h4><p><strong>JNDIRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，通过一个 JNDI 提供者1在 LDAP 目录服务器中查找用户。realm 支持大量的方法来使用认证目录。</p>
-<p>通常是可以使用 JNDI API 类的标准 LDAP 提供者。</p>
-<h5 id="a-连接目录"><a href="#a-连接目录" class="headerlink" title="a. 连接目录"></a>a. 连接目录</h5><p>realm 与目录服务器的连接是通过 <strong>connectionURL</strong> 配置属性来定义的。这个 URL 的格式是通过 JNDI 提供者来定义的。它通常是个 LDAP URL，指定了所要连接的目录服务器的域名，另外还（可选择）指定了所需的根命名上下文的端口和唯一名称（DN）。</p>
-<p>如果有多个提供者，则可以配置 <strong>alternateURL</strong>。如果一个套接字连接无法传递给提供者 <strong>connectionURL</strong>，则会换用 <strong>alternateURL</strong>。</p>
-<p>当通过创建连接来搜索目录，获取用户及角色信息时，realm 会利用 <strong>connectionName</strong> 和 <strong>connectionPassword</strong>这两个属性所指定的用户名和密码在目录上进行自我认证。如果未指定这两个属性，则创立的连接是匿名连接，这种连接适用于大多数情况。</p>
-<h5 id="b-选择用户目录项"><a href="#b-选择用户目录项" class="headerlink" title="b. 选择用户目录项"></a>b. 选择用户目录项</h5><p>在目录中，每个可被认证的用户都必须表示为独立的项，这种独立项对应着由属性 <strong>connectionURL</strong> 定义的初始 <code>DirContext</code> 中的元素。这种用户项必须有一个包含认证所需用户名的属性。</p>
-<p>每个用户项的唯一性名称（DN）通常含有用于认证的用户名。在这种情况下，<strong>userPattern</strong> 属性可以用来指定 DN，其中的 <code>{0}</code> 代表用户名应该被替换的位置。</p>
-<p>realm 必须搜索目录来寻找一个包含用户名的唯一项，可用下列属性来配置搜索：</p>
-<ul>
-<li><strong>userBase</strong> 用户子树的基准项。如果未指定，则搜索基准为顶级元素。</li>
-<li><strong>userSubtree</strong> 用户子树，也就是搜索范围。如果希望搜索以<strong>userBase</strong> 项为基准的整个子树，则使用 <code>true</code>；默认值为 <code>false</code>，只对顶级元素进行搜索。</li>
-<li><strong>userSearch</strong> 指定替代用户名之后所使用的 LDAP 搜索过滤器的模式。</li>
-</ul>
-<h5 id="c-用户认证"><a href="#c-用户认证" class="headerlink" title="c. 用户认证"></a>c. 用户认证</h5><ul>
-<li><p><strong>绑定模式</strong></p>
-<p>默认情况下，realm 会利用用户项的 DN 与用户所提供的密码，将用户绑定到目录上。如果成功执行了这种简单的绑定，那么就可以认为用户认证成功。</p>
-<p>出于安全考虑，目录可能保存的是用户的摘要式密码，而非明文密码（参看<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#digestedPass" target="_blank" rel="noopener">摘要式密码</a>以获知详情）。在这种情况下，在绑定过程中，目录会自动将用户所提供的明文密码加密为正确的摘要式密码，以便后续和存储的摘要式密码进行比对。然而在绑定过程中，realm 并不参与处理摘要式密码。不会用到 <strong>digest</strong> 属性，如果设置了该属性，也会被自动忽略。</p>
-</li>
-<li><p><strong>对比模式</strong></p>
-<p>另外一种方法是，realm 从目录中获取存储的密码，然后将其与用户所提供的值进行比对。配置方法是，在包含密码的用户项中，将 <strong>userPassword</strong> 属性设为目录属性名。</p>
-<p>对比模式的缺点在于：首先，<code>connectionName</code> 和 <code>connectionPassword</code> 属性必须配置成允许 realm 读取目录中的用户密码。出于安全考虑，这是一种不可取的做法。事实上，很多目录实现甚至都不允许目录管理器读取密码。其次，realm 必须自己处理摘要式密码，包括要设置所使用的具体算法、在目录中表示密码散列值的方式。但是，realm 可能有时又要访问存储的密码，比如为了支持 HTTP 摘要式访问认证（HTTP Digest Access Authentication，RFC 2069）。（注意，HTTP 摘要式访问认证不同于之前讨论过的在库中存储密码摘要的方式。）</p>
-</li>
-</ul>
-<h5 id="d-赋予用户角色"><a href="#d-赋予用户角色" class="headerlink" title="d. 赋予用户角色"></a>d. 赋予用户角色</h5><p>Realm 支持两种方法来表示目录中的角色：</p>
-<ul>
-<li><p><strong>将角色显式表示为目录项</strong></p>
-<p>通过明确的目录项来表示角色。角色项通常是一个 LDAP 分组项，该分组项的一个属性包含角色名称，另一属性值则是拥有该角色的用户的 DN 名或用户名。下列属性配置了一个目录搜索来寻找与认证用户相关的角色名。</p>
-<ul>
-<li><strong>roleBase</strong> 角色搜索的基准项。如未指定，则基准项为顶级目录上下文。</li>
-<li><strong>roleSubtree</strong> 搜索范围。如果希望搜索以 <code>roleBase</code> 为基准项的整个子树，则设为 <code>true</code>。默认值为 <code>false</code>，请求一个只包含顶级元素的单一搜索。</li>
-<li><strong>roleSearch</strong> 用于选择角色项的 LDAP 搜索过滤器。它还可以（可选择）包含用于唯一名称的模式替换 <code>{0}</code>、用户名的模式替换 <code>{1}</code>，以及用户目录项属性的模式替换 <code>{2}</code>。使用 <strong>userRoleAttribute</strong> 来指定提供 <code>{2}</code> 值的属性名。</li>
-<li><strong>roleName</strong> 包含角色名称的角色项属性。</li>
-<li><strong>roleNested</strong> 启用内嵌角色。如果希望在角色中内嵌角色，则设为 <code>true</code>。如果配置了该属性，每一个新近找到的 roleName 和 DN 都将用于递归式的新角色搜索。默认值为 <code>false</code>。</li>
-</ul>
-</li>
-<li><p><strong>将角色表示为用户项属性</strong></p>
-<p>将角色名称保存为用户目录项中的一个属性值。使用 <strong>userRoleName</strong> 来指定该属性名称。</p>
-</li>
-</ul>
-<p>当然，也可以综合使用这两种方法来表示角色。</p>
-<h4 id="快速入门-3"><a href="#快速入门-3" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了配置 Tomcat 使用 JNDIRealm，需要下列步骤：</p>
-<ol>
-<li>确保目录服务器配置中的模式符合上文所列出的要求。</li>
-<li>必要时可以为 Tomcat 配置一个用户名和密码，对上文所提到的信息用于只读访问权限（Tomcat 永远不会修改该信息。）</li>
-<li>按照下文的方法，在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中设置一个 <code>&lt;Realm&gt;</code> 元素。</li>
-<li>如果 Tomcat 已经运行，则重启它。</li>
-</ol>
-<h4 id="Realm-元素属性-1"><a href="#Realm-元素属性-1" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>如上所述，为了配置 JDBCRealm，需要创建一个 <code>Realm</code> 元素，并把它放在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中。JDBCRealm 的属性都定义在 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm</a> 配置文档中。</p>
-<h4 id="范例-2"><a href="#范例-2" class="headerlink" title="范例"></a>范例</h4><p>在目录服务器上创建适合的模式超出了本文档的讲解范围，因为这是跟每个目录服务器的实现密切相关的。在下面的实例中，我们将假定使用的是 OpenLDAP 目录服务器的一个分发版（2.0.11 版或更新版本，可从<a href="http://www.openldap.org/" target="_blank" rel="noopener">http://www.openldap.org</a>处下载）。假设 <code>slapd.conf</code> 文件包含下列设置（除了其他设置之外）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">database ldbm</span><br><span class="line">suffix dc=&quot;mycompany&quot;,dc=&quot;com&quot;</span><br><span class="line">rootdn &quot;cn=Manager,dc=mycompany,dc=com&quot;</span><br><span class="line">rootpw secret</span><br></pre></td></tr></table></figure>
-<p>我们还假定 <code>connectionURL</code>，使目录服务器与 Tomcat 运行在同一台机器上。要想了解如何配置及使用 JNDI LDAP 提供者的详细信息，请参看 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/jndi/index.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/7/docs/technotes/guides/jndi/index.html</a>。</p>
-<p>接下来，假定利用如下所示的元素（以 LDIF 格式）来填充目录服务器。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># Define top-level entry</span><br><span class="line">dn: dc=mycompany,dc=com</span><br><span class="line">objectClass: dcObject</span><br><span class="line">dc:mycompany</span><br><span class="line"></span><br><span class="line"># Define an entry to contain people</span><br><span class="line"># searches for users are based on this entry</span><br><span class="line">dn: ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: people</span><br><span class="line"></span><br><span class="line"># Define a user entry for Janet Jones</span><br><span class="line">dn: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: jjones</span><br><span class="line">sn: jones</span><br><span class="line">cn: janet jones</span><br><span class="line">mail: j.jones@mycompany.com</span><br><span class="line">userPassword: janet</span><br><span class="line"></span><br><span class="line"># Define a user entry for Fred Bloggs</span><br><span class="line">dn: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: fbloggs</span><br><span class="line">sn: bloggs</span><br><span class="line">cn: fred bloggs</span><br><span class="line">mail: f.bloggs@mycompany.com</span><br><span class="line">userPassword: fred</span><br><span class="line"></span><br><span class="line"># Define an entry to contain LDAP groups</span><br><span class="line"># searches for roles are based on this entry</span><br><span class="line">dn: ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: groups</span><br><span class="line"></span><br><span class="line"># Define an entry for the &quot;tomcat&quot; role</span><br><span class="line">dn: cn=tomcat,ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: groupOfUniqueNames</span><br><span class="line">cn: tomcat</span><br><span class="line">uniqueMember: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">uniqueMember: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br><span class="line"></span><br><span class="line"># Define an entry for the &quot;role1&quot; role</span><br><span class="line">dn: cn=role1,ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: groupOfUniqueNames</span><br><span class="line">cn: role1</span><br><span class="line">uniqueMember: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br></pre></td></tr></table></figure>
-<p>OpenLDAP 服务器。假定用户使用他们的 uid（比如说 jjones）登录应用，匿名连接已经足够可以搜索目录并获取角色信息了：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">       userPattern=&quot;uid=&#123;0&#125;,ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
-<p>利用这种配置，通过在 <code>userPattern</code> 替换用户名，realm 能够确定用户的 DN，然后利用这个 DN 和取自用户的密码将用户绑定到目录中，从而验证用户身份，然后搜索整个目录服务器来找寻用户角色。</p>
-<p>现在假定希望用户输入电子邮件地址（而不是用户 id）。在这种情况下，realm 必须搜索目录找到用户项。当用户项被保存在多个子树中，而这些子树可能分别对应不同的组织单位或企业位置时，可能必须执行一个搜索。</p>
-<p>另外，假设除了分组项之外，你还想用用户项的属性来保存角色，那么在这种情况下，Janet Jones 对应的项可能如下所示：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dn: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: jjones</span><br><span class="line">sn: jones</span><br><span class="line">cn: janet jones</span><br><span class="line">mail: j.jones@mycompany.com</span><br><span class="line">memberOf: role2</span><br><span class="line">memberOf: role3</span><br><span class="line">userPassword: janet</span><br></pre></td></tr></table></figure>
-<p>这个 realm 配置必须满足以下新要求：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">          userBase=&quot;ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">        userSearch=&quot;(mail=&#123;0&#125;)&quot;</span><br><span class="line">      userRoleName=&quot;memberOf&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
-<p>当 Janet Jones 用她的电子邮件 <a href="mailto:`j.jones@mycompany.com" target="_blank" rel="noopener">`j.jones@mycompany.com</a><code>登录时，realm 会搜索目录，寻找带有该电邮值的唯一项，并尝试利用给定密码来绑定到目录：</code>uid=jjones,ou=people,dc=mycompany,dc=com<code>。如果验证成功，该用户将被赋予以下三个角色：&quot;role2&quot; 与 &quot;role3&quot;，她的目录项中的</code>memberOf<code>属性值；&quot;tomcat&quot;，她作为成员存在的唯一分组项中的</code>cn` 属性值。</p>
-<p>最后，为了验证用户，我们必须从目录中获取密码并在 realm 中执行本地比对，将 realm 按照如下方式来配置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">    connectionName=&quot;cn=Manager,dc=mycompany,dc=com&quot;</span><br><span class="line">connectionPassword=&quot;secret&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">      userPassword=&quot;userPassword&quot;</span><br><span class="line">       userPattern=&quot;uid=&#123;0&#125;,ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
-<p>但是，正如之前所讨论的那样，往往应该优先考虑默认的绑定模式。</p>
-<h4 id="特别注意事项-2"><a href="#特别注意事项-2" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 JNDIRealm 需要遵循以下规则：</p>
-<ul>
-<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
-<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
-<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
-</ul>
-<h3 id="UserDatabaseRealm"><a href="#UserDatabaseRealm" class="headerlink" title="UserDatabaseRealm"></a>UserDatabaseRealm</h3><p><strong>UserDatabaseRealm</strong> 是 Tomcat <strong>Realm</strong> 接口的一种实现，使用 JNDI 资源来存储用户信息。默认，JNDI 资源是通过一个 XML 文件来提供支持的。它并不是针对大规模生产环境用途而设计的。在启动时，UserDatabaseRealm 会从一个 XML 文档中加载所有用户以及他们角色的信息（该 XML 文档默认位于 <code>$CATALINA_BASE/conf/tomcat-users.xml</code>。）用户、密码以及相应角色通常可利用 JMX 进行动态编辑，更改结果会加以保存并立刻反映在 XML 文档中。</p>
-<h4 id="Realm-元素属性-2"><a href="#Realm-元素属性-2" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>跟<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">之前讨论</a>的一样，为了配置 UserDatabaseRealm，需要在 <code>$CATALINA_BASE/conf/server.xml</code> 中创建 <code>&lt;Realm&gt;</code> 元素。关于 UserDatabaseRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
-<h4 id="用户文件格式"><a href="#用户文件格式" class="headerlink" title="用户文件格式"></a>用户文件格式</h4><p>用户文件使用的格式与 <a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#userfileformatofMemoryRealm" target="_blank" rel="noopener">MemoryRealm</a>所使用的相同。</p>
-<h4 id="范例-3"><a href="#范例-3" class="headerlink" title="范例"></a>范例</h4><p>默认的 Tomcat 安装已经配置了内嵌在 <code>&lt;Engine&gt;</code> 元素中的 UserDatabaseRealm，因而可以将其应用于所有的虚拟主机和 Web 应用中。默认的 <code>conf/tomcat-users.xml</code> 文件内容为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;tomcat-users&gt;</span><br><span class="line">  &lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;tomcat&quot; /&gt;</span><br><span class="line">  &lt;user username=&quot;role1&quot;  password=&quot;tomcat&quot; roles=&quot;role1&quot;  /&gt;</span><br><span class="line">  &lt;user username=&quot;both&quot;   password=&quot;tomcat&quot; roles=&quot;tomcat,role1&quot; /&gt;</span><br><span class="line">&lt;/tomcat-users&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="特别注意事项-3"><a href="#特别注意事项-3" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 UserDatabaseRealm 需要遵循以下规则：</p>
-<ul>
-<li>当 Tomcat 首次启动时，它会从用户文件中加载所有已定义的用户及其相关信息。假如对该用户文件中的数据进行修改，则只有重启 Tomcat 后才能生效。这些修改并不是通过 UserDatabase 数据源来完成的，是由 Tomcat 所提供的通过 JMX 访问的 MBean 来实现的。</li>
-<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
-<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
-</ul>
-<h3 id="MemoryRealm"><a href="#MemoryRealm" class="headerlink" title="MemoryRealm"></a>MemoryRealm</h3><h4 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h4><p><strong>MemoryRealm</strong> 是一种对 Tomcat 的 Realm 接口的简单演示实现，并不是针对生产环境而设计的。在启动时，MemoryRealm 会从 XML 文档中加载所有的用户信息及其相关的角色信息（默认该文档位于 <code>$CATALINA_BASE/conf/tomcat-users.xml</code>）。只有重启 Tomcat 才能使对该文件作出的修改生效。</p>
-<h4 id="Realm-元素属性-3"><a href="#Realm-元素属性-3" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>跟<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">之前讨论</a>的一样，为了配置 MemoryRealm，需要在 <code>$CATALINA_BASE/conf/server.xml</code> 中创建 <code>&lt;Realm&gt;</code> 元素。关于 MemoryRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
-<h4 id="用户文件格式-1"><a href="#用户文件格式-1" class="headerlink" title="用户文件格式"></a>用户文件格式</h4><p>用户文件包含下列属性。默认情况下，<code>conf/tomcat-users.xml</code> 必须是一个 XML 文件，并且带有一个根元素：<code>&lt;tomcat-users&gt;</code>。每一个有效用户都有一个内嵌在根元素中的 <code>&lt;user&gt;</code> 元素。</p>
-<ul>
-<li><strong>name</strong> 用户登录所用的用户名。</li>
-<li><strong>password</strong> 用户登录所用的密码。如果 <code>&lt;Realm&gt;</code> 元素中没有设置 <code>digest</code> 属性，则采用明文密码，否则就设置为摘要式密码，如<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#digestedPass" target="_blank" rel="noopener">之前讨论</a>的那样。</li>
-<li><strong>roles</strong> 以逗号分隔的用户角色名列表。</li>
-</ul>
-<h4 id="特别注意事项-4"><a href="#特别注意事项-4" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 MemoryRealm 需要注意以下规则：</p>
-<ul>
-<li>当 Tomcat 首次启动时，它会从用户文件中加载所有已定义的用户及其相关信息。假如对该用户文件中的数据进行修改，则只有重启 Tomcat 后才能生效。</li>
-<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
-<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
-<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
-</ul>
-<h3 id="JAASRealm"><a href="#JAASRealm" class="headerlink" title="JAASRealm"></a>JAASRealm</h3><h4 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h4><p><strong>JAASRealm</strong> 是 Tomcat 的 <code>Realm</code> 接口的一种实现，通过 Java Authentication &amp; Authorization Service（JAAS，Java身份验证与授权服务）架构来实现对用户身份的验证。JAAS 架构现已加入到标准的 Java SE API 中。</p>
-<p>通过 JAASRealm，开发者实际上可以将任何安全的 Realm 与 Tomcat 的 CMA 一起组合使用。</p>
-<p>JAASRealm 是 Tomcat 针对基于 JAAS 的 J2EE 1.4 的 J2EE 认证框架的原型实现，基于 <a href="https://www.jcp.org/en/jsr/detail?id=196" target="_blank" rel="noopener">JCP Specification Request 196</a>，从而能够增强容器管理安全性，并且能促进“可插拔的”认证机制，该认证机制能够实现与容器的无关性。</p>
-<p>根据 JAAS 登录模块和准则（参见 <code>javax.security.auth.spi.LoginModule</code> 与 <code>javax.security.Principal</code> 的相关说明），你可以自定义安全机制，或者将第三方的安全机制与 Tomcat 所实现的 CMA 相集成。</p>
-<h4 id="快速入门-4"><a href="#快速入门-4" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了利用自定义的 JAAS 登录模块使用 JAASRealm，需要执行如下步骤：</p>
-<ol>
-<li><p>编写自己的 JAAS 登录模块。在开发自定义登录模块时，将通过 JAAS 登录上下文对基于 JAAS 2的 User 和 Role 类管理。注意，JAASRealm 内建的 <code>CallbackHandler</code> 目前只能识别 <code>NameCallback</code> 和 <code>PasswordCallback</code>。</p>
-<p>\2. 详情请参看 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/tutorials/GeneralAcnOnly.html" target="_blank" rel="noopener">JAAS 认证教程</a> 与 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/JAASLMDevGuide.html" target="_blank" rel="noopener">JAAS 登录模块开发教程</a>。</p>
-</li>
-<li><p>尽管 JAAS 并未明确指定，但你也应该为用户和角色创建不同的类来加以区分，它们都应该扩展自 <code>javax.security.Principal</code>，从而使 Tomcat 明白从登录模块中返回的规则究竟是用户还是角色（参看 <code>org.apache.catalina.realm.JAASRealm</code> 相关描述）。不管怎样，第一个返回的规则<strong>总</strong>被认为是用户规则。</p>
-</li>
-<li><p>将编译好的类指定在 Tomcat 的类路径中。</p>
-</li>
-<li><p>为 Java 建立一个 login.config 文件（参见 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/tutorials/LoginConfigFile.html" target="_blank" rel="noopener">JAAS LoginConfig 文件</a>）。将其位置指定给 JVM，从而便于 Tomcat 明确它的位置。例如，设置如下环境变量：<br><code>JAVA_OPTS=$JAVA_OPTS -Djava.security.auth.login.config==$CATALINA_BASE/conf/jaas.config</code></p>
-</li>
-<li><p>为了保护一些资源，在 web.xml 中配置安全限制。</p>
-</li>
-<li><p>在 server.xml 中配置 JAASRealm 模块。</p>
-</li>
-<li><p>重启 Tomcat（如果它正在运行）。</p>
-</li>
-</ol>
-<h4 id="Realm-元素属性-4"><a href="#Realm-元素属性-4" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>在上述步骤中，为了配置步骤 6 以上的 JAASRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。关于 JAASRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
-<h4 id="范例-4"><a href="#范例-4" class="headerlink" title="范例"></a>范例</h4><p>下例是 server.xml 中的一截代码段：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.JAASRealm&quot;</span><br><span class="line">                appName=&quot;MyFooRealm&quot;</span><br><span class="line">    userClassNames=&quot;org.foobar.realm.FooUser&quot;</span><br><span class="line">     roleClassNames=&quot;org.foobar.realm.FooRole&quot;/&gt;</span><br></pre></td></tr></table></figure>
-<p>完全由登录模块负责创建并保存用于表示用户规则的 User 与 Role 对象（<code>javax.security.auth.Subject</code>）。如果登录模块不仅无法创建用户对象，而且也无法抛出登录异常，Tomcat CMA 就会失去作用，所在页面就会变成 <code>http://localhost:8080/myapp/j_security_check</code> 或其他未指明的页面。</p>
-<p>JAAS 方法具有双重的灵活性：</p>
-<ul>
-<li>你可以在自定义的登录模块后台执行任何所需的进程。</li>
-<li>通过改变配置以及重启服务器，你可以插入一个完全不同的登录模块，不需要对应用做出任何改动。</li>
-</ul>
-<h4 id="特别注意事项-5"><a href="#特别注意事项-5" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><ul>
-<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
-<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
-<li>和其他 Realm 实现一样，如果 <code>server.xml</code> 中的 <code>&lt;Realm&gt;</code> 元素包含一个 <code>digest</code> 属性，则支持摘要式密码。JAASRealm 的 <code>CallbackHandler</code> 将先于将密码传回 <code>LoginModule</code> 之前，对密码进行摘要式处理。</li>
-</ul>
-<h3 id="CombinedRealm"><a href="#CombinedRealm" class="headerlink" title="CombinedRealm"></a>CombinedRealm</h3><h4 id="简介-5"><a href="#简介-5" class="headerlink" title="简介"></a>简介</h4><p><strong>CombinedRealm</strong> 是一种 Tomcat 的 Realm 实现，通过一个或多个子 Realm 进行用户验证。</p>
-<p>通过 CombinedRealm，开发者能够将多个 Realm（同一或不同类型） 组合起来使用，从而用于验证多种数据源，而且万一当其中一个 Realm 失败，或其他一些操作需要多个 Realm 时，它还能提供回滚处理。</p>
-<p>子 Realm 是通过在定义 CombineRealm 的 <code>Realm</code> 元素中内嵌 <code>Realm</code> 元素来实现的。验证操作会按照 Realm 元素的叠加顺序来逐个进行。对逐个 Realm 进行验证，从而就能充分证明用户的身份。</p>
-<h4 id="Realm-元素属性-5"><a href="#Realm-元素属性-5" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>为了配置 CombinedRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 或 <code>&lt;Host&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。同样，你也可以将其内嵌到 <code>context.xml</code> 文件下的 <code>&lt;Context&gt;</code> 节点。</p>
-<h4 id="范例-5"><a href="#范例-5" class="headerlink" title="范例"></a>范例</h4><p>下面是 server.xml 中的一段代码，综合使用了 UserDatabaseRealm 和 DataSourceRealm：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.CombinedRealm&quot; &gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span><br><span class="line">             resourceName=&quot;UserDatabase&quot;/&gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.DataSourceRealm&quot;</span><br><span class="line">             dataSourceName=&quot;jdbc/authority&quot;</span><br><span class="line">             userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">             userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br><span class="line">&lt;/Realm&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="LockOutRealm"><a href="#LockOutRealm" class="headerlink" title="LockOutRealm"></a>LockOutRealm</h3><h4 id="简介-6"><a href="#简介-6" class="headerlink" title="简介"></a>简介</h4><p><strong>LockOutRealm</strong> 是一个 Tomcat 的 Realm 实现，它扩展了 CombinedRealm，假如在某一段时间内出现很多验证失败，则它能够提供锁定用户的功能。</p>
-<p>为了确保操作的正确性，该 Realm 允许出现较合理的同步。</p>
-<p>该 Realm 并不需要对底层的 Realm 或与其相关的用户存储机制进行任何改动。它会记录失败的登录，包括那些因为用户不存在的登录。为了防止无效用户通过精心设计的请求而实施的 DOS 攻击（从而造成缓存增加），没有通过验证的用户所在列表的容量受到了严格的限制。</p>
-<p>子 Realm 是通过在定义 LockOutRealm 的 <code>Realm</code> 元素中内嵌 <code>Realm</code> 元素来实现的。验证操作会按照 Realm 元素的叠加顺序来逐个进行。对逐个 Realm 进行验证，从而就能充分证明用户的身份。</p>
-<h4 id="Realm-元素属性-6"><a href="#Realm-元素属性-6" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>为了配置 CombinedRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 或 <code>&lt;Host&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。同样，你也可以将其内嵌到 <code>context.xml</code> 文件下的 <code>&lt;Context&gt;</code> 节点。关于 LockOutRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
-<h4 id="范例-6"><a href="#范例-6" class="headerlink" title="范例"></a>范例</h4><p>下面是 server.xml 中的一段代码，为 UserDatabaseRealm 添加了锁定功能。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.LockOutRealm&quot; &gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span><br><span class="line">             resourceName=&quot;UserDatabase&quot;/&gt;</span><br><span class="line">&lt;/Realm&gt;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Web Service简介/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/Web Service简介/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Web Service</p>
-<p>作用可以将一个应用程序变成Web应用</p>
-<p>Web services 通过Web 进行发布、查找和使用</p>
-<ul>
-<li>是应用程序组件</li>
-<li>使用开放协议进行通信</li>
-<li>独立且可自我描述 自我发现</li>
-<li>可被其他应用程序使用</li>
-</ul>
-<p>基础的 Web Services 平台是 XML + HTTP。</p>
-<p>Web  service 的元素</p>
-<ul>
-<li>SOAP (简易对象访问协议)</li>
-<li>UDDI (通用描述、发现及整合)   目录服务，通过它，企业可注册并搜索 Web services</li>
-<li>WSDL (Web services 描述语言)  用于描述 Web Services 以及如何访问 Web Services 的语言。</li>
-</ul>
-<p>Web 应用程序是运行在 Web 上的简易应用程序。它们围绕 Web 浏览器标准被进行构建，几乎可被任何平台之上的任何浏览器来使用。通过使用 Web services，您的应用程序可向全世界发布功能或消息</p>
-<p>Web Service 的应用</p>
-<p>可重用组件  连接组件</p>
-<p>任何应用程序都可拥有 Web Service 组件。</p>
-<p>Web Service 的创建与编程语言的种类无关。</p>
-<p>本章节我们将为大家介绍使用 PHP 的 SOAP 扩展来创建 Web Service。</p>
-<p>SOAP有两种操作方式，NO-WSDL 与 WSDL。</p>
-<ul>
-<li><strong>NO-WSDL模式：</strong>使用参数来传递要使用的信息。</li>
-<li><strong>WSDL模式：</strong> 使用WSDL文件名作为参数，并从WSDL中提取服务所需的信息。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/WSDL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/WSDL/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>WSDL是用于描述如何访问Web Service 语言</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">definitions</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span></span><br><span class="line">  web service 使用的数据类型</span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span></span><br><span class="line">  web service 定义一个操作的数据元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span>&gt;</span></span><br><span class="line">  web service要执行的操作 </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">binding</span>&gt;</span></span><br><span class="line">  web service 使用的通信协议 消息格式和协议细节</span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">definitions</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermRequest"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermResponse"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"value"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerms"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"getTermRequest"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"getTermResponse"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在这个例子中，把 “getTerm” 定义为某个<em>操作</em>的名称。</p>
-<p>操作 “getTerm” 拥有一个名为 “getTermRequest” 的<em>输入消息</em>，以及一个名为 “getTermResponse” 的<em>输出消息</em>。</p>
-<p><code>&lt;message&gt;</code> 元素可定义每个消息的<em>部件</em>，其实就是作为一个operation的一个输入和输出的参数的定义而已</p>
-<p>对比传统的编程，<code>&lt;portType&gt;</code>是一个函数库，描述各种函数的签名</p>
-<p>里面的 <code>&lt;operation&gt;</code> 则是定义的一个个函数</p>
-<p>比如 “getTerm” 是带有输入参数 “getTermRequest” 和返回参数 getTermResponse 的一个函数</p>
-<p><code>&lt;binding&gt;</code>是将<code>&lt;portType&gt;</code>标签定义的每一个操作在此实现</p>
-<p><code>&lt;service&gt;</code> 确定每一个标签的端口地址</p>
-<p>总的来说WSDL文档分成两个部分 一个是抽象层，一个就是具体实现层  </p>
-<p><code>&lt;binding&gt;</code>和<code>&lt;service&gt;</code>就是具体实现层</p>
-<p>operation的构造有下面几种形式</p>
+            <p>  正则表达式是由普通字符（例如字符 a 到 z）以及特殊字符（称为”元字符”）组成的文字模式。模式描述在搜索文本时要匹配的一个或多个字符串。正则表达式作为一个模板，将某个字符模式与所搜索的字符串进行匹配。</p>
+<p>？ 代表0或1个字符</p>
+<p>*代表0或多个字符</p>
+<p>^ 匹配输入字符串的开始位置</p>
+<p>[0-9] 匹配单个数字 + 匹配一个或多个</p>
+<p>abc$ 匹配字母abc并以abc结尾 $撇皮字符串的结束位置</p>
+<p>^[a-z0-9_-]{3,15}$ </p>
+<p>^匹配开始   [] 匹配 字母数字 下划线和连接字符   {3，15}$ 指定字符串的长度为3-15个  </p>
+<p>+号 代表前面的字符 至少出现一次 </p>
+<p>runoo+b  =&gt;  runooooooooob runoob</p>
+<p>runoo*b 可以出现0次或更多</p>
+<p>runoo?b  出现一次或0次</p>
+<p>转义字符</p>
 <table>
 <thead>
 <tr>
-<th>One-way</th>
-<th>此操作可接受消息，但不会返回响应。</th>
+<th>\cx</th>
+<th>匹配由x指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。x 的值必须为 A-Z 或 a-z 之一。否则，将 c 视为一个原义的 ‘c’ 字符。</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Request-response</td>
-<td>此操作可接受一个请求并会返回一个响应</td>
+<td>\f</td>
+<td>匹配一个换页符。等价于 \x0c 和 \cL。</td>
 </tr>
 <tr>
-<td>Solicit-response</td>
-<td>此操作可发送一个请求，并会等待一个响应。</td>
+<td>\n</td>
+<td>匹配一个换行符。等价于 \x0a 和 \cJ。</td>
 </tr>
 <tr>
-<td>Notification</td>
-<td>此操作可发送一条消息，但不会等待响应。</td>
+<td>\r</td>
+<td>匹配一个回车符。等价于 \x0d 和 \cM。</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。注意 Unicode 正则表达式会匹配全角空格符。</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- One way 操作的例子，其实就是一个带参数的void函数--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"newTermValues"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param1"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerm"</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"setTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"newTerm"</span> <span class="attr">message</span>=<span class="string">"newTermValues"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>上面的setTerm就是个one -way 方法 他只接收一个名叫newTerm的 newTermValues的消息？（我是把newTermValues理解成一个消息格式），这个参数由两个 xs:string  param1 param2 组成</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Request-Response操作--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term2"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"goodTerms"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"p1"</span> <span class="attr">message</span>=<span class="string">"Term1"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">output</span> <span class="attr">name</span>=<span class="string">"p2"</span> <span class="attr">message</span>=<span class="string">"Term2"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>发现一个更好的WSDL文档的网站 补充下  感谢 51cto的一篇文章，虽然他也是转载</p>
-<p><code>&lt;definitions  xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot;  xmlns:tns=&quot;http://www.jsoso.com/wstest&quot;   xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;   xmlns=&quot;http://schemas.xmlsoap.org/wsdl/&quot;   targetNamespace=&quot;http://www.jsoso.com/wstest&quot;  name=&quot;Example&quot;&gt;</code></p>
-<p>这个作为根元素，它定义文档用到各种xml元素的namespace 缩写，本文档自己的targetNamespace记录了自己的namespace  其他xml元素引用本文档的xml元素，要声明这个namespace       注意xmlns:tns它其实就是将tns这个前缀指向自身的命名空间。</p>
-<p>xmlns=”xxx” 叫默认名称空间 没有取名         xmlns:PART =”xxx”  这种叫源名称空间  </p>
-<p>xmlns:targetNamespace=”xx” 目标命名空间</p>
-<p>其实不要觉得这些命名空间随便给，每个网址都是有特殊意义的</p>
-<p>比如说大名鼎鼎的 xsd 代表的 <a href="http://www,w3.org/2001/XMLSchema" target="_blank" rel="noopener">http://www,w3.org/2001/XMLSchema</a>  代表的就是一种代替DTD 的XSD语言很牛逼 还有专门的xsd文件</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:import</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">schemaLocation</span>=<span class="string">"http://localhost:8080/hello?xsd=1"</span>&gt;</span><span class="tag">&lt;/<span class="name">xsd:import</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里我们要引入的schema定义 schemaLocation=”<a href="http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。" target="_blank" rel="noopener">http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。</a>  </p>
-<p>这个其实import 和 schema是涉及到xsd本身的语法，它这里的schema+import应该是属于拓展命名空间,然后这个大概是xsd文件本身没有定义 targetNamespace 而 我们自己写的文件中有 targetNamespace 是 “http://…../wstest”然后就要这么写具体看<a href="http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html</a>  然后这个xsd就引入了 我们定义的文件的类型</p>
-<p>然后他们一起定义在types里面作为文档的数据类型？？</p>
-<p><code>&lt;types&gt;</code>定义了当前文档的数据类型，为了保持平台中立性，WSDL使用XML Schema 语法来定义数据类型 这些数据类型来定义参数方法和参数值  也就是之前定义的xsd的前缀代表的命名空间，这个命名空间本身就定义了一些常用的数据类型 integer boolean char float等 </p>
-<p>然后一些 tns前缀的变量其实就是我们自定义文件中的自定义变量  我有点没懂，怎么和xsd一点关系也没，import过来干嘛。。但是好像用tns 前缀好像又和 <code>&lt;types&gt;</code>定义的有关</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"fault"</span> <span class="attr">element</span>=<span class="string">"tns:HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">part</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"userName"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:toSayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:toSayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"person arg1"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:sayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">message</span>=<span class="string">"tns:HelloException"</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><code>&lt;input&gt;</code> 和 <code>&lt;output&gt;</code> </p>
-<p><code>&lt;operation&gt;</code>元素中，name属性表示服务方法名，parameterOrder属性表示方法的参数顺序，使用空格符分割多个参数</p>
-<p>“parameterOrder=”person arg1”  这个和input 对应的message 对应的各种数据类型有关</p>
-<p>子标签<input>表示输入参数说明，它引用＜message＞标签中的输入参数。<output>表示输出参数说明，它引用＜message＞标签中的输出参数。<fault>标签在Java方法中的特别用来表示异常（其它语言有对应的错误处理机制），它引用＜message＞标签中的错误参数。 </fault></output></p>
-<p><binding>标签是完整描述协议、序列化和编码的地方，<types>,<message>和<porttype>标签处理抽象的数据内容，而<binding>标签是处理数据传输的物理实现。 </binding></porttype></message></types></binding></p>
-<p><binding>标签把前三部分的抽象定义具体化。 </binding></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">binding</span> <span class="attr">name</span>=<span class="string">"ExamplePortBinding"</span> <span class="attr">type</span>=<span class="string">"tns:Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:binding</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">transport</span>=<span class="string">"http://schemas.xmlsoap.org/soap/http"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">style</span>=<span class="string">"rpc"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:binding</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span> <span class="attr">use</span>=<span class="string">"literal"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>首先<binding>标签使用<a href="soap:binding" target="_blank" rel="noopener">soap:binding</a>的transport和style属性定义了Web Service的通讯协议HTTP和SOAP的请求风格RPC。其次<operation>子标签将portType中定义的 operation同SOAP的请求绑定，定义了操作名称soapAction，输出输入参数和异常的编码方式及命名空间。 </operation></binding></p>
-<p>   service是一套＜port＞元素。在一一对应形式下，每个＜port＞元素都和一个location关联。如果同一个＜binding＞有多个＜port＞元素与之关联，可以使用额外的URL地址作为替换。 </p>
-<p>一个WSDL文档中可以有多个＜service＞元素，而且多个＜service＞元素十分有用，其中之一就是可以根据目标URL来组织端口。在一个 WSDL文档中，＜service＞的name属性用来区分不同的service。在同一个service中，不同端口，使用端口的”name”属性区分。   </p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">port</span> <span class="attr">name</span>=<span class="string">"ExamplePort"</span> <span class="attr">binding</span>=<span class="string">"tns:ExamplePortBinding"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:address</span> <span class="attr">location</span>=<span class="string">"http://localhost:8080/hello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:address</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">port</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>元字符就是特殊字符</p>
+<p>如果要真正当作正常字符匹配他们 前面加 \</p>
+<table>
+<thead>
+<tr>
+<th>$</th>
+<th>匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配 ‘\n’ 或 ‘\r’。要匹配 $ 字符本身，请使用 \ $。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>( )</td>
+<td>标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式零次或多次。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式一次或多次。</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配除换行符 \n 之外的任何单字符。</td>
+</tr>
+<tr>
+<td>[</td>
+<td>标记一个中括号表达式的开始。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。</td>
+</tr>
+<tr>
+<td>\</td>
+<td>将下一个字符标记为或特殊字符、或原义字符、或向后引用、或八进制转义符。例如， ‘n’ 匹配字符 ‘n’。’\n’ 匹配换行符。</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配输入字符串的开始位置，除非在方括号表达式中使用，此时它表示不接受该字符集合。</td>
+</tr>
+<tr>
+<td>{</td>
+<td>标记限定符表达式的开始。</td>
+</tr>
+<tr>
+<td>\</td>
+<td></td>
+<td>指明两项之间的一个选择。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="限定符"><a href="#限定符" class="headerlink" title="限定符"></a>限定符</h2><p>限定符用来指定正则表达式的一个给定组件必须要出现多少次才能满足匹配。有 * 或 + 或 ? 或 {n} 或 {n,} 或 {n,m} 共6种。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式零次或多次。例如，zo<em> 能匹配 “z” 以及 “zoo”。</em> 等价于{0,}。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式一次或多次。例如，’zo+’ 能匹配 “zo” 以及 “zoo”，但不能匹配 “z”。+ 等价于 {1,}。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面的子表达式零次或一次。例如，”do(es)?” 可以匹配 “do” 、 “does” 中的 “does” 、 “doxy” 中的 “do” 。? 等价于 {0,1}。</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>n 是一个非负整数。匹配确定的 n 次。例如，’o{2}’ 不能匹配 “Bob” 中的 ‘o’，但是能匹配 “food” 中的两个 o。</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>n 是一个非负整数。至少匹配n 次。例如，’o{2,}’ 不能匹配 “Bob” 中的 ‘o’，但能匹配 “foooood” 中的所有 o。’o{1,}’ 等价于 ‘o+’。’o{0,}’ 则等价于 ‘o*’。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m 次。例如，”o{1,3}” 将匹配 “fooooood” 中的前三个 o。’o{0,1}’ 等价于 ‘o?’。请注意在逗号和两个数之间不能有空格。</td>
+</tr>
+</tbody>
+</table>
+<p>贪婪与最小匹配</p>
+<p><strong>*、+限定符都是贪婪的，因为它们会尽可能多的匹配文字，只有在它们的后面加上一个?就可以实现非贪婪或最小匹配</strong></p>
+<p>通过在 *、+  限定符之后放置 ?，该表达式从”贪心”表达式转换为”非贪心”表达式或者最小匹配。</p>
+<h2 id="定位符"><a href="#定位符" class="headerlink" title="定位符"></a>定位符</h2><p>定位符使您能够将正则表达式固定到行首或行尾。</p>
+<table>
+<thead>
+<tr>
+<th>^</th>
+<th>匹配输入字符串开始的位置。如果设置了 RegExp 对象的 Multiline 属性，^ 还会与 \n 或 \r 之后的位置匹配。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$</td>
+<td>匹配输入字符串结尾的位置。如果设置了 RegExp 对象的 Multiline 属性，$ 还会与 \n 或 \r 之前的位置匹配。</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>匹配一个单词边界，即字与空格间的位置。</td>
+</tr>
+<tr>
+<td>\B</td>
+<td>非单词边界匹配。</td>
+</tr>
+</tbody>
+</table>
+<p>感觉\b \B 表现很奇怪   \b可以表示一个单词后面的空格前面为止的匹配，\B就很奇怪  不奇怪</p>
+<p>下面的表达式匹配 Chapter 中的字符串 apt，但不匹配 aptitude 中的字符串 apt：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/\Bapt/</span><br></pre></td></tr></table></figure>
+<p>而且好像他们不能和$组合一起</p>
+<p>而且所谓的^ 和$ 其实是代表行首和行尾懂8</p>
+<p>捕获缓存</p>
+<p>对一个正则表达式模式或部分模式两边添加圆括号将导致相关匹配存储到一个临时缓冲区中，所捕获的每个子匹配都按照在正则表达式模式中从左到右出现的顺序存储。缓冲区编号从 1 开始，最多可存储 99 个捕获的子表达式。每个缓冲区都可以使用 \n 访问，其中 n 为一个标识特定缓冲区的一位或两位十进制数。</p>
+<p>可以使用非捕获元字符 ?:、?= 或 ?! 来重写捕获，忽略对相关匹配的保存。</p>
+<p>反向引用的最简单的、最有用的应用之一，是提供查找文本中两个相同的相邻单词的匹配项的能力。</p>
+<p>var str = “Is is the cost of of gasoline going up up”; var patt1 = /\b([a-z]+) \1\b/ig; document.write(str.match(patt1));</p>
+<p>Is is,of of,up up</p>
+<p>捕获的表达式，正如 [a-z]+ 指定的，包括一个或多个字母。正则表达式的第二部分是对以前捕获的子匹配项的引用，即，单词的第二个匹配项正好由括号表达式匹配。\1 指定第一个子匹配项。</p>
+<p>单词边界元字符确保只检测整个单词。否则，诸如 “is issued” 或 “this is” 之类的词组将不能正确地被此表达式识别。</p>
+<p>正则表达式后面的全局标记 g 指定将该表达式应用到输入字符串中能够查找到的尽可能多的匹配。</p>
+<p>表达式的结尾处的不区分大小写 i 标记指定不区分大小写。</p>
+<p>多行标记指定换行符的两边可能出现潜在的匹配。</p>
+<p>反向引用还可以将通用资源指示符 (URI) 分解为其组件。假定您想将下面的 URI 分解为协议（ftp、http 等等）、域地址和页/路径：</p>
+<p>. 特殊字符在中括号表达式时 如 [.] 只会匹配 .字符，等价于 .，而非匹配除换行符 <strong>\n</strong> 外的所有字符。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/奇奇怪怪js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/奇奇怪怪js/" itemprop="url">奇奇怪怪js</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>奇奇怪怪js</p>
+<p>牛牛皮皮<code>&lt;iframe src=&quot;xxx.html&quot; width=&quot;500px&quot; height=&quot;300px&quot;&gt;</code>可以将一个页面的内容嵌套进来</p>
+<p>他可以多层嵌套，嵌套层接嵌套</p>
+<p>而window.location.href可以跳转你当前 页面  parent.location.href可以跳转你上一个父页面  top.location.href可以跳转你最顶层页面，被跳转的父页面下的所有的嵌套页面自然会随之消失的啦</p>
+<p>window.location.href 和alert弹框会互相无阻碍执行，如果希望alert弹框能阻碍跳转 应该用其他弹框</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/数据库常识2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/数据库常识2/" itemprop="url">数据库常识2</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="1-DDL-Data-Definition-Language"><a href="#1-DDL-Data-Definition-Language" class="headerlink" title="1. DDL - Data Definition Language"></a>1. DDL - Data Definition Language</h3><p>数据库定义语言：定义数据库的结构。</p>
+<p>其主要命令有CREATE，ALTER，DROP等，该语言不需要commit，因此慎重。</p>
+<p>还有其他的：</p>
+<p>TRUNCATE - 截断表内容（开发期，还是挺常用的）</p>
+<p>COMMENT - 为数据字典添加备注</p>
+<h3 id="2-DML-Data-Manipulation-Language"><a href="#2-DML-Data-Manipulation-Language" class="headerlink" title="2. DML - Data Manipulation Language"></a>2. DML - Data Manipulation Language</h3><p>数据库操作语言：SQL中处理数据库中的数据</p>
+<p>其主要命令有INSERT,UPDATE,DELETE等，这些例子大家常用就不一一介绍了。该语言需要commit。还</p>
+<p>有常用的 LOCK TABLE ,记得写过锁的博客 - <a href="http://www.bysocket.com/?p=191" target="_blank" rel="noopener">传送门</a></p>
+<p>还有其他不熟悉的：</p>
+<p>CALL - 调用一个PL/SQL或Java子程序<br>EXPLAIN PLAN - 解析分析数据访问路径</p>
+<h3 id="3-DCL-Data-Control-Language"><a href="#3-DCL-Data-Control-Language" class="headerlink" title="3. DCL - Data Control Language"></a>3. DCL - Data Control Language</h3><p>数据库控制语言：授权，角色控制等</p>
+<p>GRANT - 为用户赋予访问权限</p>
+<p>REVOKE - 撤回授权权限</p>
+<h3 id="4-TCL-Transaction-Control-Language"><a href="#4-TCL-Transaction-Control-Language" class="headerlink" title="4. TCL - Transaction Control Language"></a>4. TCL - Transaction Control Language</h3><p>事务控制语言</p>
+<p>COMMIT - 保存已完成的工作</p>
+<p>SAVEPOINT - 在事务中设置保存点，可以回滚到此处</p>
+<p>ROLLBACK - 回滚</p>
+<p>SET TRANSACTION - 改变事务选项</p>
+<p>有一种说法是将 select  where 这种说是DQL  但也有一种说法是归于DML中</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/利用CookieManager管理Cookie/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/利用CookieManager管理Cookie/" itemprop="url">利用CookieManager管理Cookie</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/SOAP教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/SOAP教程/" itemprop="url">SOAP教程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议</p>
+<p>通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。</p>
+<p>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。</p>
+<p>一条SOAP信息就是一个普通的xml文档 含下面的元素</p>
+<ul>
+<li>必需的 Envelope元素     将xml文档标识为一条SOAP信息</li>
+<li>可选的Header元素，包含头部信息</li>
+<li>必需的Body元素，包含所有的调用和响应信息</li>
+<li>可选的Fault元素，提供处理此消息所发生的错误信息</li>
+</ul>
+<p>所有以上的元素均被声明于针对 SOAP 封装的默认命名空间中：</p>
+<p><a href="http://www.w3.org/2001/12/soap-envelope" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope</a></p>
+<p>以及针对 SOAP 编码和数据类型的默认命名空间：</p>
+<p><a href="http://www.w3.org/2001/12/soap-encoding" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding</a></p>
+<p>SOAP文档的要求</p>
+<ol>
+<li>SOAP必须用xml来进行编码</li>
+<li>必须使用SOAP Envelope命名空间和SOAP Encoding命名空间</li>
+<li>不能包含DTD引用</li>
+<li>不能包含XML处理指令</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Header</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Header</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">...</span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Envelope元素"><a href="#Envelope元素" class="headerlink" title="Envelope元素"></a>Envelope元素</h3><p>是SOAP的根元素，将其定义成soap信息</p>
+<p>属性</p>
+<ul>
+<li>xmlns:soap  命名空间 <ul>
+<li>SOAP 消息必须拥有与命名空间 “<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a> 相关联的一个 Envelope 元素</li>
+</ul>
+</li>
+<li>xmlns:encodingStyle <ul>
+<li>此属性可出现在任何 SOAP 元素中，并会被应用到元素的内容及元素的所有子元素上。</li>
+<li>SOAP 没有默认编码方式 <a href="http://www.w3.org/2001/12/soap-encoding使用这个就好" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding使用这个就好</a></li>
+</ul>
+</li>
+</ul>
+<p>之后我们就能用 soap 和 encodingStyle 属性</p>
+<h3 id="Header元素"><a href="#Header元素" class="headerlink" title="Header元素"></a>Header元素</h3><p>包含头部信息，一些SOAP/应用程序专用信息    比如认证 支付等</p>
+<p>如果使用header 它一定是第一个子元素</p>
+<p>所有 Header 元素的直接子元素必须是合格的命名空间</p>
+<p>soap在默认的命名空间中 (“<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a>) 定义了三个属性(有一个encodingStyle这里不废话 )这些被定义在 SOAP 头部的属性可定义容器如何对 SOAP 消息进行处理</p>
+<p>mustUnderstand 属性可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的</p>
+<p><code>soap:mustUnderstand=&quot;0|1&quot;</code></p>
+<p>SOAP信息可以沿着信息路径转发，actor用于寻址到下一个特点端点</p>
+<p><code>soap:actor=&quot;URI&quot;</code></p>
+<h3 id="Body元素"><a href="#Body元素" class="headerlink" title="Body元素"></a>Body元素</h3><p>soap的body元素的子元素可以引入合格的命名空间</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 比如下面使用m的getPrice属性，它首先要引入 命名空间m  xmlns:m="xxx" --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Getprice</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.xxxx.com/prices"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">m:item</span>&gt;</span>Apples<span class="tag">&lt;/<span class="name">m:item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">m:Getprice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Fault元素"><a href="#Fault元素" class="headerlink" title="Fault元素"></a>Fault元素</h3><p>Fault一定是Body的子元素，在一条soap内，fault只能出现一次，它用于指示body的错误</p>
+<p>fault拥有子元素</p>
+<ul>
+<li><code>&lt;faultcode&gt;</code>用来识别错误的代码</li>
+<li><code>&lt;faultstring&gt;</code>错误说明</li>
+<li><code>&lt;faultactor&gt;</code> 谁引发的错误</li>
+<li><code>&lt;detail&gt;</code> 涉及body元素的应用程序专用错误信息</li>
+</ul>
+<p>faultcode 有几个错误代码</p>
+<ol>
+<li>versionMismatch envelop元素的无效的命名空间</li>
+<li>MustUnderstand 这是之前header元素中设置了 mustunderstand 的时候出现的错误可能会出现  无法理解</li>
+<li>Client 消息被不正确地构成，或包含不正确的信息</li>
+<li>Server 服务有问题，因此无法处理进行</li>
+</ol>
+<h3 id="HTTP-XML-SOAP"><a href="#HTTP-XML-SOAP" class="headerlink" title="HTTP + XML = SOAP"></a>HTTP + XML = SOAP</h3><p>好像传输soap 需要在contentType上说明</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: application/soap+xml; charset=utf-8</span><br></pre></td></tr></table></figure>
+<h2 id="一个-SOAP-实例"><a href="#一个-SOAP-实例" class="headerlink" title="一个 SOAP 实例"></a>一个 SOAP 实例</h2><p>在下面的例子中，一个 GetStockPrice 请求被发送到了服务器。此请求有一个 StockName 参数，而在响应中则会返回一个 Price 参数。此功能的命名空间被定义在此地址中： “<a href="http://www.example.org/stock&quot;" target="_blank" rel="noopener">http://www.example.org/stock&quot;</a></p>
+<h3 id="SOAP-请求："><a href="#SOAP-请求：" class="headerlink" title="SOAP 请求："></a>SOAP 请求：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /InStock HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:StockName</span>&gt;</span>IBM<span class="tag">&lt;/<span class="name">m:StockName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="SOAP-响应："><a href="#SOAP-响应：" class="headerlink" title="SOAP 响应："></a>SOAP 响应：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Price</span>&gt;</span>34.5<span class="tag">&lt;/<span class="name">m:Price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -2067,7 +2182,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

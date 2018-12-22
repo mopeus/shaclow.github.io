@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/SOAP教程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Web Service简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -251,7 +251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/SOAP教程/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/Web Service简介/" itemprop="url">Web Service简介</a></h1>
         
 
         <div class="post-meta">
@@ -263,8 +263,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
               </time>
             
 
@@ -303,507 +303,616 @@
       
         
           
-            <p>SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议</p>
-<p>通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。</p>
-<p>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。</p>
-<p>一条SOAP信息就是一个普通的xml文档 含下面的元素</p>
+            <p>Web Service</p>
+<p>作用可以将一个应用程序变成Web应用</p>
+<p>Web services 通过Web 进行发布、查找和使用</p>
 <ul>
-<li>必需的 Envelope元素     将xml文档标识为一条SOAP信息</li>
-<li>可选的Header元素，包含头部信息</li>
-<li>必需的Body元素，包含所有的调用和响应信息</li>
-<li>可选的Fault元素，提供处理此消息所发生的错误信息</li>
+<li>是应用程序组件</li>
+<li>使用开放协议进行通信</li>
+<li>独立且可自我描述 自我发现</li>
+<li>可被其他应用程序使用</li>
 </ul>
-<p>所有以上的元素均被声明于针对 SOAP 封装的默认命名空间中：</p>
-<p><a href="http://www.w3.org/2001/12/soap-envelope" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope</a></p>
-<p>以及针对 SOAP 编码和数据类型的默认命名空间：</p>
-<p><a href="http://www.w3.org/2001/12/soap-encoding" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding</a></p>
-<p>SOAP文档的要求</p>
-<ol>
-<li>SOAP必须用xml来进行编码</li>
-<li>必须使用SOAP Envelope命名空间和SOAP Encoding命名空间</li>
-<li>不能包含DTD引用</li>
-<li>不能包含XML处理指令</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Header</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Header</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">...</span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Envelope元素"><a href="#Envelope元素" class="headerlink" title="Envelope元素"></a>Envelope元素</h3><p>是SOAP的根元素，将其定义成soap信息</p>
-<p>属性</p>
+<p>基础的 Web Services 平台是 XML + HTTP。</p>
+<p>Web  service 的元素</p>
 <ul>
-<li>xmlns:soap  命名空间 <ul>
-<li>SOAP 消息必须拥有与命名空间 “<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a> 相关联的一个 Envelope 元素</li>
+<li>SOAP (简易对象访问协议)</li>
+<li>UDDI (通用描述、发现及整合)   目录服务，通过它，企业可注册并搜索 Web services</li>
+<li>WSDL (Web services 描述语言)  用于描述 Web Services 以及如何访问 Web Services 的语言。</li>
+</ul>
+<p>Web 应用程序是运行在 Web 上的简易应用程序。它们围绕 Web 浏览器标准被进行构建，几乎可被任何平台之上的任何浏览器来使用。通过使用 Web services，您的应用程序可向全世界发布功能或消息</p>
+<p>Web Service 的应用</p>
+<p>可重用组件  连接组件</p>
+<p>任何应用程序都可拥有 Web Service 组件。</p>
+<p>Web Service 的创建与编程语言的种类无关。</p>
+<p>本章节我们将为大家介绍使用 PHP 的 SOAP 扩展来创建 Web Service。</p>
+<p>SOAP有两种操作方式，NO-WSDL 与 WSDL。</p>
+<ul>
+<li><strong>NO-WSDL模式：</strong>使用参数来传递要使用的信息。</li>
+<li><strong>WSDL模式：</strong> 使用WSDL文件名作为参数，并从WSDL中提取服务所需的信息。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/WSDL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/WSDL/" itemprop="url">WSDL</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>WSDL是用于描述如何访问Web Service 语言</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">definitions</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span></span><br><span class="line">  web service 使用的数据类型</span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span></span><br><span class="line">  web service 定义一个操作的数据元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span>&gt;</span></span><br><span class="line">  web service要执行的操作 </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">binding</span>&gt;</span></span><br><span class="line">  web service 使用的通信协议 消息格式和协议细节</span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">definitions</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermRequest"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermResponse"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"value"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerms"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"getTermRequest"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"getTermResponse"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，把 “getTerm” 定义为某个<em>操作</em>的名称。</p>
+<p>操作 “getTerm” 拥有一个名为 “getTermRequest” 的<em>输入消息</em>，以及一个名为 “getTermResponse” 的<em>输出消息</em>。</p>
+<p><code>&lt;message&gt;</code> 元素可定义每个消息的<em>部件</em>，其实就是作为一个operation的一个输入和输出的参数的定义而已</p>
+<p>对比传统的编程，<code>&lt;portType&gt;</code>是一个函数库，描述各种函数的签名</p>
+<p>里面的 <code>&lt;operation&gt;</code> 则是定义的一个个函数</p>
+<p>比如 “getTerm” 是带有输入参数 “getTermRequest” 和返回参数 getTermResponse 的一个函数</p>
+<p><code>&lt;binding&gt;</code>是将<code>&lt;portType&gt;</code>标签定义的每一个操作在此实现</p>
+<p><code>&lt;service&gt;</code> 确定每一个标签的端口地址</p>
+<p>总的来说WSDL文档分成两个部分 一个是抽象层，一个就是具体实现层  </p>
+<p><code>&lt;binding&gt;</code>和<code>&lt;service&gt;</code>就是具体实现层</p>
+<p>operation的构造有下面几种形式</p>
+<table>
+<thead>
+<tr>
+<th>One-way</th>
+<th>此操作可接受消息，但不会返回响应。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Request-response</td>
+<td>此操作可接受一个请求并会返回一个响应</td>
+</tr>
+<tr>
+<td>Solicit-response</td>
+<td>此操作可发送一个请求，并会等待一个响应。</td>
+</tr>
+<tr>
+<td>Notification</td>
+<td>此操作可发送一条消息，但不会等待响应。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- One way 操作的例子，其实就是一个带参数的void函数--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"newTermValues"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param1"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerm"</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"setTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"newTerm"</span> <span class="attr">message</span>=<span class="string">"newTermValues"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的setTerm就是个one -way 方法 他只接收一个名叫newTerm的 newTermValues的消息？（我是把newTermValues理解成一个消息格式），这个参数由两个 xs:string  param1 param2 组成</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Request-Response操作--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term2"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"goodTerms"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"p1"</span> <span class="attr">message</span>=<span class="string">"Term1"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">output</span> <span class="attr">name</span>=<span class="string">"p2"</span> <span class="attr">message</span>=<span class="string">"Term2"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>发现一个更好的WSDL文档的网站 补充下  感谢 51cto的一篇文章，虽然他也是转载</p>
+<p><code>&lt;definitions  xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot;  xmlns:tns=&quot;http://www.jsoso.com/wstest&quot;   xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;   xmlns=&quot;http://schemas.xmlsoap.org/wsdl/&quot;   targetNamespace=&quot;http://www.jsoso.com/wstest&quot;  name=&quot;Example&quot;&gt;</code></p>
+<p>这个作为根元素，它定义文档用到各种xml元素的namespace 缩写，本文档自己的targetNamespace记录了自己的namespace  其他xml元素引用本文档的xml元素，要声明这个namespace       注意xmlns:tns它其实就是将tns这个前缀指向自身的命名空间。</p>
+<p>xmlns=”xxx” 叫默认名称空间 没有取名         xmlns:PART =”xxx”  这种叫源名称空间  </p>
+<p>xmlns:targetNamespace=”xx” 目标命名空间</p>
+<p>其实不要觉得这些命名空间随便给，每个网址都是有特殊意义的</p>
+<p>比如说大名鼎鼎的 xsd 代表的 <a href="http://www,w3.org/2001/XMLSchema" target="_blank" rel="noopener">http://www,w3.org/2001/XMLSchema</a>  代表的就是一种代替DTD 的XSD语言很牛逼 还有专门的xsd文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:import</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">schemaLocation</span>=<span class="string">"http://localhost:8080/hello?xsd=1"</span>&gt;</span><span class="tag">&lt;/<span class="name">xsd:import</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们要引入的schema定义 schemaLocation=”<a href="http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。" target="_blank" rel="noopener">http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。</a>  </p>
+<p>这个其实import 和 schema是涉及到xsd本身的语法，它这里的schema+import应该是属于拓展命名空间,然后这个大概是xsd文件本身没有定义 targetNamespace 而 我们自己写的文件中有 targetNamespace 是 “http://…../wstest”然后就要这么写具体看<a href="http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html</a>  然后这个xsd就引入了 我们定义的文件的类型</p>
+<p>然后他们一起定义在types里面作为文档的数据类型？？</p>
+<p><code>&lt;types&gt;</code>定义了当前文档的数据类型，为了保持平台中立性，WSDL使用XML Schema 语法来定义数据类型 这些数据类型来定义参数方法和参数值  也就是之前定义的xsd的前缀代表的命名空间，这个命名空间本身就定义了一些常用的数据类型 integer boolean char float等 </p>
+<p>然后一些 tns前缀的变量其实就是我们自定义文件中的自定义变量  我有点没懂，怎么和xsd一点关系也没，import过来干嘛。。但是好像用tns 前缀好像又和 <code>&lt;types&gt;</code>定义的有关</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"fault"</span> <span class="attr">element</span>=<span class="string">"tns:HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">part</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"userName"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:toSayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:toSayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"person arg1"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:sayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">message</span>=<span class="string">"tns:HelloException"</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;input&gt;</code> 和 <code>&lt;output&gt;</code> </p>
+<p><code>&lt;operation&gt;</code>元素中，name属性表示服务方法名，parameterOrder属性表示方法的参数顺序，使用空格符分割多个参数</p>
+<p>“parameterOrder=”person arg1”  这个和input 对应的message 对应的各种数据类型有关</p>
+<p>子标签<input>表示输入参数说明，它引用＜message＞标签中的输入参数。<output>表示输出参数说明，它引用＜message＞标签中的输出参数。<fault>标签在Java方法中的特别用来表示异常（其它语言有对应的错误处理机制），它引用＜message＞标签中的错误参数。 </fault></output></p>
+<p><binding>标签是完整描述协议、序列化和编码的地方，<types>,<message>和<porttype>标签处理抽象的数据内容，而<binding>标签是处理数据传输的物理实现。 </binding></porttype></message></types></binding></p>
+<p><binding>标签把前三部分的抽象定义具体化。 </binding></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">binding</span> <span class="attr">name</span>=<span class="string">"ExamplePortBinding"</span> <span class="attr">type</span>=<span class="string">"tns:Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:binding</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">transport</span>=<span class="string">"http://schemas.xmlsoap.org/soap/http"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">style</span>=<span class="string">"rpc"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:binding</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span> <span class="attr">use</span>=<span class="string">"literal"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>首先<binding>标签使用<a href="soap:binding" target="_blank" rel="noopener">soap:binding</a>的transport和style属性定义了Web Service的通讯协议HTTP和SOAP的请求风格RPC。其次<operation>子标签将portType中定义的 operation同SOAP的请求绑定，定义了操作名称soapAction，输出输入参数和异常的编码方式及命名空间。 </operation></binding></p>
+<p>   service是一套＜port＞元素。在一一对应形式下，每个＜port＞元素都和一个location关联。如果同一个＜binding＞有多个＜port＞元素与之关联，可以使用额外的URL地址作为替换。 </p>
+<p>一个WSDL文档中可以有多个＜service＞元素，而且多个＜service＞元素十分有用，其中之一就是可以根据目标URL来组织端口。在一个 WSDL文档中，＜service＞的name属性用来区分不同的service。在同一个service中，不同端口，使用端口的”name”属性区分。   </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">port</span> <span class="attr">name</span>=<span class="string">"ExamplePort"</span> <span class="attr">binding</span>=<span class="string">"tns:ExamplePortBinding"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:address</span> <span class="attr">location</span>=<span class="string">"http://localhost:8080/hello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:address</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">port</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Realm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Realm/" itemprop="url">Realm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Realm-配置"><a href="#Realm-配置" class="headerlink" title="Realm 配置"></a>Realm 配置</h1><h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><p>本文档介绍了如何借助一个“数据库”来配置 Tomcat ，从而实现<strong>容器管理安全性</strong>。所要连接的这种数据库含有用户名、密码以及用户角色。你只需知道的是，如果使用的 Web 应用含有一个或多个 <code>&lt;security-constraint&gt;</code> 元素，<code>&lt;login-config&gt;</code> 元素定义了用户验证的必需细节信息。如果你不打算使用这些功能，则可以忽略这篇文档。</p>
+<p>关于容器管理安全性的基础知识，可参考 <a href="http://wiki.apache.org/tomcat/Specifications" target="_blank" rel="noopener">Servlet Specification (Version 2.4)</a> 中的第 12 节内容。</p>
+<p>关于如何使用 Tomcat 中的<strong>单点登录</strong>（用户只需验证一次，就能够登录一个虚拟主机的所有 Web 应用）功能，请参看<a href="http://tomcat.apache.org/tomcat-8.0-doc/config/host.html#Single_Sign_On" target="_blank" rel="noopener">该文档</a>。</p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="什么是-Realm"><a href="#什么是-Realm" class="headerlink" title="什么是 Realm"></a>什么是 Realm</h3><p><strong>Realm</strong>（安全域）其实就是一个存储用户名和密码的“数据库”再加上一个枚举列表。“数据库”中的用户名和密码是用来验证 Web 应用（或 Web 应用集合）用户合法性的，而每一合法用户所对应的<strong>角色</strong>存储在枚举列表中。可以把这些角色看成是类似 UNIX 系统中的 group（分组），因为只有能够拥有特定角色的用户才能访问特定的 Web 应用资源（而不是通过对用户名列表进行枚举适配）。特定用户的用户名下可以配置多个角色。</p>
+<p>虽然 Servlet 规范描述了一个可移植机制，使应用可以在 <code>web.xml</code> 部署描述符中声明它们的安全需求，但却没有提供一种可移植 API 来定义出 Servlet 容器与相应用户及角色信息的接口。然而，在很多情况下，非常适于将 Servlet 容器与一些已有的验证数据库或者生产环境中已存在的机制“连接”起来。因此，Tomcat 定义了一个 Java 接口（<code>org.apache.catalina.Realm</code>），通过“插入”组件来建立连接。提供了 6 种标准插件，支持与各种验证信息源的连接：</p>
+<ul>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JDBCRealm" target="_blank" rel="noopener">JDBCRealm</a>——通过 JDBC 驱动器来访问保存在关系型数据库中的验证信息。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#DataSourceRealm" target="_blank" rel="noopener">DataSourceRealm</a>——访问保存在关系型数据库中的验证信息。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JNDIRealm" target="_blank" rel="noopener">JNDIRealm</a>——访问保存在 LDAP 目录服务器中的验证信息。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#UserDatabaseRealm" target="_blank" rel="noopener">UserDatabaseRealm</a>——访问存储在一个 UserDatabase JNDI 数据源中的认证信息，通常依赖一个 XML 文档（<code>conf/tomcat-users.xml</code>）。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#MemoryRealm" target="_blank" rel="noopener">MemoryRealm</a>——访问存储在一个内存中对象集合中的认证信息，通过 XML 文档初始化（<code>conf/tomcat-users.xml</code>）。</li>
+<li><a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#JAASRealm" target="_blank" rel="noopener">JAASRealm</a>——通过 Java 认证与授权服务（JAAS）架构来获取认证信息。</li>
+</ul>
+<p>另外，还可以编写自定义 <code>Realm</code> 实现，将其整合到 Tomcat 中，只需这样做：</p>
+<ul>
+<li>实现 <code>org.apache.catalina.Realm</code> 接口。</li>
+<li>将编译好的 realm 放到 $CATALINA_HOME/lib 中。</li>
+<li>声明自定义 realm，具体方法详见<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">“配置 Realm”一节</a>。</li>
+<li>在 MBeans 描述符文件中声明自定义realm。</li>
+</ul>
+<h3 id="配置-Realm"><a href="#配置-Realm" class="headerlink" title="配置 Realm"></a>配置 Realm</h3><p>在详细介绍标准 Realm 实现之前，简要了解 Realm 的配置方式是很关键的一步。大体来说，就是需要在<code>conf/server.xml</code> 配置文件中添加一个 XML 元素，如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;... class name for this implementation&quot;</span><br><span class="line">       ... other attributes for this implementation .../&gt;</span><br></pre></td></tr></table></figure>
+<p><code>&lt;Realm&gt;</code> 可以嵌入以下任何一种 <code>Container</code> 元素中。Realm 元素的位置至关重要，它会对 Realm 的“范围”（比如说哪个 Web 应用能够共享同一验证信息）有直接的影响。</p>
+<ul>
+<li><strong><engine> 元素</engine></strong> 内嵌入该元素中的这种 Realm 元素可以被<strong>所有</strong>虚拟主机上的<strong>所有</strong> Web 应用所共享，除非该 Realm 元素被内嵌入下属 <code>&lt;Host&gt;</code> 或 <code>&lt;Context&gt;</code> 元素的 Realm 元素所覆盖。</li>
+<li><strong><host> 元素</host></strong> 内嵌入该元素中的这种 Realm 元素可以被<strong>这一</strong>虚拟主机上的<strong>所有</strong> Web 应用所共享。除非该 Realm 元素被内嵌入下属 <code>&lt;Context&gt;</code> 元素的 Realm 元素所覆盖。</li>
+<li><strong><context> 元素</context></strong> 内嵌入该元素中的这种 Realm 元素<strong>只能</strong>被这一 Web 应用所使用。</li>
+</ul>
+<h2 id="常用特性"><a href="#常用特性" class="headerlink" title="常用特性"></a>常用特性</h2><h3 id="摘要式密码"><a href="#摘要式密码" class="headerlink" title="摘要式密码"></a>摘要式密码</h3><p>对于每种标准 <code>Realm</code> 实现来说，用户的密码默认都是以明文方式保存的。在很多情况下，这种方式都非常糟糕，即使是一般的用户也能收集到足够的验证信息，从而以其他用户的信息成功登录。为了避免这种情况的发生，标准 <code>Realm</code> 实现支持一种对用户密码进行<strong>摘要式处理</strong>的机制，它能以无法轻易破解的形式对存储的密码进行加密处理，同时保证<code>Realm</code> 实现仍能使用这种加密后的密码进行验证。</p>
+<p>在标准的 Realm 验证时，会将存储的密码与用户所提供的密码进行比对，这时，我们可以通过指定 <code>&lt;Realm&gt;</code> 元素中的 <code>digest</code> 属性来选择摘要式密码。该属性值必须是一种<code>java.security.MessageDigest</code> 类所支持的摘要式算法（SHA、MD2、或 MD5）。当你选择该属性值时，存储在 Realm 中的密码内容必须是明文格式，随后它将被你所指定的算法进行摘要式加密。</p>
+<p>在调用 Realm 的 <code>authenticate()</code> 方法后，用户所提供的明文密码同样也会利用上述你所指定的加密算法进行加密，加密结果与 Realm 的返回值相比较。如果两者相等，则表明原始密码的明文形式更用户所提供的密码完全等同，因此该用户身份验证成功。</p>
+<p>可以采用以下两种比较便利的方法来计算明文密码的摘要值：</p>
+<ul>
+<li>如果应用需要动态计算摘要式密码，调用 <code>org.apache.catalina.realm.RealmBase</code> 类的静态 <code>Digest()</code> 方法，传入明文密码和摘要式算法名称及字符编码方案。该方法返回摘要式密码。</li>
+<li>如果想执行命令行工具来计算摘要式密码，只需执行：<br><code>CATALINA_HOME/bin/digest.[bat|sh] -a {algorithm} {cleartext-password}</code><br>标准输出将返回明文密码的摘要式形式。</li>
+</ul>
+<p>如果使用 DIGEST 验证的摘要式密码，用来生成摘要密码的明文密码则将有所不同，而且必须使用一次不加盐的 MD5 算法。对应到上面的范例，那就是必须把 <code>{cleartext-password}</code> 替换成 <code>{username}:{realm}:{cleartext-password}</code>。再比如说，在一个开发环境中，可能采用这种形式：<code>testUser:Authentication required:testPassword</code>。<code>{realm}</code> 的值取自 Web 应用 <code>&lt;login-config&gt;</code> 的 <code>&lt;realm-name&gt;</code> 元素。如果没有在 web.xml 中指定，则使用默认的<code>Authentication required</code>。</p>
+<p>若要使用非平台默认编码的用户名和（或）密码，则命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CATALINA_HOME/bin/digest.[bat|sh] -a &#123;algorithm&#125; -e &#123;encoding&#125; &#123;input&#125;</span><br></pre></td></tr></table></figure>
+<p>但需要注意的是，一定要确保输入正确地传入摘要。摘要返回 <code>{input}:{digest}</code>。如果输入在返回时出现损坏，摘要则将无效。</p>
+<p>摘要的输出格式为 <code>{salt}${iterations}${digest}</code>。如果盐的长度为 0，迭代次数为 1，则输出将简化为 <code>{digest}</code>。</p>
+<p><code>CATALINA_HOME/bin/digest.[bat|sh]</code> 的完整格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CATALINA_HOME/bin/digest.[bat|sh] [-a &lt;algorithm&gt;] [-e &lt;encoding&gt;]</span><br><span class="line">        [-i &lt;iterations&gt;] [-s &lt;salt-length&gt;] [-k &lt;key-length&gt;]</span><br><span class="line">        [-h &lt;handler-class-name&gt;] &lt;credentials&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-a</code> 用来生成存储凭证的算法。如未指定，将使用凭证处理器（CredentialHandler）的默认值，如果认证处理器和算法均未指定，则使用默认值 <code>SHA-512</code>。</li>
+<li><code>-e</code> 指定用于任何必要的字节与字符间转换的字符编码方案。如未指定，使用系统默认的字符编码方案 <code>Charset#defaultCharset()</code>。</li>
+<li><code>-i</code> 生成存储的凭证时所使用的迭代次数。如未指定，使用 CredentialHandler 的默认值。</li>
+<li><code>-s</code> 生成并存储到认证中的盐的长度（字节）。如未指定，使用 CredentialHandler 的默认值。</li>
+<li><code>-k</code> （生成凭证时，如果随带创建了）键的长度（位）。如未指定，则使用 CredentialHandler 的默认值</li>
+<li><code>-h</code> CredentialHandler 使用的完整类名。如未指定，则轮流使用内建的凭证处理器（<code>MessageDigestCredentialHandler</code>，然后是 <code>SecretKeyCredentialHandler</code>），将使用第一个接受指定算法的凭证处理器。</li>
+</ul>
+<h3 id="范例应用"><a href="#范例应用" class="headerlink" title="范例应用"></a>范例应用</h3><p>Tomcat 自带的范例应用中包含一个受到安全限制保护的区域，使用表单式登录方式。为了访问它，在你的浏览器地址栏中输入 <code>http://localhost:8080/examples/jsp/security/protected/</code>，并使用 <a href="http://tomcat.apache.org/tomcat-8.0-doc/realm-howto.html#UserDatabaseRealm" target="_blank" rel="noopener">UserDatabaseRealm</a> 默认的用户名和密码进行登录。</p>
+<h3 id="Manager-应用"><a href="#Manager-应用" class="headerlink" title="Manager 应用"></a>Manager 应用</h3><p>如果你希望使用 Manager 应用在一个运行的 Tomcat 安装上来部署或取消部署 Web 应用，那么<strong>必须</strong>在一个选定的 Realm 实现上，将 <strong>manager-gui</strong> 角色添加到至少一个用户名上。这是因为 Manager 自身使用一个安全限制，要想在该应用的 HTML 界面中访问请求 URI，就必须要有 manager-gui 角色。</p>
+<p>出于安全性考虑，默认情况下，Realm 中的用户名（比如使用 <code>conf/tomcat-users.xml</code>）没有被分配 manager-gui 角色。因此，用户起初无法使用这个功能，除非 Tomcat 管理员特意将这一角色分配给他们。</p>
+<h3 id="Realm-日志"><a href="#Realm-日志" class="headerlink" title="Realm 日志"></a>Realm 日志</h3><p>Realm 的容器（Context、Host 及 Engine）所对应的日志配置文件将记录 <code>Realm</code> 所记录下的调试和异常信息。</p>
+<h2 id="标准-Realm-实现"><a href="#标准-Realm-实现" class="headerlink" title="标准 Realm 实现"></a>标准 Realm 实现</h2><h3 id="JDBCRealm"><a href="#JDBCRealm" class="headerlink" title="JDBCRealm"></a>JDBCRealm</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p><strong>JDBCRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，它通过 JDBC 驱动程序在关系型数据库中查找用户。只要数据库结构符合下列要求，你可以通过大量的配置来灵活地修改现有的表与列名。</p>
+<ul>
+<li><p>必须有一张<strong>用户表</strong>（<em>users table</em>）。它包含着一个由 <code>Realm</code> 所能识别的所有合法用户所构成的行。</p>
+</li>
+<li><p>用户表</p>
+<p>必须至少包含两列（当然，如果现有应用确实需要，则同样也可以包含更多的列）：</p>
+<ul>
+<li>用户名。当用户登录时，能被 Tomcat 识别的用户名。</li>
+<li>密码。当用户登录时，能被 Tomcat 所识别的密码。该列中的值可能是明文，也可能是摘要式密码，稍后详述。</li>
 </ul>
 </li>
-<li>xmlns:encodingStyle <ul>
-<li>此属性可出现在任何 SOAP 元素中，并会被应用到元素的内容及元素的所有子元素上。</li>
-<li>SOAP 没有默认编码方式 <a href="http://www.w3.org/2001/12/soap-encoding使用这个就好" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding使用这个就好</a></li>
-</ul>
+<li><p>必须有一张<strong>用户角色表</strong>（<em>user roles table</em>）。该表包含一个角色行，包含着可能指定给特定用户的每个合法角色。一个用户可以没有角色，也可以有一个或多个角色，这都是合法的。</p>
+</li>
+<li><p>用户角色表</p>
 </li>
 </ul>
-<p>之后我们就能用 soap 和 encodingStyle 属性</p>
-<h3 id="Header元素"><a href="#Header元素" class="headerlink" title="Header元素"></a>Header元素</h3><p>包含头部信息，一些SOAP/应用程序专用信息    比如认证 支付等</p>
-<p>如果使用header 它一定是第一个子元素</p>
-<p>所有 Header 元素的直接子元素必须是合格的命名空间</p>
-<p>soap在默认的命名空间中 (“<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a>) 定义了三个属性(有一个encodingStyle这里不废话 )这些被定义在 SOAP 头部的属性可定义容器如何对 SOAP 消息进行处理</p>
-<p>mustUnderstand 属性可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的</p>
-<p><code>soap:mustUnderstand=&quot;0|1&quot;</code></p>
-<p>SOAP信息可以沿着信息路径转发，actor用于寻址到下一个特点端点</p>
-<p><code>soap:actor=&quot;URI&quot;</code></p>
-<h3 id="Body元素"><a href="#Body元素" class="headerlink" title="Body元素"></a>Body元素</h3><p>soap的body元素的子元素可以引入合格的命名空间</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 比如下面使用m的getPrice属性，它首先要引入 命名空间m  xmlns:m="xxx" --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Getprice</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.xxxx.com/prices"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">m:item</span>&gt;</span>Apples<span class="tag">&lt;/<span class="name">m:item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">m:Getprice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Fault元素"><a href="#Fault元素" class="headerlink" title="Fault元素"></a>Fault元素</h3><p>Fault一定是Body的子元素，在一条soap内，fault只能出现一次，它用于指示body的错误</p>
-<p>fault拥有子元素</p>
+<p>  至少应包含两列（如果现有应用确实需要，则也可以包含更多的列）：</p>
 <ul>
-<li><code>&lt;faultcode&gt;</code>用来识别错误的代码</li>
-<li><code>&lt;faultstring&gt;</code>错误说明</li>
-<li><code>&lt;faultactor&gt;</code> 谁引发的错误</li>
-<li><code>&lt;detail&gt;</code> 涉及body元素的应用程序专用错误信息</li>
+<li>用户名。Tomcat 所能识别的用户名（与用户表中指定的值相同）。</li>
+<li>用户所对应的合法角色名。</li>
 </ul>
-<p>faultcode 有几个错误代码</p>
+<h4 id="快速入门-1"><a href="#快速入门-1" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了设置 Tomcat 从而使用 JDBCRealm，需要执行以下步骤：</p>
 <ol>
-<li>versionMismatch envelop元素的无效的命名空间</li>
-<li>MustUnderstand 这是之前header元素中设置了 mustunderstand 的时候出现的错误可能会出现  无法理解</li>
-<li>Client 消息被不正确地构成，或包含不正确的信息</li>
-<li>Server 服务有问题，因此无法处理进行</li>
+<li>在数据库中创建符合上述规范的表与列。</li>
+<li>配置一个 Tomcat 使用的数据库用户名与密码，并且至少有只读权限（Tomcat 永远都不会去修改那些表中的数据）。</li>
+<li>将用到的 JDBC 驱动程序复制到 <code>$CATALINA_HOME/lib</code> 目录中。注意<strong>只能</strong>识别 JAR 文件！</li>
+<li>在 <code>$CATALINA_BASE/conf/server.xml</code> 目录中设置一个 <code>&lt;Realm&gt;</code> 元素。这一点下文将会详细叙述。</li>
+<li>如果 Tomcat 处于运行状态，则重启它。</li>
 </ol>
-<h3 id="HTTP-XML-SOAP"><a href="#HTTP-XML-SOAP" class="headerlink" title="HTTP + XML = SOAP"></a>HTTP + XML = SOAP</h3><p>好像传输soap 需要在contentType上说明</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: application/soap+xml; charset=utf-8</span><br></pre></td></tr></table></figure>
-<h2 id="一个-SOAP-实例"><a href="#一个-SOAP-实例" class="headerlink" title="一个 SOAP 实例"></a>一个 SOAP 实例</h2><p>在下面的例子中，一个 GetStockPrice 请求被发送到了服务器。此请求有一个 StockName 参数，而在响应中则会返回一个 Price 参数。此功能的命名空间被定义在此地址中： “<a href="http://www.example.org/stock&quot;" target="_blank" rel="noopener">http://www.example.org/stock&quot;</a></p>
-<h3 id="SOAP-请求："><a href="#SOAP-请求：" class="headerlink" title="SOAP 请求："></a>SOAP 请求：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /InStock HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:StockName</span>&gt;</span>IBM<span class="tag">&lt;/<span class="name">m:StockName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="SOAP-响应："><a href="#SOAP-响应：" class="headerlink" title="SOAP 响应："></a>SOAP 响应：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Price</span>&gt;</span>34.5<span class="tag">&lt;/<span class="name">m:Price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/RDF教程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/RDF教程/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>RDF 资源描述框架 是描述网络资源的W3C标准 </p>
-<p>比如对网页的标题、作者、修改日期、内容以及版权信息</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:si</span>=<span class="string">"http://www.runoob.com/rdf/"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://www.runoob.com"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:title</span>&gt;</span>RUNOOB<span class="tag">&lt;/<span class="name">si:title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">si:author</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>用xml编写</p>
-<p>RDF是W3C的语义网活动的组成部分，</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">RDF</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Description</span> <span class="attr">about</span>=<span class="string">"http://www.runoob.com/rdf"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">homepage</span>&gt;</span>http://www.runoob.com<span class="tag">&lt;/<span class="name">homepage</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>RDF 描述的东西叫资源 资源是拥有 URI 的任何事物   比如 地址是”<a href="http://www.runoob.com/rdf&quot;的一个java文件" target="_blank" rel="noopener">http://www.runoob.com/rdf&quot;的一个java文件</a></p>
-<p>然后标记的属性 就用键值对咯，标签名作为键   标签体作为值</p>
-<p>RDF的描述，可以变成一个个描述句</p>
-<p>陈述：”The homepage of <a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a> is <a href="http://www.runoob.com&quot;" target="_blank" rel="noopener">http://www.runoob.com&quot;</a>.</p>
+<h4 id="Realm-元素属性"><a href="#Realm-元素属性" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>如上所述，为了配置 JDBCRealm，需要创建一个 <code>Realm</code> 元素，并把它放在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中。JDBCRealm 的属性都定义在 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm</a> 配置文档中。</p>
+<h4 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h4><p>下面这个 SQL 脚本范例创建了我们所需的表（根据你所用的数据库，可以相应修改其中的语法）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table users (</span><br><span class="line">  user_name         varchar(15) not null primary key,</span><br><span class="line">  user_pass         varchar(15) not null</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table user_roles (</span><br><span class="line">  user_name         varchar(15) not null,</span><br><span class="line">  role_name         varchar(15) not null,</span><br><span class="line">  primary key (user_name, role_name)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p><code>Realm</code> 元素包含在默认的 <code>$CATALINA_BASE/conf/server.xml</code> 文件中（被注释掉了）。在下面的范例中，有一个名为 authority 的数据库，它包含上述创建的表，通过用户名“dbuser”和密码“dbpass”进行访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.JDBCRealm&quot;</span><br><span class="line">      driverName=&quot;org.gjt.mm.mysql.Driver&quot;</span><br><span class="line">   connectionURL=&quot;jdbc:mysql://localhost/authority?user=dbuser&amp;amp;password=dbpass&quot;</span><br><span class="line">       userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">   userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="特别注意事项"><a href="#特别注意事项" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>JDBCRealm 必须遵循以下规则：</p>
 <ul>
-<li>陈述的主体是：<a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a></li>
-<li>谓语是：homepage</li>
-<li>客体是：<a href="http://www.runoob.com" target="_blank" rel="noopener">http://www.runoob.com</a></li>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
 </ul>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:cd</span>=<span class="string">"http://www.recshop.fake/cd#"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Hide your heart"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bonnie Tyler<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>UK<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>CBS Records<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>9.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1988<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里使用命名空间，命名空间的定义在开头根元素的 xmlns:rdf=”xxxx”等  开始定义</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span>&gt;</span></span><br><span class="line">  ...Description goes here...</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这个网址是不是潜规则一定要引入的呢？我觉得应该是的。官方默认的标准把？</p>
-<p><code>&lt;rdf:Description&gt;</code> 元素可包含描述资源的那些元素：</p>
-<p>但其实里面的描述，就需要这个资源专门的描述 需要专门的命名空间了</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者下面用属性的方式定义--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:artist</span>=<span class="string">"Bob Dylan"</span> <span class="attr">cd:country</span>=<span class="string">"USA"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:company</span>=<span class="string">"Columbia"</span> <span class="attr">cd:price</span>=<span class="string">"10.90"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:year</span>=<span class="string">"1985"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者引入资源   下面的例子中，属性 artist 没有值，但是却引用了一个对包含有关艺术家的信息的资源。--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:resource</span>=<span class="string">"http://www.recshop.fake/cd/dylan"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="RDF容器元素"><a href="#RDF容器元素" class="headerlink" title="RDF容器元素"></a>RDF容器元素</h3><p>容器用来描述一组相同事物 比如某本书的多位作者放在一起</p>
-<h2 id="rdf-Bag-rdf-seq-rdf-alt元素"><a href="#rdf-Bag-rdf-seq-rdf-alt元素" class="headerlink" title="rdf:Bag rdf:seq rdf:alt元素"></a>rdf:Bag rdf:seq rdf:alt元素</h2><p><code>&lt;rdf:Bag&gt;</code>元素用于描述一个规定为无序的值的列表。</p>
-<p><code>&lt;rdf:Bag&gt;</code>元素可包含重复的值。</p>
-<p><code>&lt;rdf:li&gt;</code>作为其子元素</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>John<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Paul<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>George<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Ringo<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><code>&lt;rdf:Seq&gt;</code> 元素用于描述一个规定为有序的值的列表（比如一个字母顺序的排序）</p>
-<p>子元素还是 <code>&lt;rdf:li&gt;</code></p>
-<p><code>&lt;rdf:Alt&gt;</code> 元素用于一个可替换的值的列表（用户仅可选择这些值的其中之一）。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Descriptio</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:format</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>CD<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Record<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Tape<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:format</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Descriptio</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在 RDF 中，这些”值的列表”被称为成员（members）。</p>
-<p>因此，我们可以这么说：</p>
+<h3 id="DataSourceRealm"><a href="#DataSourceRealm" class="headerlink" title="DataSourceRealm"></a>DataSourceRealm</h3><h4 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h4><p><strong>DataSourceRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，它通过一个 JNDI 命名的 JDBC 数据源在关系型数据库中查找用户。只要数据库结构符合下列要求，你可以通过大量的配置来灵活地修改现有的表与列名。</p>
 <ul>
-<li>一个容器是一个包含事物的资源</li>
-<li>被包含的事物被称为成员（不能称为”值的列表”）。</li>
+<li><p>必须有一张<strong>用户表</strong>（<em>users table</em>）。它包含着一个由 <code>Realm</code> 所能识别的所有合法用户所构成的行。</p>
+</li>
+<li><p>用户表</p>
+<p>必须至少包含两列（当然，如果现有应用确实需要，则同样也可以包含更多的列）：</p>
+<ul>
+<li>用户名。当用户登录时，能被 Tomcat 识别的用户名。</li>
+<li>密码。当用户登录时，能被 Tomcat 所识别的密码。该列中的值可能是明文，也可能是摘要式密码，稍后详述。</li>
 </ul>
-<p>我们无法关闭一个容器。容器规定了所包含的资源为成员 - 它没有规定其他的成员是不被允许的。</p>
-<h2 id="RDF-集合"><a href="#RDF-集合" class="headerlink" title="RDF 集合"></a>RDF 集合</h2><p>RDF 集合用于描述仅包含指定成员的组。</p>
-<p>集合是通过属性 rdf:parseType=”Collection” 来描述的。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:parseType</span>=<span class="string">"Collection"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/George"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/John"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Paul"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Ringo"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/post的参数的一般获取/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/post的参数的一般获取/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>post的参数的获取  我们通常是用request.parameter去获得参数  然而这个参数必须是get方法获得的 如果是post传递的参数</p>
-<p>这时候用request.parameter去获取就不能获取的。这时候要用输入流取获得 虽然我没用过</p>
-<p>因为我post普通的文本信息的时候是用在图片上传的地方，这时候我可以用那里的jar包顺便处理文本信息</p>
-<p>倘若不用第三方包，我看到网上提供了一个方法</p>
-<p>是用来提供一般解决方式的</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpUtil</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title">httpProcess</span><span class="params">(HtttpServlet request,HttpServletResponse response)</span> <span class="keyword">throws</span> IOException, JSONException</span>&#123;</span><br><span class="line">        StringBuffer sb=<span class="keyword">new</span> StringBuffer();</span><br><span class="line">        InputStream is=request.getIputStream();</span><br><span class="line">        BufferedReader br =<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(is,<span class="string">"utf-8"</span>));</span><br><span class="line">        String s=<span class="string">""</span>;</span><br><span class="line">        <span class="keyword">while</span>((s.br.readline())!==<span class="keyword">null</span>)&#123;</span><br><span class="line">            sb.appead(s);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sb.toString().length()&lt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> JSONObject(sb.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用的时候</span></span><br><span class="line"></span><br><span class="line">JSONObject js=HTTPUtil.httpProcess(request,response);</span><br><span class="line"><span class="keyword">if</span>(is==<span class="keyword">null</span>)&#123;</span><br><span class="line">    out.print(<span class="string">"no parameter"</span>);</span><br><span class="line">&#125;</span><br><span class="line">String deparmentid=js.optString(<span class="string">"departmentid"</span>);</span><br><span class="line">String telphone=js.optString(<span class="string">"telphone"</span>);</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Python生成器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/22/Python生成器/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="生成器概念"><a href="#生成器概念" class="headerlink" title="生成器概念"></a>生成器概念</h2><p>生成器是一次生成一个值的<code>特殊类型函数</code>。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。<br> 包含yield关键字的函数可以理解是一个用函数名表示的另类<code>list对象</code>，通过迭代的方式（例如：for）依次获取结果。</p>
-<h2 id="生成器的特点"><a href="#生成器的特点" class="headerlink" title="生成器的特点"></a>生成器的特点</h2><ol>
-<li>记录执行函数内的所有变量状态（数据）和代码执行位置。</li>
-<li>立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。</li>
+</li>
+<li><p>必须有一张<strong>用户角色表</strong>（<em>user roles table</em>）。该表包含一个角色行，包含着可能指定给特定用户的每个合法角色。一个用户可以没有角色，也可以有一个或多个角色，这都是合法的。</p>
+</li>
+<li><p>用户角色表</p>
+</li>
+</ul>
+<p>  至少应包含两列（如果现有应用确实需要，则也可以包含更多的列）：</p>
+<ul>
+<li>用户名。Tomcat 所能识别的用户名（与用户表中指定的值相同）。</li>
+<li>用户所对应的合法角色名。</li>
+</ul>
+<h4 id="快速入门-2"><a href="#快速入门-2" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了设置 Tomcat 从而使用 DataSourceRealm，需要执行以下步骤：</p>
+<ol>
+<li>在数据库中创建符合上述规范的表与列。</li>
+<li>配置一个 Tomcat 使用的数据库用户名与密码，并且至少有只读权限（Tomcat 永远都不会去修改那些表中的数据）。</li>
+<li>为数据库配置一个 JNDI 命名的 JDBC DataSource。详情可参考<a href="http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html" target="_blank" rel="noopener">JNDI DataSource Example HOW-TO》应该链接至相应中文页面》</a>。</li>
+<li>在 <code>$CATALINA_BASE/conf/server.xml</code> 目录中设置一个 <code>&lt;Realm&gt;</code> 元素。这一点下文将会详细叙述。</li>
+<li>如果 Tomcat 处于运行状态，则重启它。</li>
 </ol>
-<h2 id="认识生成器"><a href="#认识生成器" class="headerlink" title="认识生成器"></a>认识生成器</h2><p>下来让我们一起来看看如何使用yield，先通过一个简单的例子认识生成器。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addlist</span><span class="params">(alist)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> alist:</span><br><span class="line">        <span class="comment"># yield与return功能类似，返回本次迭代结果   </span></span><br><span class="line">        <span class="keyword">yield</span> i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">alist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> addlist(alist):</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
-<p>根据addlist()函数实现可以推断出addlist(alist)相当于一个值为[2, 3, 4, 5]的list，不过迭代调用时以函数表达式的形式出现在for语句中。<br> 使用”list变量”（实际为函数变量，此处可以理解为list）替代addlist(alist)作为for的参数，执行结果相同，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_one_list = addlist(alist)</span><br><span class="line">for x in add_one_list:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
-<h2 id="生成器执行过程"><a href="#生成器执行过程" class="headerlink" title="生成器执行过程"></a>生成器执行过程</h2><p>到底yield是如何执行的呢？生成器（函数）的执行逻辑到底是什么样子？<br> 让我们一起来写个demo进行分析。</p>
-<blockquote>
-<p>next()函数<br>   用于移动迭代器指向下一个数据，直到抛出StopIteration，代表迭代终止。</p>
-</blockquote>
-<p>定义函数yield_run_logic()，对一个已经初始化变量a，多次调用，同在yield前后输出日志，用于分析执行逻辑。然后再一个while(1)的死循环中使用next()方法遍历生成器，直到抛出停止迭代异常跳出循环（StopIteration）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def yield_run_logic():</span><br><span class="line">    a = 1</span><br><span class="line">    for i in range(3):</span><br><span class="line">        print(&apos;begin yield&apos;)</span><br><span class="line">        yield a</span><br><span class="line">        print(&apos;end yield&apos;)</span><br><span class="line">        a += i</span><br><span class="line"></span><br><span class="line"># 获取生成器对象</span><br><span class="line">yield_obj = yield_run_logic()</span><br><span class="line"># 此时只是获取对象，尚未执行yield_run_logic()的内容，直到第一调用next()\</span><br><span class="line">while 1:</span><br><span class="line">    try:</span><br><span class="line">        ret = next(yield_obj)</span><br><span class="line">        # 第一次调用next()方法，开始执行yield_run_logic()，直到遇到yield关键字，返回当前结果，</span><br><span class="line">        # yield_run_logic()保留当前执行状态和代码执行位置，当下次执行next()时，</span><br><span class="line">        # yield_run_logic()从上次保留的继续执行，直到遇到yield关键字。</span><br><span class="line">        # yield_run_logic()无迭代数据时，抛出StopIteration异常，表示迭代结束。</span><br><span class="line">        print(ret)</span><br><span class="line">    except StopIteration:</span><br><span class="line">        print(&apos;end test&apos;)</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 第1次执行输出 a = 1, i = 0</span><br><span class="line">begin yield</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 第2次执行输出 a = 1, i = 1</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"># 第3次执行输出 a = 2, i = 2</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">4</span><br><span class="line"></span><br><span class="line"># 第4次执行</span><br><span class="line">end yield # yield_run_logic()中 i 超过range(3)的范围，结束迭代，</span><br><span class="line">          # 由于使用next()而并非使用for来迭代生成器，所以迭代结束异常需要自己处理。</span><br><span class="line">end test</span><br></pre></td></tr></table></figure>
-<p>根据输出结果可以看出，在第一次执行next()时，生成器yield_run_logic()开始执行，打印’begin yield’，并在<code>yield a</code>处返回结果，之后再执行next()都是从<code>yield a</code>之后开始执行（打印’end yield’），直到循环中再次遇到<code>yield a</code>时返回。</p>
-<p><strong>总结</strong> yield的执行逻辑。</p>
-<blockquote>
-<p><strong>第一次获取迭代结果，函数的第一行代码执行到yield关键字返回，第[2,n]次迭代结果，函数执行从yield关键字下一行代码到再次碰到yield关键字返回。</strong></p>
-</blockquote>
-<h2 id="yield的应用场景"><a href="#yield的应用场景" class="headerlink" title="yield的应用场景"></a>yield的应用场景</h2><p>凡是本次处理使用上次处理结果作为基础数据的逻辑实现，都可以考虑使用生成器。</p>
-<p><strong>练习1：打印杨辉三角</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">          1</span><br><span class="line">        1   1</span><br><span class="line">      1   2   1</span><br><span class="line">    1   3   3   1</span><br><span class="line">  1   4   6   4   1</span><br><span class="line">1   5   10  10  5   1</span><br></pre></td></tr></table></figure>
-<p><strong>特征分析</strong>：从第三行开始每一行的非边界数字等于上一行相邻两数字之和，边界数字全部为1。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pascals_triangle</span><span class="params">(line_count)</span>:</span></span><br><span class="line">    up_line = []</span><br><span class="line">    line = []</span><br><span class="line">    <span class="comment"># i取值范围[0, line_count-1]</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(line_count):</span><br><span class="line">        <span class="comment"># 扩展当前行列表长度，初始化数据为1，并且保证边界数据为1</span></span><br><span class="line">        line.append(<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 1,2行全部是1，3行开始体现特征，需要进行特征处理</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 当前行[1, n-1]的值等于上一行[0, n-2]与[1, n-1]的和</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(up_line)):</span><br><span class="line">                line[j] = up_line[j<span class="number">-1</span>] + up_line[j]</span><br><span class="line">        <span class="comment"># 返回当前行</span></span><br><span class="line">        <span class="keyword">yield</span> line</span><br><span class="line">        <span class="comment"># 更新上一行记录结果，保存当前行</span></span><br><span class="line">        up_line = line[:]</span><br><span class="line"></span><br><span class="line">lines = <span class="number">6</span></span><br><span class="line">fn = pascals_triangle(lines)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fn:</span><br><span class="line">    print(line)</span><br></pre></td></tr></table></figure>
-<p>函数执行结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1]</span><br><span class="line">[1, 1]</span><br><span class="line">[1, 2, 1]</span><br><span class="line">[1, 3, 3, 1]</span><br><span class="line">[1, 4, 6, 4, 1]</span><br><span class="line">[1, 5, 10, 10, 5, 1]</span><br></pre></td></tr></table></figure>
-
+<h4 id="范例-1"><a href="#范例-1" class="headerlink" title="范例"></a>范例</h4><p>下面这个 SQL 脚本范例创建了我们所需的表（根据你所用的数据库，可以相应修改其中的语法）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table users (</span><br><span class="line">  user_name         varchar(15) not null primary key,</span><br><span class="line">  user_pass         varchar(15) not null</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table user_roles (</span><br><span class="line">  user_name         varchar(15) not null,</span><br><span class="line">  role_name         varchar(15) not null,</span><br><span class="line">  primary key (user_name, role_name)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>在下面的范例中，有一个名为 authority 的 MySQL 数据库，它包含上述创建的表，通过名为 “<code>java:/comp/env/jdbc/authority</code>” 的 JNDI 命名的 JDBC 数据源来访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.DataSourceRealm&quot;</span><br><span class="line">   dataSourceName=&quot;jdbc/authority&quot;</span><br><span class="line">   userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">   userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="特别注意事项-1"><a href="#特别注意事项-1" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 DataSourceRealm 时必须遵守下列规则：</p>
+<ul>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
+</ul>
+<h3 id="JNDIRealm"><a href="#JNDIRealm" class="headerlink" title="JNDIRealm"></a>JNDIRealm</h3><h4 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h4><p><strong>JNDIRealm</strong> 是 Tomcat <code>Realm</code> 接口的一种实现，通过一个 JNDI 提供者1在 LDAP 目录服务器中查找用户。realm 支持大量的方法来使用认证目录。</p>
+<p>通常是可以使用 JNDI API 类的标准 LDAP 提供者。</p>
+<h5 id="a-连接目录"><a href="#a-连接目录" class="headerlink" title="a. 连接目录"></a>a. 连接目录</h5><p>realm 与目录服务器的连接是通过 <strong>connectionURL</strong> 配置属性来定义的。这个 URL 的格式是通过 JNDI 提供者来定义的。它通常是个 LDAP URL，指定了所要连接的目录服务器的域名，另外还（可选择）指定了所需的根命名上下文的端口和唯一名称（DN）。</p>
+<p>如果有多个提供者，则可以配置 <strong>alternateURL</strong>。如果一个套接字连接无法传递给提供者 <strong>connectionURL</strong>，则会换用 <strong>alternateURL</strong>。</p>
+<p>当通过创建连接来搜索目录，获取用户及角色信息时，realm 会利用 <strong>connectionName</strong> 和 <strong>connectionPassword</strong>这两个属性所指定的用户名和密码在目录上进行自我认证。如果未指定这两个属性，则创立的连接是匿名连接，这种连接适用于大多数情况。</p>
+<h5 id="b-选择用户目录项"><a href="#b-选择用户目录项" class="headerlink" title="b. 选择用户目录项"></a>b. 选择用户目录项</h5><p>在目录中，每个可被认证的用户都必须表示为独立的项，这种独立项对应着由属性 <strong>connectionURL</strong> 定义的初始 <code>DirContext</code> 中的元素。这种用户项必须有一个包含认证所需用户名的属性。</p>
+<p>每个用户项的唯一性名称（DN）通常含有用于认证的用户名。在这种情况下，<strong>userPattern</strong> 属性可以用来指定 DN，其中的 <code>{0}</code> 代表用户名应该被替换的位置。</p>
+<p>realm 必须搜索目录来寻找一个包含用户名的唯一项，可用下列属性来配置搜索：</p>
+<ul>
+<li><strong>userBase</strong> 用户子树的基准项。如果未指定，则搜索基准为顶级元素。</li>
+<li><strong>userSubtree</strong> 用户子树，也就是搜索范围。如果希望搜索以<strong>userBase</strong> 项为基准的整个子树，则使用 <code>true</code>；默认值为 <code>false</code>，只对顶级元素进行搜索。</li>
+<li><strong>userSearch</strong> 指定替代用户名之后所使用的 LDAP 搜索过滤器的模式。</li>
+</ul>
+<h5 id="c-用户认证"><a href="#c-用户认证" class="headerlink" title="c. 用户认证"></a>c. 用户认证</h5><ul>
+<li><p><strong>绑定模式</strong></p>
+<p>默认情况下，realm 会利用用户项的 DN 与用户所提供的密码，将用户绑定到目录上。如果成功执行了这种简单的绑定，那么就可以认为用户认证成功。</p>
+<p>出于安全考虑，目录可能保存的是用户的摘要式密码，而非明文密码（参看<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#digestedPass" target="_blank" rel="noopener">摘要式密码</a>以获知详情）。在这种情况下，在绑定过程中，目录会自动将用户所提供的明文密码加密为正确的摘要式密码，以便后续和存储的摘要式密码进行比对。然而在绑定过程中，realm 并不参与处理摘要式密码。不会用到 <strong>digest</strong> 属性，如果设置了该属性，也会被自动忽略。</p>
+</li>
+<li><p><strong>对比模式</strong></p>
+<p>另外一种方法是，realm 从目录中获取存储的密码，然后将其与用户所提供的值进行比对。配置方法是，在包含密码的用户项中，将 <strong>userPassword</strong> 属性设为目录属性名。</p>
+<p>对比模式的缺点在于：首先，<code>connectionName</code> 和 <code>connectionPassword</code> 属性必须配置成允许 realm 读取目录中的用户密码。出于安全考虑，这是一种不可取的做法。事实上，很多目录实现甚至都不允许目录管理器读取密码。其次，realm 必须自己处理摘要式密码，包括要设置所使用的具体算法、在目录中表示密码散列值的方式。但是，realm 可能有时又要访问存储的密码，比如为了支持 HTTP 摘要式访问认证（HTTP Digest Access Authentication，RFC 2069）。（注意，HTTP 摘要式访问认证不同于之前讨论过的在库中存储密码摘要的方式。）</p>
+</li>
+</ul>
+<h5 id="d-赋予用户角色"><a href="#d-赋予用户角色" class="headerlink" title="d. 赋予用户角色"></a>d. 赋予用户角色</h5><p>Realm 支持两种方法来表示目录中的角色：</p>
+<ul>
+<li><p><strong>将角色显式表示为目录项</strong></p>
+<p>通过明确的目录项来表示角色。角色项通常是一个 LDAP 分组项，该分组项的一个属性包含角色名称，另一属性值则是拥有该角色的用户的 DN 名或用户名。下列属性配置了一个目录搜索来寻找与认证用户相关的角色名。</p>
+<ul>
+<li><strong>roleBase</strong> 角色搜索的基准项。如未指定，则基准项为顶级目录上下文。</li>
+<li><strong>roleSubtree</strong> 搜索范围。如果希望搜索以 <code>roleBase</code> 为基准项的整个子树，则设为 <code>true</code>。默认值为 <code>false</code>，请求一个只包含顶级元素的单一搜索。</li>
+<li><strong>roleSearch</strong> 用于选择角色项的 LDAP 搜索过滤器。它还可以（可选择）包含用于唯一名称的模式替换 <code>{0}</code>、用户名的模式替换 <code>{1}</code>，以及用户目录项属性的模式替换 <code>{2}</code>。使用 <strong>userRoleAttribute</strong> 来指定提供 <code>{2}</code> 值的属性名。</li>
+<li><strong>roleName</strong> 包含角色名称的角色项属性。</li>
+<li><strong>roleNested</strong> 启用内嵌角色。如果希望在角色中内嵌角色，则设为 <code>true</code>。如果配置了该属性，每一个新近找到的 roleName 和 DN 都将用于递归式的新角色搜索。默认值为 <code>false</code>。</li>
+</ul>
+</li>
+<li><p><strong>将角色表示为用户项属性</strong></p>
+<p>将角色名称保存为用户目录项中的一个属性值。使用 <strong>userRoleName</strong> 来指定该属性名称。</p>
+</li>
+</ul>
+<p>当然，也可以综合使用这两种方法来表示角色。</p>
+<h4 id="快速入门-3"><a href="#快速入门-3" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了配置 Tomcat 使用 JNDIRealm，需要下列步骤：</p>
+<ol>
+<li>确保目录服务器配置中的模式符合上文所列出的要求。</li>
+<li>必要时可以为 Tomcat 配置一个用户名和密码，对上文所提到的信息用于只读访问权限（Tomcat 永远不会修改该信息。）</li>
+<li>按照下文的方法，在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中设置一个 <code>&lt;Realm&gt;</code> 元素。</li>
+<li>如果 Tomcat 已经运行，则重启它。</li>
+</ol>
+<h4 id="Realm-元素属性-1"><a href="#Realm-元素属性-1" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>如上所述，为了配置 JDBCRealm，需要创建一个 <code>Realm</code> 元素，并把它放在 <code>$CATALINA_BASE/conf/server.xml</code> 文件中。JDBCRealm 的属性都定义在 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm</a> 配置文档中。</p>
+<h4 id="范例-2"><a href="#范例-2" class="headerlink" title="范例"></a>范例</h4><p>在目录服务器上创建适合的模式超出了本文档的讲解范围，因为这是跟每个目录服务器的实现密切相关的。在下面的实例中，我们将假定使用的是 OpenLDAP 目录服务器的一个分发版（2.0.11 版或更新版本，可从<a href="http://www.openldap.org/" target="_blank" rel="noopener">http://www.openldap.org</a>处下载）。假设 <code>slapd.conf</code> 文件包含下列设置（除了其他设置之外）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">database ldbm</span><br><span class="line">suffix dc=&quot;mycompany&quot;,dc=&quot;com&quot;</span><br><span class="line">rootdn &quot;cn=Manager,dc=mycompany,dc=com&quot;</span><br><span class="line">rootpw secret</span><br></pre></td></tr></table></figure>
+<p>我们还假定 <code>connectionURL</code>，使目录服务器与 Tomcat 运行在同一台机器上。要想了解如何配置及使用 JNDI LDAP 提供者的详细信息，请参看 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/jndi/index.html" target="_blank" rel="noopener">http://docs.oracle.com/javase/7/docs/technotes/guides/jndi/index.html</a>。</p>
+<p>接下来，假定利用如下所示的元素（以 LDIF 格式）来填充目录服务器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"># Define top-level entry</span><br><span class="line">dn: dc=mycompany,dc=com</span><br><span class="line">objectClass: dcObject</span><br><span class="line">dc:mycompany</span><br><span class="line"></span><br><span class="line"># Define an entry to contain people</span><br><span class="line"># searches for users are based on this entry</span><br><span class="line">dn: ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: people</span><br><span class="line"></span><br><span class="line"># Define a user entry for Janet Jones</span><br><span class="line">dn: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: jjones</span><br><span class="line">sn: jones</span><br><span class="line">cn: janet jones</span><br><span class="line">mail: j.jones@mycompany.com</span><br><span class="line">userPassword: janet</span><br><span class="line"></span><br><span class="line"># Define a user entry for Fred Bloggs</span><br><span class="line">dn: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: fbloggs</span><br><span class="line">sn: bloggs</span><br><span class="line">cn: fred bloggs</span><br><span class="line">mail: f.bloggs@mycompany.com</span><br><span class="line">userPassword: fred</span><br><span class="line"></span><br><span class="line"># Define an entry to contain LDAP groups</span><br><span class="line"># searches for roles are based on this entry</span><br><span class="line">dn: ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: organizationalUnit</span><br><span class="line">ou: groups</span><br><span class="line"></span><br><span class="line"># Define an entry for the &quot;tomcat&quot; role</span><br><span class="line">dn: cn=tomcat,ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: groupOfUniqueNames</span><br><span class="line">cn: tomcat</span><br><span class="line">uniqueMember: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">uniqueMember: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br><span class="line"></span><br><span class="line"># Define an entry for the &quot;role1&quot; role</span><br><span class="line">dn: cn=role1,ou=groups,dc=mycompany,dc=com</span><br><span class="line">objectClass: groupOfUniqueNames</span><br><span class="line">cn: role1</span><br><span class="line">uniqueMember: uid=fbloggs,ou=people,dc=mycompany,dc=com</span><br></pre></td></tr></table></figure>
+<p>OpenLDAP 服务器。假定用户使用他们的 uid（比如说 jjones）登录应用，匿名连接已经足够可以搜索目录并获取角色信息了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">       userPattern=&quot;uid=&#123;0&#125;,ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+<p>利用这种配置，通过在 <code>userPattern</code> 替换用户名，realm 能够确定用户的 DN，然后利用这个 DN 和取自用户的密码将用户绑定到目录中，从而验证用户身份，然后搜索整个目录服务器来找寻用户角色。</p>
+<p>现在假定希望用户输入电子邮件地址（而不是用户 id）。在这种情况下，realm 必须搜索目录找到用户项。当用户项被保存在多个子树中，而这些子树可能分别对应不同的组织单位或企业位置时，可能必须执行一个搜索。</p>
+<p>另外，假设除了分组项之外，你还想用用户项的属性来保存角色，那么在这种情况下，Janet Jones 对应的项可能如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">dn: uid=jjones,ou=people,dc=mycompany,dc=com</span><br><span class="line">objectClass: inetOrgPerson</span><br><span class="line">uid: jjones</span><br><span class="line">sn: jones</span><br><span class="line">cn: janet jones</span><br><span class="line">mail: j.jones@mycompany.com</span><br><span class="line">memberOf: role2</span><br><span class="line">memberOf: role3</span><br><span class="line">userPassword: janet</span><br></pre></td></tr></table></figure>
+<p>这个 realm 配置必须满足以下新要求：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">          userBase=&quot;ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">        userSearch=&quot;(mail=&#123;0&#125;)&quot;</span><br><span class="line">      userRoleName=&quot;memberOf&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+<p>当 Janet Jones 用她的电子邮件 <a href="mailto:`j.jones@mycompany.com" target="_blank" rel="noopener">`j.jones@mycompany.com</a><code>登录时，realm 会搜索目录，寻找带有该电邮值的唯一项，并尝试利用给定密码来绑定到目录：</code>uid=jjones,ou=people,dc=mycompany,dc=com<code>。如果验证成功，该用户将被赋予以下三个角色：&quot;role2&quot; 与 &quot;role3&quot;，她的目录项中的</code>memberOf<code>属性值；&quot;tomcat&quot;，她作为成员存在的唯一分组项中的</code>cn` 属性值。</p>
+<p>最后，为了验证用户，我们必须从目录中获取密码并在 realm 中执行本地比对，将 realm 按照如下方式来配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm   className=&quot;org.apache.catalina.realm.JNDIRealm&quot;</span><br><span class="line">    connectionName=&quot;cn=Manager,dc=mycompany,dc=com&quot;</span><br><span class="line">connectionPassword=&quot;secret&quot;</span><br><span class="line">     connectionURL=&quot;ldap://localhost:389&quot;</span><br><span class="line">      userPassword=&quot;userPassword&quot;</span><br><span class="line">       userPattern=&quot;uid=&#123;0&#125;,ou=people,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleBase=&quot;ou=groups,dc=mycompany,dc=com&quot;</span><br><span class="line">          roleName=&quot;cn&quot;</span><br><span class="line">        roleSearch=&quot;(uniqueMember=&#123;0&#125;)&quot;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
+<p>但是，正如之前所讨论的那样，往往应该优先考虑默认的绑定模式。</p>
+<h4 id="特别注意事项-2"><a href="#特别注意事项-2" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 JNDIRealm 需要遵循以下规则：</p>
+<ul>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法，从而使任何对数据库的即时修改（新用户、密码或角色改变，等等）都能立即生效。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
+</ul>
+<h3 id="UserDatabaseRealm"><a href="#UserDatabaseRealm" class="headerlink" title="UserDatabaseRealm"></a>UserDatabaseRealm</h3><p><strong>UserDatabaseRealm</strong> 是 Tomcat <strong>Realm</strong> 接口的一种实现，使用 JNDI 资源来存储用户信息。默认，JNDI 资源是通过一个 XML 文件来提供支持的。它并不是针对大规模生产环境用途而设计的。在启动时，UserDatabaseRealm 会从一个 XML 文档中加载所有用户以及他们角色的信息（该 XML 文档默认位于 <code>$CATALINA_BASE/conf/tomcat-users.xml</code>。）用户、密码以及相应角色通常可利用 JMX 进行动态编辑，更改结果会加以保存并立刻反映在 XML 文档中。</p>
+<h4 id="Realm-元素属性-2"><a href="#Realm-元素属性-2" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>跟<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">之前讨论</a>的一样，为了配置 UserDatabaseRealm，需要在 <code>$CATALINA_BASE/conf/server.xml</code> 中创建 <code>&lt;Realm&gt;</code> 元素。关于 UserDatabaseRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="用户文件格式"><a href="#用户文件格式" class="headerlink" title="用户文件格式"></a>用户文件格式</h4><p>用户文件使用的格式与 <a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#userfileformatofMemoryRealm" target="_blank" rel="noopener">MemoryRealm</a>所使用的相同。</p>
+<h4 id="范例-3"><a href="#范例-3" class="headerlink" title="范例"></a>范例</h4><p>默认的 Tomcat 安装已经配置了内嵌在 <code>&lt;Engine&gt;</code> 元素中的 UserDatabaseRealm，因而可以将其应用于所有的虚拟主机和 Web 应用中。默认的 <code>conf/tomcat-users.xml</code> 文件内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;tomcat-users&gt;</span><br><span class="line">  &lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;tomcat&quot; /&gt;</span><br><span class="line">  &lt;user username=&quot;role1&quot;  password=&quot;tomcat&quot; roles=&quot;role1&quot;  /&gt;</span><br><span class="line">  &lt;user username=&quot;both&quot;   password=&quot;tomcat&quot; roles=&quot;tomcat,role1&quot; /&gt;</span><br><span class="line">&lt;/tomcat-users&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="特别注意事项-3"><a href="#特别注意事项-3" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 UserDatabaseRealm 需要遵循以下规则：</p>
+<ul>
+<li>当 Tomcat 首次启动时，它会从用户文件中加载所有已定义的用户及其相关信息。假如对该用户文件中的数据进行修改，则只有重启 Tomcat 后才能生效。这些修改并不是通过 UserDatabase 数据源来完成的，是由 Tomcat 所提供的通过 JMX 访问的 MBean 来实现的。</li>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+</ul>
+<h3 id="MemoryRealm"><a href="#MemoryRealm" class="headerlink" title="MemoryRealm"></a>MemoryRealm</h3><h4 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h4><p><strong>MemoryRealm</strong> 是一种对 Tomcat 的 Realm 接口的简单演示实现，并不是针对生产环境而设计的。在启动时，MemoryRealm 会从 XML 文档中加载所有的用户信息及其相关的角色信息（默认该文档位于 <code>$CATALINA_BASE/conf/tomcat-users.xml</code>）。只有重启 Tomcat 才能使对该文件作出的修改生效。</p>
+<h4 id="Realm-元素属性-3"><a href="#Realm-元素属性-3" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>跟<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#configRealm" target="_blank" rel="noopener">之前讨论</a>的一样，为了配置 MemoryRealm，需要在 <code>$CATALINA_BASE/conf/server.xml</code> 中创建 <code>&lt;Realm&gt;</code> 元素。关于 MemoryRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="用户文件格式-1"><a href="#用户文件格式-1" class="headerlink" title="用户文件格式"></a>用户文件格式</h4><p>用户文件包含下列属性。默认情况下，<code>conf/tomcat-users.xml</code> 必须是一个 XML 文件，并且带有一个根元素：<code>&lt;tomcat-users&gt;</code>。每一个有效用户都有一个内嵌在根元素中的 <code>&lt;user&gt;</code> 元素。</p>
+<ul>
+<li><strong>name</strong> 用户登录所用的用户名。</li>
+<li><strong>password</strong> 用户登录所用的密码。如果 <code>&lt;Realm&gt;</code> 元素中没有设置 <code>digest</code> 属性，则采用明文密码，否则就设置为摘要式密码，如<a href="http://wiki.jikexueyuan.com/project/tomcat/realms-aaa.html#digestedPass" target="_blank" rel="noopener">之前讨论</a>的那样。</li>
+<li><strong>roles</strong> 以逗号分隔的用户角色名列表。</li>
+</ul>
+<h4 id="特别注意事项-4"><a href="#特别注意事项-4" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><p>使用 MemoryRealm 需要注意以下规则：</p>
+<ul>
+<li>当 Tomcat 首次启动时，它会从用户文件中加载所有已定义的用户及其相关信息。假如对该用户文件中的数据进行修改，则只有重启 Tomcat 后才能生效。</li>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>应用负责管理<strong>users</strong>（用户表）和<strong>user roles</strong>（用户角色表）中的信息。Tomcat 没有提供任何内置功能来维护这两种表。</li>
+</ul>
+<h3 id="JAASRealm"><a href="#JAASRealm" class="headerlink" title="JAASRealm"></a>JAASRealm</h3><h4 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h4><p><strong>JAASRealm</strong> 是 Tomcat 的 <code>Realm</code> 接口的一种实现，通过 Java Authentication &amp; Authorization Service（JAAS，Java身份验证与授权服务）架构来实现对用户身份的验证。JAAS 架构现已加入到标准的 Java SE API 中。</p>
+<p>通过 JAASRealm，开发者实际上可以将任何安全的 Realm 与 Tomcat 的 CMA 一起组合使用。</p>
+<p>JAASRealm 是 Tomcat 针对基于 JAAS 的 J2EE 1.4 的 J2EE 认证框架的原型实现，基于 <a href="https://www.jcp.org/en/jsr/detail?id=196" target="_blank" rel="noopener">JCP Specification Request 196</a>，从而能够增强容器管理安全性，并且能促进“可插拔的”认证机制，该认证机制能够实现与容器的无关性。</p>
+<p>根据 JAAS 登录模块和准则（参见 <code>javax.security.auth.spi.LoginModule</code> 与 <code>javax.security.Principal</code> 的相关说明），你可以自定义安全机制，或者将第三方的安全机制与 Tomcat 所实现的 CMA 相集成。</p>
+<h4 id="快速入门-4"><a href="#快速入门-4" class="headerlink" title="快速入门"></a>快速入门</h4><p>为了利用自定义的 JAAS 登录模块使用 JAASRealm，需要执行如下步骤：</p>
+<ol>
+<li><p>编写自己的 JAAS 登录模块。在开发自定义登录模块时，将通过 JAAS 登录上下文对基于 JAAS 2的 User 和 Role 类管理。注意，JAASRealm 内建的 <code>CallbackHandler</code> 目前只能识别 <code>NameCallback</code> 和 <code>PasswordCallback</code>。</p>
+<p>\2. 详情请参看 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/tutorials/GeneralAcnOnly.html" target="_blank" rel="noopener">JAAS 认证教程</a> 与 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/JAASLMDevGuide.html" target="_blank" rel="noopener">JAAS 登录模块开发教程</a>。</p>
+</li>
+<li><p>尽管 JAAS 并未明确指定，但你也应该为用户和角色创建不同的类来加以区分，它们都应该扩展自 <code>javax.security.Principal</code>，从而使 Tomcat 明白从登录模块中返回的规则究竟是用户还是角色（参看 <code>org.apache.catalina.realm.JAASRealm</code> 相关描述）。不管怎样，第一个返回的规则<strong>总</strong>被认为是用户规则。</p>
+</li>
+<li><p>将编译好的类指定在 Tomcat 的类路径中。</p>
+</li>
+<li><p>为 Java 建立一个 login.config 文件（参见 <a href="http://docs.oracle.com/javase/7/docs/technotes/guides/security/jaas/tutorials/LoginConfigFile.html" target="_blank" rel="noopener">JAAS LoginConfig 文件</a>）。将其位置指定给 JVM，从而便于 Tomcat 明确它的位置。例如，设置如下环境变量：<br><code>JAVA_OPTS=$JAVA_OPTS -Djava.security.auth.login.config==$CATALINA_BASE/conf/jaas.config</code></p>
+</li>
+<li><p>为了保护一些资源，在 web.xml 中配置安全限制。</p>
+</li>
+<li><p>在 server.xml 中配置 JAASRealm 模块。</p>
+</li>
+<li><p>重启 Tomcat（如果它正在运行）。</p>
+</li>
+</ol>
+<h4 id="Realm-元素属性-4"><a href="#Realm-元素属性-4" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>在上述步骤中，为了配置步骤 6 以上的 JAASRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。关于 JAASRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="范例-4"><a href="#范例-4" class="headerlink" title="范例"></a>范例</h4><p>下例是 server.xml 中的一截代码段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.JAASRealm&quot;</span><br><span class="line">                appName=&quot;MyFooRealm&quot;</span><br><span class="line">    userClassNames=&quot;org.foobar.realm.FooUser&quot;</span><br><span class="line">     roleClassNames=&quot;org.foobar.realm.FooRole&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>完全由登录模块负责创建并保存用于表示用户规则的 User 与 Role 对象（<code>javax.security.auth.Subject</code>）。如果登录模块不仅无法创建用户对象，而且也无法抛出登录异常，Tomcat CMA 就会失去作用，所在页面就会变成 <code>http://localhost:8080/myapp/j_security_check</code> 或其他未指明的页面。</p>
+<p>JAAS 方法具有双重的灵活性：</p>
+<ul>
+<li>你可以在自定义的登录模块后台执行任何所需的进程。</li>
+<li>通过改变配置以及重启服务器，你可以插入一个完全不同的登录模块，不需要对应用做出任何改动。</li>
+</ul>
+<h4 id="特别注意事项-5"><a href="#特别注意事项-5" class="headerlink" title="特别注意事项"></a>特别注意事项</h4><ul>
+<li>当用户首次访问一个受保护资源时，Tomcat 会调用这一 <code>Realm</code> 的 <code>authenticate()</code> 方法。</li>
+<li>一旦用户认证成功，在登录后，该用户（及其相应角色）就将缓存在 Tomcat 中。（对于以表单形式的认证，这意味着直到会话超时或者无效才会过期；对于基本形式的验证，意味着直到用户关闭浏览器才会过期。）在会话序列化期间<strong>不会</strong>保存或重置缓存的用户。对已认证用户的数据库信息进行的任何改动都<strong>不会</strong>生效，直到该用户下次登录。</li>
+<li>和其他 Realm 实现一样，如果 <code>server.xml</code> 中的 <code>&lt;Realm&gt;</code> 元素包含一个 <code>digest</code> 属性，则支持摘要式密码。JAASRealm 的 <code>CallbackHandler</code> 将先于将密码传回 <code>LoginModule</code> 之前，对密码进行摘要式处理。</li>
+</ul>
+<h3 id="CombinedRealm"><a href="#CombinedRealm" class="headerlink" title="CombinedRealm"></a>CombinedRealm</h3><h4 id="简介-5"><a href="#简介-5" class="headerlink" title="简介"></a>简介</h4><p><strong>CombinedRealm</strong> 是一种 Tomcat 的 Realm 实现，通过一个或多个子 Realm 进行用户验证。</p>
+<p>通过 CombinedRealm，开发者能够将多个 Realm（同一或不同类型） 组合起来使用，从而用于验证多种数据源，而且万一当其中一个 Realm 失败，或其他一些操作需要多个 Realm 时，它还能提供回滚处理。</p>
+<p>子 Realm 是通过在定义 CombineRealm 的 <code>Realm</code> 元素中内嵌 <code>Realm</code> 元素来实现的。验证操作会按照 Realm 元素的叠加顺序来逐个进行。对逐个 Realm 进行验证，从而就能充分证明用户的身份。</p>
+<h4 id="Realm-元素属性-5"><a href="#Realm-元素属性-5" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>为了配置 CombinedRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 或 <code>&lt;Host&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。同样，你也可以将其内嵌到 <code>context.xml</code> 文件下的 <code>&lt;Context&gt;</code> 节点。</p>
+<h4 id="范例-5"><a href="#范例-5" class="headerlink" title="范例"></a>范例</h4><p>下面是 server.xml 中的一段代码，综合使用了 UserDatabaseRealm 和 DataSourceRealm：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.CombinedRealm&quot; &gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span><br><span class="line">             resourceName=&quot;UserDatabase&quot;/&gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.DataSourceRealm&quot;</span><br><span class="line">             dataSourceName=&quot;jdbc/authority&quot;</span><br><span class="line">             userTable=&quot;users&quot; userNameCol=&quot;user_name&quot; userCredCol=&quot;user_pass&quot;</span><br><span class="line">             userRoleTable=&quot;user_roles&quot; roleNameCol=&quot;role_name&quot;/&gt;</span><br><span class="line">&lt;/Realm&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="LockOutRealm"><a href="#LockOutRealm" class="headerlink" title="LockOutRealm"></a>LockOutRealm</h3><h4 id="简介-6"><a href="#简介-6" class="headerlink" title="简介"></a>简介</h4><p><strong>LockOutRealm</strong> 是一个 Tomcat 的 Realm 实现，它扩展了 CombinedRealm，假如在某一段时间内出现很多验证失败，则它能够提供锁定用户的功能。</p>
+<p>为了确保操作的正确性，该 Realm 允许出现较合理的同步。</p>
+<p>该 Realm 并不需要对底层的 Realm 或与其相关的用户存储机制进行任何改动。它会记录失败的登录，包括那些因为用户不存在的登录。为了防止无效用户通过精心设计的请求而实施的 DOS 攻击（从而造成缓存增加），没有通过验证的用户所在列表的容量受到了严格的限制。</p>
+<p>子 Realm 是通过在定义 LockOutRealm 的 <code>Realm</code> 元素中内嵌 <code>Realm</code> 元素来实现的。验证操作会按照 Realm 元素的叠加顺序来逐个进行。对逐个 Realm 进行验证，从而就能充分证明用户的身份。</p>
+<h4 id="Realm-元素属性-6"><a href="#Realm-元素属性-6" class="headerlink" title="Realm 元素属性"></a>Realm 元素属性</h4><p>为了配置 CombinedRealm，需要创建一个 <code>&lt;Realm&gt;</code> 元素，并将其内嵌在 <code>&lt;Engine&gt;</code> 或 <code>&lt;Host&gt;</code> 元素中的 <code>$CATALINA_BASE/conf/server.xml</code> 文件内。同样，你也可以将其内嵌到 <code>context.xml</code> 文件下的 <code>&lt;Context&gt;</code> 节点。关于 LockOutRealm 中的属性定义可参看 <a href="http://tomcat.apache.org/tomcat-8.0-doc/config/realm.html" target="_blank" rel="noopener">Realm 配置文档</a>。</p>
+<h4 id="范例-6"><a href="#范例-6" class="headerlink" title="范例"></a>范例</h4><p>下面是 server.xml 中的一段代码，为 UserDatabaseRealm 添加了锁定功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;Realm className=&quot;org.apache.catalina.realm.LockOutRealm&quot; &gt;</span><br><span class="line">   &lt;Realm className=&quot;org.apache.catalina.realm.UserDatabaseRealm&quot;</span><br><span class="line">             resourceName=&quot;UserDatabase&quot;/&gt;</span><br><span class="line">&lt;/Realm&gt;</span><br></pre></td></tr></table></figure>
           
         
       
@@ -851,7 +960,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/Python(4)oop/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python(4)oop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -870,7 +979,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/22/Python(4)oop/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2018/12/23/Python(4)oop/" itemprop="url">Python(4)oop</a></h1>
         
 
         <div class="post-meta">
@@ -882,8 +991,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-22T17:36:05+08:00">
-                2018-12-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
               </time>
             
 
@@ -1023,7 +1132,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/test-my-site/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/RDF教程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -1042,7 +1151,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/20/test-my-site/" itemprop="url">test_my_site</a></h1>
+                <a class="post-title-link" href="/2018/12/23/RDF教程/" itemprop="url">RDF教程</a></h1>
         
 
         <div class="post-meta">
@@ -1054,8 +1163,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T17:19:48+08:00">
-                2018-07-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
               </time>
             
 
@@ -1094,7 +1203,322 @@
       
         
           
+            <p>RDF 资源描述框架 是描述网络资源的W3C标准 </p>
+<p>比如对网页的标题、作者、修改日期、内容以及版权信息</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:si</span>=<span class="string">"http://www.runoob.com/rdf/"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://www.runoob.com"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:title</span>&gt;</span>RUNOOB<span class="tag">&lt;/<span class="name">si:title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">si:author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">si:author</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>用xml编写</p>
+<p>RDF是W3C的语义网活动的组成部分，</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" ?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">RDF</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Description</span> <span class="attr">about</span>=<span class="string">"http://www.runoob.com/rdf"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">author</span>&gt;</span>Jan Egil Refsnes<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">homepage</span>&gt;</span>http://www.runoob.com<span class="tag">&lt;/<span class="name">homepage</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>RDF 描述的东西叫资源 资源是拥有 URI 的任何事物   比如 地址是”<a href="http://www.runoob.com/rdf&quot;的一个java文件" target="_blank" rel="noopener">http://www.runoob.com/rdf&quot;的一个java文件</a></p>
+<p>然后标记的属性 就用键值对咯，标签名作为键   标签体作为值</p>
+<p>RDF的描述，可以变成一个个描述句</p>
+<p>陈述：”The homepage of <a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a> is <a href="http://www.runoob.com&quot;" target="_blank" rel="noopener">http://www.runoob.com&quot;</a>.</p>
+<ul>
+<li>陈述的主体是：<a href="http://www.runoob.com/rdf" target="_blank" rel="noopener">http://www.runoob.com/rdf</a></li>
+<li>谓语是：homepage</li>
+<li>客体是：<a href="http://www.runoob.com" target="_blank" rel="noopener">http://www.runoob.com</a></li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:cd</span>=<span class="string">"http://www.recshop.fake/cd#"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Hide your heart"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bonnie Tyler<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>UK<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>CBS Records<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>9.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1988<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里使用命名空间，命名空间的定义在开头根元素的 xmlns:rdf=”xxxx”等  开始定义</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:RDF</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:rdf</span>=<span class="string">"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</span>&gt;</span></span><br><span class="line">  ...Description goes here...</span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:RDF</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这个网址是不是潜规则一定要引入的呢？我觉得应该是的。官方默认的标准把？</p>
+<p><code>&lt;rdf:Description&gt;</code> 元素可包含描述资源的那些元素：</p>
+<p>但其实里面的描述，就需要这个资源专门的描述 需要专门的命名空间了</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span>Bob Dylan<span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:country</span>&gt;</span>USA<span class="tag">&lt;/<span class="name">cd:country</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:company</span>&gt;</span>Columbia<span class="tag">&lt;/<span class="name">cd:company</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:price</span>&gt;</span>10.90<span class="tag">&lt;/<span class="name">cd:price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:year</span>&gt;</span>1985<span class="tag">&lt;/<span class="name">cd:year</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者下面用属性的方式定义--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Empire Burlesque"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:artist</span>=<span class="string">"Bob Dylan"</span> <span class="attr">cd:country</span>=<span class="string">"USA"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:company</span>=<span class="string">"Columbia"</span> <span class="attr">cd:price</span>=<span class="string">"10.90"</span></span></span><br><span class="line"><span class="tag"><span class="attr">cd:year</span>=<span class="string">"1985"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 或者引入资源   下面的例子中，属性 artist 没有值，但是却引用了一个对包含有关艺术家的信息的资源。--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:resource</span>=<span class="string">"http://www.recshop.fake/cd/dylan"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="RDF容器元素"><a href="#RDF容器元素" class="headerlink" title="RDF容器元素"></a>RDF容器元素</h3><p>容器用来描述一组相同事物 比如某本书的多位作者放在一起</p>
+<h2 id="rdf-Bag-rdf-seq-rdf-alt元素"><a href="#rdf-Bag-rdf-seq-rdf-alt元素" class="headerlink" title="rdf:Bag rdf:seq rdf:alt元素"></a>rdf:Bag rdf:seq rdf:alt元素</h2><p><code>&lt;rdf:Bag&gt;</code>元素用于描述一个规定为无序的值的列表。</p>
+<p><code>&lt;rdf:Bag&gt;</code>元素可包含重复的值。</p>
+<p><code>&lt;rdf:li&gt;</code>作为其子元素</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>John<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Paul<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>George<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Ringo<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Bag</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;rdf:Seq&gt;</code> 元素用于描述一个规定为有序的值的列表（比如一个字母顺序的排序）</p>
+<p>子元素还是 <code>&lt;rdf:li&gt;</code></p>
+<p><code>&lt;rdf:Alt&gt;</code> 元素用于一个可替换的值的列表（用户仅可选择这些值的其中之一）。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Descriptio</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://www.recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:format</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>CD<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Record<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">rdf:li</span>&gt;</span>Tape<span class="tag">&lt;/<span class="name">rdf:li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">rdf:Alt</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:format</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Descriptio</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在 RDF 中，这些”值的列表”被称为成员（members）。</p>
+<p>因此，我们可以这么说：</p>
+<ul>
+<li>一个容器是一个包含事物的资源</li>
+<li>被包含的事物被称为成员（不能称为”值的列表”）。</li>
+</ul>
+<p>我们无法关闭一个容器。容器规定了所包含的资源为成员 - 它没有规定其他的成员是不被允许的。</p>
+<h2 id="RDF-集合"><a href="#RDF-集合" class="headerlink" title="RDF 集合"></a>RDF 集合</h2><p>RDF 集合用于描述仅包含指定成员的组。</p>
+<p>集合是通过属性 rdf:parseType=”Collection” 来描述的。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:parseType</span>=<span class="string">"Collection"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/George"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/John"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Paul"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Ringo"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python生成器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Python生成器/" itemprop="url">Python生成器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
             
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="生成器概念"><a href="#生成器概念" class="headerlink" title="生成器概念"></a>生成器概念</h2><p>生成器是一次生成一个值的<code>特殊类型函数</code>。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。<br> 包含yield关键字的函数可以理解是一个用函数名表示的另类<code>list对象</code>，通过迭代的方式（例如：for）依次获取结果。</p>
+<h2 id="生成器的特点"><a href="#生成器的特点" class="headerlink" title="生成器的特点"></a>生成器的特点</h2><ol>
+<li>记录执行函数内的所有变量状态（数据）和代码执行位置。</li>
+<li>立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。</li>
+</ol>
+<h2 id="认识生成器"><a href="#认识生成器" class="headerlink" title="认识生成器"></a>认识生成器</h2><p>下来让我们一起来看看如何使用yield，先通过一个简单的例子认识生成器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addlist</span><span class="params">(alist)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> alist:</span><br><span class="line">        <span class="comment"># yield与return功能类似，返回本次迭代结果   </span></span><br><span class="line">        <span class="keyword">yield</span> i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">alist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> addlist(alist):</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>根据addlist()函数实现可以推断出addlist(alist)相当于一个值为[2, 3, 4, 5]的list，不过迭代调用时以函数表达式的形式出现在for语句中。<br> 使用”list变量”（实际为函数变量，此处可以理解为list）替代addlist(alist)作为for的参数，执行结果相同，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_one_list = addlist(alist)</span><br><span class="line">for x in add_one_list:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<h2 id="生成器执行过程"><a href="#生成器执行过程" class="headerlink" title="生成器执行过程"></a>生成器执行过程</h2><p>到底yield是如何执行的呢？生成器（函数）的执行逻辑到底是什么样子？<br> 让我们一起来写个demo进行分析。</p>
+<blockquote>
+<p>next()函数<br>   用于移动迭代器指向下一个数据，直到抛出StopIteration，代表迭代终止。</p>
+</blockquote>
+<p>定义函数yield_run_logic()，对一个已经初始化变量a，多次调用，同在yield前后输出日志，用于分析执行逻辑。然后再一个while(1)的死循环中使用next()方法遍历生成器，直到抛出停止迭代异常跳出循环（StopIteration）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def yield_run_logic():</span><br><span class="line">    a = 1</span><br><span class="line">    for i in range(3):</span><br><span class="line">        print(&apos;begin yield&apos;)</span><br><span class="line">        yield a</span><br><span class="line">        print(&apos;end yield&apos;)</span><br><span class="line">        a += i</span><br><span class="line"></span><br><span class="line"># 获取生成器对象</span><br><span class="line">yield_obj = yield_run_logic()</span><br><span class="line"># 此时只是获取对象，尚未执行yield_run_logic()的内容，直到第一调用next()\</span><br><span class="line">while 1:</span><br><span class="line">    try:</span><br><span class="line">        ret = next(yield_obj)</span><br><span class="line">        # 第一次调用next()方法，开始执行yield_run_logic()，直到遇到yield关键字，返回当前结果，</span><br><span class="line">        # yield_run_logic()保留当前执行状态和代码执行位置，当下次执行next()时，</span><br><span class="line">        # yield_run_logic()从上次保留的继续执行，直到遇到yield关键字。</span><br><span class="line">        # yield_run_logic()无迭代数据时，抛出StopIteration异常，表示迭代结束。</span><br><span class="line">        print(ret)</span><br><span class="line">    except StopIteration:</span><br><span class="line">        print(&apos;end test&apos;)</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 第1次执行输出 a = 1, i = 0</span><br><span class="line">begin yield</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 第2次执行输出 a = 1, i = 1</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"># 第3次执行输出 a = 2, i = 2</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">4</span><br><span class="line"></span><br><span class="line"># 第4次执行</span><br><span class="line">end yield # yield_run_logic()中 i 超过range(3)的范围，结束迭代，</span><br><span class="line">          # 由于使用next()而并非使用for来迭代生成器，所以迭代结束异常需要自己处理。</span><br><span class="line">end test</span><br></pre></td></tr></table></figure>
+<p>根据输出结果可以看出，在第一次执行next()时，生成器yield_run_logic()开始执行，打印’begin yield’，并在<code>yield a</code>处返回结果，之后再执行next()都是从<code>yield a</code>之后开始执行（打印’end yield’），直到循环中再次遇到<code>yield a</code>时返回。</p>
+<p><strong>总结</strong> yield的执行逻辑。</p>
+<blockquote>
+<p><strong>第一次获取迭代结果，函数的第一行代码执行到yield关键字返回，第[2,n]次迭代结果，函数执行从yield关键字下一行代码到再次碰到yield关键字返回。</strong></p>
+</blockquote>
+<h2 id="yield的应用场景"><a href="#yield的应用场景" class="headerlink" title="yield的应用场景"></a>yield的应用场景</h2><p>凡是本次处理使用上次处理结果作为基础数据的逻辑实现，都可以考虑使用生成器。</p>
+<p><strong>练习1：打印杨辉三角</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">          1</span><br><span class="line">        1   1</span><br><span class="line">      1   2   1</span><br><span class="line">    1   3   3   1</span><br><span class="line">  1   4   6   4   1</span><br><span class="line">1   5   10  10  5   1</span><br></pre></td></tr></table></figure>
+<p><strong>特征分析</strong>：从第三行开始每一行的非边界数字等于上一行相邻两数字之和，边界数字全部为1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pascals_triangle</span><span class="params">(line_count)</span>:</span></span><br><span class="line">    up_line = []</span><br><span class="line">    line = []</span><br><span class="line">    <span class="comment"># i取值范围[0, line_count-1]</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(line_count):</span><br><span class="line">        <span class="comment"># 扩展当前行列表长度，初始化数据为1，并且保证边界数据为1</span></span><br><span class="line">        line.append(<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 1,2行全部是1，3行开始体现特征，需要进行特征处理</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 当前行[1, n-1]的值等于上一行[0, n-2]与[1, n-1]的和</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(up_line)):</span><br><span class="line">                line[j] = up_line[j<span class="number">-1</span>] + up_line[j]</span><br><span class="line">        <span class="comment"># 返回当前行</span></span><br><span class="line">        <span class="keyword">yield</span> line</span><br><span class="line">        <span class="comment"># 更新上一行记录结果，保存当前行</span></span><br><span class="line">        up_line = line[:]</span><br><span class="line"></span><br><span class="line">lines = <span class="number">6</span></span><br><span class="line">fn = pascals_triangle(lines)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fn:</span><br><span class="line">    print(line)</span><br></pre></td></tr></table></figure>
+<p>函数执行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1]</span><br><span class="line">[1, 1]</span><br><span class="line">[1, 2, 1]</span><br><span class="line">[1, 3, 3, 1]</span><br><span class="line">[1, 4, 6, 4, 1]</span><br><span class="line">[1, 5, 10, 10, 5, 1]</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/post的参数的一般获取/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/post的参数的一般获取/" itemprop="url">post的参数的一般获取</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>post的参数的获取  我们通常是用request.parameter去获得参数  然而这个参数必须是get方法获得的 如果是post传递的参数</p>
+<p>这时候用request.parameter去获取就不能获取的。这时候要用输入流取获得 虽然我没用过</p>
+<p>因为我post普通的文本信息的时候是用在图片上传的地方，这时候我可以用那里的jar包顺便处理文本信息</p>
+<p>倘若不用第三方包，我看到网上提供了一个方法</p>
+<p>是用来提供一般解决方式的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpUtil</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title">httpProcess</span><span class="params">(HtttpServlet request,HttpServletResponse response)</span> <span class="keyword">throws</span> IOException, JSONException</span>&#123;</span><br><span class="line">        StringBuffer sb=<span class="keyword">new</span> StringBuffer();</span><br><span class="line">        InputStream is=request.getIputStream();</span><br><span class="line">        BufferedReader br =<span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(is,<span class="string">"utf-8"</span>));</span><br><span class="line">        String s=<span class="string">""</span>;</span><br><span class="line">        <span class="keyword">while</span>((s.br.readline())!==<span class="keyword">null</span>)&#123;</span><br><span class="line">            sb.appead(s);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(sb.toString().length()&lt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> JSONObject(sb.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用的时候</span></span><br><span class="line"></span><br><span class="line">JSONObject js=HTTPUtil.httpProcess(request,response);</span><br><span class="line"><span class="keyword">if</span>(is==<span class="keyword">null</span>)&#123;</span><br><span class="line">    out.print(<span class="string">"no parameter"</span>);</span><br><span class="line">&#125;</span><br><span class="line">String deparmentid=js.optString(<span class="string">"departmentid"</span>);</span><br><span class="line">String telphone=js.optString(<span class="string">"telphone"</span>);</span><br></pre></td></tr></table></figure>
           
         
       
@@ -1161,7 +1585,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/20/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/2018/07/20/hello-world/" itemprop="url">hello-world</a></h1>
         
 
         <div class="post-meta">
@@ -1213,8 +1637,9 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<p>—                                                                                                                                                                                                  asd                                                                                                                                                                                                                                              —</p>
+            <h2 id="title-hello-world"><a href="#title-hello-world" class="headerlink" title="title: hello-world"></a>title: hello-world</h2><h2 id="title-hello-world-1"><a href="#title-hello-world-1" class="headerlink" title="title: hello-world"></a>title: hello-world</h2><hr>
+<hr>
+<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
@@ -1308,7 +1733,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
