@@ -374,6 +374,157 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/hibernate学习（二）持久化类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/hibernate学习（二）持久化类/" itemprop="url">hibernate学习（二）持久化类</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>持久化类使用和操作</p>
+<p>持久化类的要求</p>
+<ul>
+<li>无参构造器，好像不一定要public 但至少包可见</li>
+<li>标识属性，主键  最好用8种基本类型的包装类型，虽然用基本类型也行  这样方便</li>
+<li>提供set和get方法</li>
+<li>使用非final类  因为如果持久化类没实现接口，hibernate就使用javassist生成代理，这个代理对象是持久化类的子类实例   还有一个实现所有方法都是public的接口，此时使用jdk动态代理。避免声明public final 方法  如果必须要用public final 方法的类，用lazy=false禁用代理</li>
+<li>重写equals 和 hashCode  如果将持久化类的实例放入set中就要提供这些方法，最常见的equals就是比较标识属性,但是如果是标识属性是自动生成的话不能比较标识属性，因为刚加进去的对象未被持久化是没有标识属性的，会在save的时候进行生成和分配</li>
+</ul>
+<p>持久化对象有三个情况</p>
+<p>瞬态 持久化 脱管   （持久化和脱管可相互转换，脱管状态下的改变不会影响数据库，而持久化会）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">News n=<span class="keyword">new</span> News();</span><br><span class="line">n.setTitle(<span class="string">"xxx"</span>);</span><br><span class="line">n.setContent(<span class="string">"xxx"</span>);</span><br><span class="line">sess.save(n);       <span class="comment">//持久化类 将瞬态/脱管类保存在会话中</span></span><br></pre></td></tr></table></figure>
+<p>在持久化的过程中，底层会生成一条insert语句</p>
+<p>还有个persist()方法和save()一样，不过save()返回标识属性值，而persist不反悔，而且persist保证它在一个事务外部被调用的时候 并不立即转换为insert语句  这对需要封装长会话流程很有用</p>
+<p>加载持久化实体  底层为seletct  + where 语句</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">News n=sess.load(News.class,pk);   <span class="comment">//pk值是持久化实例的标识属性</span></span><br></pre></td></tr></table></figure>
+<p>还有个get方法一样  不过get不支持延迟加载，若不存在就返回null  load支持延迟加载，若不存在对象返回一个未初始化的代理对象  延迟加载就是实际上使用对象的方法的时候才会真正向数据库加载</p>
+<p>load和get还有 LockOptions 提供READ和UPGRADE代表共享 修改锁</p>
+<p>还有用sess.buildLockRequest(LockOptions.xx).lock(n);来持久化的，不过要求这个n不能有修改，没啥用 </p>
+<p>更新</p>
+<ol>
+<li><p>其实是加载持久化对象的基础上，调用方法进行修改然后再更新数据库中  更新的时候不用save，因为它就是持久化实体  用<code>sess.flush()</code></p>
+</li>
+<li><p>关闭会话后原来的持久化对象就脱管了，此时对其修改要保存到数据库中，需要重新创建session  然后<code>sess.update(n);</code>进行更新 类似的方法有merge 不过它的特定是不会持久化实例n，而是返回一个n的副本，该副本被持久化了 如果用merge保存程序对脱管对象做的修改时，如果会话有相同的持久化对象，merge提供的对象会覆盖它</p>
+</li>
+</ol>
+<p>如果不知道这个对象是否持久化过，就用updateOrSave()方法就行</p>
+<p>删除</p>
+<p><code>sess.delete(n)</code></p>
+<p>注意Session类不是平时用的tomcat的类 是hibernate的类 用来存储实例化类</p>
+<h1 id="org-hibernate-resource-jdbc-internal-LogicalConnectionManagedImpl-21456e12-is-closed"><a href="#org-hibernate-resource-jdbc-internal-LogicalConnectionManagedImpl-21456e12-is-closed" class="headerlink" title="org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@21456e12 is closed"></a>org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl@21456e12 is closed</h1><p>在调用session.close()的时候，该函数就已经将 trans.commit()执行了。所以最后一句代码显然就是多余的，将最后的trans.commit()这一句删除就好了。</p>
+<p>所以想让脱离的对象重新持久化，那个事务要分开两个，因为中途会有session.close</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/hibernate3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -802,6 +953,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/自定义标签/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/自定义标签/" itemprop="url">自定义标签</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>自定义标签</p>
+<p>一个tld文件 一个特殊的实现类 一个标签的使用</p>
+<p>类</p>
+<ul>
+<li><p>SimpleTagSupport接口的实现  （doTag()）</p>
+</li>
+<li><p>带属性的标签需要 get/set方法</p>
+</li>
+<li><p>getJspContext().getAttribute(xx,PageContext.xxxx_SCOPE) 可以获取jsp页面各种作用域的属性</p>
+<ul>
+<li>或者是 getJspContext().setAttribute(String,object)设置属性不过好像就是pageScope属性的</li>
+</ul>
+</li>
+<li><p>getJspContext().getOut()获取Writer 输出页面</p>
+</li>
+<li><p>getJspBody().invoke(null) 输出标签体内的内容</p>
+<ul>
+<li>这有个很骚的操作 标签体为 ${pageScope.xxx} 然后在一个循环中一边 getJspContext().setAttribute(String,object)设置更改属性，一遍getJspBody().invoke(null)去输出，这样就能实现遍历</li>
+<li>好像就算是<code>&lt;jsp:attribute name=&quot;xxx&quot;&gt;</code>标签包裹的的标签体作为属性，她在类里面也只是个JspFragment也只是能invoke而已</li>
+</ul>
+<p>还有动态属性这比较麻烦，二七</p>
+</li>
+</ul>
+<p>tld文件</p>
+<ul>
+<li>放在WEB-INF文件夹下</li>
+<li>taglib标签为根标签<ul>
+<li>uri标签</li>
+<li>tag标签<ul>
+<li>name</li>
+<li>tag-class</li>
+<li>body-content</li>
+<li>attribute<ul>
+<li>name required fragment</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>使用标签</p>
+<ul>
+<li><code>&lt;%@taglib uri=&quot;&quot; prefix%&gt;</code>声明</li>
+<li><code>&lt;前缀：tagname attributename=&quot;value&quot;&gt;</code></li>
+<li>标签体做属性 用 jsp:attribute标签包裹</li>
+</ul>
+<p>传递集合的时候，只能通过session 属性进行获取传递</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/big-endian和little-endian/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1070,173 +1388,6 @@
 <p>然后将缓存区的stash记录删除  git stash drop </p>
 <p>git stash pop 这个是还原加记录删除</p>
 <p>但是这个删除只是删除记录中的最近一条，实际上drop 中可以加  stash_id </p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/自定义标签/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/自定义标签/" itemprop="url">自定义标签</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>自定义标签</p>
-<p>一个tld文件 一个特殊的实现类 一个标签的使用</p>
-<p>类</p>
-<ul>
-<li><p>SimpleTagSupport接口的实现  （doTag()）</p>
-</li>
-<li><p>带属性的标签需要 get/set方法</p>
-</li>
-<li><p>getJspContext().getAttribute(xx,PageContext.xxxx_SCOPE) 可以获取jsp页面各种作用域的属性</p>
-<ul>
-<li>或者是 getJspContext().setAttribute(String,object)设置属性不过好像就是pageScope属性的</li>
-</ul>
-</li>
-<li><p>getJspContext().getOut()获取Writer 输出页面</p>
-</li>
-<li><p>getJspBody().invoke(null) 输出标签体内的内容</p>
-<ul>
-<li>这有个很骚的操作 标签体为 ${pageScope.xxx} 然后在一个循环中一边 getJspContext().setAttribute(String,object)设置更改属性，一遍getJspBody().invoke(null)去输出，这样就能实现遍历</li>
-<li>好像就算是<code>&lt;jsp:attribute name=&quot;xxx&quot;&gt;</code>标签包裹的的标签体作为属性，她在类里面也只是个JspFragment也只是能invoke而已</li>
-</ul>
-<p>还有动态属性这比较麻烦，二七</p>
-</li>
-</ul>
-<p>tld文件</p>
-<ul>
-<li>放在WEB-INF文件夹下</li>
-<li>taglib标签为根标签<ul>
-<li>uri标签</li>
-<li>tag标签<ul>
-<li>name</li>
-<li>tag-class</li>
-<li>body-content</li>
-<li>attribute<ul>
-<li>name required fragment</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>使用标签</p>
-<ul>
-<li><code>&lt;%@taglib uri=&quot;&quot; prefix%&gt;</code>声明</li>
-<li><code>&lt;前缀：tagname attributename=&quot;value&quot;&gt;</code></li>
-<li>标签体做属性 用 jsp:attribute标签包裹</li>
-</ul>
-<p>传递集合的时候，只能通过session 属性进行获取传递</p>
 
           
         
@@ -1947,191 +2098,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/SOAP教程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/SOAP教程/" itemprop="url">SOAP教程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议</p>
-<p>通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。</p>
-<p>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。</p>
-<p>一条SOAP信息就是一个普通的xml文档 含下面的元素</p>
-<ul>
-<li>必需的 Envelope元素     将xml文档标识为一条SOAP信息</li>
-<li>可选的Header元素，包含头部信息</li>
-<li>必需的Body元素，包含所有的调用和响应信息</li>
-<li>可选的Fault元素，提供处理此消息所发生的错误信息</li>
-</ul>
-<p>所有以上的元素均被声明于针对 SOAP 封装的默认命名空间中：</p>
-<p><a href="http://www.w3.org/2001/12/soap-envelope" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope</a></p>
-<p>以及针对 SOAP 编码和数据类型的默认命名空间：</p>
-<p><a href="http://www.w3.org/2001/12/soap-encoding" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding</a></p>
-<p>SOAP文档的要求</p>
-<ol>
-<li>SOAP必须用xml来进行编码</li>
-<li>必须使用SOAP Envelope命名空间和SOAP Encoding命名空间</li>
-<li>不能包含DTD引用</li>
-<li>不能包含XML处理指令</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Header</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Header</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">...</span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Envelope元素"><a href="#Envelope元素" class="headerlink" title="Envelope元素"></a>Envelope元素</h3><p>是SOAP的根元素，将其定义成soap信息</p>
-<p>属性</p>
-<ul>
-<li>xmlns:soap  命名空间 <ul>
-<li>SOAP 消息必须拥有与命名空间 “<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a> 相关联的一个 Envelope 元素</li>
-</ul>
-</li>
-<li>xmlns:encodingStyle <ul>
-<li>此属性可出现在任何 SOAP 元素中，并会被应用到元素的内容及元素的所有子元素上。</li>
-<li>SOAP 没有默认编码方式 <a href="http://www.w3.org/2001/12/soap-encoding使用这个就好" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding使用这个就好</a></li>
-</ul>
-</li>
-</ul>
-<p>之后我们就能用 soap 和 encodingStyle 属性</p>
-<h3 id="Header元素"><a href="#Header元素" class="headerlink" title="Header元素"></a>Header元素</h3><p>包含头部信息，一些SOAP/应用程序专用信息    比如认证 支付等</p>
-<p>如果使用header 它一定是第一个子元素</p>
-<p>所有 Header 元素的直接子元素必须是合格的命名空间</p>
-<p>soap在默认的命名空间中 (“<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a>) 定义了三个属性(有一个encodingStyle这里不废话 )这些被定义在 SOAP 头部的属性可定义容器如何对 SOAP 消息进行处理</p>
-<p>mustUnderstand 属性可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的</p>
-<p><code>soap:mustUnderstand=&quot;0|1&quot;</code></p>
-<p>SOAP信息可以沿着信息路径转发，actor用于寻址到下一个特点端点</p>
-<p><code>soap:actor=&quot;URI&quot;</code></p>
-<h3 id="Body元素"><a href="#Body元素" class="headerlink" title="Body元素"></a>Body元素</h3><p>soap的body元素的子元素可以引入合格的命名空间</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 比如下面使用m的getPrice属性，它首先要引入 命名空间m  xmlns:m="xxx" --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Getprice</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.xxxx.com/prices"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">m:item</span>&gt;</span>Apples<span class="tag">&lt;/<span class="name">m:item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">m:Getprice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="Fault元素"><a href="#Fault元素" class="headerlink" title="Fault元素"></a>Fault元素</h3><p>Fault一定是Body的子元素，在一条soap内，fault只能出现一次，它用于指示body的错误</p>
-<p>fault拥有子元素</p>
-<ul>
-<li><code>&lt;faultcode&gt;</code>用来识别错误的代码</li>
-<li><code>&lt;faultstring&gt;</code>错误说明</li>
-<li><code>&lt;faultactor&gt;</code> 谁引发的错误</li>
-<li><code>&lt;detail&gt;</code> 涉及body元素的应用程序专用错误信息</li>
-</ul>
-<p>faultcode 有几个错误代码</p>
-<ol>
-<li>versionMismatch envelop元素的无效的命名空间</li>
-<li>MustUnderstand 这是之前header元素中设置了 mustunderstand 的时候出现的错误可能会出现  无法理解</li>
-<li>Client 消息被不正确地构成，或包含不正确的信息</li>
-<li>Server 服务有问题，因此无法处理进行</li>
-</ol>
-<h3 id="HTTP-XML-SOAP"><a href="#HTTP-XML-SOAP" class="headerlink" title="HTTP + XML = SOAP"></a>HTTP + XML = SOAP</h3><p>好像传输soap 需要在contentType上说明</p>
-<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: application/soap+xml; charset=utf-8</span><br></pre></td></tr></table></figure>
-<h2 id="一个-SOAP-实例"><a href="#一个-SOAP-实例" class="headerlink" title="一个 SOAP 实例"></a>一个 SOAP 实例</h2><p>在下面的例子中，一个 GetStockPrice 请求被发送到了服务器。此请求有一个 StockName 参数，而在响应中则会返回一个 Price 参数。此功能的命名空间被定义在此地址中： “<a href="http://www.example.org/stock&quot;" target="_blank" rel="noopener">http://www.example.org/stock&quot;</a></p>
-<h3 id="SOAP-请求："><a href="#SOAP-请求：" class="headerlink" title="SOAP 请求："></a>SOAP 请求：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /InStock HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:StockName</span>&gt;</span>IBM<span class="tag">&lt;/<span class="name">m:StockName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h3 id="SOAP-响应："><a href="#SOAP-响应：" class="headerlink" title="SOAP 响应："></a>SOAP 响应：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Price</span>&gt;</span>34.5<span class="tag">&lt;/<span class="name">m:Price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2182,7 +2148,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

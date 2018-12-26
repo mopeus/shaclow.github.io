@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/mysql临时表复制表/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/26/Spring基础学习(一)基本介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -251,7 +251,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/23/mysql临时表复制表/" itemprop="url">mysql临时表复制表</a></h1>
+                <a class="post-title-link" href="/2018/12/26/Spring基础学习(一)基本介绍/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -263,8 +263,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-26T22:32:32+08:00">
+                2018-12-26
               </time>
             
 
@@ -303,56 +303,113 @@
       
         
           
-            <p>临时表 </p>
-<p>就是临时保存的表，关闭客户端后将其删除，你用show tables 并不能看到他， 你也可以在使用完后主动drop 他</p>
-<p><code>create temporary table xxx(xxx xxx,xxx,xxx);</code></p>
-<p>mysql的表复制</p>
-<p><code>show create table tablename \G</code> 这样就会出现你想要的表的创建信息，你复制就行，不过你第一行要改一下表名字</p>
-<p>然后insert into clonetable (col1,col2,col3…) select col1,col2,col3,…. from tablename;进行数据的复制</p>
-<p>完整复制表的其他方法，感觉这个完爆好吧</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE targetTable LIKE sourceTable;</span><br><span class="line">INSERT INTO targetTable SELECT * FROM sourceTable;</span><br></pre></td></tr></table></figure>
-<p>这种好像无法模仿索引神魔的 默认值？</p>
-<p>可以拷贝一个表中其中的一些字段:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT username, password FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>可以将新建的表的字段改名:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(  </span><br><span class="line">    SELECT id, username AS uname, password AS pass FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>可以拷贝一部分数据:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin WHERE LEFT(username,1) = &apos;s&apos;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>可以在创建表的同时定义表中的字段信息:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin</span><br><span class="line">(</span><br><span class="line">    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY</span><br><span class="line">)</span><br><span class="line">AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p><strong>第一、只复制表结构到新表</strong></p>
-<p>create table 新表 select * from 旧表 where 1=2</p>
-<p>或者</p>
-<p>create table 新表 like 旧表 </p>
-<p><strong>第二、复制表结构及数据到新表</strong></p>
-<p>create table新表 select * from 旧表 </p>
-<p>服务器元数据</p>
-<table>
-<thead>
-<tr>
-<th>SELECT VERSION( )</th>
-<th>服务器版本信息</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>SELECT DATABASE( )</td>
-<td>当前数据库名 (或者返回空)</td>
-</tr>
-<tr>
-<td>SELECT USER( )</td>
-<td>当前用户名</td>
-</tr>
-<tr>
-<td>SHOW STATUS</td>
-<td>服务器状态</td>
-</tr>
-<tr>
-<td>SHOW VARIABLES</td>
-<td>服务器配置变量</td>
-</tr>
-</tbody>
-</table>
+            <p>title: Spring基础学习(一)基本介绍</p>
+<p>date: 2018-12-26 22:30</p>
+<p>categories: Spring</p>
+<p>tags: [Spring]</p>
+<p>文件目录 </p>
+<p>docs  文档和开发指南等</p>
+<p>libs  Jar包 有三类</p>
+<ul>
+<li>Spring框架得class文件JAR包</li>
+<li>Spring框架源文件的压缩包 -sources结尾</li>
+<li>Spring框架API文档压缩包 文件名以-javadoc 结尾</li>
+</ul>
+<p>schemas 该目录下包含了Spring 各种配置文件的XML Schema文档</p>
+<p>还有其他说明性文档</p>
+<p>如果使用spring就将所需的模块的class文件的JAR包添加到项目的类加载路径中，</p>
+<p>Spring作为一个超级工厂管理的对象的是Bean  只要是一个java类就行  </p>
+<p>Spring将java类当作Bean管理的 唯一条件就是XML配置文件，也可以用注解，这个XML文件没有命名要求</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="GBK" ?&gt;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span> <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"person"</span> <span class="attr">class</span>=<span class="string">"beans.Person"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"axe"</span> <span class="attr">ref</span>=<span class="string">"axe"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"axe"</span> <span class="attr">class</span>=<span class="string">"beans.Axe"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"win"</span> <span class="attr">class</span>=<span class="string">"javax.swing.JFrame"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"date"</span> <span class="attr">class</span>=<span class="string">"java.util.Date"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>从xml表中获得几个点</p>
+<ol>
+<li>只要是Java类就可以使作为Bean类   不能是接口或抽象类 （除非特殊配置）</li>
+<li>其实bean标签的声明就是 构造方式的声明<ol>
+<li>bean默认的则为无参构造器</li>
+</ol>
+</li>
+<li>class一定要将包名也写清楚</li>
+</ol>
+<p>通过xml文件进行构造的本质</p>
+<ol>
+<li>将bean元素的id属性和class属性都转为字符串</li>
+<li>通过classname反射成class然后创建实例</li>
+<li>将id名和这个实例放入Spring容器中</li>
+</ol>
+<p>property作为bean的子元素代表底层的setter方法</p>
+<ol>
+<li>name代表具体setter方法</li>
+<li>value/ref 代表执行setter方法的传入参数<ol>
+<li>String 基本类型及包装类 用value指定属性</li>
+<li>容器中其他Bean类传入参数，使用ref指定</li>
+</ol>
+</li>
+</ol>
+<p>property标签的本质</p>
+<ol>
+<li>通过ref 即代表id name从spring 容器中获取对应的实例对象</li>
+<li>获得methodname 调用setter方法</li>
+</ol>
+<p>一般来说我们要通过Spring容器去管理和使用Bean 我们要声明Spring容器 有两种</p>
+<ol>
+<li>ClassPathXmlApplicationContext 从类加载路径搜索配置文件，创建Spring容器</li>
+<li>FileSystemXmlApplicationContext 从文件系统相对或绝对路径搜索配置文件 创建Spring容器</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">    ApplicationContext ctx=<span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);</span><br><span class="line">    Person p=ctx.getBean(<span class="string">"person"</span>,Person.class);</span><br><span class="line">    p.useAxe();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面代码获取几个点</p>
+<ol>
+<li>两个容器都有统一的接口ApplicationContext掌握</li>
+<li>getBean(id,class)  需要id 获取实例  用class转换对应类型  （这个Class一定是具体）</li>
+</ol>
+<p>最大的改变就是我们不再需要new Java对象，所有对象由Spring容器创建</p>
+<p>这种有种升级版，将Axe 和Person抽象为接口</p>
+<p>然后让具体子类分别实现他们，这样松耦合，不过配置文件中要<strong>指明白相应的实现子类</strong></p>
+<h2 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h2><p>依赖注入还有另一个名字叫控制反转 IoC</p>
+<p>依赖  就是 A对象需要调用B对象的方法则，A依赖B</p>
+<p>使用Spring后调用者（依赖方）无需主动获取被依赖对象，只要被动接受成员变量赋值即可</p>
+<p>依赖方 就无需关心被依赖对象，专心做自己事情即可</p>
+<h3 id="注入方式"><a href="#注入方式" class="headerlink" title="注入方式"></a>注入方式</h3><p>注入方式有两种</p>
+<ol>
+<li>设值注入，通过setter方法  <code>&lt;property&gt;</code>标签</li>
+<li>构造注入 使用带参数的构造器 通过<code>&lt;constructor-arg&gt;</code>标签  默认是无参数构造</li>
+</ol>
+<p>通常不建议使用配置文件Bean基本类型的属性值，通常只用来处理Bean和Bean的依赖关系</p>
+<p>构造注入</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 构造注入--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"chinese"</span> <span class="attr">class</span>=<span class="string">"javaspring.demo1.Chinese"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"steelAxe"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"tt"</span> <span class="attr">class</span>=<span class="string">"ccc.Test01"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">"美滋滋"</span> /&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">"233"</span> /&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 明确指明类型 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"3"</span> <span class="attr">value</span>=<span class="string">"345"</span> <span class="attr">type</span>=<span class="string">"int"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>代表 调用 <code>new ccc.Test01(&quot;美滋滋&quot;，233);</code> 可以用index属性 如指定index=”0”  代表第一个构造参数值 默认为上到下递增</p>
+<p>通常构造注入会让生成代码臃肿而且导致性能下降，且不直观。但它更内聚，且决定依赖顺序</p>
+<p>依赖关系无须变化的注入，采用构造注入，其他优先考虑设置构造</p>
+<p>Spring容器</p>
+<p>BeanFactory 和 ApplicationContext是代表Spring容器的两个核心接口，后者是前者的子接口</p>
+<p>虽然可以用，但一般不用前者，直接用后者就好了</p>
+<p>J2EE应用可再启动Web应用时自动加载Application实例</p>
+<p>ApplicationContext 创建时，会初始所有的singleton bean （就是你在xml中定义的Bean）并且调用setter方法。说明一开始会带来较大性能花销之后就不会了  组织初始化bean，可在相应的bean添加属性 lazy-init=”true”</p>
+<p>ApplicationContext支持国家化支持 getMessage()方法</p>
+<p>ApplicationContext事件机制</p>
+<ul>
+<li>ApplicationEvent 容器事件（extends） 必须由ApplicationContext发布</li>
+<li>ApplicationListener 监听器（implements） 可以由任何监听器Bean担任</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义监听事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmailEvent</span> <span class="keyword">extends</span> <span class="title">ApplicationEvent</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String address;</span><br><span class="line">	<span class="keyword">private</span> String text;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">EmailEvent</span><span class="params">(Object source)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(source);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">EmailEvent</span><span class="params">(Object source,String address,String text)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(source);</span><br><span class="line">		<span class="keyword">this</span>.address=address;</span><br><span class="line">		<span class="keyword">this</span>.text=text;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//set get方法忽略</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义监听器</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmailNotifier</span> <span class="keyword">implements</span> <span class="title">ApplicationListener</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onApplicationEvent</span><span class="params">(ApplicationEvent arg0)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(arg0 <span class="keyword">instanceof</span> EmailEvent) &#123;    <span class="comment">//只监听EmailEvent事件</span></span><br><span class="line">			EmailEvent emailEvent=(EmailEvent)arg0;</span><br><span class="line">			System.out.println(<span class="string">"需要发送的邮件地址： "</span>+emailEvent.getAddress());</span><br><span class="line">			System.out.println(<span class="string">"邮件正文： "</span>+emailEvent.getText());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			System.out.println(<span class="string">"其他事件不处理"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"xxx.ccc.EmailNotifier"</span> /&gt;</span> 直接class定义监听器</span><br></pre></td></tr></table></figure>
+<p>自动创建和加载Spring容器的时候会自动触发，也可用pushEvent主动触发</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String []args)</span></span>&#123;</span><br><span class="line">    ApplicationContext ctx=<span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);</span><br><span class="line">    EmailEvent ele=<span class="keyword">new</span> EmailEvent(<span class="string">"test"</span>,<span class="string">"xxx.163@com"</span>,<span class="string">"this is a test"</span>);</span><br><span class="line">    ctx.publishEvent(ele);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Spring有几个内置事件</p>
+<ul>
+<li>ContextRefreshEvent ContextStartedEvent ContextClosedEvent  ContextStoppedEvent(和Context容器生命周期相关）</li>
+<li>RequestHandledEvent 和其他一些新增的WebSocket服务</li>
+</ul>
+<p>让Bean获取Spring</p>
+<p>通常来说Bean是不知道容器的存在的，但有时候为了国际化信息，需要向Spring容器发布事件，所以需要感知</p>
+<ul>
+<li>实现BeanFactoryAware接口 实现setBeanFactory(BeanFactory)方法</li>
+<li>我们不需要在xml或在别的地方调用这个set方法，容器本身就会自动调用</li>
+<li>同理还有ApplicationContextAware 和对应的set方法</li>
+<li>xml中正常声明bean即可</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ApplicationcontextAware</span> <span class="keyword">implements</span> <span class="title">ApplicationContextAware</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> ApplicationContext context;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext ctx)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.context=ctx;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHi</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		System.out.println(context.getMessage(<span class="string">"hello"</span>, <span class="keyword">new</span> String[] &#123;name&#125;,Locale.getDefault(Locale.Category.FORMAT)));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">xxx</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        ApplicationContext ctx=<span class="keyword">new</span> ClassPathXmlApplication(<span class="string">"beans.xml"</span>);</span><br><span class="line">        <span class="comment">//下面这个是自己定义的bean实例获取</span></span><br><span class="line">        ApplicationcontextAware aa=ctx.getBean(<span class="string">"idname"</span>,Axxxx.class);</span><br><span class="line">        aa.sayHi(<span class="string">"xx"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其他Spring  XMLSchema的XML配置文件，甚至允许程序员自定义配置文件标签，然后再配置文件中使用这些新标签，</p>
 
           
         
@@ -481,165 +538,6 @@
 <p>kill processid;  //processid表示process的id，比如kill 3301，就会将id为3301的process杀死。</p>
 <p>使用 kill 将所有的 id 杀死。然后重启MySQL，一般就会解决了。如果还不行，那应该是不可能的吧。。。</p>
 <p>重启MySQL：</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Mysql 的外键/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/Mysql 的外键/" itemprop="url">Mysql 的外键</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Mysql 的外键</p>
-<p>感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的</p>
-<p>数据库中其实外键有两种说法啦，</p>
-<p>一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联）</p>
-<p>真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。</p>
-<p>首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的列（可以名字不同，但一般名字相同方便思考）这时候，一个表A把这个列定义为唯一索引（可以为unique也可以primary key），一定要（这个表就是主表）。</p>
-<p>另一个表B则要将这个键定义成外键 连接到上一个表的的唯一索引（称为从表）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">create table orders(</span><br><span class="line">O_id int not null,</span><br><span class="line">P_id int ,PRIMARY KEY (O_id),FOREIGN KEY (P_id) references Person(P_id)</span><br><span class="line">)</span><br><span class="line">-- 在Person中P_id是主键   foreign key 等的括号不能省略</span><br><span class="line"></span><br><span class="line">-- alter修改</span><br><span class="line">alter table orders add constraint fk_foreignkey foreign key (P_id) references Person(P_id);</span><br><span class="line"></span><br><span class="line">-- 撤销外键</span><br><span class="line">alter table orders drop foreign key fk_foreignkey  (外键名字)</span><br><span class="line"></span><br><span class="line">-- 删除外键关系时会有点小尴尬，因为一定要外键名字，而你大概率是没有设置或者不记得的，你可以用show create table xxx查看</span><br><span class="line"></span><br><span class="line">-- 禁用约束（子表的外键约束）  好像是用在 oracle的 mysql好像不行  启用是enable</span><br><span class="line">ALTER TABLE 表名 disable constraint 约束名;</span><br></pre></td></tr></table></figure>
-<p><strong>谁是谁的外键？</strong></p>
-<p>说了这么多到底谁是外键呢？你以为是B的那个索引是外键？太天真了 naive 是A的那个主键是B的外键。竟然是主表的键是从表的外键太奇怪了。。</p>
-<p>外键约束</p>
-<p>外键约束咧应该是本来是不能违反的 但是你可以设置违反响应事件？</p>
-<p>   <strong>外键约束事件触发</strong>。既然有外键约束，当违反约束时会发生什么？我们把它的反应看作事件，一共有四种： </p>
-<p>定义方式在最后面加  比如  <code>FOREIGN KEY (main_id) REFERENCES test_main ON DELETE SET NULL;</code></p>
-<p>​        1、级联：当主表更改时，从表跟从更改。  on delete/update cascade</p>
-<p>​        2、不执行任何操作。           默认的外键触发</p>
-<p>​        3、设置null。                        // on delete set null </p>
-<p>​        4、设置默认值。    难道是set 加参数值？   </p>
-<p>   <code>alter table 表名 add constraint DF_字段名 default &#39;默认值&#39; for 字段名--其中的&#39;默认值&#39;为你想要默认的值，注意&#39;for&#39;</code></p>
-<p>外键作用可以说是：保持数据一致性，完整性，关联性，主要目的是控制存储在外键表中的数据。就是当你对一个表的数据进行操作，和他有关联的一个或更多表的数据能够同时发生改变，<strong>避免无效或是无用的改变和孤立的数据</strong>。</p>
-<p>​        <strong>建键原则</strong>：</p>
-<p>​       1、 外键字段为主键<br>　　2、 所有的键都必须唯一<br>　　3、避免使用复合键<br>　　4、外键总是关联唯一的键字段</p>
-<p>总之</p>
-<ul>
-<li><p>删除  要先删除子表所关联的数据再删除父表数据   级联删除 可以删父表的同时删除子表数据</p>
-</li>
-<li><p>更新 更新父表（应该是主键值）会违反约束 但可以修改子表（外键列）（不过该外键不能改成父表没有的 ）  和父表的非主键值   级联更新  可以修改父表的同时修改子表</p>
-<p>其实是可以修改主键的，但是呢和删除数据一样   前提是从表没有连接到它的行</p>
-</li>
-<li><p>插入时 父表可以插入 子表插入如果插入的外键列是父表没有的值的时候会违反约束，子表的数据一定要有父表做依据  </p>
-<p>给出的错误提示<code>Cannot add or update a child row: a foreign key constraint fails</code>  </p>
-</li>
-</ul>
-<p>总的来说 先有父表再有子表    父表数据先看子表，甚至不能改</p>
-<p>级联都是针对改变主表主键/删除主表数据   从表的外键也修改/从表数据删除 的情况 </p>
-<p>已经经过实操过所有例子大概率没有任何问题</p>
-<p>然而并没有级联插入</p>
-<p>或者我们可以用触发器实现级联删除</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TRIGGER [dbo].[trigCascadeDelete]    --触发器名</span><br><span class="line">   ON  [dbo].[main]      ---作用于哪张表</span><br><span class="line">   instead of  delete    ---什么动作触发</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	declare @id int   --声明@id变量</span><br><span class="line">	select @id=id from deleted --取出要删除的id</span><br><span class="line">	delete from branch where mainId =@id  --先删除从表中的数据行</span><br><span class="line">	delete from main where id =@id   ---再删除主表中的数据行</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
-<p>外键并不能帮助我们对查询有什么帮助，我们只能老老实实用联合查询 什么子查询那种东西去做多表查询</p>
 
           
         
@@ -896,6 +794,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Mysql 的外键/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Mysql 的外键/" itemprop="url">Mysql 的外键</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Mysql 的外键</p>
+<p>感觉实际上外键对查询没有任何帮助，还是得乖乖用联合查询，左右连接什么的</p>
+<p>数据库中其实外键有两种说法啦，</p>
+<p>一个是逻辑外键，就是你把他当作外键，然后操作中也把他看作外键（什么查询啊，什么修改顺便改另一个表啊那种来假装级联）</p>
+<p>真正的外键写在数据库当中，这时候就很牛啤酒了。今天我就来解决这个问题。</p>
+<p>首先咧，外键是描述两个表的联系关系。所以首先要有两个表，然后两个表都各自有一个属性相同的列（可以名字不同，但一般名字相同方便思考）这时候，一个表A把这个列定义为唯一索引（可以为unique也可以primary key），一定要（这个表就是主表）。</p>
+<p>另一个表B则要将这个键定义成外键 连接到上一个表的的唯一索引（称为从表）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">create table orders(</span><br><span class="line">O_id int not null,</span><br><span class="line">P_id int ,PRIMARY KEY (O_id),FOREIGN KEY (P_id) references Person(P_id)</span><br><span class="line">)</span><br><span class="line">-- 在Person中P_id是主键   foreign key 等的括号不能省略</span><br><span class="line"></span><br><span class="line">-- alter修改</span><br><span class="line">alter table orders add constraint fk_foreignkey foreign key (P_id) references Person(P_id);</span><br><span class="line"></span><br><span class="line">-- 撤销外键</span><br><span class="line">alter table orders drop foreign key fk_foreignkey  (外键名字)</span><br><span class="line"></span><br><span class="line">-- 删除外键关系时会有点小尴尬，因为一定要外键名字，而你大概率是没有设置或者不记得的，你可以用show create table xxx查看</span><br><span class="line"></span><br><span class="line">-- 禁用约束（子表的外键约束）  好像是用在 oracle的 mysql好像不行  启用是enable</span><br><span class="line">ALTER TABLE 表名 disable constraint 约束名;</span><br></pre></td></tr></table></figure>
+<p><strong>谁是谁的外键？</strong></p>
+<p>说了这么多到底谁是外键呢？你以为是B的那个索引是外键？太天真了 naive 是A的那个主键是B的外键。竟然是主表的键是从表的外键太奇怪了。。</p>
+<p>外键约束</p>
+<p>外键约束咧应该是本来是不能违反的 但是你可以设置违反响应事件？</p>
+<p>   <strong>外键约束事件触发</strong>。既然有外键约束，当违反约束时会发生什么？我们把它的反应看作事件，一共有四种： </p>
+<p>定义方式在最后面加  比如  <code>FOREIGN KEY (main_id) REFERENCES test_main ON DELETE SET NULL;</code></p>
+<p>​        1、级联：当主表更改时，从表跟从更改。  on delete/update cascade</p>
+<p>​        2、不执行任何操作。           默认的外键触发</p>
+<p>​        3、设置null。                        // on delete set null </p>
+<p>​        4、设置默认值。    难道是set 加参数值？   </p>
+<p>   <code>alter table 表名 add constraint DF_字段名 default &#39;默认值&#39; for 字段名--其中的&#39;默认值&#39;为你想要默认的值，注意&#39;for&#39;</code></p>
+<p>外键作用可以说是：保持数据一致性，完整性，关联性，主要目的是控制存储在外键表中的数据。就是当你对一个表的数据进行操作，和他有关联的一个或更多表的数据能够同时发生改变，<strong>避免无效或是无用的改变和孤立的数据</strong>。</p>
+<p>​        <strong>建键原则</strong>：</p>
+<p>​       1、 外键字段为主键<br>　　2、 所有的键都必须唯一<br>　　3、避免使用复合键<br>　　4、外键总是关联唯一的键字段</p>
+<p>总之</p>
+<ul>
+<li><p>删除  要先删除子表所关联的数据再删除父表数据   级联删除 可以删父表的同时删除子表数据</p>
+</li>
+<li><p>更新 更新父表（应该是主键值）会违反约束 但可以修改子表（外键列）（不过该外键不能改成父表没有的 ）  和父表的非主键值   级联更新  可以修改父表的同时修改子表</p>
+<p>其实是可以修改主键的，但是呢和删除数据一样   前提是从表没有连接到它的行</p>
+</li>
+<li><p>插入时 父表可以插入 子表插入如果插入的外键列是父表没有的值的时候会违反约束，子表的数据一定要有父表做依据  </p>
+<p>给出的错误提示<code>Cannot add or update a child row: a foreign key constraint fails</code>  </p>
+</li>
+</ul>
+<p>总的来说 先有父表再有子表    父表数据先看子表，甚至不能改</p>
+<p>级联都是针对改变主表主键/删除主表数据   从表的外键也修改/从表数据删除 的情况 </p>
+<p>已经经过实操过所有例子大概率没有任何问题</p>
+<p>然而并没有级联插入</p>
+<p>或者我们可以用触发器实现级联删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ALTER TRIGGER [dbo].[trigCascadeDelete]    --触发器名</span><br><span class="line">   ON  [dbo].[main]      ---作用于哪张表</span><br><span class="line">   instead of  delete    ---什么动作触发</span><br><span class="line">AS </span><br><span class="line">BEGIN</span><br><span class="line">	declare @id int   --声明@id变量</span><br><span class="line">	select @id=id from deleted --取出要删除的id</span><br><span class="line">	delete from branch where mainId =@id  --先删除从表中的数据行</span><br><span class="line">	delete from main where id =@id   ---再删除主表中的数据行</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+<p>外键并不能帮助我们对查询有什么帮助，我们只能老老实实用联合查询 什么子查询那种东西去做多表查询</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/mysql索引/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1035,6 +1092,175 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; CREATE TABLE tmp SELECT last_name, first_name, sex FROM person_tbl  GROUP BY (last_name, first_name, sex);</span><br></pre></td></tr></table></figure>
 <p>当然你也可以在数据表中添加 INDEX（索引） 和 PRIMAY KEY（主键）这种简单的方法来删除表中的重复记录。方法如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER IGNORE TABLE person_tbl</span><br><span class="line">    -&gt; ADD PRIMARY KEY (last_name, first_name);</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/mysql临时表复制表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/mysql临时表复制表/" itemprop="url">mysql临时表复制表</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>临时表 </p>
+<p>就是临时保存的表，关闭客户端后将其删除，你用show tables 并不能看到他， 你也可以在使用完后主动drop 他</p>
+<p><code>create temporary table xxx(xxx xxx,xxx,xxx);</code></p>
+<p>mysql的表复制</p>
+<p><code>show create table tablename \G</code> 这样就会出现你想要的表的创建信息，你复制就行，不过你第一行要改一下表名字</p>
+<p>然后insert into clonetable (col1,col2,col3…) select col1,col2,col3,…. from tablename;进行数据的复制</p>
+<p>完整复制表的其他方法，感觉这个完爆好吧</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE targetTable LIKE sourceTable;</span><br><span class="line">INSERT INTO targetTable SELECT * FROM sourceTable;</span><br></pre></td></tr></table></figure>
+<p>这种好像无法模仿索引神魔的 默认值？</p>
+<p>可以拷贝一个表中其中的一些字段:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT username, password FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以将新建的表的字段改名:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(  </span><br><span class="line">    SELECT id, username AS uname, password AS pass FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以拷贝一部分数据:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin WHERE LEFT(username,1) = &apos;s&apos;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以在创建表的同时定义表中的字段信息:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE newadmin</span><br><span class="line">(</span><br><span class="line">    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY</span><br><span class="line">)</span><br><span class="line">AS</span><br><span class="line">(</span><br><span class="line">    SELECT * FROM admin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><strong>第一、只复制表结构到新表</strong></p>
+<p>create table 新表 select * from 旧表 where 1=2</p>
+<p>或者</p>
+<p>create table 新表 like 旧表 </p>
+<p><strong>第二、复制表结构及数据到新表</strong></p>
+<p>create table新表 select * from 旧表 </p>
+<p>服务器元数据</p>
+<table>
+<thead>
+<tr>
+<th>SELECT VERSION( )</th>
+<th>服务器版本信息</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SELECT DATABASE( )</td>
+<td>当前数据库名 (或者返回空)</td>
+</tr>
+<tr>
+<td>SELECT USER( )</td>
+<td>当前用户名</td>
+</tr>
+<tr>
+<td>SHOW STATUS</td>
+<td>服务器状态</td>
+</tr>
+<tr>
+<td>SHOW VARIABLES</td>
+<td>服务器配置变量</td>
+</tr>
+</tbody>
+</table>
 
           
         
@@ -1257,130 +1483,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/js 和 jsp变量的传递/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/js 和 jsp变量的传递/" itemprop="url">js 和 jsp变量的传递</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>js 和 jsp变量的传递</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a=<span class="string">"&lt;%= xxxList%&gt;"</span>;         </span><br><span class="line"><span class="comment">//传递list值直接传递 不过一定要加双引号，这能避免很多莫名其妙的麻烦</span></span><br><span class="line"><span class="comment">//比如你如果是纯数字可以不加，但其他比如字符串什么的一定要加</span></span><br><span class="line"><span class="keyword">var</span> id=<span class="string">"&lt;%= request.getAttribute("</span>xxxParam<span class="string">")%&gt;"</span>;</span><br><span class="line">&lt;% <span class="built_in">String</span> s=<span class="string">"abc"</span>;%&gt;</span><br><span class="line"><span class="keyword">var</span> s=<span class="string">"&lt;%= s%&gt;"</span>;</span><br></pre></td></tr></table></figure>
-<p>注意传递数组的时候  不能像list那样直接传递给js变量 这样得到的值是java.lang.String</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在js和jsp页面中巧妙交换实现数组传递</span></span><br><span class="line"><span class="keyword">var</span> arr=<span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line">&lt;% <span class="keyword">for</span> (int i=<span class="number">0</span>;i&lt;archiveArr.length;i++)&#123;%&gt;</span><br><span class="line">    arr[<span class="xml"><span class="tag">&lt;<span class="name">%=i%</span>&gt;</span>]="<span class="tag">&lt;<span class="name">%=archiveArr[i]%</span>&gt;</span>";   //<span class="tag">&lt;<span class="name">%=</span> <span class="attr">i</span>%&gt;</span>中i是纯数字所以加不加双引号没所谓</span></span><br><span class="line"><span class="xml"> <span class="tag">&lt;<span class="name">%&#125;%</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
-<p>jsp使用js定义的变量，只能使用js代码，将对应的变量放到表单里面或通过url（window.open拼接上变量）的方式。传递给jsp.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JSP杂谈/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1471,6 +1573,130 @@
 <p>但EL 可以采用  ${cookie.userName.value}  只需要提供名字就可以找到相应的值</p>
 <p>上下文初始化 </p>
 <p>可以通过 &lt;%=application.getInitParameter(“xxx”)%&gt;     ${initParam.xxx}   注意initParam 对应是 application的参数 不是某个 config的</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/js 和 jsp变量的传递/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/js 和 jsp变量的传递/" itemprop="url">js 和 jsp变量的传递</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>js 和 jsp变量的传递</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a=<span class="string">"&lt;%= xxxList%&gt;"</span>;         </span><br><span class="line"><span class="comment">//传递list值直接传递 不过一定要加双引号，这能避免很多莫名其妙的麻烦</span></span><br><span class="line"><span class="comment">//比如你如果是纯数字可以不加，但其他比如字符串什么的一定要加</span></span><br><span class="line"><span class="keyword">var</span> id=<span class="string">"&lt;%= request.getAttribute("</span>xxxParam<span class="string">")%&gt;"</span>;</span><br><span class="line">&lt;% <span class="built_in">String</span> s=<span class="string">"abc"</span>;%&gt;</span><br><span class="line"><span class="keyword">var</span> s=<span class="string">"&lt;%= s%&gt;"</span>;</span><br></pre></td></tr></table></figure>
+<p>注意传递数组的时候  不能像list那样直接传递给js变量 这样得到的值是java.lang.String</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在js和jsp页面中巧妙交换实现数组传递</span></span><br><span class="line"><span class="keyword">var</span> arr=<span class="keyword">new</span> <span class="built_in">Array</span>();</span><br><span class="line">&lt;% <span class="keyword">for</span> (int i=<span class="number">0</span>;i&lt;archiveArr.length;i++)&#123;%&gt;</span><br><span class="line">    arr[<span class="xml"><span class="tag">&lt;<span class="name">%=i%</span>&gt;</span>]="<span class="tag">&lt;<span class="name">%=archiveArr[i]%</span>&gt;</span>";   //<span class="tag">&lt;<span class="name">%=</span> <span class="attr">i</span>%&gt;</span>中i是纯数字所以加不加双引号没所谓</span></span><br><span class="line"><span class="xml"> <span class="tag">&lt;<span class="name">%&#125;%</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>jsp使用js定义的变量，只能使用js代码，将对应的变量放到表单里面或通过url（window.open拼接上变量）的方式。传递给jsp.</p>
 
           
         
@@ -1697,225 +1923,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(七)异常/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/JDBC(七)异常/" itemprop="url">JDBC(七)异常</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>JDBC最常见的异常是 SQLException</p>
-<p>获取错误的信息的一些方法 通过SQLException对象来调用</p>
-<table>
-<thead>
-<tr>
-<th><code>getErrorCode( )</code></th>
-<th>获取与异常关联的错误代码。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>getMessage( )</code></td>
-<td>获取驱动程序处理的错误的JDBC驱动程序的错误消息，或获取数据库错误的Oracle错误代码和消息。</td>
-</tr>
-<tr>
-<td><code>getSQLState( )</code></td>
-<td>获取XOPEN SQLstate字符串。 对于JDBC驱动程序错误，不会从此方法返回有用的信息。 对于数据库错误，返回五位数的XOPEN SQLstate代码。 此方法可以返回<code>null</code>。</td>
-</tr>
-<tr>
-<td><code>getNextException( )</code></td>
-<td>获取异常链中的下一个<code>Exception</code>对象。</td>
-</tr>
-<tr>
-<td><code>printStackTrace( )</code></td>
-<td>打印当前异常或可抛出的异常，并将其追溯到标准错误流。</td>
-</tr>
-<tr>
-<td><code>printStackTrace(PrintStream s)</code></td>
-<td>将此<code>throwable</code>及其回溯打印到指定的打印流。</td>
-</tr>
-<tr>
-<td><code>printStackTrace(PrintWriter w)</code></td>
-<td>打印这个<code>throwable</code>，它是回溯到指定的打印器(<code>PrintWriter</code>)。</td>
-</tr>
-</tbody>
-</table>
-<h3 id="批量处理"><a href="#批量处理" class="headerlink" title="批量处理"></a>批量处理</h3><p>一次性向数据库发送多个sql语句可以减少通信花销提高性能</p>
-<p>首先得看看jdbc驱动是否支持该功能</p>
-<p>使用 <code>DatabaseMetaData.supportsBatchUpdates()</code> 去检查目标数据库和驱动是否支持把？ 如果支持则返回true</p>
-<ul>
-<li>用Statement和其兄弟的addBatch 将单个语句添加到批处理 executeBatch() 执行批量处理的所有语句</li>
-<li>我们可以使用clearBatch()删除等待执行的批量处理的所有语句，不过是全部删除，不能单个删除</li>
-</ul>
-<p>感觉PreparedStatement和Statement差不多，不过好像没有CallableStatement的用法</p>
-<ul>
-<li>创建Statement/PreparedStatement 对象</li>
-<li>conn.setAutoCommit(false)</li>
-<li>addBatch()  将构造好的Statement对象传进去，注意prepareStatement的sql也是填好参数了，Statement就在addBatch参数传入sql语句</li>
-<li>executeBatch() 执行所有sql语句</li>
-<li>commit 提交事务</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//假装statement/preparedStatement构造完成</span></span><br><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">stmt.setXXX(...); stmt.addBatch();  /stmt.addBatch(sql);</span><br><span class="line"></span><br><span class="line"><span class="comment">//好像是能返回结果的？ 不过如果太多怎么处理？</span></span><br><span class="line">stmt.executeBatch();</span><br><span class="line">conn.commit()</span><br></pre></td></tr></table></figure>
-<p>JDBC的SQL转义语法</p>
-<h2 id="JDBC-SQL转义语法"><a href="#JDBC-SQL转义语法" class="headerlink" title="JDBC SQL转义语法"></a>JDBC SQL转义语法</h2><p>通过使用标准JDBC方法和属性，转义语法使您能够灵活地使用不可用的数据库特定功能。</p>
-<p>一般SQL转义语法格式如下 -</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;keyword &apos;parameters&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p>以下是以下转义序列，在执行JDBC编程时非常有用 -</p>
-<p><strong>d, t, ts关键字</strong></p>
-<p>它们用于帮助确定日期，时间和时间戳文字。没有哪两个DBMS表示时间和日期的方式相同。 该转义语法告诉驱动程序以目标数据库的格式呈现日期或时间。 例如 -</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;d &apos;yyyy-mm-dd&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p><code>yyyy</code>=年份，<code>mm</code>=月份; <code>dd</code>=日期。 使用这种语法<code>{d&#39;2019-09-03&#39;}</code>表示的是2019年3月9日。</p>
-<p>这是一个简单的示例，显示如何将日期插入表中 -</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create a Statement object</span></span><br><span class="line">stmt = conn.createStatement();</span><br><span class="line"><span class="comment">//Insert data ==&gt; ID, First Name, Last Name, DOB</span></span><br><span class="line">String sql=<span class="string">"INSERT INTO STUDENTS VALUES"</span> +</span><br><span class="line">             <span class="string">"(100,'Kobe','Bryant', &#123;d '2002-12-16'&#125;)"</span>;</span><br><span class="line"></span><br><span class="line">stmt.executeUpdate(sql);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Java</span><br></pre></td></tr></table></figure>
-<p>同样，还可以使用以下两种语法：<code>t</code>或<code>ts</code> -</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;t &apos;hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p>这里，<code>hh</code>=小时，<code>mm</code> =分钟， <code>ss</code> =秒。 使用这种语法<code>{t &#39;13:30:29&#39;}</code>是<code>1:30:29 PM</code>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;ts &apos;yyyy-mm-dd hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
-<p>这里“<code>d</code>”和“<code>t</code>”是上述两种语法的组合语法来表示时间戳。</p>
-<p><strong>escape关键字</strong></p>
-<p><code>escape</code>关键字标识<code>LIKE</code>子句中使用转义字符。 使用SQL通配符<code>%</code>(与<code>0</code>个或多个字符匹配)时很有用。 例如 -</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT symbol FROM MathSymbols</span></span><br><span class="line"><span class="string">              WHERE symbol LIKE '\%' &#123;escape '\'&#125;"</span>;     <span class="comment">//escape声明 \是转义字符</span></span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
-<p>如果使用反斜杠字符(<code>\</code>)作为转义字符，则还必须在Java字符串文字中使用<strong>两个反斜杠</strong>字符，因为反斜杠也是Java转义字符。</p>
-<p><strong>fn 关键字</strong></p>
-<p>这个关键字表示DBMS中使用的标量函数。 例如，可以使用SQL函数长度来获取字符串的长度 -</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">fn <span class="title">length</span><span class="params">(<span class="string">'Hello World'</span>)</span>&#125;</span></span><br></pre></td></tr></table></figure>
-<p>上面语句返回结果值为：<code>11</code>，也就是字符串’<code>Hello World</code>‘的长度。</p>
-<p><strong>call 关键字</strong></p>
-<p>此关键字用于调用存储过程。 例如，对于需要<code>IN</code>参数的存储过程，请使用以下语法 -</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;</span><br><span class="line">&#123;? = <span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;   <span class="comment">//感觉这个不像是存储过程的啊，像是存储函数的</span></span><br></pre></td></tr></table></figure>
-<p>有一个博客是这样调用存储函数的，但是好像没怎么见到是这样调用存储过程的</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFuntion</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//jdbc调用存储函数sql语句：</span></span><br><span class="line">        <span class="comment">//&#123;?= call &lt;procedure-name&gt;[(&lt;arg1&gt;,&lt;arg2&gt;, ...)]&#125;</span></span><br><span class="line">        String sql = <span class="string">"&#123;? = call queryEmpIncome(?)&#125;"</span>;</span><br><span class="line">        </span><br><span class="line">        Connection conn = <span class="keyword">null</span>;</span><br><span class="line">        CallableStatement call = <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            conn = JDBCUtils.getConnection();</span><br><span class="line">            call = conn.prepareCall(sql);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//注册输出参数</span></span><br><span class="line">            call.registerOutParameter(<span class="number">1</span>, OracleTypes.NUMBER);</span><br><span class="line">            <span class="comment">//输入参数</span></span><br><span class="line">            call.setInt(<span class="number">2</span>, <span class="number">7839</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//执行</span></span><br><span class="line">            call.execute();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//取出返回值</span></span><br><span class="line">            <span class="keyword">double</span> income = call.getDouble(<span class="number">1</span>);</span><br><span class="line">            System.out.println(<span class="string">"年薪："</span>+income);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            JDBCUtils.release(conn, call, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">也有这样调用</span><br><span class="line"></span><br><span class="line">            String sql = <span class="string">"select fun_avg_dept(?) from dual"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//调用方式还是和使用ps调用普通SQL一样</span></span><br><span class="line">            PreparedStatement ps = conn.prepareStatement(sql);</span><br><span class="line"></span><br><span class="line">            ps.setObject(<span class="number">1</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">            ResultSet rs = ps.executeQuery();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (rs.next()) &#123;</span><br><span class="line">                System.out.println(rs.getObject(<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
-<p><strong>oj关键字</strong></p>
-<p>此关键字用于表示外部连接。 语法如下 -</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;oj outer-join&#125;</span><br></pre></td></tr></table></figure>
-<p>这里，<em>outer-join = table {LEFT|RIGHT|FULL} OUTERJOIN {table | outer-join}</em> 搜索条件。 例如 -</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT Employees </span></span><br><span class="line"><span class="string">              FROM &#123;oj ThisTable RIGHT</span></span><br><span class="line"><span class="string">              OUTER JOIN ThatTable on id = '100'&#125;"</span>;</span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
-<p><code>PreparedStatement</code>对象可以使用输入和输出流来提供参数数据。能够将整个文件放入可以容纳大值的数据库列，例如<code>CLOB</code>和<code>BLOB</code>数据类型。</p>
-<p>有以下方法可用于流式传输数据 -</p>
-<ul>
-<li><code>setAsciiStream()</code>：此方法用于提供大的ASCII值。</li>
-<li><code>setCharacterStream()</code>：此方法用于提供较大的UNICODE值。</li>
-<li><code>setBinaryStream()</code>：此方法用于提供较大的二进制值。</li>
-</ul>
-<p><code>setXXXStream()</code>方法除了参数占位符之外还需要额外的参数和文件大小。此参数通知驱动程序使用流向数据库发送多少数据。</p>
-<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>考虑要将XML文件<code>xml_data.xml</code>上传到数据库表中。下面是XML文件的内容 -</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>125<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">first</span>&gt;</span>Max<span class="tag">&lt;/<span class="name">first</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">last</span>&gt;</span>Su<span class="tag">&lt;/<span class="name">last</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Salary</span>&gt;</span>18000<span class="tag">&lt;/<span class="name">Salary</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Dob</span>&gt;</span>18-08-1978<span class="tag">&lt;/<span class="name">Dob</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">XML</span><br></pre></td></tr></table></figure>
-<p>将此XML文件保存在要运行此示例的同一目录中。</p>
-<p>此示例将在数据库创建一个表：<em>xml_data</em>，然后将文件<code>xml_data.xml</code>上传到此表中。</p>
-<p>复制以下示例代码，并保存在文件：<em>StreamingData.java</em> 中，编译并运行如下 -</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Import required packages</span></span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamingData</span> </span>&#123;</span><br><span class="line">   <span class="comment">// JDBC driver name and database URL</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String JDBC_DRIVER = <span class="string">"com.mysql.jdbc.Driver"</span>;  </span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">"jdbc:mysql://localhost/EMP"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//  Database credentials</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">"root"</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String PASS = <span class="string">"123456"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Connection conn = <span class="keyword">null</span>;</span><br><span class="line">   PreparedStatement pstmt = <span class="keyword">null</span>;</span><br><span class="line">   Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">   ResultSet rs = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="comment">// Register JDBC driver</span></span><br><span class="line">      Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Open a connection</span></span><br><span class="line">      System.out.println(<span class="string">"Connecting to database..."</span>);</span><br><span class="line">      conn = DriverManager.getConnection(DB_URL,USER,PASS);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create a Statement object and build table</span></span><br><span class="line">      stmt = conn.createStatement();</span><br><span class="line">      createXMLTable(stmt);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Open a FileInputStream</span></span><br><span class="line">      File f = <span class="keyword">new</span> File(<span class="string">"xml_data.xml"</span>);</span><br><span class="line">      <span class="keyword">long</span> fileLength = f.length();</span><br><span class="line">      FileInputStream fis = <span class="keyword">new</span> FileInputStream(f);   <span class="comment">//构造文件流</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create PreparedStatement and stream data</span></span><br><span class="line">      String SQL = <span class="string">"INSERT INTO XML_Data VALUES (?,?)"</span>;</span><br><span class="line">      pstmt = conn.prepareStatement(SQL);</span><br><span class="line">      pstmt.setInt(<span class="number">1</span>,<span class="number">125</span>);</span><br><span class="line">      pstmt.setAsciiStream(<span class="number">2</span>,fis,(<span class="keyword">int</span>)fileLength);  <span class="comment">//传递文件流 并且设置文件长度</span></span><br><span class="line">      pstmt.execute();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Close input stream</span></span><br><span class="line">      fis.close();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Do a query to get the row</span></span><br><span class="line">      SQL = <span class="string">"SELECT Data FROM XML_Data WHERE id=125"</span>;</span><br><span class="line">      rs = stmt.executeQuery (SQL);</span><br><span class="line">      <span class="comment">// Get the first row</span></span><br><span class="line">      <span class="keyword">if</span> (rs.next ())&#123;</span><br><span class="line">         </span><br><span class="line">         InputStream xmlInputStream = rs.getAsciiStream (<span class="number">1</span>);   </span><br><span class="line">          <span class="comment">//从resultset得到ascll流后将其转为byte的数组流</span></span><br><span class="line">         <span class="keyword">int</span> c;</span><br><span class="line">         ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">         <span class="keyword">while</span> (( c = xmlInputStream.read ()) != -<span class="number">1</span>)</span><br><span class="line">            bos.write(c);</span><br><span class="line">         <span class="comment">//Print results</span></span><br><span class="line">         System.out.println(bos.toString());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// Clean-up environment</span></span><br><span class="line">      rs.close();</span><br><span class="line">      stmt.close();</span><br><span class="line">      pstmt.close();</span><br><span class="line">      conn.close();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for JDBC</span></span><br><span class="line">      se.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for Class.forName</span></span><br><span class="line">      e.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      <span class="comment">//finally block used to close resources</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(stmt!=<span class="keyword">null</span>)</span><br><span class="line">            stmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(pstmt!=<span class="keyword">null</span>)</span><br><span class="line">            pstmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">         se.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end finally try</span></span><br><span class="line">   &#125;<span class="comment">//end try</span></span><br><span class="line">   System.out.println(<span class="string">"Goodbye!"</span>);</span><br><span class="line">&#125;<span class="comment">//end main</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createXMLTable</span><span class="params">(Statement stmt)</span> </span></span><br><span class="line"><span class="function">   <span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">   System.out.println(<span class="string">"Creating XML_Data table..."</span> );</span><br><span class="line">   <span class="comment">//Create SQL Statement</span></span><br><span class="line">   String streamingDataSql = <span class="string">"CREATE TABLE XML_Data "</span> +</span><br><span class="line">                             <span class="string">"(id INTEGER, Data LONG)"</span>;     <span class="comment">//存储类型是的是Long</span></span><br><span class="line">   <span class="comment">//Drop table first if it exists.</span></span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      stmt.executeUpdate(<span class="string">"DROP TABLE XML_Data"</span>);</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">   &#125;<span class="comment">// do nothing</span></span><br><span class="line">   <span class="comment">//Build table.</span></span><br><span class="line">   stmt.executeUpdate(streamingDataSql);</span><br><span class="line">&#125;<span class="comment">//end createXMLTable</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1966,7 +1973,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -232,6 +232,191 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/SOAP教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/SOAP教程/" itemprop="url">SOAP教程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>SOAP是基于xml的简易协议，用于程序在http之上进行信息交换。它是用来访问网络服务的协议</p>
+<p>通过 HTTP 在应用程序间通信是更好的方法，因为 HTTP 得到了所有的因特网浏览器及服务器的支持。SOAP 就是被创造出来完成这个任务的。</p>
+<p>SOAP 提供了一种标准的方法，使得运行在不同的操作系统并使用不同的技术和编程语言的应用程序可以互相进行通信。</p>
+<p>一条SOAP信息就是一个普通的xml文档 含下面的元素</p>
+<ul>
+<li>必需的 Envelope元素     将xml文档标识为一条SOAP信息</li>
+<li>可选的Header元素，包含头部信息</li>
+<li>必需的Body元素，包含所有的调用和响应信息</li>
+<li>可选的Fault元素，提供处理此消息所发生的错误信息</li>
+</ul>
+<p>所有以上的元素均被声明于针对 SOAP 封装的默认命名空间中：</p>
+<p><a href="http://www.w3.org/2001/12/soap-envelope" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope</a></p>
+<p>以及针对 SOAP 编码和数据类型的默认命名空间：</p>
+<p><a href="http://www.w3.org/2001/12/soap-encoding" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding</a></p>
+<p>SOAP文档的要求</p>
+<ol>
+<li>SOAP必须用xml来进行编码</li>
+<li>必须使用SOAP Envelope命名空间和SOAP Encoding命名空间</li>
+<li>不能包含DTD引用</li>
+<li>不能包含XML处理指令</li>
+</ol>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Header</span>&gt;</span></span><br><span class="line">...</span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Header</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">...</span><br><span class="line">  <span class="tag">&lt;<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">soap:Fault</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Envelope元素"><a href="#Envelope元素" class="headerlink" title="Envelope元素"></a>Envelope元素</h3><p>是SOAP的根元素，将其定义成soap信息</p>
+<p>属性</p>
+<ul>
+<li>xmlns:soap  命名空间 <ul>
+<li>SOAP 消息必须拥有与命名空间 “<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a> 相关联的一个 Envelope 元素</li>
+</ul>
+</li>
+<li>xmlns:encodingStyle <ul>
+<li>此属性可出现在任何 SOAP 元素中，并会被应用到元素的内容及元素的所有子元素上。</li>
+<li>SOAP 没有默认编码方式 <a href="http://www.w3.org/2001/12/soap-encoding使用这个就好" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-encoding使用这个就好</a></li>
+</ul>
+</li>
+</ul>
+<p>之后我们就能用 soap 和 encodingStyle 属性</p>
+<h3 id="Header元素"><a href="#Header元素" class="headerlink" title="Header元素"></a>Header元素</h3><p>包含头部信息，一些SOAP/应用程序专用信息    比如认证 支付等</p>
+<p>如果使用header 它一定是第一个子元素</p>
+<p>所有 Header 元素的直接子元素必须是合格的命名空间</p>
+<p>soap在默认的命名空间中 (“<a href="http://www.w3.org/2001/12/soap-envelope&quot;" target="_blank" rel="noopener">http://www.w3.org/2001/12/soap-envelope&quot;</a>) 定义了三个属性(有一个encodingStyle这里不废话 )这些被定义在 SOAP 头部的属性可定义容器如何对 SOAP 消息进行处理</p>
+<p>mustUnderstand 属性可用于标识标题项对于要对其进行处理的接收者来说是强制的还是可选的</p>
+<p><code>soap:mustUnderstand=&quot;0|1&quot;</code></p>
+<p>SOAP信息可以沿着信息路径转发，actor用于寻址到下一个特点端点</p>
+<p><code>soap:actor=&quot;URI&quot;</code></p>
+<h3 id="Body元素"><a href="#Body元素" class="headerlink" title="Body元素"></a>Body元素</h3><p>soap的body元素的子元素可以引入合格的命名空间</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 比如下面使用m的getPrice属性，它首先要引入 命名空间m  xmlns:m="xxx" --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Getprice</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.xxxx.com/prices"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">m:item</span>&gt;</span>Apples<span class="tag">&lt;/<span class="name">m:item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">m:Getprice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Fault元素"><a href="#Fault元素" class="headerlink" title="Fault元素"></a>Fault元素</h3><p>Fault一定是Body的子元素，在一条soap内，fault只能出现一次，它用于指示body的错误</p>
+<p>fault拥有子元素</p>
+<ul>
+<li><code>&lt;faultcode&gt;</code>用来识别错误的代码</li>
+<li><code>&lt;faultstring&gt;</code>错误说明</li>
+<li><code>&lt;faultactor&gt;</code> 谁引发的错误</li>
+<li><code>&lt;detail&gt;</code> 涉及body元素的应用程序专用错误信息</li>
+</ul>
+<p>faultcode 有几个错误代码</p>
+<ol>
+<li>versionMismatch envelop元素的无效的命名空间</li>
+<li>MustUnderstand 这是之前header元素中设置了 mustunderstand 的时候出现的错误可能会出现  无法理解</li>
+<li>Client 消息被不正确地构成，或包含不正确的信息</li>
+<li>Server 服务有问题，因此无法处理进行</li>
+</ol>
+<h3 id="HTTP-XML-SOAP"><a href="#HTTP-XML-SOAP" class="headerlink" title="HTTP + XML = SOAP"></a>HTTP + XML = SOAP</h3><p>好像传输soap 需要在contentType上说明</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span>: application/soap+xml; charset=utf-8</span><br></pre></td></tr></table></figure>
+<h2 id="一个-SOAP-实例"><a href="#一个-SOAP-实例" class="headerlink" title="一个 SOAP 实例"></a>一个 SOAP 实例</h2><p>在下面的例子中，一个 GetStockPrice 请求被发送到了服务器。此请求有一个 StockName 参数，而在响应中则会返回一个 Price 参数。此功能的命名空间被定义在此地址中： “<a href="http://www.example.org/stock&quot;" target="_blank" rel="noopener">http://www.example.org/stock&quot;</a></p>
+<h3 id="SOAP-请求："><a href="#SOAP-请求：" class="headerlink" title="SOAP 请求："></a>SOAP 请求：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /InStock HTTP/1.1</span><br><span class="line">Host: www.example.org</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:StockName</span>&gt;</span>IBM<span class="tag">&lt;/<span class="name">m:StockName</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPrice</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="SOAP-响应："><a href="#SOAP-响应：" class="headerlink" title="SOAP 响应："></a>SOAP 响应：</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Content-Type: application/soap+xml; charset=utf-8</span><br><span class="line">Content-Length: nnn</span><br><span class="line"></span><br><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Envelope</span></span></span><br><span class="line"><span class="tag"><span class="attr">xmlns:soap</span>=<span class="string">"http://www.w3.org/2001/12/soap-envelope"</span></span></span><br><span class="line"><span class="tag"><span class="attr">soap:encodingStyle</span>=<span class="string">"http://www.w3.org/2001/12/soap-encoding"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">soap:Body</span> <span class="attr">xmlns:m</span>=<span class="string">"http://www.example.org/stock"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">m:Price</span>&gt;</span>34.5<span class="tag">&lt;/<span class="name">m:Price</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">m:GetStockPriceResponse</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">soap:Envelope</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Web Service简介/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -960,6 +1145,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python生成器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Python生成器/" itemprop="url">Python生成器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="生成器概念"><a href="#生成器概念" class="headerlink" title="生成器概念"></a>生成器概念</h2><p>生成器是一次生成一个值的<code>特殊类型函数</code>。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。<br> 包含yield关键字的函数可以理解是一个用函数名表示的另类<code>list对象</code>，通过迭代的方式（例如：for）依次获取结果。</p>
+<h2 id="生成器的特点"><a href="#生成器的特点" class="headerlink" title="生成器的特点"></a>生成器的特点</h2><ol>
+<li>记录执行函数内的所有变量状态（数据）和代码执行位置。</li>
+<li>立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。</li>
+</ol>
+<h2 id="认识生成器"><a href="#认识生成器" class="headerlink" title="认识生成器"></a>认识生成器</h2><p>下来让我们一起来看看如何使用yield，先通过一个简单的例子认识生成器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addlist</span><span class="params">(alist)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> alist:</span><br><span class="line">        <span class="comment"># yield与return功能类似，返回本次迭代结果   </span></span><br><span class="line">        <span class="keyword">yield</span> i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">alist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> addlist(alist):</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>根据addlist()函数实现可以推断出addlist(alist)相当于一个值为[2, 3, 4, 5]的list，不过迭代调用时以函数表达式的形式出现在for语句中。<br> 使用”list变量”（实际为函数变量，此处可以理解为list）替代addlist(alist)作为for的参数，执行结果相同，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_one_list = addlist(alist)</span><br><span class="line">for x in add_one_list:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<h2 id="生成器执行过程"><a href="#生成器执行过程" class="headerlink" title="生成器执行过程"></a>生成器执行过程</h2><p>到底yield是如何执行的呢？生成器（函数）的执行逻辑到底是什么样子？<br> 让我们一起来写个demo进行分析。</p>
+<blockquote>
+<p>next()函数<br>   用于移动迭代器指向下一个数据，直到抛出StopIteration，代表迭代终止。</p>
+</blockquote>
+<p>定义函数yield_run_logic()，对一个已经初始化变量a，多次调用，同在yield前后输出日志，用于分析执行逻辑。然后再一个while(1)的死循环中使用next()方法遍历生成器，直到抛出停止迭代异常跳出循环（StopIteration）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def yield_run_logic():</span><br><span class="line">    a = 1</span><br><span class="line">    for i in range(3):</span><br><span class="line">        print(&apos;begin yield&apos;)</span><br><span class="line">        yield a</span><br><span class="line">        print(&apos;end yield&apos;)</span><br><span class="line">        a += i</span><br><span class="line"></span><br><span class="line"># 获取生成器对象</span><br><span class="line">yield_obj = yield_run_logic()</span><br><span class="line"># 此时只是获取对象，尚未执行yield_run_logic()的内容，直到第一调用next()\</span><br><span class="line">while 1:</span><br><span class="line">    try:</span><br><span class="line">        ret = next(yield_obj)</span><br><span class="line">        # 第一次调用next()方法，开始执行yield_run_logic()，直到遇到yield关键字，返回当前结果，</span><br><span class="line">        # yield_run_logic()保留当前执行状态和代码执行位置，当下次执行next()时，</span><br><span class="line">        # yield_run_logic()从上次保留的继续执行，直到遇到yield关键字。</span><br><span class="line">        # yield_run_logic()无迭代数据时，抛出StopIteration异常，表示迭代结束。</span><br><span class="line">        print(ret)</span><br><span class="line">    except StopIteration:</span><br><span class="line">        print(&apos;end test&apos;)</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 第1次执行输出 a = 1, i = 0</span><br><span class="line">begin yield</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 第2次执行输出 a = 1, i = 1</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"># 第3次执行输出 a = 2, i = 2</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">4</span><br><span class="line"></span><br><span class="line"># 第4次执行</span><br><span class="line">end yield # yield_run_logic()中 i 超过range(3)的范围，结束迭代，</span><br><span class="line">          # 由于使用next()而并非使用for来迭代生成器，所以迭代结束异常需要自己处理。</span><br><span class="line">end test</span><br></pre></td></tr></table></figure>
+<p>根据输出结果可以看出，在第一次执行next()时，生成器yield_run_logic()开始执行，打印’begin yield’，并在<code>yield a</code>处返回结果，之后再执行next()都是从<code>yield a</code>之后开始执行（打印’end yield’），直到循环中再次遇到<code>yield a</code>时返回。</p>
+<p><strong>总结</strong> yield的执行逻辑。</p>
+<blockquote>
+<p><strong>第一次获取迭代结果，函数的第一行代码执行到yield关键字返回，第[2,n]次迭代结果，函数执行从yield关键字下一行代码到再次碰到yield关键字返回。</strong></p>
+</blockquote>
+<h2 id="yield的应用场景"><a href="#yield的应用场景" class="headerlink" title="yield的应用场景"></a>yield的应用场景</h2><p>凡是本次处理使用上次处理结果作为基础数据的逻辑实现，都可以考虑使用生成器。</p>
+<p><strong>练习1：打印杨辉三角</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">          1</span><br><span class="line">        1   1</span><br><span class="line">      1   2   1</span><br><span class="line">    1   3   3   1</span><br><span class="line">  1   4   6   4   1</span><br><span class="line">1   5   10  10  5   1</span><br></pre></td></tr></table></figure>
+<p><strong>特征分析</strong>：从第三行开始每一行的非边界数字等于上一行相邻两数字之和，边界数字全部为1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pascals_triangle</span><span class="params">(line_count)</span>:</span></span><br><span class="line">    up_line = []</span><br><span class="line">    line = []</span><br><span class="line">    <span class="comment"># i取值范围[0, line_count-1]</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(line_count):</span><br><span class="line">        <span class="comment"># 扩展当前行列表长度，初始化数据为1，并且保证边界数据为1</span></span><br><span class="line">        line.append(<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 1,2行全部是1，3行开始体现特征，需要进行特征处理</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 当前行[1, n-1]的值等于上一行[0, n-2]与[1, n-1]的和</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(up_line)):</span><br><span class="line">                line[j] = up_line[j<span class="number">-1</span>] + up_line[j]</span><br><span class="line">        <span class="comment"># 返回当前行</span></span><br><span class="line">        <span class="keyword">yield</span> line</span><br><span class="line">        <span class="comment"># 更新上一行记录结果，保存当前行</span></span><br><span class="line">        up_line = line[:]</span><br><span class="line"></span><br><span class="line">lines = <span class="number">6</span></span><br><span class="line">fn = pascals_triangle(lines)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fn:</span><br><span class="line">    print(line)</span><br></pre></td></tr></table></figure>
+<p>函数执行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1]</span><br><span class="line">[1, 1]</span><br><span class="line">[1, 2, 1]</span><br><span class="line">[1, 3, 3, 1]</span><br><span class="line">[1, 4, 6, 4, 1]</span><br><span class="line">[1, 5, 10, 10, 5, 1]</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python(4)oop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1244,156 +1579,6 @@
 <h2 id="RDF-集合"><a href="#RDF-集合" class="headerlink" title="RDF 集合"></a>RDF 集合</h2><p>RDF 集合用于描述仅包含指定成员的组。</p>
 <p>集合是通过属性 rdf:parseType=”Collection” 来描述的。</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">rdf:Description</span></span></span><br><span class="line"><span class="tag"><span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">cd:artist</span> <span class="attr">rdf:parseType</span>=<span class="string">"Collection"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/George"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/John"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Paul"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">rdf:Description</span> <span class="attr">rdf:about</span>=<span class="string">"http://recshop.fake/cd/Beatles/Ringo"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">cd:artist</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">rdf:Description</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python生成器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/Python生成器/" itemprop="url">Python生成器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="生成器概念"><a href="#生成器概念" class="headerlink" title="生成器概念"></a>生成器概念</h2><p>生成器是一次生成一个值的<code>特殊类型函数</code>。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。<br> 包含yield关键字的函数可以理解是一个用函数名表示的另类<code>list对象</code>，通过迭代的方式（例如：for）依次获取结果。</p>
-<h2 id="生成器的特点"><a href="#生成器的特点" class="headerlink" title="生成器的特点"></a>生成器的特点</h2><ol>
-<li>记录执行函数内的所有变量状态（数据）和代码执行位置。</li>
-<li>立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。</li>
-</ol>
-<h2 id="认识生成器"><a href="#认识生成器" class="headerlink" title="认识生成器"></a>认识生成器</h2><p>下来让我们一起来看看如何使用yield，先通过一个简单的例子认识生成器。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addlist</span><span class="params">(alist)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> alist:</span><br><span class="line">        <span class="comment"># yield与return功能类似，返回本次迭代结果   </span></span><br><span class="line">        <span class="keyword">yield</span> i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">alist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> addlist(alist):</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
-<p>根据addlist()函数实现可以推断出addlist(alist)相当于一个值为[2, 3, 4, 5]的list，不过迭代调用时以函数表达式的形式出现在for语句中。<br> 使用”list变量”（实际为函数变量，此处可以理解为list）替代addlist(alist)作为for的参数，执行结果相同，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_one_list = addlist(alist)</span><br><span class="line">for x in add_one_list:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
-<h2 id="生成器执行过程"><a href="#生成器执行过程" class="headerlink" title="生成器执行过程"></a>生成器执行过程</h2><p>到底yield是如何执行的呢？生成器（函数）的执行逻辑到底是什么样子？<br> 让我们一起来写个demo进行分析。</p>
-<blockquote>
-<p>next()函数<br>   用于移动迭代器指向下一个数据，直到抛出StopIteration，代表迭代终止。</p>
-</blockquote>
-<p>定义函数yield_run_logic()，对一个已经初始化变量a，多次调用，同在yield前后输出日志，用于分析执行逻辑。然后再一个while(1)的死循环中使用next()方法遍历生成器，直到抛出停止迭代异常跳出循环（StopIteration）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def yield_run_logic():</span><br><span class="line">    a = 1</span><br><span class="line">    for i in range(3):</span><br><span class="line">        print(&apos;begin yield&apos;)</span><br><span class="line">        yield a</span><br><span class="line">        print(&apos;end yield&apos;)</span><br><span class="line">        a += i</span><br><span class="line"></span><br><span class="line"># 获取生成器对象</span><br><span class="line">yield_obj = yield_run_logic()</span><br><span class="line"># 此时只是获取对象，尚未执行yield_run_logic()的内容，直到第一调用next()\</span><br><span class="line">while 1:</span><br><span class="line">    try:</span><br><span class="line">        ret = next(yield_obj)</span><br><span class="line">        # 第一次调用next()方法，开始执行yield_run_logic()，直到遇到yield关键字，返回当前结果，</span><br><span class="line">        # yield_run_logic()保留当前执行状态和代码执行位置，当下次执行next()时，</span><br><span class="line">        # yield_run_logic()从上次保留的继续执行，直到遇到yield关键字。</span><br><span class="line">        # yield_run_logic()无迭代数据时，抛出StopIteration异常，表示迭代结束。</span><br><span class="line">        print(ret)</span><br><span class="line">    except StopIteration:</span><br><span class="line">        print(&apos;end test&apos;)</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 第1次执行输出 a = 1, i = 0</span><br><span class="line">begin yield</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 第2次执行输出 a = 1, i = 1</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"># 第3次执行输出 a = 2, i = 2</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">4</span><br><span class="line"></span><br><span class="line"># 第4次执行</span><br><span class="line">end yield # yield_run_logic()中 i 超过range(3)的范围，结束迭代，</span><br><span class="line">          # 由于使用next()而并非使用for来迭代生成器，所以迭代结束异常需要自己处理。</span><br><span class="line">end test</span><br></pre></td></tr></table></figure>
-<p>根据输出结果可以看出，在第一次执行next()时，生成器yield_run_logic()开始执行，打印’begin yield’，并在<code>yield a</code>处返回结果，之后再执行next()都是从<code>yield a</code>之后开始执行（打印’end yield’），直到循环中再次遇到<code>yield a</code>时返回。</p>
-<p><strong>总结</strong> yield的执行逻辑。</p>
-<blockquote>
-<p><strong>第一次获取迭代结果，函数的第一行代码执行到yield关键字返回，第[2,n]次迭代结果，函数执行从yield关键字下一行代码到再次碰到yield关键字返回。</strong></p>
-</blockquote>
-<h2 id="yield的应用场景"><a href="#yield的应用场景" class="headerlink" title="yield的应用场景"></a>yield的应用场景</h2><p>凡是本次处理使用上次处理结果作为基础数据的逻辑实现，都可以考虑使用生成器。</p>
-<p><strong>练习1：打印杨辉三角</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">          1</span><br><span class="line">        1   1</span><br><span class="line">      1   2   1</span><br><span class="line">    1   3   3   1</span><br><span class="line">  1   4   6   4   1</span><br><span class="line">1   5   10  10  5   1</span><br></pre></td></tr></table></figure>
-<p><strong>特征分析</strong>：从第三行开始每一行的非边界数字等于上一行相邻两数字之和，边界数字全部为1。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pascals_triangle</span><span class="params">(line_count)</span>:</span></span><br><span class="line">    up_line = []</span><br><span class="line">    line = []</span><br><span class="line">    <span class="comment"># i取值范围[0, line_count-1]</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(line_count):</span><br><span class="line">        <span class="comment"># 扩展当前行列表长度，初始化数据为1，并且保证边界数据为1</span></span><br><span class="line">        line.append(<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 1,2行全部是1，3行开始体现特征，需要进行特征处理</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 当前行[1, n-1]的值等于上一行[0, n-2]与[1, n-1]的和</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(up_line)):</span><br><span class="line">                line[j] = up_line[j<span class="number">-1</span>] + up_line[j]</span><br><span class="line">        <span class="comment"># 返回当前行</span></span><br><span class="line">        <span class="keyword">yield</span> line</span><br><span class="line">        <span class="comment"># 更新上一行记录结果，保存当前行</span></span><br><span class="line">        up_line = line[:]</span><br><span class="line"></span><br><span class="line">lines = <span class="number">6</span></span><br><span class="line">fn = pascals_triangle(lines)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fn:</span><br><span class="line">    print(line)</span><br></pre></td></tr></table></figure>
-<p>函数执行结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1]</span><br><span class="line">[1, 1]</span><br><span class="line">[1, 2, 1]</span><br><span class="line">[1, 3, 3, 1]</span><br><span class="line">[1, 4, 6, 4, 1]</span><br><span class="line">[1, 5, 10, 10, 5, 1]</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1733,7 +1918,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

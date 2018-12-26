@@ -232,6 +232,377 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(七)异常/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/JDBC(七)异常/" itemprop="url">JDBC(七)异常</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>JDBC最常见的异常是 SQLException</p>
+<p>获取错误的信息的一些方法 通过SQLException对象来调用</p>
+<table>
+<thead>
+<tr>
+<th><code>getErrorCode( )</code></th>
+<th>获取与异常关联的错误代码。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getMessage( )</code></td>
+<td>获取驱动程序处理的错误的JDBC驱动程序的错误消息，或获取数据库错误的Oracle错误代码和消息。</td>
+</tr>
+<tr>
+<td><code>getSQLState( )</code></td>
+<td>获取XOPEN SQLstate字符串。 对于JDBC驱动程序错误，不会从此方法返回有用的信息。 对于数据库错误，返回五位数的XOPEN SQLstate代码。 此方法可以返回<code>null</code>。</td>
+</tr>
+<tr>
+<td><code>getNextException( )</code></td>
+<td>获取异常链中的下一个<code>Exception</code>对象。</td>
+</tr>
+<tr>
+<td><code>printStackTrace( )</code></td>
+<td>打印当前异常或可抛出的异常，并将其追溯到标准错误流。</td>
+</tr>
+<tr>
+<td><code>printStackTrace(PrintStream s)</code></td>
+<td>将此<code>throwable</code>及其回溯打印到指定的打印流。</td>
+</tr>
+<tr>
+<td><code>printStackTrace(PrintWriter w)</code></td>
+<td>打印这个<code>throwable</code>，它是回溯到指定的打印器(<code>PrintWriter</code>)。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="批量处理"><a href="#批量处理" class="headerlink" title="批量处理"></a>批量处理</h3><p>一次性向数据库发送多个sql语句可以减少通信花销提高性能</p>
+<p>首先得看看jdbc驱动是否支持该功能</p>
+<p>使用 <code>DatabaseMetaData.supportsBatchUpdates()</code> 去检查目标数据库和驱动是否支持把？ 如果支持则返回true</p>
+<ul>
+<li>用Statement和其兄弟的addBatch 将单个语句添加到批处理 executeBatch() 执行批量处理的所有语句</li>
+<li>我们可以使用clearBatch()删除等待执行的批量处理的所有语句，不过是全部删除，不能单个删除</li>
+</ul>
+<p>感觉PreparedStatement和Statement差不多，不过好像没有CallableStatement的用法</p>
+<ul>
+<li>创建Statement/PreparedStatement 对象</li>
+<li>conn.setAutoCommit(false)</li>
+<li>addBatch()  将构造好的Statement对象传进去，注意prepareStatement的sql也是填好参数了，Statement就在addBatch参数传入sql语句</li>
+<li>executeBatch() 执行所有sql语句</li>
+<li>commit 提交事务</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//假装statement/preparedStatement构造完成</span></span><br><span class="line">conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">stmt.setXXX(...); stmt.addBatch();  /stmt.addBatch(sql);</span><br><span class="line"></span><br><span class="line"><span class="comment">//好像是能返回结果的？ 不过如果太多怎么处理？</span></span><br><span class="line">stmt.executeBatch();</span><br><span class="line">conn.commit()</span><br></pre></td></tr></table></figure>
+<p>JDBC的SQL转义语法</p>
+<h2 id="JDBC-SQL转义语法"><a href="#JDBC-SQL转义语法" class="headerlink" title="JDBC SQL转义语法"></a>JDBC SQL转义语法</h2><p>通过使用标准JDBC方法和属性，转义语法使您能够灵活地使用不可用的数据库特定功能。</p>
+<p>一般SQL转义语法格式如下 -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;keyword &apos;parameters&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>以下是以下转义序列，在执行JDBC编程时非常有用 -</p>
+<p><strong>d, t, ts关键字</strong></p>
+<p>它们用于帮助确定日期，时间和时间戳文字。没有哪两个DBMS表示时间和日期的方式相同。 该转义语法告诉驱动程序以目标数据库的格式呈现日期或时间。 例如 -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;d &apos;yyyy-mm-dd&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p><code>yyyy</code>=年份，<code>mm</code>=月份; <code>dd</code>=日期。 使用这种语法<code>{d&#39;2019-09-03&#39;}</code>表示的是2019年3月9日。</p>
+<p>这是一个简单的示例，显示如何将日期插入表中 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Create a Statement object</span></span><br><span class="line">stmt = conn.createStatement();</span><br><span class="line"><span class="comment">//Insert data ==&gt; ID, First Name, Last Name, DOB</span></span><br><span class="line">String sql=<span class="string">"INSERT INTO STUDENTS VALUES"</span> +</span><br><span class="line">             <span class="string">"(100,'Kobe','Bryant', &#123;d '2002-12-16'&#125;)"</span>;</span><br><span class="line"></span><br><span class="line">stmt.executeUpdate(sql);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Java</span><br></pre></td></tr></table></figure>
+<p>同样，还可以使用以下两种语法：<code>t</code>或<code>ts</code> -</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;t &apos;hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，<code>hh</code>=小时，<code>mm</code> =分钟， <code>ss</code> =秒。 使用这种语法<code>{t &#39;13:30:29&#39;}</code>是<code>1:30:29 PM</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;ts &apos;yyyy-mm-dd hh:mm:ss&apos;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里“<code>d</code>”和“<code>t</code>”是上述两种语法的组合语法来表示时间戳。</p>
+<p><strong>escape关键字</strong></p>
+<p><code>escape</code>关键字标识<code>LIKE</code>子句中使用转义字符。 使用SQL通配符<code>%</code>(与<code>0</code>个或多个字符匹配)时很有用。 例如 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT symbol FROM MathSymbols</span></span><br><span class="line"><span class="string">              WHERE symbol LIKE '\%' &#123;escape '\'&#125;"</span>;     <span class="comment">//escape声明 \是转义字符</span></span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
+<p>如果使用反斜杠字符(<code>\</code>)作为转义字符，则还必须在Java字符串文字中使用<strong>两个反斜杠</strong>字符，因为反斜杠也是Java转义字符。</p>
+<p><strong>fn 关键字</strong></p>
+<p>这个关键字表示DBMS中使用的标量函数。 例如，可以使用SQL函数长度来获取字符串的长度 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">fn <span class="title">length</span><span class="params">(<span class="string">'Hello World'</span>)</span>&#125;</span></span><br></pre></td></tr></table></figure>
+<p>上面语句返回结果值为：<code>11</code>，也就是字符串’<code>Hello World</code>‘的长度。</p>
+<p><strong>call 关键字</strong></p>
+<p>此关键字用于调用存储过程。 例如，对于需要<code>IN</code>参数的存储过程，请使用以下语法 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;</span><br><span class="line">&#123;? = <span class="function">call <span class="title">my_procedure</span><span class="params">(?)</span>&#125;</span>;   <span class="comment">//感觉这个不像是存储过程的啊，像是存储函数的</span></span><br></pre></td></tr></table></figure>
+<p>有一个博客是这样调用存储函数的，但是好像没怎么见到是这样调用存储过程的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFuntion</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//jdbc调用存储函数sql语句：</span></span><br><span class="line">        <span class="comment">//&#123;?= call &lt;procedure-name&gt;[(&lt;arg1&gt;,&lt;arg2&gt;, ...)]&#125;</span></span><br><span class="line">        String sql = <span class="string">"&#123;? = call queryEmpIncome(?)&#125;"</span>;</span><br><span class="line">        </span><br><span class="line">        Connection conn = <span class="keyword">null</span>;</span><br><span class="line">        CallableStatement call = <span class="keyword">null</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            conn = JDBCUtils.getConnection();</span><br><span class="line">            call = conn.prepareCall(sql);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//注册输出参数</span></span><br><span class="line">            call.registerOutParameter(<span class="number">1</span>, OracleTypes.NUMBER);</span><br><span class="line">            <span class="comment">//输入参数</span></span><br><span class="line">            call.setInt(<span class="number">2</span>, <span class="number">7839</span>);</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//执行</span></span><br><span class="line">            call.execute();</span><br><span class="line">            </span><br><span class="line">            <span class="comment">//取出返回值</span></span><br><span class="line">            <span class="keyword">double</span> income = call.getDouble(<span class="number">1</span>);</span><br><span class="line">            System.out.println(<span class="string">"年薪："</span>+income);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            JDBCUtils.release(conn, call, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">也有这样调用</span><br><span class="line"></span><br><span class="line">            String sql = <span class="string">"select fun_avg_dept(?) from dual"</span>;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//调用方式还是和使用ps调用普通SQL一样</span></span><br><span class="line">            PreparedStatement ps = conn.prepareStatement(sql);</span><br><span class="line"></span><br><span class="line">            ps.setObject(<span class="number">1</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line">            ResultSet rs = ps.executeQuery();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (rs.next()) &#123;</span><br><span class="line">                System.out.println(rs.getObject(<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>oj关键字</strong></p>
+<p>此关键字用于表示外部连接。 语法如下 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;oj outer-join&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，<em>outer-join = table {LEFT|RIGHT|FULL} OUTERJOIN {table | outer-join}</em> 搜索条件。 例如 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String sql = <span class="string">"SELECT Employees </span></span><br><span class="line"><span class="string">              FROM &#123;oj ThisTable RIGHT</span></span><br><span class="line"><span class="string">              OUTER JOIN ThatTable on id = '100'&#125;"</span>;</span><br><span class="line">stmt.execute(sql);</span><br></pre></td></tr></table></figure>
+<p><code>PreparedStatement</code>对象可以使用输入和输出流来提供参数数据。能够将整个文件放入可以容纳大值的数据库列，例如<code>CLOB</code>和<code>BLOB</code>数据类型。</p>
+<p>有以下方法可用于流式传输数据 -</p>
+<ul>
+<li><code>setAsciiStream()</code>：此方法用于提供大的ASCII值。</li>
+<li><code>setCharacterStream()</code>：此方法用于提供较大的UNICODE值。</li>
+<li><code>setBinaryStream()</code>：此方法用于提供较大的二进制值。</li>
+</ul>
+<p><code>setXXXStream()</code>方法除了参数占位符之外还需要额外的参数和文件大小。此参数通知驱动程序使用流向数据库发送多少数据。</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>考虑要将XML文件<code>xml_data.xml</code>上传到数据库表中。下面是XML文件的内容 -</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>125<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">first</span>&gt;</span>Max<span class="tag">&lt;/<span class="name">first</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">last</span>&gt;</span>Su<span class="tag">&lt;/<span class="name">last</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Salary</span>&gt;</span>18000<span class="tag">&lt;/<span class="name">Salary</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Dob</span>&gt;</span>18-08-1978<span class="tag">&lt;/<span class="name">Dob</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Employee</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">XML</span><br></pre></td></tr></table></figure>
+<p>将此XML文件保存在要运行此示例的同一目录中。</p>
+<p>此示例将在数据库创建一个表：<em>xml_data</em>，然后将文件<code>xml_data.xml</code>上传到此表中。</p>
+<p>复制以下示例代码，并保存在文件：<em>StreamingData.java</em> 中，编译并运行如下 -</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Import required packages</span></span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamingData</span> </span>&#123;</span><br><span class="line">   <span class="comment">// JDBC driver name and database URL</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String JDBC_DRIVER = <span class="string">"com.mysql.jdbc.Driver"</span>;  </span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">"jdbc:mysql://localhost/EMP"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//  Database credentials</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">"root"</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String PASS = <span class="string">"123456"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Connection conn = <span class="keyword">null</span>;</span><br><span class="line">   PreparedStatement pstmt = <span class="keyword">null</span>;</span><br><span class="line">   Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">   ResultSet rs = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="comment">// Register JDBC driver</span></span><br><span class="line">      Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Open a connection</span></span><br><span class="line">      System.out.println(<span class="string">"Connecting to database..."</span>);</span><br><span class="line">      conn = DriverManager.getConnection(DB_URL,USER,PASS);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create a Statement object and build table</span></span><br><span class="line">      stmt = conn.createStatement();</span><br><span class="line">      createXMLTable(stmt);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Open a FileInputStream</span></span><br><span class="line">      File f = <span class="keyword">new</span> File(<span class="string">"xml_data.xml"</span>);</span><br><span class="line">      <span class="keyword">long</span> fileLength = f.length();</span><br><span class="line">      FileInputStream fis = <span class="keyword">new</span> FileInputStream(f);   <span class="comment">//构造文件流</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//Create PreparedStatement and stream data</span></span><br><span class="line">      String SQL = <span class="string">"INSERT INTO XML_Data VALUES (?,?)"</span>;</span><br><span class="line">      pstmt = conn.prepareStatement(SQL);</span><br><span class="line">      pstmt.setInt(<span class="number">1</span>,<span class="number">125</span>);</span><br><span class="line">      pstmt.setAsciiStream(<span class="number">2</span>,fis,(<span class="keyword">int</span>)fileLength);  <span class="comment">//传递文件流 并且设置文件长度</span></span><br><span class="line">      pstmt.execute();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//Close input stream</span></span><br><span class="line">      fis.close();</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Do a query to get the row</span></span><br><span class="line">      SQL = <span class="string">"SELECT Data FROM XML_Data WHERE id=125"</span>;</span><br><span class="line">      rs = stmt.executeQuery (SQL);</span><br><span class="line">      <span class="comment">// Get the first row</span></span><br><span class="line">      <span class="keyword">if</span> (rs.next ())&#123;</span><br><span class="line">         </span><br><span class="line">         InputStream xmlInputStream = rs.getAsciiStream (<span class="number">1</span>);   </span><br><span class="line">          <span class="comment">//从resultset得到ascll流后将其转为byte的数组流</span></span><br><span class="line">         <span class="keyword">int</span> c;</span><br><span class="line">         ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">         <span class="keyword">while</span> (( c = xmlInputStream.read ()) != -<span class="number">1</span>)</span><br><span class="line">            bos.write(c);</span><br><span class="line">         <span class="comment">//Print results</span></span><br><span class="line">         System.out.println(bos.toString());</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// Clean-up environment</span></span><br><span class="line">      rs.close();</span><br><span class="line">      stmt.close();</span><br><span class="line">      pstmt.close();</span><br><span class="line">      conn.close();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for JDBC</span></span><br><span class="line">      se.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for Class.forName</span></span><br><span class="line">      e.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      <span class="comment">//finally block used to close resources</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(stmt!=<span class="keyword">null</span>)</span><br><span class="line">            stmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(pstmt!=<span class="keyword">null</span>)</span><br><span class="line">            pstmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">         se.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end finally try</span></span><br><span class="line">   &#125;<span class="comment">//end try</span></span><br><span class="line">   System.out.println(<span class="string">"Goodbye!"</span>);</span><br><span class="line">&#125;<span class="comment">//end main</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">createXMLTable</span><span class="params">(Statement stmt)</span> </span></span><br><span class="line"><span class="function">   <span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">   System.out.println(<span class="string">"Creating XML_Data table..."</span> );</span><br><span class="line">   <span class="comment">//Create SQL Statement</span></span><br><span class="line">   String streamingDataSql = <span class="string">"CREATE TABLE XML_Data "</span> +</span><br><span class="line">                             <span class="string">"(id INTEGER, Data LONG)"</span>;     <span class="comment">//存储类型是的是Long</span></span><br><span class="line">   <span class="comment">//Drop table first if it exists.</span></span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      stmt.executeUpdate(<span class="string">"DROP TABLE XML_Data"</span>);</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">   &#125;<span class="comment">// do nothing</span></span><br><span class="line">   <span class="comment">//Build table.</span></span><br><span class="line">   stmt.executeUpdate(streamingDataSql);</span><br><span class="line">&#125;<span class="comment">//end createXMLTable</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(三)Statement家族/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/JDBC(三)Statement家族/" itemprop="url">JDBC(三)Statement家族</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Statement家族</p>
+<p>其实是祖孙三代 Statement PreparedStatement CallableStatement  其实它们都只是个接口</p>
+<ul>
+<li>Statement 用于普通的访问啦，就是普通的静态sql语句使用</li>
+<li>PreparedStatement  用于计划多次使用sql时，而且是动态sql，可改变参数构造</li>
+<li>CallableStatement  也是支持动态sql，不过是专门是用于存储过程的样子</li>
+</ul>
+<h3 id="Statement"><a href="#Statement" class="headerlink" title="Statement"></a>Statement</h3><p>构造Statement</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Statement stm=conn.createStatement();   <span class="comment">//con是Connection对象</span></span><br></pre></td></tr></table></figure>
+<p>Statement的使用</p>
+<p>所谓使用只不过将sql语句传递进去，让其执行而已</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ResultSet rs=stmt.executeQuery(<span class="string">"select * from test"</span>);</span><br><span class="line">rs.getString(<span class="number">1</span>);   <span class="comment">//好像从1开始 参数为序号</span></span><br></pre></td></tr></table></figure>
+<p>实际上不只是executeQuery 还有其他执行的方式 </p>
+<ul>
+<li>boolean execute(String sql) 就执行，如果有ResultSet的存在 则返回true 适合一些不需要返回值的东东，比如创建数据库 创建表这个</li>
+<li>int executeUpdate(String sql) 会返回sql影响的数据库行数， 适合一些 insert update delete</li>
+</ul>
+<p>关闭Statement</p>
+<p>Statement和Connection一样都需要关闭，如果关闭Connection 它也会先关闭Statement 但最好显式关闭</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Statement stmt=<span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    stmt=conn.createStatement();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (SQLException e)&#123;&#125;</span><br><span class="line"><span class="keyword">finally</span>&#123;</span><br><span class="line">    stmt.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="PreparedStatement对象"><a href="#PreparedStatement对象" class="headerlink" title="PreparedStatement对象"></a>PreparedStatement对象</h3><p>PreparedStatement 的String可以构造带参数的sql语句</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String sql=<span class="string">"update aatable set age=? where id=?"</span></span><br><span class="line">PreparedStatement stmt=conn.prepareStatement(sql);        <span class="comment">//构造函数变成preparedStatement对象  构造函数没有d</span></span><br><span class="line">stmt.setInt(<span class="number">1</span>,<span class="number">23</span>);            <span class="comment">//序号从1 开始 不是从0开始</span></span><br><span class="line">stmt.setString(<span class="number">2</span>,<span class="string">"abc"</span>);</span><br><span class="line"><span class="keyword">int</span> rs=stmt.executeUpdate();</span><br></pre></td></tr></table></figure>
+<p>preparedStatement 同样支持 execute() executeQuery()</p>
+<p>不过区别是sql语句在preparedStatement 是在创建Statement时填入，而对于Statement是execute执行的时候填入</p>
+<p>setXXX 有很多 和下面的getXXX 对应</p>
+<p>getXXX 有：</p>
+<p>getString、getBigDecimal、getString、getDate、getURL getInt(int parameterIndex)</p>
+<p>关闭的方法也一样</p>
+<p>CallableStatement</p>
+<p>首先定义一个存储过程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER //</span><br><span class="line">create procedure kk(IN id int,OUT meizizi varchar(233))</span><br><span class="line">begin</span><br><span class="line">	select username into meizizi from kk_table where k_id =id;</span><br><span class="line">end//</span><br><span class="line">DELIMITER;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String sql=<span class="string">"&#123;call kk(?,?)&#125;"</span>;</span><br><span class="line">CallableStatement stmt=conn.prepareCall(sql);   <span class="comment">//是prepareCall 没有d</span></span><br><span class="line">stmt.setInt(<span class="number">1</span>,<span class="number">233</span>);   <span class="comment">//传参了  setXXX</span></span><br><span class="line"><span class="comment">//OUT INOUT 参数时都需要一个额外的registerOutParameter 将参数和类型绑定一下  </span></span><br><span class="line">stmt.registerOutParameter(<span class="number">2</span>,Types.VARCHAR);</span><br><span class="line"><span class="comment">//猜如果时INOUT 参数 可以之后再 setXXX 一下</span></span><br><span class="line">stmt.execute();</span><br><span class="line"><span class="comment">//结果都存在Statement中？</span></span><br><span class="line">String a=stmt.getString(<span class="string">"meizizi"</span>);    <span class="comment">//通过getXXX 加参数名获得OUT/INOUT参数</span></span><br></pre></td></tr></table></figure>
+<p>关闭也一样</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(五)数据类型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -456,309 +827,6 @@
 </ul>
 <p>下面是一个用来处理<code>NULL</code>值的例子</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Statement stmt = conn.createStatement();</span><br><span class="line">String sql = <span class="string">"SELECT id, first, last, age FROM Employees"</span>;</span><br><span class="line">ResultSet rs = stmt.executeQuery(sql);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> id = rs.getInt(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">if</span>( rs.wasNull( ) ) &#123;</span><br><span class="line">   id = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(三)Statement家族/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/JDBC(三)Statement家族/" itemprop="url">JDBC(三)Statement家族</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Statement家族</p>
-<p>其实是祖孙三代 Statement PreparedStatement CallableStatement  其实它们都只是个接口</p>
-<ul>
-<li>Statement 用于普通的访问啦，就是普通的静态sql语句使用</li>
-<li>PreparedStatement  用于计划多次使用sql时，而且是动态sql，可改变参数构造</li>
-<li>CallableStatement  也是支持动态sql，不过是专门是用于存储过程的样子</li>
-</ul>
-<h3 id="Statement"><a href="#Statement" class="headerlink" title="Statement"></a>Statement</h3><p>构造Statement</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Statement stm=conn.createStatement();   <span class="comment">//con是Connection对象</span></span><br></pre></td></tr></table></figure>
-<p>Statement的使用</p>
-<p>所谓使用只不过将sql语句传递进去，让其执行而已</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ResultSet rs=stmt.executeQuery(<span class="string">"select * from test"</span>);</span><br><span class="line">rs.getString(<span class="number">1</span>);   <span class="comment">//好像从1开始 参数为序号</span></span><br></pre></td></tr></table></figure>
-<p>实际上不只是executeQuery 还有其他执行的方式 </p>
-<ul>
-<li>boolean execute(String sql) 就执行，如果有ResultSet的存在 则返回true 适合一些不需要返回值的东东，比如创建数据库 创建表这个</li>
-<li>int executeUpdate(String sql) 会返回sql影响的数据库行数， 适合一些 insert update delete</li>
-</ul>
-<p>关闭Statement</p>
-<p>Statement和Connection一样都需要关闭，如果关闭Connection 它也会先关闭Statement 但最好显式关闭</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Statement stmt=<span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    stmt=conn.createStatement();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (SQLException e)&#123;&#125;</span><br><span class="line"><span class="keyword">finally</span>&#123;</span><br><span class="line">    stmt.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="PreparedStatement对象"><a href="#PreparedStatement对象" class="headerlink" title="PreparedStatement对象"></a>PreparedStatement对象</h3><p>PreparedStatement 的String可以构造带参数的sql语句</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">String sql=<span class="string">"update aatable set age=? where id=?"</span></span><br><span class="line">PreparedStatement stmt=conn.prepareStatement(sql);        <span class="comment">//构造函数变成preparedStatement对象  构造函数没有d</span></span><br><span class="line">stmt.setInt(<span class="number">1</span>,<span class="number">23</span>);            <span class="comment">//序号从1 开始 不是从0开始</span></span><br><span class="line">stmt.setString(<span class="number">2</span>,<span class="string">"abc"</span>);</span><br><span class="line"><span class="keyword">int</span> rs=stmt.executeUpdate();</span><br></pre></td></tr></table></figure>
-<p>preparedStatement 同样支持 execute() executeQuery()</p>
-<p>不过区别是sql语句在preparedStatement 是在创建Statement时填入，而对于Statement是execute执行的时候填入</p>
-<p>setXXX 有很多 和下面的getXXX 对应</p>
-<p>getXXX 有：</p>
-<p>getString、getBigDecimal、getString、getDate、getURL getInt(int parameterIndex)</p>
-<p>关闭的方法也一样</p>
-<p>CallableStatement</p>
-<p>首先定义一个存储过程</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DELIMITER //</span><br><span class="line">create procedure kk(IN id int,OUT meizizi varchar(233))</span><br><span class="line">begin</span><br><span class="line">	select username into meizizi from kk_table where k_id =id;</span><br><span class="line">end//</span><br><span class="line">DELIMITER;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">String sql=<span class="string">"&#123;call kk(?,?)&#125;"</span>;</span><br><span class="line">CallableStatement stmt=conn.prepareCall(sql);   <span class="comment">//是prepareCall 没有d</span></span><br><span class="line">stmt.setInt(<span class="number">1</span>,<span class="number">233</span>);   <span class="comment">//传参了  setXXX</span></span><br><span class="line"><span class="comment">//OUT INOUT 参数时都需要一个额外的registerOutParameter 将参数和类型绑定一下  </span></span><br><span class="line">stmt.registerOutParameter(<span class="number">2</span>,Types.VARCHAR);</span><br><span class="line"><span class="comment">//猜如果时INOUT 参数 可以之后再 setXXX 一下</span></span><br><span class="line">stmt.execute();</span><br><span class="line"><span class="comment">//结果都存在Statement中？</span></span><br><span class="line">String a=stmt.getString(<span class="string">"meizizi"</span>);    <span class="comment">//通过getXXX 加参数名获得OUT/INOUT参数</span></span><br></pre></td></tr></table></figure>
-<p>关闭也一样</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(六)事务/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/JDBC(六)事务/" itemprop="url">JDBC(六)事务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>JDBC连接处于自动提交模式，正常的话每个sql完成后都会提交到数据库</p>
-<p>但是使用事务的原因</p>
-<ul>
-<li>提高性能</li>
-<li>保持业务流程的完整</li>
-<li>使用分布式事务</li>
-</ul>
-<p>如果不是使用自动提交模式，而是开启手动事务支持 </p>
-<p><code>conn.setAutoCommit(false)</code></p>
-<p>提交事务，进行更改</p>
-<p><code>con.commit()</code></p>
-<p>使用conn进行数据库</p>
-<p><code>con.rollback()</code></p>
-<p>操作流程</p>
-<ul>
-<li>关闭自动提交，开启事务</li>
-<li>创建Statement对象</li>
-<li>构造sql语句，并execute</li>
-<li>commit 提交事务</li>
-<li>出现SQLException 后执行rollback 进行事务回滚</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//进行事务提交或回滚都是要Connection对象进行操作</span></span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stm=con.createStatement();</span><br><span class="line">    String sql=<span class="string">"select * from test"</span>;</span><br><span class="line">    rs=stmt.executeQuery(sql);</span><br><span class="line">    conn.commit();</span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Savepoint 保存点</p>
-<p>这让你在回滚中，可以跑回这个保存点</p>
-<p>Connection 采用两个方法去管理保存点</p>
-<ul>
-<li>setSavepoint(String savepointname)    设置保存点它返回一个savepoint对象</li>
-<li>releaseSavepoint(Savepoint savepoint) 删除保存点</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stmt=conn.createStatement();</span><br><span class="line">    String sql=<span class="string">"xxx"</span>;</span><br><span class="line">    Savepoint savepoint1=conn.setSavepoint(<span class="string">"xxx"</span>);</span><br><span class="line">    stmt.executeUpdate(sql);</span><br><span class="line">    conn.commit();</span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException s)&#123;</span><br><span class="line">    conn.rollback(savepoint1);        <span class="comment">//传入savepoint作为参数 savepoint对象在try声明的catch依然有效</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这是一个保存点和回滚的应用</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//STEP 1. Import required packages</span></span><br><span class="line"><span class="comment">// See more detail at http://www.yiibai.com/jdbc/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JDBCSavepoint</span> </span>&#123;</span><br><span class="line">   <span class="comment">// JDBC driver name and database URL</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String JDBC_DRIVER = <span class="string">"com.mysql.jdbc.Driver"</span>;  </span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">"jdbc:mysql://localhost/EMP"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//  Database credentials</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">"root"</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String PASS = <span class="string">"123456"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Connection conn = <span class="keyword">null</span>;</span><br><span class="line">   Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="comment">//STEP 2: Register JDBC driver</span></span><br><span class="line">      Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 3: Open a connection</span></span><br><span class="line">      System.out.println(<span class="string">"Connecting to database..."</span>);</span><br><span class="line">      conn = DriverManager.getConnection(DB_URL,USER,PASS);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 4: Set auto commit as false.</span></span><br><span class="line">      conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 5: Execute a query to delete statment with</span></span><br><span class="line">      <span class="comment">// required arguments for RS example.</span></span><br><span class="line">      System.out.println(<span class="string">"Creating statement..."</span>);</span><br><span class="line">      stmt = conn.createStatement();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 6: Now list all the available records.</span></span><br><span class="line">      String sql = <span class="string">"SELECT id, first, last, age FROM Employees"</span>;</span><br><span class="line">      ResultSet rs = stmt.executeQuery(sql);</span><br><span class="line">      System.out.println(<span class="string">"List result set for reference...."</span>);</span><br><span class="line">      printRs(rs);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// STEP 7: delete rows having ID grater than 104</span></span><br><span class="line">      <span class="comment">// But save point before doing so.</span></span><br><span class="line">      Savepoint savepoint1 = conn.setSavepoint(<span class="string">"ROWS_DELETED_1"</span>);</span><br><span class="line">      System.out.println(<span class="string">"Deleting row...."</span>);</span><br><span class="line">      String SQL = <span class="string">"DELETE FROM Employees "</span> +</span><br><span class="line">                   <span class="string">"WHERE ID = 106"</span>;</span><br><span class="line">      stmt.executeUpdate(SQL);  </span><br><span class="line">      <span class="comment">// oops... we deleted too wrong employees!</span></span><br><span class="line">      <span class="comment">//STEP 8: Rollback the changes afetr save point 2.</span></span><br><span class="line">      conn.rollback(savepoint1);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// STEP 9: delete rows having ID grater than 104</span></span><br><span class="line">      <span class="comment">// But save point before doing so.</span></span><br><span class="line">      Savepoint savepoint2 = conn.setSavepoint(<span class="string">"ROWS_DELETED_2"</span>);</span><br><span class="line">      System.out.println(<span class="string">"Deleting row...."</span>);</span><br><span class="line">      SQL = <span class="string">"DELETE FROM Employees "</span> +</span><br><span class="line">                   <span class="string">"WHERE ID = 107"</span>;</span><br><span class="line">      stmt.executeUpdate(SQL);  </span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 10: Now list all the available records.</span></span><br><span class="line">      sql = <span class="string">"SELECT id, first, last, age FROM Employees"</span>;</span><br><span class="line">      rs = stmt.executeQuery(sql);</span><br><span class="line">      System.out.println(<span class="string">"List result set for reference...."</span>);</span><br><span class="line">      printRs(rs);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 10: Clean-up environment</span></span><br><span class="line">      rs.close();</span><br><span class="line">      stmt.close();</span><br><span class="line">      conn.close();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for JDBC</span></span><br><span class="line">      se.printStackTrace();</span><br><span class="line">      <span class="comment">// If there is an error then rollback the changes.</span></span><br><span class="line">      System.out.println(<span class="string">"Rolling back data here...."</span>);</span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.rollback();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">         se2.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end try</span></span><br><span class="line"></span><br><span class="line">   &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for Class.forName</span></span><br><span class="line">      e.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      <span class="comment">//finally block used to close resources</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(stmt!=<span class="keyword">null</span>)</span><br><span class="line">            stmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">         se.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end finally try</span></span><br><span class="line">   &#125;<span class="comment">//end try</span></span><br><span class="line">   System.out.println(<span class="string">"Goodbye!"</span>);</span><br><span class="line">&#125;<span class="comment">//end main</span></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printRs</span><span class="params">(ResultSet rs)</span> <span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">      <span class="comment">//Ensure we start with first row</span></span><br><span class="line">      rs.beforeFirst();</span><br><span class="line">      <span class="keyword">while</span>(rs.next())&#123;</span><br><span class="line">         <span class="comment">//Retrieve by column name</span></span><br><span class="line">         <span class="keyword">int</span> id  = rs.getInt(<span class="string">"id"</span>);</span><br><span class="line">         <span class="keyword">int</span> age = rs.getInt(<span class="string">"age"</span>);</span><br><span class="line">         String first = rs.getString(<span class="string">"first"</span>);</span><br><span class="line">         String last = rs.getString(<span class="string">"last"</span>);</span><br><span class="line"></span><br><span class="line">         <span class="comment">//Display values</span></span><br><span class="line">         System.out.print(<span class="string">"ID: "</span> + id);</span><br><span class="line">         System.out.print(<span class="string">", Age: "</span> + age);</span><br><span class="line">         System.out.print(<span class="string">", First: "</span> + first);</span><br><span class="line">         System.out.println(<span class="string">", Last: "</span> + last);</span><br><span class="line">     &#125;</span><br><span class="line">     System.out.println();</span><br><span class="line">   &#125;<span class="comment">//end printRs()</span></span><br><span class="line">&#125;<span class="comment">//end JDBCExample</span></span><br></pre></td></tr></table></figure>
-
           
         
       
@@ -1131,6 +1199,157 @@
 <li>selector.close() 会释放所有键和所有被select阻塞的线程都会通畅</li>
 <li>SelectionKey 的cancel方法 用来撤销注册</li>
 </ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JDBC(六)事务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/JDBC(六)事务/" itemprop="url">JDBC(六)事务</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>JDBC连接处于自动提交模式，正常的话每个sql完成后都会提交到数据库</p>
+<p>但是使用事务的原因</p>
+<ul>
+<li>提高性能</li>
+<li>保持业务流程的完整</li>
+<li>使用分布式事务</li>
+</ul>
+<p>如果不是使用自动提交模式，而是开启手动事务支持 </p>
+<p><code>conn.setAutoCommit(false)</code></p>
+<p>提交事务，进行更改</p>
+<p><code>con.commit()</code></p>
+<p>使用conn进行数据库</p>
+<p><code>con.rollback()</code></p>
+<p>操作流程</p>
+<ul>
+<li>关闭自动提交，开启事务</li>
+<li>创建Statement对象</li>
+<li>构造sql语句，并execute</li>
+<li>commit 提交事务</li>
+<li>出现SQLException 后执行rollback 进行事务回滚</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//进行事务提交或回滚都是要Connection对象进行操作</span></span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stm=con.createStatement();</span><br><span class="line">    String sql=<span class="string">"select * from test"</span>;</span><br><span class="line">    rs=stmt.executeQuery(sql);</span><br><span class="line">    conn.commit();</span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException e)&#123;</span><br><span class="line">    conn.rollback();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Savepoint 保存点</p>
+<p>这让你在回滚中，可以跑回这个保存点</p>
+<p>Connection 采用两个方法去管理保存点</p>
+<ul>
+<li>setSavepoint(String savepointname)    设置保存点它返回一个savepoint对象</li>
+<li>releaseSavepoint(Savepoint savepoint) 删除保存点</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">    Statement stmt=conn.createStatement();</span><br><span class="line">    String sql=<span class="string">"xxx"</span>;</span><br><span class="line">    Savepoint savepoint1=conn.setSavepoint(<span class="string">"xxx"</span>);</span><br><span class="line">    stmt.executeUpdate(sql);</span><br><span class="line">    conn.commit();</span><br><span class="line">&#125;<span class="keyword">catch</span>(SQLException s)&#123;</span><br><span class="line">    conn.rollback(savepoint1);        <span class="comment">//传入savepoint作为参数 savepoint对象在try声明的catch依然有效</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个保存点和回滚的应用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//STEP 1. Import required packages</span></span><br><span class="line"><span class="comment">// See more detail at http://www.yiibai.com/jdbc/</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JDBCSavepoint</span> </span>&#123;</span><br><span class="line">   <span class="comment">// JDBC driver name and database URL</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String JDBC_DRIVER = <span class="string">"com.mysql.jdbc.Driver"</span>;  </span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String DB_URL = <span class="string">"jdbc:mysql://localhost/EMP"</span>;</span><br><span class="line"></span><br><span class="line">   <span class="comment">//  Database credentials</span></span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String USER = <span class="string">"root"</span>;</span><br><span class="line">   <span class="keyword">static</span> <span class="keyword">final</span> String PASS = <span class="string">"123456"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">   Connection conn = <span class="keyword">null</span>;</span><br><span class="line">   Statement stmt = <span class="keyword">null</span>;</span><br><span class="line">   <span class="keyword">try</span>&#123;</span><br><span class="line">      <span class="comment">//STEP 2: Register JDBC driver</span></span><br><span class="line">      Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 3: Open a connection</span></span><br><span class="line">      System.out.println(<span class="string">"Connecting to database..."</span>);</span><br><span class="line">      conn = DriverManager.getConnection(DB_URL,USER,PASS);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 4: Set auto commit as false.</span></span><br><span class="line">      conn.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 5: Execute a query to delete statment with</span></span><br><span class="line">      <span class="comment">// required arguments for RS example.</span></span><br><span class="line">      System.out.println(<span class="string">"Creating statement..."</span>);</span><br><span class="line">      stmt = conn.createStatement();</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 6: Now list all the available records.</span></span><br><span class="line">      String sql = <span class="string">"SELECT id, first, last, age FROM Employees"</span>;</span><br><span class="line">      ResultSet rs = stmt.executeQuery(sql);</span><br><span class="line">      System.out.println(<span class="string">"List result set for reference...."</span>);</span><br><span class="line">      printRs(rs);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// STEP 7: delete rows having ID grater than 104</span></span><br><span class="line">      <span class="comment">// But save point before doing so.</span></span><br><span class="line">      Savepoint savepoint1 = conn.setSavepoint(<span class="string">"ROWS_DELETED_1"</span>);</span><br><span class="line">      System.out.println(<span class="string">"Deleting row...."</span>);</span><br><span class="line">      String SQL = <span class="string">"DELETE FROM Employees "</span> +</span><br><span class="line">                   <span class="string">"WHERE ID = 106"</span>;</span><br><span class="line">      stmt.executeUpdate(SQL);  </span><br><span class="line">      <span class="comment">// oops... we deleted too wrong employees!</span></span><br><span class="line">      <span class="comment">//STEP 8: Rollback the changes afetr save point 2.</span></span><br><span class="line">      conn.rollback(savepoint1);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// STEP 9: delete rows having ID grater than 104</span></span><br><span class="line">      <span class="comment">// But save point before doing so.</span></span><br><span class="line">      Savepoint savepoint2 = conn.setSavepoint(<span class="string">"ROWS_DELETED_2"</span>);</span><br><span class="line">      System.out.println(<span class="string">"Deleting row...."</span>);</span><br><span class="line">      SQL = <span class="string">"DELETE FROM Employees "</span> +</span><br><span class="line">                   <span class="string">"WHERE ID = 107"</span>;</span><br><span class="line">      stmt.executeUpdate(SQL);  </span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 10: Now list all the available records.</span></span><br><span class="line">      sql = <span class="string">"SELECT id, first, last, age FROM Employees"</span>;</span><br><span class="line">      rs = stmt.executeQuery(sql);</span><br><span class="line">      System.out.println(<span class="string">"List result set for reference...."</span>);</span><br><span class="line">      printRs(rs);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//STEP 10: Clean-up environment</span></span><br><span class="line">      rs.close();</span><br><span class="line">      stmt.close();</span><br><span class="line">      conn.close();</span><br><span class="line">   &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for JDBC</span></span><br><span class="line">      se.printStackTrace();</span><br><span class="line">      <span class="comment">// If there is an error then rollback the changes.</span></span><br><span class="line">      System.out.println(<span class="string">"Rolling back data here...."</span>);</span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.rollback();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">         se2.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end try</span></span><br><span class="line"></span><br><span class="line">   &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">      <span class="comment">//Handle errors for Class.forName</span></span><br><span class="line">      e.printStackTrace();</span><br><span class="line">   &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">      <span class="comment">//finally block used to close resources</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(stmt!=<span class="keyword">null</span>)</span><br><span class="line">            stmt.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se2)&#123;</span><br><span class="line">      &#125;<span class="comment">// nothing we can do</span></span><br><span class="line">      <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="keyword">if</span>(conn!=<span class="keyword">null</span>)</span><br><span class="line">            conn.close();</span><br><span class="line">      &#125;<span class="keyword">catch</span>(SQLException se)&#123;</span><br><span class="line">         se.printStackTrace();</span><br><span class="line">      &#125;<span class="comment">//end finally try</span></span><br><span class="line">   &#125;<span class="comment">//end try</span></span><br><span class="line">   System.out.println(<span class="string">"Goodbye!"</span>);</span><br><span class="line">&#125;<span class="comment">//end main</span></span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printRs</span><span class="params">(ResultSet rs)</span> <span class="keyword">throws</span> SQLException</span>&#123;</span><br><span class="line">      <span class="comment">//Ensure we start with first row</span></span><br><span class="line">      rs.beforeFirst();</span><br><span class="line">      <span class="keyword">while</span>(rs.next())&#123;</span><br><span class="line">         <span class="comment">//Retrieve by column name</span></span><br><span class="line">         <span class="keyword">int</span> id  = rs.getInt(<span class="string">"id"</span>);</span><br><span class="line">         <span class="keyword">int</span> age = rs.getInt(<span class="string">"age"</span>);</span><br><span class="line">         String first = rs.getString(<span class="string">"first"</span>);</span><br><span class="line">         String last = rs.getString(<span class="string">"last"</span>);</span><br><span class="line"></span><br><span class="line">         <span class="comment">//Display values</span></span><br><span class="line">         System.out.print(<span class="string">"ID: "</span> + id);</span><br><span class="line">         System.out.print(<span class="string">", Age: "</span> + age);</span><br><span class="line">         System.out.print(<span class="string">", First: "</span> + first);</span><br><span class="line">         System.out.println(<span class="string">", Last: "</span> + last);</span><br><span class="line">     &#125;</span><br><span class="line">     System.out.println();</span><br><span class="line">   &#125;<span class="comment">//end printRs()</span></span><br><span class="line">&#125;<span class="comment">//end JDBCExample</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -2039,338 +2258,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java网络编程(七)URLConnection/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/Java网络编程(七)URLConnection/" itemprop="url">Java网络编程(七)URLConnection</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>URLConnection是一个抽象类，表示指向URL指定资源的活动连接。</p>
-<p>用途</p>
-<ul>
-<li>URL类相比，它对服务器（Http服务器）的交互提供更多的控制 可以控制首部什么的，还能用几种请求方法</li>
-<li>URLConnection 时协议处理器机制的一部分，这个机制还包括URLStreamHandler类</li>
-</ul>
-<p>协议处理器的思想</p>
-<ol>
-<li><p>将处理协议的细节和处理特定数据类型分开，提供相应的接口，并完成完整浏览器所完成的其他操作</p>
-</li>
-<li><p>URLConnection 是抽象类，要实现一个特定的协议就要编写一个子类。不同的协议就用不同的处理器去处理</p>
-</li>
-</ol>
-<p>注：java.net 只有URLConnection抽象类，但除了<strong>connect()</strong>之外其他方法都实现了。它的具体子类放在sun.net中 URLConnection许多方法和字段和一个构造函数是protected的</p>
-<p>虽然说能用来处理不同协议，不过URIConnection和http绑定过于紧密</p>
-<p>使用URLConnection的步骤</p>
-<ul>
-<li>构造URL对象</li>
-<li>URL对象的方法openConnection() 获取对象的URLConnection()</li>
-<li>配置这个URLConnection</li>
-<li>读取首部</li>
-<li>获得输入流并读取数据 getInputStream()</li>
-<li>获得输出流并写入数据</li>
-<li>关闭连接</li>
-</ul>
-<p>URLConnection的唯一一个构造方法是protected的</p>
-<ol>
-<li><p>所以如果除非是派生URLConnection的子类来处理URL（显式指明自己调用的类）</p>
-</li>
-<li><p>否则都要调用URL类的openConnection()来构造对象 （我觉得这个对象是URLConnection的一个实现子类）</p>
-</li>
-</ol>
-<p>从上知道 如果要实现URLConnection的子类 要实现的方法主要是<code>connect()</code>方法</p>
-<p>connect的作用是在本地和远程主机之间建立一个连接，一般来说一些 getInputStream getContent等方法都会自动调用connect 所以你不需要显式调用它，只用实现</p>
-<hr>
-<h2 id="读取服务器的数据"><a href="#读取服务器的数据" class="headerlink" title="读取服务器的数据"></a>读取服务器的数据</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SourceViewer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(args.length&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                URL u=<span class="keyword">new</span> URL(args[<span class="number">0</span>]);</span><br><span class="line">                URLConnection uc=u.openConnection();  <span class="comment">//通过URL构造URLConnection</span></span><br><span class="line">                <span class="keyword">try</span>(InputStream raw=uc.getInputStream())&#123;</span><br><span class="line">                    InputStream buffer=<span class="keyword">new</span> BufferedInputStream(raw);  <span class="comment">//进行输入流包装</span></span><br><span class="line">                    Reader reader=<span class="keyword">new</span> InputStreamReader(buffer);  <span class="comment">//将输入流串联到阅读器</span></span><br><span class="line">                    <span class="keyword">int</span> c;</span><br><span class="line">                    <span class="keyword">while</span>((c=reader.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">                        System.out.println((<span class="keyword">char</span>) c);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">catch</span>(MalformedURLException ex)&#123;</span><br><span class="line">                    System.err.println(args[<span class="number">0</span>]+<span class="string">"is not a parseable URL"</span>);</span><br><span class="line">                &#125;<span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">                    System.err.println(ex);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>URLConnection 和URL的主要区别</p>
-<ul>
-<li>提供对首部的访问</li>
-<li>配置发送给服务器的请求参数   可以更好地访问</li>
-<li>可以向服务器写入数据</li>
-</ul>
-<h2 id="首部访问"><a href="#首部访问" class="headerlink" title="首部访问"></a>首部访问</h2><p>获取指定的首部字段</p>
-<p>前6个方法可以请求首部中特定的常用字段</p>
-<ul>
-<li>Content-type        </li>
-<li>Content-length     </li>
-<li>Content-encoding</li>
-<li>Date</li>
-<li>Last-modified</li>
-<li>Expires </li>
-</ul>
-<p>String getContentType()     text/plain  可能后面会加个charset等等 反正就是完整的值</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对改善字符编码有用</span></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SourceViewer</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(args.length&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                URL u=<span class="keyword">new</span> URL(args[<span class="number">0</span>]);</span><br><span class="line">                URLConnection uc=u.openConnection();</span><br><span class="line">                <span class="comment">//获取contentType头部</span></span><br><span class="line">                String contentType=uc.getContentType();</span><br><span class="line">                String encoding=<span class="string">"ISO-8859-1"</span>;   <span class="comment">//默认编码风格</span></span><br><span class="line">                <span class="keyword">int</span> encodingStart=contentType.indexOf(<span class="string">"charset="</span>);</span><br><span class="line">                <span class="keyword">if</span>(encodingStart!=-<span class="number">1</span>)&#123;</span><br><span class="line">                    encoding=contentType.substring(encodingStart+<span class="number">8</span>);  <span class="comment">//8是省略掉charset=</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">try</span>(InputStream raw=uc.getInputStream())&#123;</span><br><span class="line">                    InputStream buffer=<span class="keyword">new</span> BufferedInputStream(raw); </span><br><span class="line">                    Reader reader=<span class="keyword">new</span> InputStreamReader(buffer,encoding);  <span class="comment">//添加编码方式</span></span><br><span class="line">                    <span class="keyword">int</span> c;</span><br><span class="line">                    <span class="keyword">while</span>((c=reader.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">                        System.out.println((<span class="keyword">char</span>) c);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;<span class="keyword">catch</span>(MalformedURLException ex)&#123;</span><br><span class="line">                    System.err.println(args[<span class="number">0</span>]+<span class="string">"is not a parseable URL"</span>);</span><br><span class="line">                &#125;<span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">                    System.err.println(ex);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>int getContentLength() / long getContentLengthLong()</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对读取二进制文件有用</span></span><br><span class="line">URLConnection uc=u.openConnection();    <span class="comment">//u是URL</span></span><br><span class="line">String contentType=uc.getContentType();</span><br><span class="line"><span class="keyword">int</span> contentLength=uc.getContentLength();</span><br><span class="line"><span class="keyword">if</span>(contentType.startWith(<span class="string">"text/"</span>)||contentLength==-<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="function"><span class="keyword">throws</span> new <span class="title">IOException</span><span class="params">(<span class="string">"this not a binary file"</span>)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">try</span>(InputStream raw=uc.getInputStream())&#123;</span><br><span class="line">    InputStream in=BufferedInputStream(raw);</span><br><span class="line">    <span class="keyword">byte</span>[]data=<span class="keyword">new</span> <span class="keyword">byte</span>[contentLength];</span><br><span class="line">    <span class="keyword">int</span> offset=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(offset&lt;contentLength)&#123;</span><br><span class="line">        <span class="keyword">int</span> byteRead=in.read(data,offset,data.length-offset);</span><br><span class="line">        <span class="keyword">if</span>(byteRead==-<span class="number">1</span>) <span class="keyword">break</span>;</span><br><span class="line">        offset+=byteRead;</span><br><span class="line">    &#125;</span><br><span class="line">    String filename=u.getFile();</span><br><span class="line">    filename=filename.substring(filename.lastIndexOf(<span class="string">'/'</span>)+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">try</span>(FileOutputStream fout=<span class="keyword">new</span> FileOutputStream(filename))&#123;  <span class="comment">//通过名字创建一个文件输出流</span></span><br><span class="line">        fout.write(data);    <span class="comment">//将byte数组填入输出流中 然后刷新</span></span><br><span class="line">        fout.flush();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>String getContentEncoding()  指出内容如何编码，比如可能是x-gzip 这样可以用 GZipInputStream解码</p>
-<p>ContentEncoding 内容编码和字符编码(ContentType)不同，字符编码有Content-Type/文档内部信息确定 指出如何将字符编码成字节 内容编码方式则指出字节如何编码为其他字节 用于加密和压缩的作用</p>
-<p>long getDate()   </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Date documentSent=<span class="keyword">new</span> Date(uc.getDate());      <span class="comment">//没有指明则返回0</span></span><br></pre></td></tr></table></figure>
-<p>long getExpiration() 指定Cookies过期的日期 如何没指明返回0 用法和上面一样</p>
-<p>long getLastModified 返回文档最后修改日期 没有则返回0  用法同上  这个要用Date包装一下</p>
-<p>其实上面各种方法都是有点小蛋疼</p>
-<p>直接 uc.getHeaderField(“你想要的字段名”)   不区分大小写            返回的都是String  如果是时间之类的可以将其转为long 然后再构造Date</p>
-<p>如果没有则会返回null</p>
-<p>String getHeaderFieldKey(int )   （首部键值） String getHeaderField(int n)  （首部值）</p>
-<p>返回第n个首部字段键或者是字段值   第一个首部的编号为1         感觉是拿来遍历的</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">URL u=<span class="keyword">new</span> URL(xxx);</span><br><span class="line">URLConnection=u.openConnection();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;;i++)&#123;</span><br><span class="line">    String header=uc.getHeaderField(i);</span><br><span class="line">    <span class="keyword">if</span>(header==<span class="keyword">null</span>)<span class="keyword">break</span>;</span><br><span class="line">    System.out.println(uc.getHeaderFieldKey(i)+<span class="string">":"</span>+header);</span><br><span class="line">&#125;</span><br><span class="line">&#125;<span class="keyword">catch</span> (MalformedURLException ex)&#123;</span><br><span class="line">    System.err.println(xxx+<span class="string">"is not a URL"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(IOException ex)&#123;</span><br><span class="line">    System.err.println(ex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>long getHeaderFieldDate(String name,long default)  针对 expires last-modified date 字段</p>
-<p>int getHeaderFieldInt(String name,int default)  针对的是 content-length</p>
-<hr>
-<p>Expires 我们知道这是对文档的缓存时间（前面说cookie说错了） 实际上 Cache-control 提供细粒度的缓存策略</p>
-<ul>
-<li>max-age=[seconds]  过期之前的秒数</li>
-<li>s-maxage=[seconds] 直到缓存项在共享缓存中过期之前的秒数，私有缓存可以将缓存项保存更长的时间</li>
-<li>public 可以缓存一个经过认证的响应。否则已认证的响应不能缓存</li>
-<li>private 仅单个用户缓存可以保存相应 共享缓存不应保存</li>
-<li>no-cache 缓存项能缓存 但每次访问都要用一个Etag 或 Last-modified首部重新验证响应状态</li>
-<li>no-store 不缓存</li>
-</ul>
-<p>Cache-control 覆盖Expires 多个Cache-control不冲突可同时存在</p>
-<p>Last-modified指示资源上一次修改的日期，只有缓存时间比这个早才会真正指向GET获取资源</p>
-<p>Etag 资源的唯一标识符，不同的资源Etag不同</p>
-<p>Java默认情况下不完成缓存，要安装URL类使用的系统级缓存</p>
-<ul>
-<li>ResponseCache 的一个具体子类</li>
-<li>CacheRequest 的一个具体子类</li>
-<li>CacheResponse 的一个具体子类</li>
-</ul>
-<p>安装你的ResponseCahce 子类来处理你得CacheRequest 和 CacheResponse子类     需要将其传递到<strong>ResponseCache.setDefault() 这将缓存对象安装为系统的默认缓存</strong>，Java虚拟机支支持一个共享缓存</p>
-<p>一旦安装了缓存，只要系统加载一个新URL 就会先从缓存中查找，如果有响应缓存就URLConnection不会和远程服务器连接，如果不在那就下载并将响应放入缓存</p>
-<p>ResponseCache 提供两个抽象方法</p>
-<p><code>CacheResponse get(URI uri,String requestMethod ,Map&lt;String,List&lt;String&gt;&gt; requestHeaders)throws IOException</code></p>
-<p>从缓存中获取数据和首部，包装CacheResponse 对象中返回。如果所需URI不在缓存中，返回null        </p>
-<p><code>CacheResquest put(URI uri,URLConnection conn)throws IOException</code></p>
-<p>大概是设置缓存，然后返回一个包装了数据流的CacheResquest对象</p>
-<p>CacheRequest 包装了一个OutputStream URL将把读取的可缓存数据写入这个输出流 它内部有两个方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//CacheRequest要的实现方法</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">CacheRequest</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> OutputStream <span class="title">getBody</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span></span><br><span class="line"><span class="function"><span class="comment">//返回一个输出流，指向缓存  输出流和缓存的存储方式密切相关 如果数据存储在一个文件中 则返回FileOutputStream</span></span></span><br><span class="line"><span class="function">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">abort</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="comment">//如果数据向输出流复制出现问题，这个方法应当从缓存删除为这个请求存储的所有数据</span></span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>SimpleCacheRequest 类 只是你构造一个容器(用来保存缓存数据)而已，具体怎么存数据是ResponseCache 来处理</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">SimpleCacheRequest</span> <span class="keyword">extends</span> <span class="title">CacheRequest</span></span>&#123;</span><br><span class="line">    private ByteArrayOutputStream out=<span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">    public OutputStream getBody()throws IOException&#123;</span><br><span class="line">        <span class="keyword">return</span> out;</span><br><span class="line">    &#125;</span><br><span class="line">    public <span class="keyword">void</span> abort()&#123;</span><br><span class="line">        out.reset();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获得具体数据</span></span><br><span class="line">    public byte[] getData()&#123;</span><br><span class="line">        <span class="keyword">if</span>(out.size()==<span class="number">0</span>)<span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> out.toByteArray();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//CacheResponse 要实现的方法  </span></span><br><span class="line"></span><br><span class="line">Map&lt;String,List&lt;String&gt;&gt;getHeaders()<span class="keyword">throws</span> IOException</span><br><span class="line"></span><br><span class="line"><span class="function">InputStream <span class="title">getBody</span><span class="params">()</span><span class="keyword">throws</span> IOException</span></span><br></pre></td></tr></table></figure>
-<p>具体的实现类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleCacheResponse</span> <span class="keyword">extends</span> <span class="title">CacheResponse</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String,List&lt;String&gt;&gt; headers;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> SimpleCacheRequest request;   <span class="comment">//他竟然要CacheRequest对象</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Date expires;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> CacheControl control;   <span class="comment">//CacheControl对象</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SimpleCacheResponse</span><span class="params">(SimpleCacheRequest request,URLConnection uc,CacheControl control)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.request=request;</span><br><span class="line">        <span class="keyword">this</span>.control=control;</span><br><span class="line">        <span class="keyword">this</span>.expires=<span class="keyword">new</span> Date(uc.getExpiration());</span><br><span class="line">        <span class="keyword">this</span>.headers=Collections.unmodifiableMap(uc.getHeaderFields());  <span class="comment">//首部存储为键值对</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> InputStream <span class="title">getBody</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ByteArrayInputStream(request.getData());  </span><br><span class="line">        <span class="comment">//通过CacheRequest对象来实现操作，说明CacheResponse还是要通过CacheRequest去指向Cache数据</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> Map&lt;String,List&lt;String&gt;&gt; getHeaders() <span class="keyword">throws</span> IOException&#123;</span><br><span class="line">        <span class="keyword">return</span> headers;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> CacheControl <span class="title">getControl</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> control;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//将CacheControl的东西也包在这里</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isExpired</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Date now =<span class="keyword">new</span> Date();</span><br><span class="line">        <span class="keyword">if</span>(control.getMaxAge().before(now)) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(expires!=<span class="keyword">null</span>&amp;&amp; control.getMaxAge()!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> expires.before(now);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<hr>
-<p>私有缓存，就是不能被各级代理缓存的缓存，只能本机进行缓存</p>
-<p>ResponseCache子类 在请求时存储和获取缓存的之，同时注意Cache-control首部</p>
-<p>我们知道要实现的主要就是 put 和 get两个方法</p>
-<p>其实我觉得CacheResquest其实式为CacheResponse 服务的，真正存储是用CacheResponse 但真正去访问数据的是CacheResquest</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MemoryCache</span> <span class="keyword">extends</span> <span class="title">ResponseCache</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;URI,SimpleCacheResponse&gt;responses=<span class="keyword">new</span> ConcurrentHashMap&lt;URI,SimpleCacheResponse&gt;;</span><br><span class="line">    <span class="comment">//真正将URI和缓存对应的东东，缓存方式CacheResponse</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> maxEntries;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MemoryCache</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MemoryCache</span><span class="params">(<span class="keyword">int</span> maxentries)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.maxEntries=maxentries;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> CacheRequest <span class="title">put</span><span class="params">(URI uri,URLConnection conn)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(responses.size()&gt;=maxEntries)<span class="keyword">return</span> <span class="keyword">null</span>;   <span class="comment">//超过最大的缓存设置了</span></span><br><span class="line">        <span class="comment">//通过URLConnection的首部获取缓存方案</span></span><br><span class="line">        CacheControl control=<span class="keyword">new</span> CacheControl(conn.getHeaderField(<span class="string">"Cache-Control"</span>));</span><br><span class="line">        <span class="keyword">if</span>(control.noStore())&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span>(!conn.getHeaderField(<span class="number">0</span>).startsWith(<span class="string">"GET"</span>))&#123;</span><br><span class="line">            <span class="comment">//加这个判断只是因为这个缓存只是要缓存get方法的东东</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        SimpleCacheRequest request=<span class="keyword">new</span> SimpleCacheRequest();</span><br><span class="line">        SimpleCacheResponse response=<span class="keyword">new</span> SimpleCacheResponse(request,conn,control);</span><br><span class="line">        responses.put(uri,response);</span><br><span class="line">        <span class="keyword">return</span> request;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> CacheResponse <span class="title">get</span><span class="params">(URI uri,String requestMethod,Map&lt;String,List&lt;String&gt;&gt;requestHeaders)</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"GET"</span>.equals(requestMethod))&#123;</span><br><span class="line">            SimpleCacheResponse response=response.get(uri);</span><br><span class="line">            <span class="keyword">if</span>(response!=<span class="keyword">null</span>&amp;&amp;response.isExpired())&#123;</span><br><span class="line">                responses.remove(response);</span><br><span class="line">                response=<span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> reponse;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>java要求一次只有一个url缓存 要安装或改变缓存，需要使用静态方法ResponseCache.setDefault()和ResponseCache.getDefault()   这两个方法会设置同一个java虚拟级中运行所有程序中所使用的缓存</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置缓存类？</span></span><br><span class="line">ResponseCache.setDefault(<span class="keyword">new</span> MemoryCache());  <span class="comment">//urlconnections会一直使用这个缓存</span></span><br></pre></td></tr></table></figure>
-<p>之后获取的资源，如果作为缓存则保留在hashmap之中，直到过期。在上面的ResponseCache的实现类中，它是在过期后再次请求资源的时候才会将其移除缓存中并返回null，除了这样做之外，可以用一个低优先级的线程扫描文档将其删除，或者将所有资源按时间顺序缓存在一个队列中，必要时删除过期或最接近过期的资源，腾出空间。更复杂的可以加上访问频率，删除最老和最少使用资源。</p>
-<p>但其实还有别的方式  1.在文件系统上实现 2.缓存在数据库中 3.将某些url请求重定向到本地服务器中 或者加载某一组特定的固定文件，然后在内存中提供这些文件（处理很多不同的soap请求服务器很有用）</p>
-<p>URLConnection类 有保护实例字段，定义客户端对服务器的请求  并不是http的首部 懂8小老弟</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">URL url</span><br><span class="line"><span class="keyword">boolean</span> doInput =<span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">boolean</span> doOutput=<span class="keyword">false</span>;             <span class="comment">//如果true 除了通过这个URLConnection 读数据也可以将数据写入服务器</span></span><br><span class="line"><span class="keyword">boolean</span> allowUserInteraction=defaultAllowUserInteraction;</span><br><span class="line"><span class="keyword">boolean</span> useCaches=defaultUseCaches;    <span class="comment">//如果为false 则绕过本地缓存向服务器下载</span></span><br><span class="line"><span class="keyword">long</span> ifModifiedSince=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">boolean</span> connected=<span class="keyword">false</span>;</span><br></pre></td></tr></table></figure>
-<p>控制上面的字段除了connected 和 url (它是在构造URLConnection是决定的  只有 getURL() )</p>
-<p>其他字段对应一个set和get方法      比如 <code>boolean getDoInput()</code> 和<code>void setDoInput(boolean doInput)</code></p>
-<p>还有一些还有一些方法设置URLConnection的默认行为</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">get/setDefaultUseCaches()</span><br><span class="line">get/setDefaultAllowUserInteraction()</span><br><span class="line">get/setFileNameMap()</span><br><span class="line">当然set方法是需要参数的第三个是FileNameMap 前两个为<span class="keyword">boolean</span></span><br></pre></td></tr></table></figure>
-<p>boolean connected</p>
-<p>如果连接已经打开则为true 否则为false 如果创建新URLConnection对象时连接未打开 也为false </p>
-<p>没有直接获取或改变connected的方法  但任何导致URLConnection连接的方法都会设置该变量为true </p>
-<ul>
-<li>connect()</li>
-<li>getInputStream()</li>
-<li>getOutputStream()</li>
-</ul>
-<p>任何导致URLConnection断开连接的方法都会把该字段设置为false   URLConnection中没有<code>disconnect()</code></p>
-<p>但它的一些子类如 HttpURLConnection有</p>
-<p>如果你是要自己派生实现URLConnection子类 你就要在连接和关闭时改变connected变量 java.net.URLConnection中许多方法都会读取这变量，来确定操作，如果未设置就会出很多难判断的bug</p>
-<p>boolean allowUserInteraction</p>
-<p>是否能和用户进行交互   比如会询问用户名和口令 神魔的，但有时候很多应用程序不能假定有真实存在的用户，比如只是一个小机器人</p>
-<p>会有一些身份认证？</p>
-<p>不懂   </p>
-<p>boolean doInput 是否可读取 服务器 </p>
-<p>boolean doOutput 默认为false</p>
-<p>程序可以用URLConnection将输出发回服务器写入服务器</p>
-<p>当doOutput设置true 这时候请求方法就从get变成post</p>
-<p>boolean ifModifiedSince</p>
-<p>客户端可能会缓存来自服务器的资源，但可能这个资源会在服务器中已经改变了，这时候就要更新缓存，就要询问服务器  在http首部中包括一个 if-modified-since 这个首部包括一个日期和时间  如果在这个时间后有修改服务器就发送该文档，否则不发回复一个304 未修改消息</p>
-<p>但有些web服务器不会理会if-modified-since这个字段 都会发送</p>
-<p>ifmodifiedsince 用的时格林尼治标准时间1970.1.1子夜后的毫秒数 所有参数时一个long</p>
-<p>boolean useCaches 获取是否使用本地的缓存资源，而不是从服务器中获取</p>
-<p><code>uc.setUseCaches(true);</code></p>
-<p>超时</p>
-<p>其实还有两个属性是定义超时  ConnectionTimeout / ReadTimeout 都有相应的get/set方法  参数都是int</p>
-<p>毫秒为单位 设置为0 则永不超时 设置为负数则为抛出异常 </p>
-<p>ConnectionTimeout  代表控制socket等待建立连接的时间  (ms单位)</p>
-<p><code>uc.setConnectionTimeout(3000)</code></p>
-<p>ReadTimeout  代表输入流的等待时间 （ms单位）</p>
-<p><code>uc.setReadTimeout(6000)</code></p>
-<p>配置客户端发送的http首部</p>
-<p>setRequestProperty(String name,String value)   getRequestProperty(String name)</p>
-<p>键值对  多个属性的话用逗号分隔</p>
-<p>注意这些只用于http协议中  如果其他协议会有其他意思 （指的是键值对还是方法有其他意思？应该是前者巴巴吧）</p>
-<p>对于Cookie值 则是键值对之间分号分隔</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">uc.setRequestProperty(<span class="string">"Cookie"</span>,<span class="string">"username=elharo;password=xxxx"</span>);</span><br><span class="line"><span class="comment">//可以对一个属性设置多次值，不过这会覆盖</span></span><br><span class="line"><span class="comment">//如果是想要在原有基础上添加</span></span><br><span class="line">uc.addRequestProperty(<span class="string">"Cookie"</span>,<span class="string">"..."</span>);</span><br><span class="line"><span class="comment">//添加是在一开始加，所以如果是cookie是要加分号，不是cookie则不要加</span></span><br></pre></td></tr></table></figure>
-<p>查看首部</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">String <span class="title">getRequestProperty</span><span class="params">(String name)</span></span></span><br><span class="line"><span class="function">Map&lt;String,List&lt;String&gt;&gt;<span class="title">getRequestProperties</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-<p>用DoOutput向服务器进行写入</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">URL u=<span class="keyword">new</span> URL(<span class="string">"http://xxx"</span>);</span><br><span class="line">URLConnection uc=u.openConnection();</span><br><span class="line">uc.setDoOutput(<span class="keyword">true</span>);</span><br><span class="line">OutputStream raw=uc.getOutputStream();</span><br><span class="line">OutputStream buffered=<span class="keyword">new</span> BufferedOutputStream(raw);</span><br><span class="line">OutputStreamWriter out=<span class="keyword">new</span> OutputStreamWriter(buffered,<span class="string">"8859_1"</span>);</span><br><span class="line">out.write(<span class="string">"username=aab;password=12315"</span>);</span><br><span class="line">out.flush();</span><br><span class="line">out.close();</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FormPoster</span></span>&#123;</span><br><span class="line">   <span class="keyword">private</span> QueryString query=<span class="keyword">new</span> QueryString();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FormPoster</span><span class="params">(URL url)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!url.getProtocol().toLowerCase().startsWith(<span class="string">"http"</span>))&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Posting only works for http URLs"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.url=url;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String name,String value)</span></span>&#123;</span><br><span class="line">        query.add(name,value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> URL <span class="title">getURL</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.url;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> InputStream <span class="title">post</span><span class="params">()</span><span class="keyword">throws</span> IOException</span>&#123;</span><br><span class="line">        URLConnection uc=url.openConnection();</span><br><span class="line">        uc.setDoOutput(<span class="keyword">true</span>);</span><br><span class="line">        <span class="comment">//带资源的try 自动关闭out  不关闭out 不会发送数据</span></span><br><span class="line">        <span class="keyword">try</span>(OutputStreamWriter out=<span class="keyword">new</span> OutputStreamWriter(uc.getOutputStream(),<span class="string">"UTF-8"</span>))&#123;</span><br><span class="line">            <span class="comment">//发送post的数据</span></span><br><span class="line">            out.write(query.toString());</span><br><span class="line">            out.write(<span class="string">"\r\n"</span>);</span><br><span class="line">            out.flush();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> uc.getInputStream();<span class="comment">//获取读取流</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        URL url;</span><br><span class="line">        </span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">            url=<span class="keyword">new</span> URL(args[<span class="number">0</span>]);</span><br><span class="line">            &#125;<span class="keyword">catch</span>(MalformedURLException ex)&#123;</span><br><span class="line">                System.err.println(<span class="string">"Usage:java FormPoster url"</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">       FormPoster poster=<span class="keyword">new</span> FormPoster(url);</span><br><span class="line">        poster.add(<span class="string">"name"</span>,<span class="string">"xxxx"</span>);</span><br><span class="line">        poster.add(<span class="string">"password"</span>,<span class="string">"123"</span>);</span><br><span class="line">        <span class="keyword">try</span>(InputStream in=poster.post())&#123;</span><br><span class="line">            <span class="comment">//读取响应 是一个html</span></span><br><span class="line">            Reader r=<span class="keyword">new</span> InputStreamReader(in);</span><br><span class="line">            <span class="keyword">int</span> c ;</span><br><span class="line">            <span class="keyword">while</span>((c=r.read())!=-<span class="number">1</span>)&#123;</span><br><span class="line">                System.out.print((<span class="keyword">char</span>)c);</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println();</span><br><span class="line">        &#125;<span class="keyword">catch</span>(IOException ex)&#123; System.err.println(ex);&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>QueryString 是干嘛的？？？？？？？？？？？？？？？？？？/</p>
-<p>是自己实现地一个类</p>
-<p>getOutputStream 方法可以用于put请求方法，这是一种在web服务器存储文件的方法，要存储的数据写入到getOutputStream 返回的OutputStream 不过这只能 在URLConnection 的HttpURLConnection 子类中进行</p>
-<p>为了安全有个  <code>Permission getPermission() throws IOException</code> 返回一个Permission对象，指出这个连接的URL权限</p>
-<p>推测MIME媒体类型，由于一些服务器不提供MIME首部，或者提供不正确首部，所以有时候需要推测正确的MIME媒体类型</p>
-<p>两个URLConnection方法</p>
-<p><code>public static String guessContentTypeFromName(String name)</code> 根据资源的拓展名进行推测 </p>
-<p>但对RDF XSL CSS等未提供正确的MIME</p>
-<p><code>public static String guessContentTypeFromStream(InputStream in)</code> 尝试查看流中前几个字节来猜测内容类型。这个InputStream一定要支持标记，从而读取了前面的字节之后可以返回到流的开始处。不一定可靠，</p>
-<p>HttpURLConnection</p>
-<p>是URLConnection的抽象子类，提供了更多的方法用来处理http URL ，但这是抽象子类，唯一的构造函数是保护类型，但如果使用http URL 构造一个URL对象并调用openConnection()方法，返回的就是HttpURLConnection一个实例，这时候可以强制转换</p>
-<p><code>URL u=new URL(&quot;http://www&quot;);</code></p>
-<p><code>URLConnection uc=u.openConnection();</code></p>
-<p><code>HttpURLConnection http=(HttpURLConnection)uc;</code></p>
-<p>HttpURLConnection可以设置请求方法</p>
-<p><code>public void setRequestMethod(String method)</code></p>
-<p>get/post/head/put/delete/options/trace  其他方法还会抛出 ProtocolException异常 这是IOException的一个子类</p>
-<p>然而只设置方法是不够的，还要操作，http首部，消息体都要搭配上</p>
-<p>其他的一些拓展方法 WebDAV 的一些方法 Java 不支持</p>
-<p>主动断开与服务器的连接</p>
-<p>如果使用keep-alive时，服务器不会因为已经向客户端发送最后一个字节的数据就立即关闭连接，会等待一段时间，让连接超时关闭。</p>
-<p>httpurlconnection可以显式使用disconnnect()方法显式断开连接  如果连接上有流，它也会处理关闭这些流。</p>
-<p>但你要知道关闭持久连接上的流，不代表这个socket断开</p>
-<p>获取首部行</p>
-<p><code>uc.getResponseCode()</code> 获取首部的响应代码</p>
-<p><code>uc.getResponseMessage()</code> 获取首部响应代码的解释内容</p>
-<p>其实还不如 <code>uc.getHeaderField(0)</code></p>
-<p>错误条件</p>
-<p>当页面出错的时候，同样会返回有用的信息，这时候需要</p>
-<p><code>InputStream getErrorStream</code>去返回错误的信息流</p>
-<p>其他用法就想普通的输入流差不多</p>
-<p>重定向</p>
-<p><code>static boolean getFollowRedirects()</code>  是否重定向</p>
-<p><code>static void setFollowRedirects(boolean follow)</code> 设置是否跟随</p>
-<p>注意set的是static方法，所以它会影响之后所有的urlconnection是否跟随重定向，其实我觉得跟随重定向很正常吧。。</p>
-<p>如果只是针对实例配置</p>
-<p><code>boolean getInstanceFollowRedirects()</code></p>
-<p><code>void setInstanceFollowRedirects(boolean followRedirects)</code></p>
-<p>查看代理</p>
-<p>查看你某个HttpURLConnection是否通过某个代理对象</p>
-<p><code>boolean usingProxy()</code></p>
-<p>流模式</p>
-<p>有三种</p>
-<ul>
-<li>一个是缓存输出后</li>
-<li><code>setFixedLengthStreamingMode(long)</code> 设置文件长度 到时就直接进行传输，不过传的参数一定要对</li>
-<li><code>setChunkedStreamingMode(int chunkLength)</code> 设置分块传输的大小，注意DoOutput要设置true</li>
-</ul>
-<p>上面三个不能同时用，比如2.3方法不能同时用，否则出错</p>
-<p>而且用2.3种对于身份认证和重定向没有什么智商，需要你自己手工完成解决 比如一个合适的url 一般没有必要不要改流模式</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2421,7 +2308,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">58</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

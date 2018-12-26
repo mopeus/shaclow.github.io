@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="title: Spring基础学习(一)基本介绍 date: 2018-12-26 22:30 categories: Spring tags: [Spring] 文件目录  docs  文档和开发指南等 libs  Jar包 有三类  Spring框架得class文件JAR包 Spring框架源文件的压缩包 -sources结尾 Spring框架API文档压缩包 文件名以-javadoc 结尾">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shaclow&#39;s Blog">
+<meta property="og:url" content="http://yoursite.com/2018/12/26/Spring基础学习(一)基本介绍/index.html">
+<meta property="og:site_name" content="Shaclow&#39;s Blog">
+<meta property="og:description" content="title: Spring基础学习(一)基本介绍 date: 2018-12-26 22:30 categories: Spring tags: [Spring] 文件目录  docs  文档和开发指南等 libs  Jar包 有三类  Spring框架得class文件JAR包 Spring框架源文件的压缩包 -sources结尾 Spring框架API文档压缩包 文件名以-javadoc 结尾">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-26T14:31:55.319Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shaclow&#39;s Blog">
+<meta name="twitter:description" content="title: Spring基础学习(一)基本介绍 date: 2018-12-26 22:30 categories: Spring tags: [Spring] 文件目录  docs  文档和开发指南等 libs  Jar包 有三类  Spring框架得class文件JAR包 Spring框架源文件的压缩包 -sources结尾 Spring框架API文档压缩包 文件名以-javadoc 结尾">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/26/Spring基础学习(一)基本介绍/"/>
+
+
+
+
+
+  <title> | Shaclow's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shaclow's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Hello,my world.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/26/Spring基础学习(一)基本介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-26T22:32:32+08:00">
+                2018-12-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>title: Spring基础学习(一)基本介绍</p>
+<p>date: 2018-12-26 22:30</p>
+<p>categories: Spring</p>
+<p>tags: [Spring]</p>
+<p>文件目录 </p>
+<p>docs  文档和开发指南等</p>
+<p>libs  Jar包 有三类</p>
+<ul>
+<li>Spring框架得class文件JAR包</li>
+<li>Spring框架源文件的压缩包 -sources结尾</li>
+<li>Spring框架API文档压缩包 文件名以-javadoc 结尾</li>
+</ul>
+<p>schemas 该目录下包含了Spring 各种配置文件的XML Schema文档</p>
+<p>还有其他说明性文档</p>
+<p>如果使用spring就将所需的模块的class文件的JAR包添加到项目的类加载路径中，</p>
+<p>Spring作为一个超级工厂管理的对象的是Bean  只要是一个java类就行  </p>
+<p>Spring将java类当作Bean管理的 唯一条件就是XML配置文件，也可以用注解，这个XML文件没有命名要求</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="GBK" ?&gt;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span> <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"person"</span> <span class="attr">class</span>=<span class="string">"beans.Person"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"axe"</span> <span class="attr">ref</span>=<span class="string">"axe"</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"axe"</span> <span class="attr">class</span>=<span class="string">"beans.Axe"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"win"</span> <span class="attr">class</span>=<span class="string">"javax.swing.JFrame"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"date"</span> <span class="attr">class</span>=<span class="string">"java.util.Date"</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>从xml表中获得几个点</p>
+<ol>
+<li>只要是Java类就可以使作为Bean类   不能是接口或抽象类 （除非特殊配置）</li>
+<li>其实bean标签的声明就是 构造方式的声明<ol>
+<li>bean默认的则为无参构造器</li>
+</ol>
+</li>
+<li>class一定要将包名也写清楚</li>
+</ol>
+<p>通过xml文件进行构造的本质</p>
+<ol>
+<li>将bean元素的id属性和class属性都转为字符串</li>
+<li>通过classname反射成class然后创建实例</li>
+<li>将id名和这个实例放入Spring容器中</li>
+</ol>
+<p>property作为bean的子元素代表底层的setter方法</p>
+<ol>
+<li>name代表具体setter方法</li>
+<li>value/ref 代表执行setter方法的传入参数<ol>
+<li>String 基本类型及包装类 用value指定属性</li>
+<li>容器中其他Bean类传入参数，使用ref指定</li>
+</ol>
+</li>
+</ol>
+<p>property标签的本质</p>
+<ol>
+<li>通过ref 即代表id name从spring 容器中获取对应的实例对象</li>
+<li>获得methodname 调用setter方法</li>
+</ol>
+<p>一般来说我们要通过Spring容器去管理和使用Bean 我们要声明Spring容器 有两种</p>
+<ol>
+<li>ClassPathXmlApplicationContext 从类加载路径搜索配置文件，创建Spring容器</li>
+<li>FileSystemXmlApplicationContext 从文件系统相对或绝对路径搜索配置文件 创建Spring容器</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">    ApplicationContext ctx=<span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);</span><br><span class="line">    Person p=ctx.getBean(<span class="string">"person"</span>,Person.class);</span><br><span class="line">    p.useAxe();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面代码获取几个点</p>
+<ol>
+<li>两个容器都有统一的接口ApplicationContext掌握</li>
+<li>getBean(id,class)  需要id 获取实例  用class转换对应类型  （这个Class一定是具体）</li>
+</ol>
+<p>最大的改变就是我们不再需要new Java对象，所有对象由Spring容器创建</p>
+<p>这种有种升级版，将Axe 和Person抽象为接口</p>
+<p>然后让具体子类分别实现他们，这样松耦合，不过配置文件中要<strong>指明白相应的实现子类</strong></p>
+<h2 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h2><p>依赖注入还有另一个名字叫控制反转 IoC</p>
+<p>依赖  就是 A对象需要调用B对象的方法则，A依赖B</p>
+<p>使用Spring后调用者（依赖方）无需主动获取被依赖对象，只要被动接受成员变量赋值即可</p>
+<p>依赖方 就无需关心被依赖对象，专心做自己事情即可</p>
+<h3 id="注入方式"><a href="#注入方式" class="headerlink" title="注入方式"></a>注入方式</h3><p>注入方式有两种</p>
+<ol>
+<li>设值注入，通过setter方法  <code>&lt;property&gt;</code>标签</li>
+<li>构造注入 使用带参数的构造器 通过<code>&lt;constructor-arg&gt;</code>标签  默认是无参数构造</li>
+</ol>
+<p>通常不建议使用配置文件Bean基本类型的属性值，通常只用来处理Bean和Bean的依赖关系</p>
+<p>构造注入</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 构造注入--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"chinese"</span> <span class="attr">class</span>=<span class="string">"javaspring.demo1.Chinese"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">ref</span>=<span class="string">"steelAxe"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"tt"</span> <span class="attr">class</span>=<span class="string">"ccc.Test01"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">"美滋滋"</span> /&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">value</span>=<span class="string">"233"</span> /&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- 明确指明类型 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"3"</span> <span class="attr">value</span>=<span class="string">"345"</span> <span class="attr">type</span>=<span class="string">"int"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>代表 调用 <code>new ccc.Test01(&quot;美滋滋&quot;，233);</code> 可以用index属性 如指定index=”0”  代表第一个构造参数值 默认为上到下递增</p>
+<p>通常构造注入会让生成代码臃肿而且导致性能下降，且不直观。但它更内聚，且决定依赖顺序</p>
+<p>依赖关系无须变化的注入，采用构造注入，其他优先考虑设置构造</p>
+<p>Spring容器</p>
+<p>BeanFactory 和 ApplicationContext是代表Spring容器的两个核心接口，后者是前者的子接口</p>
+<p>虽然可以用，但一般不用前者，直接用后者就好了</p>
+<p>J2EE应用可再启动Web应用时自动加载Application实例</p>
+<p>ApplicationContext 创建时，会初始所有的singleton bean （就是你在xml中定义的Bean）并且调用setter方法。说明一开始会带来较大性能花销之后就不会了  组织初始化bean，可在相应的bean添加属性 lazy-init=”true”</p>
+<p>ApplicationContext支持国家化支持 getMessage()方法</p>
+<p>ApplicationContext事件机制</p>
+<ul>
+<li>ApplicationEvent 容器事件（extends） 必须由ApplicationContext发布</li>
+<li>ApplicationListener 监听器（implements） 可以由任何监听器Bean担任</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义监听事件</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmailEvent</span> <span class="keyword">extends</span> <span class="title">ApplicationEvent</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String address;</span><br><span class="line">	<span class="keyword">private</span> String text;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">EmailEvent</span><span class="params">(Object source)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(source);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">EmailEvent</span><span class="params">(Object source,String address,String text)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(source);</span><br><span class="line">		<span class="keyword">this</span>.address=address;</span><br><span class="line">		<span class="keyword">this</span>.text=text;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//set get方法忽略</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义监听器</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmailNotifier</span> <span class="keyword">implements</span> <span class="title">ApplicationListener</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onApplicationEvent</span><span class="params">(ApplicationEvent arg0)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(arg0 <span class="keyword">instanceof</span> EmailEvent) &#123;    <span class="comment">//只监听EmailEvent事件</span></span><br><span class="line">			EmailEvent emailEvent=(EmailEvent)arg0;</span><br><span class="line">			System.out.println(<span class="string">"需要发送的邮件地址： "</span>+emailEvent.getAddress());</span><br><span class="line">			System.out.println(<span class="string">"邮件正文： "</span>+emailEvent.getText());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			System.out.println(<span class="string">"其他事件不处理"</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"xxx.ccc.EmailNotifier"</span> /&gt;</span> 直接class定义监听器</span><br></pre></td></tr></table></figure>
+<p>自动创建和加载Spring容器的时候会自动触发，也可用pushEvent主动触发</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String []args)</span></span>&#123;</span><br><span class="line">    ApplicationContext ctx=<span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);</span><br><span class="line">    EmailEvent ele=<span class="keyword">new</span> EmailEvent(<span class="string">"test"</span>,<span class="string">"xxx.163@com"</span>,<span class="string">"this is a test"</span>);</span><br><span class="line">    ctx.publishEvent(ele);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Spring有几个内置事件</p>
+<ul>
+<li>ContextRefreshEvent ContextStartedEvent ContextClosedEvent  ContextStoppedEvent(和Context容器生命周期相关）</li>
+<li>RequestHandledEvent 和其他一些新增的WebSocket服务</li>
+</ul>
+<p>让Bean获取Spring</p>
+<p>通常来说Bean是不知道容器的存在的，但有时候为了国际化信息，需要向Spring容器发布事件，所以需要感知</p>
+<ul>
+<li>实现BeanFactoryAware接口 实现setBeanFactory(BeanFactory)方法</li>
+<li>我们不需要在xml或在别的地方调用这个set方法，容器本身就会自动调用</li>
+<li>同理还有ApplicationContextAware 和对应的set方法</li>
+<li>xml中正常声明bean即可</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ApplicationcontextAware</span> <span class="keyword">implements</span> <span class="title">ApplicationContextAware</span></span>&#123;</span><br><span class="line">	<span class="keyword">private</span> ApplicationContext context;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext ctx)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.context=ctx;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayHi</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">		System.out.println(context.getMessage(<span class="string">"hello"</span>, <span class="keyword">new</span> String[] &#123;name&#125;,Locale.getDefault(Locale.Category.FORMAT)));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">xxx</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        ApplicationContext ctx=<span class="keyword">new</span> ClassPathXmlApplication(<span class="string">"beans.xml"</span>);</span><br><span class="line">        <span class="comment">//下面这个是自己定义的bean实例获取</span></span><br><span class="line">        ApplicationcontextAware aa=ctx.getBean(<span class="string">"idname"</span>,Axxxx.class);</span><br><span class="line">        aa.sayHi(<span class="string">"xx"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其他Spring  XMLSchema的XML配置文件，甚至允许程序员自定义配置文件标签，然后再配置文件中使用这些新标签，</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/23/mysql表不能删除修改/" rel="next" title="mysql表不能删除修改">
+                <i class="fa fa-chevron-left"></i> mysql表不能删除修改
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Chen JianLun</p>
+              <p class="site-description motion-element" itemprop="description">Embrace the trend</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#依赖注入"><span class="nav-number">1.</span> <span class="nav-text">依赖注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注入方式"><span class="nav-number">1.1.</span> <span class="nav-text">注入方式</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chen JianLun</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
