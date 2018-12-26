@@ -232,6 +232,190 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/WSDL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/WSDL/" itemprop="url">WSDL</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>WSDL是用于描述如何访问Web Service 语言</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">definitions</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span></span><br><span class="line">  web service 使用的数据类型</span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span></span><br><span class="line">  web service 定义一个操作的数据元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span>&gt;</span></span><br><span class="line">  web service要执行的操作 </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">binding</span>&gt;</span></span><br><span class="line">  web service 使用的通信协议 消息格式和协议细节</span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">definitions</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermRequest"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermResponse"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"value"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerms"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"getTermRequest"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"getTermResponse"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这个例子中，把 “getTerm” 定义为某个<em>操作</em>的名称。</p>
+<p>操作 “getTerm” 拥有一个名为 “getTermRequest” 的<em>输入消息</em>，以及一个名为 “getTermResponse” 的<em>输出消息</em>。</p>
+<p><code>&lt;message&gt;</code> 元素可定义每个消息的<em>部件</em>，其实就是作为一个operation的一个输入和输出的参数的定义而已</p>
+<p>对比传统的编程，<code>&lt;portType&gt;</code>是一个函数库，描述各种函数的签名</p>
+<p>里面的 <code>&lt;operation&gt;</code> 则是定义的一个个函数</p>
+<p>比如 “getTerm” 是带有输入参数 “getTermRequest” 和返回参数 getTermResponse 的一个函数</p>
+<p><code>&lt;binding&gt;</code>是将<code>&lt;portType&gt;</code>标签定义的每一个操作在此实现</p>
+<p><code>&lt;service&gt;</code> 确定每一个标签的端口地址</p>
+<p>总的来说WSDL文档分成两个部分 一个是抽象层，一个就是具体实现层  </p>
+<p><code>&lt;binding&gt;</code>和<code>&lt;service&gt;</code>就是具体实现层</p>
+<p>operation的构造有下面几种形式</p>
+<table>
+<thead>
+<tr>
+<th>One-way</th>
+<th>此操作可接受消息，但不会返回响应。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Request-response</td>
+<td>此操作可接受一个请求并会返回一个响应</td>
+</tr>
+<tr>
+<td>Solicit-response</td>
+<td>此操作可发送一个请求，并会等待一个响应。</td>
+</tr>
+<tr>
+<td>Notification</td>
+<td>此操作可发送一条消息，但不会等待响应。</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- One way 操作的例子，其实就是一个带参数的void函数--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"newTermValues"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param1"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerm"</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"setTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"newTerm"</span> <span class="attr">message</span>=<span class="string">"newTermValues"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上面的setTerm就是个one -way 方法 他只接收一个名叫newTerm的 newTermValues的消息？（我是把newTermValues理解成一个消息格式），这个参数由两个 xs:string  param1 param2 组成</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Request-Response操作--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term2"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"goodTerms"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"p1"</span> <span class="attr">message</span>=<span class="string">"Term1"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">output</span> <span class="attr">name</span>=<span class="string">"p2"</span> <span class="attr">message</span>=<span class="string">"Term2"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>发现一个更好的WSDL文档的网站 补充下  感谢 51cto的一篇文章，虽然他也是转载</p>
+<p><code>&lt;definitions  xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot;  xmlns:tns=&quot;http://www.jsoso.com/wstest&quot;   xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;   xmlns=&quot;http://schemas.xmlsoap.org/wsdl/&quot;   targetNamespace=&quot;http://www.jsoso.com/wstest&quot;  name=&quot;Example&quot;&gt;</code></p>
+<p>这个作为根元素，它定义文档用到各种xml元素的namespace 缩写，本文档自己的targetNamespace记录了自己的namespace  其他xml元素引用本文档的xml元素，要声明这个namespace       注意xmlns:tns它其实就是将tns这个前缀指向自身的命名空间。</p>
+<p>xmlns=”xxx” 叫默认名称空间 没有取名         xmlns:PART =”xxx”  这种叫源名称空间  </p>
+<p>xmlns:targetNamespace=”xx” 目标命名空间</p>
+<p>其实不要觉得这些命名空间随便给，每个网址都是有特殊意义的</p>
+<p>比如说大名鼎鼎的 xsd 代表的 <a href="http://www,w3.org/2001/XMLSchema" target="_blank" rel="noopener">http://www,w3.org/2001/XMLSchema</a>  代表的就是一种代替DTD 的XSD语言很牛逼 还有专门的xsd文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:import</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">schemaLocation</span>=<span class="string">"http://localhost:8080/hello?xsd=1"</span>&gt;</span><span class="tag">&lt;/<span class="name">xsd:import</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们要引入的schema定义 schemaLocation=”<a href="http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。" target="_blank" rel="noopener">http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。</a>  </p>
+<p>这个其实import 和 schema是涉及到xsd本身的语法，它这里的schema+import应该是属于拓展命名空间,然后这个大概是xsd文件本身没有定义 targetNamespace 而 我们自己写的文件中有 targetNamespace 是 “http://…../wstest”然后就要这么写具体看<a href="http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html</a>  然后这个xsd就引入了 我们定义的文件的类型</p>
+<p>然后他们一起定义在types里面作为文档的数据类型？？</p>
+<p><code>&lt;types&gt;</code>定义了当前文档的数据类型，为了保持平台中立性，WSDL使用XML Schema 语法来定义数据类型 这些数据类型来定义参数方法和参数值  也就是之前定义的xsd的前缀代表的命名空间，这个命名空间本身就定义了一些常用的数据类型 integer boolean char float等 </p>
+<p>然后一些 tns前缀的变量其实就是我们自定义文件中的自定义变量  我有点没懂，怎么和xsd一点关系也没，import过来干嘛。。但是好像用tns 前缀好像又和 <code>&lt;types&gt;</code>定义的有关</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"fault"</span> <span class="attr">element</span>=<span class="string">"tns:HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">part</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"userName"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:toSayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:toSayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"person arg1"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:sayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">message</span>=<span class="string">"tns:HelloException"</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>&lt;input&gt;</code> 和 <code>&lt;output&gt;</code> </p>
+<p><code>&lt;operation&gt;</code>元素中，name属性表示服务方法名，parameterOrder属性表示方法的参数顺序，使用空格符分割多个参数</p>
+<p>“parameterOrder=”person arg1”  这个和input 对应的message 对应的各种数据类型有关</p>
+<p>子标签<input>表示输入参数说明，它引用＜message＞标签中的输入参数。<output>表示输出参数说明，它引用＜message＞标签中的输出参数。<fault>标签在Java方法中的特别用来表示异常（其它语言有对应的错误处理机制），它引用＜message＞标签中的错误参数。 </fault></output></p>
+<p><binding>标签是完整描述协议、序列化和编码的地方，<types>,<message>和<porttype>标签处理抽象的数据内容，而<binding>标签是处理数据传输的物理实现。 </binding></porttype></message></types></binding></p>
+<p><binding>标签把前三部分的抽象定义具体化。 </binding></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">binding</span> <span class="attr">name</span>=<span class="string">"ExamplePortBinding"</span> <span class="attr">type</span>=<span class="string">"tns:Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:binding</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">transport</span>=<span class="string">"http://schemas.xmlsoap.org/soap/http"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">style</span>=<span class="string">"rpc"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:binding</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span> <span class="attr">use</span>=<span class="string">"literal"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>首先<binding>标签使用<a href="soap:binding" target="_blank" rel="noopener">soap:binding</a>的transport和style属性定义了Web Service的通讯协议HTTP和SOAP的请求风格RPC。其次<operation>子标签将portType中定义的 operation同SOAP的请求绑定，定义了操作名称soapAction，输出输入参数和异常的编码方式及命名空间。 </operation></binding></p>
+<p>   service是一套＜port＞元素。在一一对应形式下，每个＜port＞元素都和一个location关联。如果同一个＜binding＞有多个＜port＞元素与之关联，可以使用额外的URL地址作为替换。 </p>
+<p>一个WSDL文档中可以有多个＜service＞元素，而且多个＜service＞元素十分有用，其中之一就是可以根据目标URL来组织端口。在一个 WSDL文档中，＜service＞的name属性用来区分不同的service。在同一个service中，不同端口，使用端口的”name”属性区分。   </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">port</span> <span class="attr">name</span>=<span class="string">"ExamplePort"</span> <span class="attr">binding</span>=<span class="string">"tns:ExamplePortBinding"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:address</span> <span class="attr">location</span>=<span class="string">"http://localhost:8080/hello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:address</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">port</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/SOAP教程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -515,190 +699,6 @@
 <li><strong>NO-WSDL模式：</strong>使用参数来传递要使用的信息。</li>
 <li><strong>WSDL模式：</strong> 使用WSDL文件名作为参数，并从WSDL中提取服务所需的信息。</li>
 </ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/WSDL/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/WSDL/" itemprop="url">WSDL</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>WSDL是用于描述如何访问Web Service 语言</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">definitions</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span></span><br><span class="line">  web service 使用的数据类型</span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span>&gt;</span></span><br><span class="line">  web service 定义一个操作的数据元素</span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span>&gt;</span></span><br><span class="line">  web service要执行的操作 </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">binding</span>&gt;</span></span><br><span class="line">  web service 使用的通信协议 消息格式和协议细节</span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">definitions</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermRequest"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"getTermResponse"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"value"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerms"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"getTermRequest"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"getTermResponse"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>在这个例子中，把 “getTerm” 定义为某个<em>操作</em>的名称。</p>
-<p>操作 “getTerm” 拥有一个名为 “getTermRequest” 的<em>输入消息</em>，以及一个名为 “getTermResponse” 的<em>输出消息</em>。</p>
-<p><code>&lt;message&gt;</code> 元素可定义每个消息的<em>部件</em>，其实就是作为一个operation的一个输入和输出的参数的定义而已</p>
-<p>对比传统的编程，<code>&lt;portType&gt;</code>是一个函数库，描述各种函数的签名</p>
-<p>里面的 <code>&lt;operation&gt;</code> 则是定义的一个个函数</p>
-<p>比如 “getTerm” 是带有输入参数 “getTermRequest” 和返回参数 getTermResponse 的一个函数</p>
-<p><code>&lt;binding&gt;</code>是将<code>&lt;portType&gt;</code>标签定义的每一个操作在此实现</p>
-<p><code>&lt;service&gt;</code> 确定每一个标签的端口地址</p>
-<p>总的来说WSDL文档分成两个部分 一个是抽象层，一个就是具体实现层  </p>
-<p><code>&lt;binding&gt;</code>和<code>&lt;service&gt;</code>就是具体实现层</p>
-<p>operation的构造有下面几种形式</p>
-<table>
-<thead>
-<tr>
-<th>One-way</th>
-<th>此操作可接受消息，但不会返回响应。</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Request-response</td>
-<td>此操作可接受一个请求并会返回一个响应</td>
-</tr>
-<tr>
-<td>Solicit-response</td>
-<td>此操作可发送一个请求，并会等待一个响应。</td>
-</tr>
-<tr>
-<td>Notification</td>
-<td>此操作可发送一条消息，但不会等待响应。</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- One way 操作的例子，其实就是一个带参数的void函数--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"newTermValues"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param1"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"param2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"glossaryTerm"</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"setTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"newTerm"</span> <span class="attr">message</span>=<span class="string">"newTermValues"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>上面的setTerm就是个one -way 方法 他只接收一个名叫newTerm的 newTermValues的消息？（我是把newTermValues理解成一个消息格式），这个参数由两个 xs:string  param1 param2 组成</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Request-Response操作--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term1"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"Term2"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"term2"</span> <span class="attr">type</span>=<span class="string">"xs:string"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"goodTerms"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"getTerm"</span>&gt;</span></span><br><span class="line">    	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"p1"</span> <span class="attr">message</span>=<span class="string">"Term1"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">output</span> <span class="attr">name</span>=<span class="string">"p2"</span> <span class="attr">message</span>=<span class="string">"Term2"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">operation</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>发现一个更好的WSDL文档的网站 补充下  感谢 51cto的一篇文章，虽然他也是转载</p>
-<p><code>&lt;definitions  xmlns:soap=&quot;http://schemas.xmlsoap.org/wsdl/soap/&quot;  xmlns:tns=&quot;http://www.jsoso.com/wstest&quot;   xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;   xmlns=&quot;http://schemas.xmlsoap.org/wsdl/&quot;   targetNamespace=&quot;http://www.jsoso.com/wstest&quot;  name=&quot;Example&quot;&gt;</code></p>
-<p>这个作为根元素，它定义文档用到各种xml元素的namespace 缩写，本文档自己的targetNamespace记录了自己的namespace  其他xml元素引用本文档的xml元素，要声明这个namespace       注意xmlns:tns它其实就是将tns这个前缀指向自身的命名空间。</p>
-<p>xmlns=”xxx” 叫默认名称空间 没有取名         xmlns:PART =”xxx”  这种叫源名称空间  </p>
-<p>xmlns:targetNamespace=”xx” 目标命名空间</p>
-<p>其实不要觉得这些命名空间随便给，每个网址都是有特殊意义的</p>
-<p>比如说大名鼎鼎的 xsd 代表的 <a href="http://www,w3.org/2001/XMLSchema" target="_blank" rel="noopener">http://www,w3.org/2001/XMLSchema</a>  代表的就是一种代替DTD 的XSD语言很牛逼 还有专门的xsd文件</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">types</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">xsd:import</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">schemaLocation</span>=<span class="string">"http://localhost:8080/hello?xsd=1"</span>&gt;</span><span class="tag">&lt;/<span class="name">xsd:import</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">xsd:schema</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">types</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里我们要引入的schema定义 schemaLocation=”<a href="http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。" target="_blank" rel="noopener">http://localhost:8080/hello?xsd=1&quot;是我们自定义的Java对象类型。</a>  </p>
-<p>这个其实import 和 schema是涉及到xsd本身的语法，它这里的schema+import应该是属于拓展命名空间,然后这个大概是xsd文件本身没有定义 targetNamespace 而 我们自己写的文件中有 targetNamespace 是 “http://…../wstest”然后就要这么写具体看<a href="http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_62ef85c201019gbb.html</a>  然后这个xsd就引入了 我们定义的文件的类型</p>
-<p>然后他们一起定义在types里面作为文档的数据类型？？</p>
-<p><code>&lt;types&gt;</code>定义了当前文档的数据类型，为了保持平台中立性，WSDL使用XML Schema 语法来定义数据类型 这些数据类型来定义参数方法和参数值  也就是之前定义的xsd的前缀代表的命名空间，这个命名空间本身就定义了一些常用的数据类型 integer boolean char float等 </p>
-<p>然后一些 tns前缀的变量其实就是我们自定义文件中的自定义变量  我有点没懂，怎么和xsd一点关系也没，import过来干嘛。。但是好像用tns 前缀好像又和 <code>&lt;types&gt;</code>定义的有关</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">message</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">part</span> <span class="attr">name</span>=<span class="string">"fault"</span> <span class="attr">element</span>=<span class="string">"tns:HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">part</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">message</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">portType</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"userName"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:toSayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:toSayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span> <span class="attr">parameterOrder</span>=<span class="string">"person arg1"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">message</span>=<span class="string">"tns:sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span> <span class="attr">message</span>=<span class="string">"tns:sayHelloResponse"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">message</span>=<span class="string">"tns:HelloException"</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">portType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><code>&lt;input&gt;</code> 和 <code>&lt;output&gt;</code> </p>
-<p><code>&lt;operation&gt;</code>元素中，name属性表示服务方法名，parameterOrder属性表示方法的参数顺序，使用空格符分割多个参数</p>
-<p>“parameterOrder=”person arg1”  这个和input 对应的message 对应的各种数据类型有关</p>
-<p>子标签<input>表示输入参数说明，它引用＜message＞标签中的输入参数。<output>表示输出参数说明，它引用＜message＞标签中的输出参数。<fault>标签在Java方法中的特别用来表示异常（其它语言有对应的错误处理机制），它引用＜message＞标签中的错误参数。 </fault></output></p>
-<p><binding>标签是完整描述协议、序列化和编码的地方，<types>,<message>和<porttype>标签处理抽象的数据内容，而<binding>标签是处理数据传输的物理实现。 </binding></porttype></message></types></binding></p>
-<p><binding>标签把前三部分的抽象定义具体化。 </binding></p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">binding</span> <span class="attr">name</span>=<span class="string">"ExamplePortBinding"</span> <span class="attr">type</span>=<span class="string">"tns:Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:binding</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">transport</span>=<span class="string">"http://schemas.xmlsoap.org/soap/http"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">style</span>=<span class="string">"rpc"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:binding</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"toSayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">operation</span> <span class="attr">name</span>=<span class="string">"sayHello"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:operation</span> <span class="attr">soapAction</span>=<span class="string">"sayHello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">input</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:body</span> <span class="attr">use</span>=<span class="string">"literal"</span>  </span></span><br><span class="line"><span class="tag"><span class="attr">namespace</span>=<span class="string">"http://www.jsoso.com/wstest"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:body</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">output</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:fault</span> <span class="attr">name</span>=<span class="string">"HelloException"</span> <span class="attr">use</span>=<span class="string">"literal"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">fault</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">operation</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">binding</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>首先<binding>标签使用<a href="soap:binding" target="_blank" rel="noopener">soap:binding</a>的transport和style属性定义了Web Service的通讯协议HTTP和SOAP的请求风格RPC。其次<operation>子标签将portType中定义的 operation同SOAP的请求绑定，定义了操作名称soapAction，输出输入参数和异常的编码方式及命名空间。 </operation></binding></p>
-<p>   service是一套＜port＞元素。在一一对应形式下，每个＜port＞元素都和一个location关联。如果同一个＜binding＞有多个＜port＞元素与之关联，可以使用额外的URL地址作为替换。 </p>
-<p>一个WSDL文档中可以有多个＜service＞元素，而且多个＜service＞元素十分有用，其中之一就是可以根据目标URL来组织端口。在一个 WSDL文档中，＜service＞的name属性用来区分不同的service。在同一个service中，不同端口，使用端口的”name”属性区分。   </p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">service</span> <span class="attr">name</span>=<span class="string">"Example"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">port</span> <span class="attr">name</span>=<span class="string">"ExamplePort"</span> <span class="attr">binding</span>=<span class="string">"tns:ExamplePortBinding"</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">soap:address</span> <span class="attr">location</span>=<span class="string">"http://localhost:8080/hello"</span>&gt;</span><span class="tag">&lt;/<span class="name">soap:address</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">port</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">service</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
           
         
@@ -1145,156 +1145,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python生成器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/Python生成器/" itemprop="url">Python生成器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="生成器概念"><a href="#生成器概念" class="headerlink" title="生成器概念"></a>生成器概念</h2><p>生成器是一次生成一个值的<code>特殊类型函数</code>。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。<br> 包含yield关键字的函数可以理解是一个用函数名表示的另类<code>list对象</code>，通过迭代的方式（例如：for）依次获取结果。</p>
-<h2 id="生成器的特点"><a href="#生成器的特点" class="headerlink" title="生成器的特点"></a>生成器的特点</h2><ol>
-<li>记录执行函数内的所有变量状态（数据）和代码执行位置。</li>
-<li>立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。</li>
-</ol>
-<h2 id="认识生成器"><a href="#认识生成器" class="headerlink" title="认识生成器"></a>认识生成器</h2><p>下来让我们一起来看看如何使用yield，先通过一个简单的例子认识生成器。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addlist</span><span class="params">(alist)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> alist:</span><br><span class="line">        <span class="comment"># yield与return功能类似，返回本次迭代结果   </span></span><br><span class="line">        <span class="keyword">yield</span> i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">alist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> addlist(alist):</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
-<p>根据addlist()函数实现可以推断出addlist(alist)相当于一个值为[2, 3, 4, 5]的list，不过迭代调用时以函数表达式的形式出现在for语句中。<br> 使用”list变量”（实际为函数变量，此处可以理解为list）替代addlist(alist)作为for的参数，执行结果相同，代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_one_list = addlist(alist)</span><br><span class="line">for x in add_one_list:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
-<h2 id="生成器执行过程"><a href="#生成器执行过程" class="headerlink" title="生成器执行过程"></a>生成器执行过程</h2><p>到底yield是如何执行的呢？生成器（函数）的执行逻辑到底是什么样子？<br> 让我们一起来写个demo进行分析。</p>
-<blockquote>
-<p>next()函数<br>   用于移动迭代器指向下一个数据，直到抛出StopIteration，代表迭代终止。</p>
-</blockquote>
-<p>定义函数yield_run_logic()，对一个已经初始化变量a，多次调用，同在yield前后输出日志，用于分析执行逻辑。然后再一个while(1)的死循环中使用next()方法遍历生成器，直到抛出停止迭代异常跳出循环（StopIteration）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def yield_run_logic():</span><br><span class="line">    a = 1</span><br><span class="line">    for i in range(3):</span><br><span class="line">        print(&apos;begin yield&apos;)</span><br><span class="line">        yield a</span><br><span class="line">        print(&apos;end yield&apos;)</span><br><span class="line">        a += i</span><br><span class="line"></span><br><span class="line"># 获取生成器对象</span><br><span class="line">yield_obj = yield_run_logic()</span><br><span class="line"># 此时只是获取对象，尚未执行yield_run_logic()的内容，直到第一调用next()\</span><br><span class="line">while 1:</span><br><span class="line">    try:</span><br><span class="line">        ret = next(yield_obj)</span><br><span class="line">        # 第一次调用next()方法，开始执行yield_run_logic()，直到遇到yield关键字，返回当前结果，</span><br><span class="line">        # yield_run_logic()保留当前执行状态和代码执行位置，当下次执行next()时，</span><br><span class="line">        # yield_run_logic()从上次保留的继续执行，直到遇到yield关键字。</span><br><span class="line">        # yield_run_logic()无迭代数据时，抛出StopIteration异常，表示迭代结束。</span><br><span class="line">        print(ret)</span><br><span class="line">    except StopIteration:</span><br><span class="line">        print(&apos;end test&apos;)</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
-<p>执行结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 第1次执行输出 a = 1, i = 0</span><br><span class="line">begin yield</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 第2次执行输出 a = 1, i = 1</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"># 第3次执行输出 a = 2, i = 2</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">4</span><br><span class="line"></span><br><span class="line"># 第4次执行</span><br><span class="line">end yield # yield_run_logic()中 i 超过range(3)的范围，结束迭代，</span><br><span class="line">          # 由于使用next()而并非使用for来迭代生成器，所以迭代结束异常需要自己处理。</span><br><span class="line">end test</span><br></pre></td></tr></table></figure>
-<p>根据输出结果可以看出，在第一次执行next()时，生成器yield_run_logic()开始执行，打印’begin yield’，并在<code>yield a</code>处返回结果，之后再执行next()都是从<code>yield a</code>之后开始执行（打印’end yield’），直到循环中再次遇到<code>yield a</code>时返回。</p>
-<p><strong>总结</strong> yield的执行逻辑。</p>
-<blockquote>
-<p><strong>第一次获取迭代结果，函数的第一行代码执行到yield关键字返回，第[2,n]次迭代结果，函数执行从yield关键字下一行代码到再次碰到yield关键字返回。</strong></p>
-</blockquote>
-<h2 id="yield的应用场景"><a href="#yield的应用场景" class="headerlink" title="yield的应用场景"></a>yield的应用场景</h2><p>凡是本次处理使用上次处理结果作为基础数据的逻辑实现，都可以考虑使用生成器。</p>
-<p><strong>练习1：打印杨辉三角</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">          1</span><br><span class="line">        1   1</span><br><span class="line">      1   2   1</span><br><span class="line">    1   3   3   1</span><br><span class="line">  1   4   6   4   1</span><br><span class="line">1   5   10  10  5   1</span><br></pre></td></tr></table></figure>
-<p><strong>特征分析</strong>：从第三行开始每一行的非边界数字等于上一行相邻两数字之和，边界数字全部为1。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pascals_triangle</span><span class="params">(line_count)</span>:</span></span><br><span class="line">    up_line = []</span><br><span class="line">    line = []</span><br><span class="line">    <span class="comment"># i取值范围[0, line_count-1]</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(line_count):</span><br><span class="line">        <span class="comment"># 扩展当前行列表长度，初始化数据为1，并且保证边界数据为1</span></span><br><span class="line">        line.append(<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 1,2行全部是1，3行开始体现特征，需要进行特征处理</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 当前行[1, n-1]的值等于上一行[0, n-2]与[1, n-1]的和</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(up_line)):</span><br><span class="line">                line[j] = up_line[j<span class="number">-1</span>] + up_line[j]</span><br><span class="line">        <span class="comment"># 返回当前行</span></span><br><span class="line">        <span class="keyword">yield</span> line</span><br><span class="line">        <span class="comment"># 更新上一行记录结果，保存当前行</span></span><br><span class="line">        up_line = line[:]</span><br><span class="line"></span><br><span class="line">lines = <span class="number">6</span></span><br><span class="line">fn = pascals_triangle(lines)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fn:</span><br><span class="line">    print(line)</span><br></pre></td></tr></table></figure>
-<p>函数执行结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1]</span><br><span class="line">[1, 1]</span><br><span class="line">[1, 2, 1]</span><br><span class="line">[1, 3, 3, 1]</span><br><span class="line">[1, 4, 6, 4, 1]</span><br><span class="line">[1, 5, 10, 10, 5, 1]</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python(4)oop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1419,6 +1269,156 @@
 <p>有很多魔法方法</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在class定义的方法  假设x y 都是这个类的方法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span> ...    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__contains__</span><span class="params">(self, key)</span>:</span> ...  x el <span class="keyword">in</span>   </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__add__</span><span class="params">(self, other)</span>:</span> ... x &lt; y    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__iter__</span><span class="params">(self)</span>:</span> ... iter(x)   用于范围<span class="keyword">for</span>  <span class="keyword">for</span> n <span class="keyword">in</span> Fib():</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__next__</span><span class="params">(self)</span>:</span> ...  next(x)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, key)</span>:</span> ...   下标访问 </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span> ...</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__lt__</span><span class="params">(self, other)</span>:</span> ... x &lt; y    <span class="number">2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__eq__</span><span class="params">(self, other)</span>:</span> ...   x == y   </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span> ...    str(x)   用来直接作为<span class="keyword">print</span>参数时隐式调用</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__repr__</span><span class="params">(self)</span>:</span> ... </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self,z)</span>:</span>          用来`实例对象()` 调用函数</span><br></pre></td></tr></table></figure>
 <p>#And even more… </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Python生成器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Python生成器/" itemprop="url">Python生成器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:48+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="生成器概念"><a href="#生成器概念" class="headerlink" title="生成器概念"></a>生成器概念</h2><p>生成器是一次生成一个值的<code>特殊类型函数</code>。可以将其视为可恢复函数。调用该函数将返回一个可用于生成连续 x 值的生成器。<br> 包含yield关键字的函数可以理解是一个用函数名表示的另类<code>list对象</code>，通过迭代的方式（例如：for）依次获取结果。</p>
+<h2 id="生成器的特点"><a href="#生成器的特点" class="headerlink" title="生成器的特点"></a>生成器的特点</h2><ol>
+<li>记录执行函数内的所有变量状态（数据）和代码执行位置。</li>
+<li>立即返回yield标记的变量或值，再次调用函数时，代码从上次返回yield之后继续执行。</li>
+</ol>
+<h2 id="认识生成器"><a href="#认识生成器" class="headerlink" title="认识生成器"></a>认识生成器</h2><p>下来让我们一起来看看如何使用yield，先通过一个简单的例子认识生成器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">addlist</span><span class="params">(alist)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> alist:</span><br><span class="line">        <span class="comment"># yield与return功能类似，返回本次迭代结果   </span></span><br><span class="line">        <span class="keyword">yield</span> i + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">alist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> x <span class="keyword">in</span> addlist(alist):</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<p>根据addlist()函数实现可以推断出addlist(alist)相当于一个值为[2, 3, 4, 5]的list，不过迭代调用时以函数表达式的形式出现在for语句中。<br> 使用”list变量”（实际为函数变量，此处可以理解为list）替代addlist(alist)作为for的参数，执行结果相同，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_one_list = addlist(alist)</span><br><span class="line">for x in add_one_list:</span><br><span class="line">    print(x)</span><br></pre></td></tr></table></figure>
+<h2 id="生成器执行过程"><a href="#生成器执行过程" class="headerlink" title="生成器执行过程"></a>生成器执行过程</h2><p>到底yield是如何执行的呢？生成器（函数）的执行逻辑到底是什么样子？<br> 让我们一起来写个demo进行分析。</p>
+<blockquote>
+<p>next()函数<br>   用于移动迭代器指向下一个数据，直到抛出StopIteration，代表迭代终止。</p>
+</blockquote>
+<p>定义函数yield_run_logic()，对一个已经初始化变量a，多次调用，同在yield前后输出日志，用于分析执行逻辑。然后再一个while(1)的死循环中使用next()方法遍历生成器，直到抛出停止迭代异常跳出循环（StopIteration）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def yield_run_logic():</span><br><span class="line">    a = 1</span><br><span class="line">    for i in range(3):</span><br><span class="line">        print(&apos;begin yield&apos;)</span><br><span class="line">        yield a</span><br><span class="line">        print(&apos;end yield&apos;)</span><br><span class="line">        a += i</span><br><span class="line"></span><br><span class="line"># 获取生成器对象</span><br><span class="line">yield_obj = yield_run_logic()</span><br><span class="line"># 此时只是获取对象，尚未执行yield_run_logic()的内容，直到第一调用next()\</span><br><span class="line">while 1:</span><br><span class="line">    try:</span><br><span class="line">        ret = next(yield_obj)</span><br><span class="line">        # 第一次调用next()方法，开始执行yield_run_logic()，直到遇到yield关键字，返回当前结果，</span><br><span class="line">        # yield_run_logic()保留当前执行状态和代码执行位置，当下次执行next()时，</span><br><span class="line">        # yield_run_logic()从上次保留的继续执行，直到遇到yield关键字。</span><br><span class="line">        # yield_run_logic()无迭代数据时，抛出StopIteration异常，表示迭代结束。</span><br><span class="line">        print(ret)</span><br><span class="line">    except StopIteration:</span><br><span class="line">        print(&apos;end test&apos;)</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
+<p>执行结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 第1次执行输出 a = 1, i = 0</span><br><span class="line">begin yield</span><br><span class="line">1</span><br><span class="line"></span><br><span class="line"># 第2次执行输出 a = 1, i = 1</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">2</span><br><span class="line"></span><br><span class="line"># 第3次执行输出 a = 2, i = 2</span><br><span class="line">end yield</span><br><span class="line">begin yield</span><br><span class="line">4</span><br><span class="line"></span><br><span class="line"># 第4次执行</span><br><span class="line">end yield # yield_run_logic()中 i 超过range(3)的范围，结束迭代，</span><br><span class="line">          # 由于使用next()而并非使用for来迭代生成器，所以迭代结束异常需要自己处理。</span><br><span class="line">end test</span><br></pre></td></tr></table></figure>
+<p>根据输出结果可以看出，在第一次执行next()时，生成器yield_run_logic()开始执行，打印’begin yield’，并在<code>yield a</code>处返回结果，之后再执行next()都是从<code>yield a</code>之后开始执行（打印’end yield’），直到循环中再次遇到<code>yield a</code>时返回。</p>
+<p><strong>总结</strong> yield的执行逻辑。</p>
+<blockquote>
+<p><strong>第一次获取迭代结果，函数的第一行代码执行到yield关键字返回，第[2,n]次迭代结果，函数执行从yield关键字下一行代码到再次碰到yield关键字返回。</strong></p>
+</blockquote>
+<h2 id="yield的应用场景"><a href="#yield的应用场景" class="headerlink" title="yield的应用场景"></a>yield的应用场景</h2><p>凡是本次处理使用上次处理结果作为基础数据的逻辑实现，都可以考虑使用生成器。</p>
+<p><strong>练习1：打印杨辉三角</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">          1</span><br><span class="line">        1   1</span><br><span class="line">      1   2   1</span><br><span class="line">    1   3   3   1</span><br><span class="line">  1   4   6   4   1</span><br><span class="line">1   5   10  10  5   1</span><br></pre></td></tr></table></figure>
+<p><strong>特征分析</strong>：从第三行开始每一行的非边界数字等于上一行相邻两数字之和，边界数字全部为1。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pascals_triangle</span><span class="params">(line_count)</span>:</span></span><br><span class="line">    up_line = []</span><br><span class="line">    line = []</span><br><span class="line">    <span class="comment"># i取值范围[0, line_count-1]</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(line_count):</span><br><span class="line">        <span class="comment"># 扩展当前行列表长度，初始化数据为1，并且保证边界数据为1</span></span><br><span class="line">        line.append(<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 1,2行全部是1，3行开始体现特征，需要进行特征处理</span></span><br><span class="line">        <span class="keyword">if</span> i &gt; <span class="number">1</span>:</span><br><span class="line">            <span class="comment"># 当前行[1, n-1]的值等于上一行[0, n-2]与[1, n-1]的和</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>, len(up_line)):</span><br><span class="line">                line[j] = up_line[j<span class="number">-1</span>] + up_line[j]</span><br><span class="line">        <span class="comment"># 返回当前行</span></span><br><span class="line">        <span class="keyword">yield</span> line</span><br><span class="line">        <span class="comment"># 更新上一行记录结果，保存当前行</span></span><br><span class="line">        up_line = line[:]</span><br><span class="line"></span><br><span class="line">lines = <span class="number">6</span></span><br><span class="line">fn = pascals_triangle(lines)</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> fn:</span><br><span class="line">    print(line)</span><br></pre></td></tr></table></figure>
+<p>函数执行结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[1]</span><br><span class="line">[1, 1]</span><br><span class="line">[1, 2, 1]</span><br><span class="line">[1, 3, 3, 1]</span><br><span class="line">[1, 4, 6, 4, 1]</span><br><span class="line">[1, 5, 10, 10, 5, 1]</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1925,7 +1925,25 @@
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
             
 
           </nav>

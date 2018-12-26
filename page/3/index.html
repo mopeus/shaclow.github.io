@@ -564,141 +564,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java网络编程(九)番外 日志/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/Java网络编程(九)番外 日志/" itemprop="url">Java网络编程(九)番外 日志</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>我们可以为每个类创建一个日志工具</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Logger auditLogger=Logger.getLogger(<span class="string">"requests"</span>);</span><br></pre></td></tr></table></figure>
-<p>日志工具是线程安全的，所以他们存储在共享的静态字段没问题，整个类共用一个，</p>
-<p>多个Logger对象可以输出到同一个日志文件中，但一个Logger只能将日志记录到一个文件中</p>
-<p>参数可能是一个文件名字 可能是一个数据库 可能是一个SOAP服务 同意主机运行的另一个Java程序</p>
-<p>一旦有了日志工具就可以多个方法写入日志</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">catch</span>(RuntimeException ex)&#123;</span><br><span class="line">    logger.log(Level.SEVERE,<span class="string">"unexpected error "</span>+ex.getMessage(),ex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第一个参数代表level  SEVERE WARNING INFO CONFIG FINE FINER FINEST</p>
-<p>一般实际使用上是用前三个 SEVERE WARNING INFO三个 后三个最多也就调试用用</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//记录info </span></span><br><span class="line">logger.info(<span class="keyword">new</span> Date()+<span class="string">" "</span>+connection.getRemoteSocketAddress());</span><br></pre></td></tr></table></figure>
-<p>如果只是记录错误一般就寄生在catch语句块就行</p>
-<p>默认情况下日志是输出在控制台上的但是如果你想放入到一个持久的目标的位置</p>
-<p>可以在代码也可以在配置文件中指定</p>
-<p>java.util.logging.config.file 系统属性采用常规的属性格式指向控制日志记录的一个文件</p>
-<p>可以在启动虚拟机的时候 传入 -Djava.util.logging.config.file=<em>filename</em>参数来设置该属性</p>
-<p>日志属性文件 略 详情看别的地方的介绍</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java网络编程(九)服务器Socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -805,6 +670,375 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServerSocket server=<span class="keyword">new</span> ServerSocket(<span class="number">0</span>);   <span class="comment">//随机端口</span></span><br><span class="line">System.out.println(server.getLocalPort());   <span class="comment">//知道其具体绑定的端口，如果未绑定到则返回-1</span></span><br></pre></td></tr></table></figure>
 <p>toString能用来打印信息  addr表示socket绑定的本地网络接口的地址 如果绑定到所有接口则 0.0.0.0？？ port总是显示0</p>
 <p>localhost表示服务器正在连接监听的本地端口   其实没啥用</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java网络编程(六)HTTP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Java网络编程(六)HTTP/" itemprop="url">Java网络编程(六)HTTP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>HTTP </p>
+<p>Http指定客户端与服务器如何建立链接、客户端如何从服务器请求数据，服务器如何响应请求，以及最后如何关闭链接。Http链接使用TCP/IP来传输数据，对于从客户端到服务器的每个请求，都有四个步骤</p>
+<p>Http1.0</p>
+<ol>
+<li>默认情况，客户端在端口80打开与服务器的一个TCP连接，URL中可以指定其他接口</li>
+<li>客户端向服务器发送信息，请求路径上的资源   请求包括首部 可选地 一个空行 请求数据</li>
+<li>服务器向客户端发送响应。响应以响应码开头，后面是包含元数据的首部、一个空行以及所请求的文档或错误信息</li>
+<li>服务器关闭连接</li>
+</ol>
+<p>Http1.1 及之后版本，可通过一个TCP连接连续发送多个请求和响应，也就是２.３步可以指向多次，而且响应和请求可以分成多个块进行发送</p>
+<p>每个请求和响应都有相同的基本形式：</p>
+<ul>
+<li>一个首部行</li>
+<li>一个包含元数据的HTTP首部</li>
+<li>一个空行</li>
+<li>消息体</li>
+</ul>
+<p>第一行称为请求行（首部行？） 定义返回资源的方式 路径 Http版本 </p>
+<p>还有其他信息 （Keyword:Value）</p>
+<p>关键词不区分大小写，如果一个值太长，可以在下一行最前面增加一个空格或制表符，然后接上一行（都要用Ascll）</p>
+<p>首部中的行以一个回车换行对结束</p>
+<p>一些键值对</p>
+<ul>
+<li>User-Agent</li>
+<li>Host 说明主机</li>
+<li>Accept 指明可以指定可以使用那个数据类型 后面接MIME类型</li>
+</ul>
+<p>MIME类型分为两级：类型和子类型。子类型是对类型的详细补充</p>
+<ul>
+<li>text/*</li>
+<li>image/*</li>
+<li>model/* 3D模型</li>
+<li>audio/* 声音</li>
+<li>video/* 表示移动的图标可能包含声音</li>
+<li>application/* 二进制数据</li>
+<li>message/* 表示协议特定的信封 email信息或Http响应等等</li>
+<li>multipart/* 表示多个文档和资源的容器</li>
+</ul>
+<p>最后请求以一个空行结束 也就是 两个回车换行对  \r\n\r\n</p>
+<p>响应 一个状态行开始 后面一个首部（也是采用键值对） 然后一个空行，然后是请求资源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date:xxxxxx</span><br><span class="line">Server:Apache</span><br><span class="line">Connection:close  //承诺响应发送时关闭连接</span><br><span class="line">Content-Type:text/html; charset=ISO-8859-1</span><br><span class="line">Content-length:115   //不考虑首部的长度</span><br><span class="line">&lt;html&gt;</span><br><span class="line">.....</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>响应码有很多    有问题去查一下就行 p173</p>
+<p>100-199 总表示一个提供信息的响应 200-299 总指示成功 300-399 表示重定向 400-499 客户端错误 500-599 服务器错误</p>
+<p>HTTP  1.0  会为每个请求打开一个新连接。实际上典型Web会话中打开和关闭所有链接所花费的时间远大于实际传输数据的时间，特别是很多小文档的会话，特别是那种加密的链接</p>
+<p>客户可以在首部添加</p>
+<p>Connectiond:Keep-Alive  指定重用一个socket</p>
+<p>URL类默认支持keep-alive 除非显式关闭，如果再次连接到同一个服务器就会重用socket。可以利用系统属性，控制java如何使用http keep-alive</p>
+<ul>
+<li>http.keepAlive true/false  Http Keep-Alive 的是否启用 默认开启</li>
+<li>http.maxConnections 希望同时保持打开的socket数 默认为5</li>
+<li>http.keepAlive.remainingData  若为true 使Java丢弃连接后之后完成清理java6后支持（默认false）</li>
+<li>sun.net.http.errorstream.enableBuffering true时尝试缓存400和500级响应的相对小的错误六，从而释放连接，以备重用 默认false</li>
+<li>sun.net.http.errorstream.bufferSize 为缓冲错误流使用的字节数 默认4096字节</li>
+<li>sun.net.http.errorstream.timeout 为读错误流超时前的毫秒数 默认300ms</li>
+</ul>
+<p>Http 2.0 时在传输层完成优化，具体细节是屏蔽的，java还不支持？ 不过你只要用URL/URLConnection类去访问http服务器你得程序不做修改就可使用该功能</p>
+<p>Http方法</p>
+<p>请求  起始行 首部 请求主题，是包含资源的请求才有（post/put）</p>
+<p>Http有四种方法 get post put delete</p>
+<ul>
+<li>GET没有副作用，失败可重复用，它的输出通常会缓存，不过可通过首部控制 而且没有指明默认用get</li>
+<li>PUT 将资源上传到一个服务器，没有副作用出错可重复执行，不过有幂等性，如果将连续两次把同个文档放在服务器同一个位置，和放一次对于服务器的状态是一样的</li>
+<li>DELETE 从一个URL删除一个资源 没有副作用也是幂等的，可以多次删除不会报错</li>
+<li>POST 将资源上传服务器，但没有说明如何处理该资源 POST要用于不能重复的不安全的操作  POST的信息量也没有限制</li>
+<li>HEAD 就是个GET不过只返回头部</li>
+<li>OPTIONS 允许客户端询问服务器可以如何处理一个资源</li>
+<li>TRACE 会回显客户端请求进行调试</li>
+</ul>
+<p>URL类使用GET方法进行通讯 之后的URLConnection类支持上面四种方法</p>
+<h3 id="请求主体"><a href="#请求主体" class="headerlink" title="请求主体"></a>请求主体</h3><p>GET方法获取URL所标识资源的一个表示。用GET从服务器获取的资源的具体位置由路径和查询字符串的不同部分指定。</p>
+<p>而POST和PUT更复杂，因为除了提供url之外，还要提供资源的表示（？其实就是资源主体）一般资源会在首部指明两个 Content-length Content-type</p>
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p>它有时候不包含数据，只是指示服务器上的而数据   它只能时非空白符的ASCLL 不能有逗号和分号</p>
+<p>在响应中的首部的Set-Cookie 有指定</p>
+<p><code>Set-Cookie: cart=AKKQQ</code>   （可以有多个，一个cookie对应一个set-cookie）</p>
+<p>或者请求时会在首部中指定发送</p>
+<p><code>Cookie: cart=AKKQQ</code></p>
+<p>一般来说，cookie来自哪个服务器就会用于哪个服务器 比如来自<a href="http://www.baidu.com的cookie只会发给www.baidu.com的服务器。不过可以指定cookie应用于整个子域，而不只是最初的服务器。" target="_blank" rel="noopener">www.baidu.com的cookie只会发给www.baidu.com的服务器。不过可以指定cookie应用于整个子域，而不只是最初的服务器。</a></p>
+<p><code>Set-Cookie: username=hehe;Domain=.baidu.com</code></p>
+<p>这样cookie可能能发给什么 cc.baidu.com  oob.baidu.com  (如果存在的话哈哈)</p>
+<p>但是所设的子域必须时服务器直接所属的域，比如你baidu域的主机不能设置成lunlun.com域</p>
+<p>一些网站会将一个域中的一个图像或某个内容嵌入到另一个域的一个页面中，从而通过这个这个嵌入内容来设置cookie，这种就实现了没有真正访问这个域也能设置 到这个域的cookie。 这叫第三方cookie 现在慢慢开始阻塞这种cookie</p>
+<p>Cookie的作用域其实对于路径也有限制 比如 xxxx/aab设置一个cookie  你只能在xxxx/aab或其子树域下使用cookie 而xxxx/bba 这种域毫无办法。当然你可以设置使用路径</p>
+<p><code>Set-Cookie: username=hehe;Path=/kkk</code>  就会在/kkk及其子树域有效 但是如果你不设置Domain默认是那个xxxx服务器域内</p>
+<p>一些其他的cookie设置</p>
+<p>设置过期时间</p>
+<p>expires=Wed,21-Dec-2018 16:33:09 GMT</p>
+<p>Max-Age=3600   单位是秒</p>
+<p>安全性</p>
+<p>secure 不用设置值   代表浏览器拒绝通过非安全通道发送这种cookie</p>
+<p>httponly 也是安全相关，说明浏览器只通过http/https 返回cookie尤其强调不能通过js返回防范xss</p>
+<p>CookieHandler 其实才是真正来实现http状态管理的，而他提供两个方法 最重要的是setDefault(Cookiemanager)用来设置你的handler的内核，而若没有他会有一个默认的，你可以通过 getDefault()去获得这个    其中CookieHandler还有两个抽象方法就是 put(uri,responseheaders) 和get(uri,requestheaders)</p>
+<blockquote>
+<p>我们可以认为CookieHandler是一个无形的神的旨意，而CookieManger是这种精神的传承实体，而CookieManger本身是一个复杂的个体，一分为二是CookieStore CookiePolicy 一个是管理现存的cookie,一个是决定是否接收cookie</p>
+</blockquote>
+<h2 id="CookieManager"><a href="#CookieManager" class="headerlink" title="CookieManager"></a>CookieManager</h2><p>java.net.CookieHandler 定域了存储和获取cookie的一个api，</p>
+<p>提供了一个具体的子类 java.net.CookieManager 默认情况下我们需要启用cookie</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CookieManager m=<span class="keyword">new</span> CookieManager();</span><br><span class="line">CookieHandler.setDefault(m);</span><br><span class="line"><span class="comment">//一个cookieManager安装完成</span></span><br></pre></td></tr></table></figure>
+<p>默认提供的存储策略</p>
+<ul>
+<li>CookiePolicy.ACCEPT_ALL</li>
+<li>CookiePolicy.ACCEPT_NONE</li>
+<li>CookiePolicy.ACCEPT_ORIGINAL_SERVER 只接受原服务器的cookie（默认）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CookieManager m=<span class="keyword">new</span> CookieManager();</span><br><span class="line">m.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);</span><br><span class="line">CookieHandler.setDefault(m);</span><br></pre></td></tr></table></figure>
+<p>只需要实现CookiePolicy 接口并覆盖shouldAccept方法 可以自己实现存储策略</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过url去获得头部信息，进行域的判断</span></span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoGovernmentCookies</span> <span class="keyword">implements</span> <span class="title">CookiePolicy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldAccept</span><span class="params">(URI uri,HttpCookie cookie)</span></span>&#123;</span><br><span class="line">        <span class="comment">//从url和cookie的发送域双重保证分析</span></span><br><span class="line">  <span class="keyword">if</span>(uri.getAuthority().toLowerCase().endsWith(<span class="string">".gov"</span>)||cookie.getDomain().toLowerCase().endsWith(<span class="string">".gov"</span>))&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;          <span class="comment">//拒绝存储    </span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlacklistCookiePolicy</span> <span class="keyword">implements</span> <span class="title">CookiePolicy</span> </span>&#123;</span><br><span class="line">    String[] blacklist;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BlacklistCookiePolicy</span><span class="params">(String[] list)</span> </span>&#123;</span><br><span class="line">        blacklist = list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldAccept</span><span class="params">(URI uri, HttpCookie cookie)</span>  </span>&#123;</span><br><span class="line">        String host;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            host =  InetAddress.getByName(uri.getHost()).getCanonicalHostName();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (UnknownHostException e) &#123;</span><br><span class="line">            host = uri.getHost();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;blacklist.length; i++) &#123;</span><br><span class="line">	    <span class="keyword">if</span> (HttpCookie.domainMatches(blacklist[i], host)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> CookiePolicy.ACCEPT_ORIGINAL_SERVER.shouldAccept(uri, cookie);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="CookieStore"><a href="#CookieStore" class="headerlink" title="CookieStore"></a>CookieStore</h2><p>cookiestore可以实现该接口，但是并在CookieManager实例化时传给它。你不能在CookieManager实例化之后设置它的CookieStore</p>
+<p>有时候必须本地存放和获取cookie 这说明应用退出下一次再启用时加载，这时候就需要获取CookieStore</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CookieStore store=m.getCookieStore();  <span class="comment">//通过cookiemanager去获得</span></span><br></pre></td></tr></table></figure>
+<p>CookieStore 允许增加删除列出cookie 控制在正常http请求和响应流之外发送cookie</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(URI uri,HttpCookie cookie)</span></span></span><br><span class="line"><span class="function">List&lt;HttpCookie&gt; <span class="title">get</span><span class="params">(URI)</span></span></span><br><span class="line"><span class="function">List&lt;HttpCookie&gt; <span class="title">getCookies</span><span class="params">()</span></span></span><br><span class="line"><span class="function">List&lt;URI&gt; <span class="title">getURIs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(URI uri,HttpCookie cookie)</span></span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p>每个cookie都封装在一个HttpCookie对象中，它提供了一些方法去访问属性</p>
+<p>感觉有用的  set/getDomain set/getPath set/getMaxAge   set/getValue</p>
+<p>还有其他，不过有些方法已经过时并废弃了</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java网络编程(九)番外 日志/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Java网络编程(九)番外 日志/" itemprop="url">Java网络编程(九)番外 日志</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>我们可以为每个类创建一个日志工具</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Logger auditLogger=Logger.getLogger(<span class="string">"requests"</span>);</span><br></pre></td></tr></table></figure>
+<p>日志工具是线程安全的，所以他们存储在共享的静态字段没问题，整个类共用一个，</p>
+<p>多个Logger对象可以输出到同一个日志文件中，但一个Logger只能将日志记录到一个文件中</p>
+<p>参数可能是一个文件名字 可能是一个数据库 可能是一个SOAP服务 同意主机运行的另一个Java程序</p>
+<p>一旦有了日志工具就可以多个方法写入日志</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">catch</span>(RuntimeException ex)&#123;</span><br><span class="line">    logger.log(Level.SEVERE,<span class="string">"unexpected error "</span>+ex.getMessage(),ex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一个参数代表level  SEVERE WARNING INFO CONFIG FINE FINER FINEST</p>
+<p>一般实际使用上是用前三个 SEVERE WARNING INFO三个 后三个最多也就调试用用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//记录info </span></span><br><span class="line">logger.info(<span class="keyword">new</span> Date()+<span class="string">" "</span>+connection.getRemoteSocketAddress());</span><br></pre></td></tr></table></figure>
+<p>如果只是记录错误一般就寄生在catch语句块就行</p>
+<p>默认情况下日志是输出在控制台上的但是如果你想放入到一个持久的目标的位置</p>
+<p>可以在代码也可以在配置文件中指定</p>
+<p>java.util.logging.config.file 系统属性采用常规的属性格式指向控制日志记录的一个文件</p>
+<p>可以在启动虚拟机的时候 传入 -Djava.util.logging.config.file=<em>filename</em>参数来设置该属性</p>
+<p>日志属性文件 略 详情看别的地方的介绍</p>
 
           
         
@@ -1122,240 +1356,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java网络编程(六)HTTP/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/Java网络编程(六)HTTP/" itemprop="url">Java网络编程(六)HTTP</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>HTTP </p>
-<p>Http指定客户端与服务器如何建立链接、客户端如何从服务器请求数据，服务器如何响应请求，以及最后如何关闭链接。Http链接使用TCP/IP来传输数据，对于从客户端到服务器的每个请求，都有四个步骤</p>
-<p>Http1.0</p>
-<ol>
-<li>默认情况，客户端在端口80打开与服务器的一个TCP连接，URL中可以指定其他接口</li>
-<li>客户端向服务器发送信息，请求路径上的资源   请求包括首部 可选地 一个空行 请求数据</li>
-<li>服务器向客户端发送响应。响应以响应码开头，后面是包含元数据的首部、一个空行以及所请求的文档或错误信息</li>
-<li>服务器关闭连接</li>
-</ol>
-<p>Http1.1 及之后版本，可通过一个TCP连接连续发送多个请求和响应，也就是２.３步可以指向多次，而且响应和请求可以分成多个块进行发送</p>
-<p>每个请求和响应都有相同的基本形式：</p>
-<ul>
-<li>一个首部行</li>
-<li>一个包含元数据的HTTP首部</li>
-<li>一个空行</li>
-<li>消息体</li>
-</ul>
-<p>第一行称为请求行（首部行？） 定义返回资源的方式 路径 Http版本 </p>
-<p>还有其他信息 （Keyword:Value）</p>
-<p>关键词不区分大小写，如果一个值太长，可以在下一行最前面增加一个空格或制表符，然后接上一行（都要用Ascll）</p>
-<p>首部中的行以一个回车换行对结束</p>
-<p>一些键值对</p>
-<ul>
-<li>User-Agent</li>
-<li>Host 说明主机</li>
-<li>Accept 指明可以指定可以使用那个数据类型 后面接MIME类型</li>
-</ul>
-<p>MIME类型分为两级：类型和子类型。子类型是对类型的详细补充</p>
-<ul>
-<li>text/*</li>
-<li>image/*</li>
-<li>model/* 3D模型</li>
-<li>audio/* 声音</li>
-<li>video/* 表示移动的图标可能包含声音</li>
-<li>application/* 二进制数据</li>
-<li>message/* 表示协议特定的信封 email信息或Http响应等等</li>
-<li>multipart/* 表示多个文档和资源的容器</li>
-</ul>
-<p>最后请求以一个空行结束 也就是 两个回车换行对  \r\n\r\n</p>
-<p>响应 一个状态行开始 后面一个首部（也是采用键值对） 然后一个空行，然后是请求资源</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Date:xxxxxx</span><br><span class="line">Server:Apache</span><br><span class="line">Connection:close  //承诺响应发送时关闭连接</span><br><span class="line">Content-Type:text/html; charset=ISO-8859-1</span><br><span class="line">Content-length:115   //不考虑首部的长度</span><br><span class="line">&lt;html&gt;</span><br><span class="line">.....</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<p>响应码有很多    有问题去查一下就行 p173</p>
-<p>100-199 总表示一个提供信息的响应 200-299 总指示成功 300-399 表示重定向 400-499 客户端错误 500-599 服务器错误</p>
-<p>HTTP  1.0  会为每个请求打开一个新连接。实际上典型Web会话中打开和关闭所有链接所花费的时间远大于实际传输数据的时间，特别是很多小文档的会话，特别是那种加密的链接</p>
-<p>客户可以在首部添加</p>
-<p>Connectiond:Keep-Alive  指定重用一个socket</p>
-<p>URL类默认支持keep-alive 除非显式关闭，如果再次连接到同一个服务器就会重用socket。可以利用系统属性，控制java如何使用http keep-alive</p>
-<ul>
-<li>http.keepAlive true/false  Http Keep-Alive 的是否启用 默认开启</li>
-<li>http.maxConnections 希望同时保持打开的socket数 默认为5</li>
-<li>http.keepAlive.remainingData  若为true 使Java丢弃连接后之后完成清理java6后支持（默认false）</li>
-<li>sun.net.http.errorstream.enableBuffering true时尝试缓存400和500级响应的相对小的错误六，从而释放连接，以备重用 默认false</li>
-<li>sun.net.http.errorstream.bufferSize 为缓冲错误流使用的字节数 默认4096字节</li>
-<li>sun.net.http.errorstream.timeout 为读错误流超时前的毫秒数 默认300ms</li>
-</ul>
-<p>Http 2.0 时在传输层完成优化，具体细节是屏蔽的，java还不支持？ 不过你只要用URL/URLConnection类去访问http服务器你得程序不做修改就可使用该功能</p>
-<p>Http方法</p>
-<p>请求  起始行 首部 请求主题，是包含资源的请求才有（post/put）</p>
-<p>Http有四种方法 get post put delete</p>
-<ul>
-<li>GET没有副作用，失败可重复用，它的输出通常会缓存，不过可通过首部控制 而且没有指明默认用get</li>
-<li>PUT 将资源上传到一个服务器，没有副作用出错可重复执行，不过有幂等性，如果将连续两次把同个文档放在服务器同一个位置，和放一次对于服务器的状态是一样的</li>
-<li>DELETE 从一个URL删除一个资源 没有副作用也是幂等的，可以多次删除不会报错</li>
-<li>POST 将资源上传服务器，但没有说明如何处理该资源 POST要用于不能重复的不安全的操作  POST的信息量也没有限制</li>
-<li>HEAD 就是个GET不过只返回头部</li>
-<li>OPTIONS 允许客户端询问服务器可以如何处理一个资源</li>
-<li>TRACE 会回显客户端请求进行调试</li>
-</ul>
-<p>URL类使用GET方法进行通讯 之后的URLConnection类支持上面四种方法</p>
-<h3 id="请求主体"><a href="#请求主体" class="headerlink" title="请求主体"></a>请求主体</h3><p>GET方法获取URL所标识资源的一个表示。用GET从服务器获取的资源的具体位置由路径和查询字符串的不同部分指定。</p>
-<p>而POST和PUT更复杂，因为除了提供url之外，还要提供资源的表示（？其实就是资源主体）一般资源会在首部指明两个 Content-length Content-type</p>
-<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p>它有时候不包含数据，只是指示服务器上的而数据   它只能时非空白符的ASCLL 不能有逗号和分号</p>
-<p>在响应中的首部的Set-Cookie 有指定</p>
-<p><code>Set-Cookie: cart=AKKQQ</code>   （可以有多个，一个cookie对应一个set-cookie）</p>
-<p>或者请求时会在首部中指定发送</p>
-<p><code>Cookie: cart=AKKQQ</code></p>
-<p>一般来说，cookie来自哪个服务器就会用于哪个服务器 比如来自<a href="http://www.baidu.com的cookie只会发给www.baidu.com的服务器。不过可以指定cookie应用于整个子域，而不只是最初的服务器。" target="_blank" rel="noopener">www.baidu.com的cookie只会发给www.baidu.com的服务器。不过可以指定cookie应用于整个子域，而不只是最初的服务器。</a></p>
-<p><code>Set-Cookie: username=hehe;Domain=.baidu.com</code></p>
-<p>这样cookie可能能发给什么 cc.baidu.com  oob.baidu.com  (如果存在的话哈哈)</p>
-<p>但是所设的子域必须时服务器直接所属的域，比如你baidu域的主机不能设置成lunlun.com域</p>
-<p>一些网站会将一个域中的一个图像或某个内容嵌入到另一个域的一个页面中，从而通过这个这个嵌入内容来设置cookie，这种就实现了没有真正访问这个域也能设置 到这个域的cookie。 这叫第三方cookie 现在慢慢开始阻塞这种cookie</p>
-<p>Cookie的作用域其实对于路径也有限制 比如 xxxx/aab设置一个cookie  你只能在xxxx/aab或其子树域下使用cookie 而xxxx/bba 这种域毫无办法。当然你可以设置使用路径</p>
-<p><code>Set-Cookie: username=hehe;Path=/kkk</code>  就会在/kkk及其子树域有效 但是如果你不设置Domain默认是那个xxxx服务器域内</p>
-<p>一些其他的cookie设置</p>
-<p>设置过期时间</p>
-<p>expires=Wed,21-Dec-2018 16:33:09 GMT</p>
-<p>Max-Age=3600   单位是秒</p>
-<p>安全性</p>
-<p>secure 不用设置值   代表浏览器拒绝通过非安全通道发送这种cookie</p>
-<p>httponly 也是安全相关，说明浏览器只通过http/https 返回cookie尤其强调不能通过js返回防范xss</p>
-<p>CookieHandler 其实才是真正来实现http状态管理的，而他提供两个方法 最重要的是setDefault(Cookiemanager)用来设置你的handler的内核，而若没有他会有一个默认的，你可以通过 getDefault()去获得这个    其中CookieHandler还有两个抽象方法就是 put(uri,responseheaders) 和get(uri,requestheaders)</p>
-<blockquote>
-<p>我们可以认为CookieHandler是一个无形的神的旨意，而CookieManger是这种精神的传承实体，而CookieManger本身是一个复杂的个体，一分为二是CookieStore CookiePolicy 一个是管理现存的cookie,一个是决定是否接收cookie</p>
-</blockquote>
-<h2 id="CookieManager"><a href="#CookieManager" class="headerlink" title="CookieManager"></a>CookieManager</h2><p>java.net.CookieHandler 定域了存储和获取cookie的一个api，</p>
-<p>提供了一个具体的子类 java.net.CookieManager 默认情况下我们需要启用cookie</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CookieManager m=<span class="keyword">new</span> CookieManager();</span><br><span class="line">CookieHandler.setDefault(m);</span><br><span class="line"><span class="comment">//一个cookieManager安装完成</span></span><br></pre></td></tr></table></figure>
-<p>默认提供的存储策略</p>
-<ul>
-<li>CookiePolicy.ACCEPT_ALL</li>
-<li>CookiePolicy.ACCEPT_NONE</li>
-<li>CookiePolicy.ACCEPT_ORIGINAL_SERVER 只接受原服务器的cookie（默认）</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CookieManager m=<span class="keyword">new</span> CookieManager();</span><br><span class="line">m.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);</span><br><span class="line">CookieHandler.setDefault(m);</span><br></pre></td></tr></table></figure>
-<p>只需要实现CookiePolicy 接口并覆盖shouldAccept方法 可以自己实现存储策略</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过url去获得头部信息，进行域的判断</span></span><br><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoGovernmentCookies</span> <span class="keyword">implements</span> <span class="title">CookiePolicy</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldAccept</span><span class="params">(URI uri,HttpCookie cookie)</span></span>&#123;</span><br><span class="line">        <span class="comment">//从url和cookie的发送域双重保证分析</span></span><br><span class="line">  <span class="keyword">if</span>(uri.getAuthority().toLowerCase().endsWith(<span class="string">".gov"</span>)||cookie.getDomain().toLowerCase().endsWith(<span class="string">".gov"</span>))&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;          <span class="comment">//拒绝存储    </span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.net.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BlacklistCookiePolicy</span> <span class="keyword">implements</span> <span class="title">CookiePolicy</span> </span>&#123;</span><br><span class="line">    String[] blacklist;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BlacklistCookiePolicy</span><span class="params">(String[] list)</span> </span>&#123;</span><br><span class="line">        blacklist = list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">shouldAccept</span><span class="params">(URI uri, HttpCookie cookie)</span>  </span>&#123;</span><br><span class="line">        String host;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            host =  InetAddress.getByName(uri.getHost()).getCanonicalHostName();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (UnknownHostException e) &#123;</span><br><span class="line">            host = uri.getHost();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;blacklist.length; i++) &#123;</span><br><span class="line">	    <span class="keyword">if</span> (HttpCookie.domainMatches(blacklist[i], host)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> CookiePolicy.ACCEPT_ORIGINAL_SERVER.shouldAccept(uri, cookie);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="CookieStore"><a href="#CookieStore" class="headerlink" title="CookieStore"></a>CookieStore</h2><p>cookiestore可以实现该接口，但是并在CookieManager实例化时传给它。你不能在CookieManager实例化之后设置它的CookieStore</p>
-<p>有时候必须本地存放和获取cookie 这说明应用退出下一次再启用时加载，这时候就需要获取CookieStore</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CookieStore store=m.getCookieStore();  <span class="comment">//通过cookiemanager去获得</span></span><br></pre></td></tr></table></figure>
-<p>CookieStore 允许增加删除列出cookie 控制在正常http请求和响应流之外发送cookie</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(URI uri,HttpCookie cookie)</span></span></span><br><span class="line"><span class="function">List&lt;HttpCookie&gt; <span class="title">get</span><span class="params">(URI)</span></span></span><br><span class="line"><span class="function">List&lt;HttpCookie&gt; <span class="title">getCookies</span><span class="params">()</span></span></span><br><span class="line"><span class="function">List&lt;URI&gt; <span class="title">getURIs</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(URI uri,HttpCookie cookie)</span></span></span><br><span class="line"><span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
-<p>每个cookie都封装在一个HttpCookie对象中，它提供了一些方法去访问属性</p>
-<p>感觉有用的  set/getDomain set/getPath set/getMaxAge   set/getValue</p>
-<p>还有其他，不过有些方法已经过时并废弃了</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JavaSE(一)Void和void/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1433,162 +1433,6 @@
 <p>例如<code>Future&lt;T&gt;</code>用来保存结果。Future的get方法会返回结果(类型为T)。 如果操作并没有返回值，用Void调用get后结果计算完毕则返回后将会返回null。</p>
 <p>Void也用于无值的Map中，例如<code>Map&lt;T,Void&gt;</code>这样map将具<code>Set&lt;T&gt;</code>有一样的功能</p>
 <p>同理Callable<void>也是同理 好像是没 Callable<void>的</void></void></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java包的概述/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen JianLun">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Shaclow's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/23/Java包的概述/" itemprop="url">Java包的概述</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
-                2018-12-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>JDK所提供的所有标准Java类都存放在Java包中，如java.lang包中包含了运行Java必不可少的系统类。由于系统会自动将java.lang引入，所以不需要在源文件中用import语句来显示地引入这个包。另外，Java跪地过java.util和java.io是必须提供的标准包，在JDK中常用的包有以下几种：</p>
-<p>1.java.lang：语言包</p>
-<p>2.java.util：实用包</p>
-<p>3.java.awt：抽象窗口工具包</p>
-<p>4.javax.swing：轻量级的窗口工具包，这是目前使用最广泛的GUI程序设计包</p>
-<p>5.java.io：输入输出包</p>
-<p>6.java.net：网络函数包</p>
-<p>7.java.applet：编制applet用到的包（目前编制applet程序时，更多的是使用swing中的JApplet类）。</p>
-<p>下面分别对这几个包做下介绍：</p>
-<p>①.java.lang：语言包</p>
-<p>这是Java语言的核心包，系统自动将这个包引入到用户程序，该包中主要类有：</p>
-<p>1.object类：它是所有类的父类，其中定义的方法其它类都可以使用。</p>
-<p>2.数据类型包装类：简单的数据类型的类包装，包括Integer、Float、Boolean等。</p>
-<p>3.数学类Math：提供常量和数学函数，包括E和PI常数及abs()、sin()、cos()、min()、max()、random()等方法，这些常量和方法都是静态的。</p>
-<p>4.字符串类String和StringBuffer类。</p>
-<p>5.系统和运行时类：System类提供一个独立于具体计算机系统资源的编程界面；Runtime类可以直接访问运行时资源。</p>
-<p>6.操作类 ：Class和ClassLoader类。类Class提供了对象运行时的若干信息，ClassLoader是一个抽象类，它提供了将类名转换成文件名并在文件系统中查找并装载该文件的方法。</p>
-<p>7.线程类：Thread类。Java是一个多线程环境，主要有Thread（线程建立）、ThreadDeath（线程结束后的清理操作）、ThreadGroup（组织一组线程）和Runnable（建立线程的交互工具）等类。</p>
-<p>8.错误和异常处理类：Throwable（所有错误和异常处理的父类），Exception（处理异常，需要用户捕获处理）和Error（处理硬件错误，不要求用户捕获处理）。</p>
-<p>9.过程类Process：它支持系统过程，当实用类Runtime执行系统命令时，会建立处理系统过程的Process类。</p>
-<p>②.实用包</p>
-<p>实用包提供了各种实用功能的类，主要包括日期类、数据结构类和随机数类等。</p>
-<p>1.日期类：包括Date（获取日期和时间）、Calendar（抽象类，日历类）和GregorianCalendar（Calendar类的子类）类。</p>
-<p>2.数据结构类：包括链表类LinkedList、向量类Vector、栈类Stack和散列表类Hashtable等。</p>
-<p>3.随机数类Random：它封装了Math类中的random方法，并提供了更多的辅助功能。</p>
-<p>③抽象窗口工具包</p>
-<p>Java的java.awt提供了绘图和图像类，主要用于编写GUI程序，包括按钮、标签等常用组件以及相应的事件类。</p>
-<p>1.组件类：包括Button，Panel，Label，Choice等类，用于设计图形界面。</p>
-<p>2事件包：在java.awt.event中包括各种事件处理的接口和类</p>
-<p>3.颜色包：在java.awt.color中提供用于颜色的类。</p>
-<p>4.字体包：在java.awt.font中提供用于字体相关的接口和类。</p>
-<p>④输入输出包</p>
-<p>java.io提供了系统输入输出类和接口，只要包括输入流类InputStream和输出流OutputStream就可以实现文件的输入输出、管道的数据传输以及网络数据传输的功能</p>
-<p>⑤网络函数包</p>
-<p>java.net提供了实现网络应用程序的类，主要包括用于实现Socket通信的Socket类，此外还提供了便于处理URL的类</p>
-<p>⑥applet包</p>
-<p>java.applet是专为创建Applet程序提供的包，它包含了基本的applet类和通信类，目前基本上被JApplet类所代替。</p>
 
           
         
@@ -1760,6 +1604,162 @@
 <p>枚举值可以作为switch的判断</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> Color &#123;GREEN,RED,BLUE&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EnumDemo4</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printName</span><span class="params">(Color color)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (color)&#123;</span><br><span class="line">            <span class="keyword">case</span> BLUE: <span class="comment">//无需使用Color进行引用</span></span><br><span class="line">                System.out.println(<span class="string">"蓝色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> RED:</span><br><span class="line">                System.out.println(<span class="string">"红色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> GREEN:</span><br><span class="line">                System.out.println(<span class="string">"绿色"</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        printName(Color.BLUE);</span><br><span class="line">        printName(Color.RED);</span><br><span class="line">        printName(Color.GREEN);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//蓝色</span></span><br><span class="line">        <span class="comment">//红色</span></span><br><span class="line">        <span class="comment">//绿色</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>未完待续 。。。。主要是枚举的一些的set 和 map</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Java包的概述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen JianLun">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shaclow's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Java包的概述/" itemprop="url">Java包的概述</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T00:52:49+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>JDK所提供的所有标准Java类都存放在Java包中，如java.lang包中包含了运行Java必不可少的系统类。由于系统会自动将java.lang引入，所以不需要在源文件中用import语句来显示地引入这个包。另外，Java跪地过java.util和java.io是必须提供的标准包，在JDK中常用的包有以下几种：</p>
+<p>1.java.lang：语言包</p>
+<p>2.java.util：实用包</p>
+<p>3.java.awt：抽象窗口工具包</p>
+<p>4.javax.swing：轻量级的窗口工具包，这是目前使用最广泛的GUI程序设计包</p>
+<p>5.java.io：输入输出包</p>
+<p>6.java.net：网络函数包</p>
+<p>7.java.applet：编制applet用到的包（目前编制applet程序时，更多的是使用swing中的JApplet类）。</p>
+<p>下面分别对这几个包做下介绍：</p>
+<p>①.java.lang：语言包</p>
+<p>这是Java语言的核心包，系统自动将这个包引入到用户程序，该包中主要类有：</p>
+<p>1.object类：它是所有类的父类，其中定义的方法其它类都可以使用。</p>
+<p>2.数据类型包装类：简单的数据类型的类包装，包括Integer、Float、Boolean等。</p>
+<p>3.数学类Math：提供常量和数学函数，包括E和PI常数及abs()、sin()、cos()、min()、max()、random()等方法，这些常量和方法都是静态的。</p>
+<p>4.字符串类String和StringBuffer类。</p>
+<p>5.系统和运行时类：System类提供一个独立于具体计算机系统资源的编程界面；Runtime类可以直接访问运行时资源。</p>
+<p>6.操作类 ：Class和ClassLoader类。类Class提供了对象运行时的若干信息，ClassLoader是一个抽象类，它提供了将类名转换成文件名并在文件系统中查找并装载该文件的方法。</p>
+<p>7.线程类：Thread类。Java是一个多线程环境，主要有Thread（线程建立）、ThreadDeath（线程结束后的清理操作）、ThreadGroup（组织一组线程）和Runnable（建立线程的交互工具）等类。</p>
+<p>8.错误和异常处理类：Throwable（所有错误和异常处理的父类），Exception（处理异常，需要用户捕获处理）和Error（处理硬件错误，不要求用户捕获处理）。</p>
+<p>9.过程类Process：它支持系统过程，当实用类Runtime执行系统命令时，会建立处理系统过程的Process类。</p>
+<p>②.实用包</p>
+<p>实用包提供了各种实用功能的类，主要包括日期类、数据结构类和随机数类等。</p>
+<p>1.日期类：包括Date（获取日期和时间）、Calendar（抽象类，日历类）和GregorianCalendar（Calendar类的子类）类。</p>
+<p>2.数据结构类：包括链表类LinkedList、向量类Vector、栈类Stack和散列表类Hashtable等。</p>
+<p>3.随机数类Random：它封装了Math类中的random方法，并提供了更多的辅助功能。</p>
+<p>③抽象窗口工具包</p>
+<p>Java的java.awt提供了绘图和图像类，主要用于编写GUI程序，包括按钮、标签等常用组件以及相应的事件类。</p>
+<p>1.组件类：包括Button，Panel，Label，Choice等类，用于设计图形界面。</p>
+<p>2事件包：在java.awt.event中包括各种事件处理的接口和类</p>
+<p>3.颜色包：在java.awt.color中提供用于颜色的类。</p>
+<p>4.字体包：在java.awt.font中提供用于字体相关的接口和类。</p>
+<p>④输入输出包</p>
+<p>java.io提供了系统输入输出类和接口，只要包括输入流类InputStream和输出流OutputStream就可以实现文件的输入输出、管道的数据传输以及网络数据传输的功能</p>
+<p>⑤网络函数包</p>
+<p>java.net提供了实现网络应用程序的类，主要包括用于实现Socket通信的Socket类，此外还提供了便于处理URL的类</p>
+<p>⑥applet包</p>
+<p>java.applet是专为创建Applet程序提供的包，它包含了基本的applet类和通信类，目前基本上被JApplet类所代替。</p>
 
           
         
@@ -2032,7 +2032,7 @@ document.getElementById("demo").innerHTML = i;
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JavaNIO(一)Tutorial/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/JavaNIO(五)Channel的Transfer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen JianLun">
@@ -2051,7 +2051,7 @@ document.getElementById("demo").innerHTML = i;
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/23/JavaNIO(一)Tutorial/" itemprop="url">JavaNIO(一)Tutorial</a></h1>
+                <a class="post-title-link" href="/2018/12/23/JavaNIO(五)Channel的Transfer/" itemprop="url">JavaNIO(五)Channel的Transfer</a></h1>
         
 
         <div class="post-meta">
@@ -2103,25 +2103,13 @@ document.getElementById("demo").innerHTML = i;
       
         
           
-            <p>JavaNIO  的特点</p>
-<p>这是给java IO  和 网络编程的一种新的IO方式</p>
-<p>我们以往的IO方式可能就是和字符和字节打交道，而在NIO中 我们只和通道和缓存打交道 （channel buffer） 数据只会从一个channel到buffer或者反过来</p>
-<p>NIO是无阻塞IO 你的线程可以在读取写入数据的过程中做别的，数据读写完成后再进行处理</p>
-<p>NIO有个概念是selector 这是个监听器，监听多个通道的事件，比如连接打开数据到达等，然后这样每个单独的线程可以用来通过selector来监听多个通道的数据 （selector当作一个侦察兵）</p>
-<p>buffer也有很多接口</p>
-<ul>
-<li>ByteBuffer</li>
-<li>CharBuffer</li>
-<li>DoubleBuffer</li>
-<li>FloatBuffer</li>
-<li>IntBuffer</li>
-<li>LongBuffer</li>
-<li>ShortBuffer</li>
-</ul>
-<p>这包括了你可以通过IO可以发送的数据</p>
-<p><code>MappedByteBuffer</code> which is used in conjunction with memory mapped files</p>
-<p>selector</p>
-<p>适合通信信息量比较少的连接  这样就可以让一个线程处理多个channel的数据</p>
+            <p>Channel之间的数据传输</p>
+<p>如果是FileChannel 有transferTo 和 transferFrom两个方法</p>
+<p>transferFrom 应该是其他类型的Channel到FileChannel的方法</p>
+<p>transferTo 则是FileChannel到其他类型的Channel</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打开文件channel</span></span><br><span class="line">RandomAccessFile fromFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"fromFile.txt"</span>, <span class="string">"rw"</span>);</span><br><span class="line">FileChannel      fromChannel = fromFile.getChannel();</span><br><span class="line"><span class="comment">//打开文件channel</span></span><br><span class="line">RandomAccessFile toFile = <span class="keyword">new</span> RandomAccessFile(<span class="string">"toFile.txt"</span>, <span class="string">"rw"</span>);</span><br><span class="line">FileChannel      toChannel = toFile.getChannel();</span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> position = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">long</span> count    = fromChannel.size();</span><br><span class="line"></span><br><span class="line"><span class="comment">//向另外一个channel进行数据传输</span></span><br><span class="line">toChannel.transferFrom(fromChannel, position, count);</span><br><span class="line"></span><br><span class="line"><span class="comment">//fromChannel.transferTo(toChannel,position,count);</span></span><br></pre></td></tr></table></figure>
+<p>注意使用transferFrom  socketChannel来说 它传输的数据只是它现在当前有的数据，后面新增的数据是不被计算在内的，所以你数据正常不会是完全传递的</p>
+<p>注意使用transferTo  socketChannel来说，它会一直读取 直到send缓存满了为止</p>
 
           
         
@@ -2214,7 +2202,25 @@ document.getElementById("demo").innerHTML = i;
             
 
             
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
             
 
           </nav>
